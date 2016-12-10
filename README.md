@@ -18,6 +18,7 @@ I test against:
 (that's not to say everything is 100% working across all platforms - I fix the broken code as I find it)
 
 ViM plugins:
+* gmarik/Vundle.vim
 * WolfgangMehner/bash-support
 * amadeus/vim-evokai
 * ap/vim-css-color
