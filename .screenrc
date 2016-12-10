@@ -1,0 +1,20 @@
+# kdm bash-env
+# .screenrc
+
+# Last modified : Fri 28 Oct 2016 07:17:58 PM EDT
+
+# Set terminal variable, 'screen-256color' allows home/end keys to work properly
+term screen-256color
+
+# Do not display the copyright page
+startup_message off
+
+# Change the number of scrollback lines
+defscrollback 100000
+
+# Ensure the default shell is the same as the $SHELL environment variable
+shell -$SHELL
+
+# Configure status bar at the bottom of the terminal
+hardstatus alwayslastline
+hardstatus string "%{= kb}[ %=%{w}%?%-Lw%?%{C}(%{W}%n*%f %t%?(%u)%?%{C})%{w}%?%+Lw%?%?%= %{b}][%{C} %Y.%m.%d %{W}%0c"

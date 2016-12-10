@@ -1,0 +1,216 @@
+# kdm bash-env
+# .dircolors
+
+# Last modified : Thu 01 Dec 2016 06:37:17 PM EST
+
+COLOR tty
+OPTIONS -F -T 0
+TERM putty-256color
+
+TERM rxvt-256color
+TERM rxvt-unicode-256color
+TERM rxvt-unicode256
+TERM screen-256color
+TERM xterm-256color
+TERM gnome-256color
+TERM st-256color
+
+# Attribute codes:
+# 0 : none
+# 2 : dim
+# 1 : bold
+# 3 : italic
+# 4 : underscore
+# 5 : blink
+# 7 : reverse
+
+# Foreground : 38;2;R;G;B;<Attributes>
+# Background : 48;2;R;G;B;<Attributes>
+
+# Basic file type colors
+DIR    38;2;52;152;219    # Directory (sky blue)
+EXEC   38;2;0;255;0;3     # File with execute permission (bright green, italic)
+LINK   38;2;0;246;248;3   # Symlink (cyan)
+ORPHAN 38;2;255;0;0;1;5;7 # Bad symlink (red, invert, bold, blink)
+
+BLK 38;2;240;32;32;1;48;2;96;96;96 # Block device (red, bold, grey background)
+CHR 38;2;252;106;8;1;48;2;96;96;96 # Character device (orange, bold, grey background)
+
+CAPABILITY            30;41 # File with capability
+DOOR                  01;35 # Door
+FIFO                  40;33 # Pipe
+MISSING               0     # ... and the files they point to
+MULTIHARDLINK         0     # Regular file with more than one link
+OTHER_WRITABLE        34;42 # Dir that is other-writable (o+w) and not sticky
+RESET                 0     # Reset to "normal" color
+SETGID                30;43 # File that is setgid (g+s)
+SETUID                37;41 # File that is setuid (u+s)
+SOCK                  01;35 # Socket
+STICKY                37;44 # Dir with sticky bit set (+t) and NOT other-writable
+STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+w)
+
+NORMAL 38;2;200;200;200
+FILE   38;2;240;240;240
+
+# Scripts (darker green, italic)
+# These should already have exec permission and be set to brighter green,
+# So this darker green helps weed them out
+.bat   38;2;63;183;58;3
+.btm   38;2;63;183;58;3
+.cmd   38;2;63;183;58;3
+.com   38;2;63;183;58;3
+.csh   38;2;63;183;58;3
+.exe   38;2;63;183;58;3
+.py    38;2;63;183;58;3
+.sh    38;2;63;183;58;3
+
+# Archives/compressed (dark pink)
+.7z    38;2;240;32;32
+.Z     38;2;240;32;32
+.ace   38;2;240;32;32
+.alz   38;2;240;32;32
+.arc   38;2;240;32;32
+.arj   38;2;240;32;32
+.bz    38;2;240;32;32
+.bz2   38;2;240;32;32
+.cab   38;2;240;32;32
+.cpio  38;2;240;32;32
+.deb   38;2;240;32;32
+.dz    38;2;240;32;32
+.ear   38;2;240;32;32
+.gz    38;2;240;32;32
+.jar   38;2;240;32;32
+.lha   38;2;240;32;32
+.lrz   38;2;240;32;32
+.lz    38;2;240;32;32
+.lz4   38;2;240;32;32
+.lzh   38;2;240;32;32
+.lzma  38;2;240;32;32
+.lzo   38;2;240;32;32
+.rar   38;2;240;32;32
+.rpm   38;2;240;32;32
+.rz    38;2;240;32;32
+.sar   38;2;240;32;32
+.t7z   38;2;240;32;32
+.tar   38;2;240;32;32
+.taz   38;2;240;32;32
+.tbz   38;2;240;32;32
+.tbz2  38;2;240;32;32
+.tgz   38;2;240;32;32
+.tlz   38;2;240;32;32
+.txz   38;2;240;32;32
+.tz    38;2;240;32;32
+.tzo   38;2;240;32;32
+.war   38;2;240;32;32
+.xz    38;2;240;32;32
+.z     38;2;240;32;32
+.zip   38;2;240;32;32
+.zoo   38;2;240;32;32
+
+# Image formats (magenta)
+.anx   38;2;201;68;127
+.asf   38;2;201;68;127
+.avi   38;2;201;68;127
+.axv   38;2;201;68;127
+.bmp   38;2;201;68;127
+.cgm   38;2;201;68;127
+.dl    38;2;201;68;127
+.emf   38;2;201;68;127
+.flc   38;2;201;68;127
+.fli   38;2;201;68;127
+.flv   38;2;201;68;127
+.gif   38;2;201;68;127
+.gl    38;2;201;68;127
+.jpeg  38;2;201;68;127
+.jpg   38;2;201;68;127
+.m2v   38;2;201;68;127
+.m4v   38;2;201;68;127
+.mkv   38;2;201;68;127
+.mng   38;2;201;68;127
+.mov   38;2;201;68;127
+.mp4   38;2;201;68;127
+.mp4v  38;2;201;68;127
+.mpeg  38;2;201;68;127
+.mpg   38;2;201;68;127
+.nuv   38;2;201;68;127
+.ogm   38;2;201;68;127
+.ogv   38;2;201;68;127
+.ogx   38;2;201;68;127
+.pbm   38;2;201;68;127
+.pcx   38;2;201;68;127
+.pgm   38;2;201;68;127
+.png   38;2;201;68;127
+.ppm   38;2;201;68;127
+.qt    38;2;201;68;127
+.rm    38;2;201;68;127
+.rmvb  38;2;201;68;127
+.svg   38;2;201;68;127
+.svgz  38;2;201;68;127
+.tga   38;2;201;68;127
+.tif   38;2;201;68;127
+.tiff  38;2;201;68;127
+.vob   38;2;201;68;127
+.webm  38;2;201;68;127
+.wmv   38;2;201;68;127
+.xbm   38;2;201;68;127
+.xcf   38;2;201;68;127
+.xpm   38;2;201;68;127
+.xwd   38;2;201;68;127
+.yuv   38;2;201;68;127
+
+# Audio formats (cadet blue)
+.aac   38;2;108;113;196
+.au    38;2;108;113;196
+.axa   38;2;108;113;196
+.dff   38;2;108;113;196
+.dsf   38;2;108;113;196
+.flac  38;2;108;113;196
+.mid   38;2;108;113;196
+.midi  38;2;108;113;196
+.mka   38;2;108;113;196
+.mp3   38;2;108;113;196
+.mpc   38;2;108;113;196
+.oga   38;2;108;113;196
+.ogg   38;2;108;113;196
+.ra    38;2;108;113;196
+.spx   38;2;108;113;196
+.wav   38;2;108;113;196
+.xspf  38;2;108;113;196
+
+# Data blobs (orange)
+.csv   38;2;252;106;8
+.json  38;2;252;106;8
+.xml   38;2;252;106;8
+
+# Config files (yellow)
+.cfg   38;2;170;115;220
+.conf  38;2;170;115;220
+
+# Binary documents (dark yellow/brown)
+.abw   38;2;209;117;67
+.doc   38;2;209;117;67
+.docx  38;2;209;117;67
+.epub  38;2;209;117;67
+.odp   38;2;209;117;67
+.ods   38;2;209;117;67
+.odt   38;2;209;117;67
+.pdf   38;2;209;117;67
+.ppt   38;2;209;117;67
+.pptx  38;2;209;117;67
+.ps    38;2;209;117;67
+.ps.gz 38;2;209;117;67
+.rtf   38;2;209;117;67
+.tex   38;2;209;117;67
+.wpd   38;2;209;117;67
+.xls   38;2;209;117;67
+.xlsx  38;2;209;117;67
+
+# Text documents (yellow)
+.css   38;2;255;255;0
+.diff  38;2;255;255;0
+.htm   38;2;255;255;0
+.html  38;2;255;255;0
+.log   38;2;255;255;0
+.patch 38;2;255;255;0
+.shtml 38;2;255;255;0
+.txt   38;2;255;255;0

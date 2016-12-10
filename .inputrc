@@ -1,0 +1,47 @@
+# kdm bash-env
+# .inputrc
+
+# Last modified : Fri 28 Oct 2016 07:20:23 PM EDT
+
+# Escape code handlers for shells missing them
+"\e[5~": history-search-backward
+"\e[6~": history-search-forward
+"\e[3~": delete-char
+# Use Alt/Meta + Delete to delete the preceding word
+"\e[3;3~": kill-word
+
+# Only require single tab instead of double tab for completion
+set show-all-if-ambiguous on
+
+# Suffix each returned file completion with a character denoting its type
+set visible-stats on
+
+# Turn off the use of the internal pager when returning long completion lists
+set page-completions off
+
+# Enable returning up to 500 completions without having to be asked
+set completion-query-items 500
+
+# Don't expand the home dir tilde (~)
+set expand-tilde off
+
+# Immediately add a trailing slash when autocompleting symlinks to directories
+set mark-symlinked-directories on
+
+# Be more intelligent when autocompleting by also looking at the text after
+# the cursor. For example, when the current line is "cd ~/src/mozil", and
+# the cursor is on the "z", pressing Tab will not autocomplete it to "cd
+# ~/src/mozillail", but to "cd ~/src/mozilla". (This is supported by the
+# Readline used by Bash 4.)
+set skip-completed-text on
+
+# Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
+set input-meta on
+set output-meta on
+set convert-meta off
+
+# Make Tab autocomplete regardless of filename case
+set completion-ignore-case on
+
+# Do not autocomplete hidden files unless the pattern explicitly begins with a dot
+set match-hidden-files off
