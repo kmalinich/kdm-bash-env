@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 09 Dec 2016 08:03:36 PM EST
+# Last modified : Fri 16 Dec 2016 11:28:12 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -755,7 +755,7 @@ _net_ping_subnet() {
 
 	output purple "Pinging subnet '${1}'"
 	# Sort by IP octets
-	fping -a -i 10 -r 0 -p 20 -t 50 -g ${1} 2> /dev/null | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
+	fping -a -i 10 -r 1 -p 20 -t 250 -g ${1} 2> /dev/null | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
 }
 
 # Ping something 100 times and show a running average with printf
@@ -1063,10 +1063,10 @@ _fix_osx_files() {
 	done
 	echo
 
-	read -p "Are you sure you want to remove these files? Enter Y/N: " FIX_OSX_FILES_YN
+	read -p "Are you sure you want to remove these files? Enter Y/N: " FIX_MACOS_FILES_YN
 	echo
 
-	if [[ "${FIX_OSX_FILES_YN}" != [Yy] ]]; then
+	if [[ "${FIX_MACOS_FILES_YN}" != [Yy] ]]; then
 		output purple "No macOS attribute/Finder files under '${PWD}' removed"
 	else
 		for FILE in "${FILES_TO_REMOVE[@]}"; do
@@ -1116,8 +1116,8 @@ _show_bin() {
 	fi
 
 	local FILE_PATH="$(which --skip-alias --skip-functions ${1})"
-	local FILE_TYPE="$(file -bNn  ${FILE_PATH})"
-	local FILE_MIME="$(file -bINn ${FILE_PATH})"
+	local FILE_TYPE="$(file -bNn                             ${FILE_PATH})"
+	local FILE_MIME="$(file -bNn --mime-type --mime-encoding ${FILE_PATH})"
 
 	output green "Name : '${1}'"
 	output blue  "Path : '${FILE_PATH}'"
@@ -2029,7 +2029,7 @@ fi
 # First check if we're root. If so, we don't need any of this
 if [[ "${UID}" != "0" ]]; then
 	# If we're on macOS, add the macOS commands to the base array
-	[[ "${UNAME_KERNEL_NAME}" == "Darwin" ]] && ARRAY_SUDO="${ARRAY_SUDO[@]} ${ARRAY_SUDO_OSX[@]}"
+	[[ "${UNAME_KERNEL_NAME}" == "Darwin" ]] && ARRAY_SUDO="${ARRAY_SUDO[@]} ${ARRAY_SUDO_MACOS[@]}"
 
 	# If we're on Linux, add the Linux commands to the base array
 	[[ "${UNAME_KERNEL_NAME}" == "Linux"  ]] && ARRAY_SUDO="${ARRAY_SUDO[@]} ${ARRAY_SUDO_LINUX[@]}"

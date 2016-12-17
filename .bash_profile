@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 09 Dec 2016 03:10:10 PM EST
+# Last modified : Fri 16 Dec 2016 11:27:28 PM EST
 
 #### Init functions ==start ####
 
@@ -177,8 +177,8 @@ ${BASH_ENV_FILE_SSH_AUTHKEYS}
 ${BASH_ENV_FILE_PROXY}
 )
 
-# Array of automatic sudo-ing commands (OS X-only)
-export ARRAY_SUDO_OSX=(
+# Array of automatic sudo-ing commands (macOS-only)
+export ARRAY_SUDO_MACOS=(
 atsutil
 cupsctl
 defaults
@@ -208,6 +208,7 @@ scutil
 security
 shutdown
 softwareupdate
+spctl
 ssdtprgen
 system_profiler
 systemsetup
