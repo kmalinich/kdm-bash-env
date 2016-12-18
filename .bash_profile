@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 16 Dec 2016 11:27:28 PM EST
+# Last modified : Sat 17 Dec 2016 02:39:05 PM EST
 
 #### Init functions ==start ####
 
@@ -431,10 +431,12 @@ export UNAME_KERNEL_RELEASE="$(uname -r)"
 
 bash-env-loading # Output loading message
 
-# Get IP, TTY, and hostname so the binaries doesn't have to be run again
-export DEFROUTE_NIC="$(ip route | grep -Po '(?<=dev\ )(e(n|th|ns|np[1-9]s)|br|wlan)[0-9]{1,3}(?=(\s\sproto\ static)?(\s\smetric\ [1-9][0-9]{0,3})?\s?$)')"
-export HOST_IP=$(ip addr | grep -Po "(?<=inet\ )([1-9]([0-9]{1,2})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})(?=.*.[^vir]${DEFROUTE_NIC}$))")
-bash-env-loading # Output loading message
+# Get IP, TTY, and hostname so the binaries doesn't have to be run again, if the ip binary exists
+if hash ip; then
+	export DEFROUTE_NIC="$(ip route | grep -Po '(?<=dev\ )(e(n|th|ns|np[1-9]s)|br|wlan)[0-9]{1,3}(?=(\s\sproto\ static)?(\s\smetric\ [1-9][0-9]{0,3})?\s?$)' | head -n 1)"
+	[[ "${DEFROUTE_NIC}" ]] && export HOST_IP=$(ip addr  | grep -Po "(?<=inet\ )([1-9]([0-9]{1,2})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})(?=.*.[^vir]${DEFROUTE_NIC}$))")
+	bash-env-loading # Output loading message
+fi
 
 export CURRENT_TTY="$(ps ax | awk '/'"${$}"'/ {printf $2; exit}')"
 bash-env-loading # Output loading message

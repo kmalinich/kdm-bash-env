@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 16 Dec 2016 11:28:12 PM EST
+# Last modified : Sun 18 Dec 2016 12:39:51 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1115,9 +1115,15 @@ _show_bin() {
 		return 1
 	fi
 
+	# Get full file path, type, and MIME encoding/type
 	local FILE_PATH="$(which --skip-alias --skip-functions ${1})"
 	local FILE_TYPE="$(file -bNn                             ${FILE_PATH})"
-	local FILE_MIME="$(file -bNn --mime-type --mime-encoding ${FILE_PATH})"
+	local FILE_MIME="$(file -bNn --mime-encoding --mime-type ${FILE_PATH})"
+
+	# Detect GNU ls or stock macOS ls to enable color output properly
+	[[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]] && local LS='ls -hl --color=auto' || local LS='ls -Ghl'
+	${LS} ${FILE_PATH} 2> /dev/null
+	echo
 
 	output green "Name : '${1}'"
 	output blue  "Path : '${FILE_PATH}'"
@@ -1866,21 +1872,27 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 
 	# Network config information
 	_net_info() {
-		output purple "hostname    : '$(hostname)"
-		output purple "hostname -s : '$(hostname -s)'"
-		output purple "hostname -d : '$(hostname -d)'"
-		output purple "hostname -f : '$(hostname -f)'"
+		if hash hostname; then
+			output purple "hostname    : '$(hostname)"
+			output purple "hostname -s : '$(hostname -s)'"
+			output purple "hostname -d : '$(hostname -d)'"
+			output purple "hostname -f : '$(hostname -f)'"
+		fi
 
-		output purple "resolv.conf :"
-		grep -Ev '^#' /etc/resolv.conf
+		if [[ -s /etc/resolv.conf ]]; then
+			output purple "resolv.conf :"
+			grep -Ev '^#' /etc/resolv.conf
+		fi
 
-		output purple "ip route    :"
-		ip route show
-		echo
+		if hash ip; then
+			output purple "ip route    :"
+			ip route show
+			echo
 
-		output purple "ip addr     :"
-		ip addr show ${DEFROUTE_NIC}
-		echo
+			output purple "ip addr     :"
+			ip addr show ${DEFROUTE_NIC}
+			echo
+		fi
 	}
 
 	# List running VMs
@@ -2213,36 +2225,40 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 
 	# Network config information
 	_net_info() {
-		output purple "hostname:"
-		hostname
-		echo
+		if hash hostname; then
+			output purple "hostname    : '$(hostname)"
+			output purple "hostname -s : '$(hostname -s)'"
+			output purple "hostname -d : '$(hostname -d)'"
+			output purple "hostname -f : '$(hostname -f)'"
+			echo
+		fi
 
-		output purple "hostname -s:"
-		hostname -s
-		echo
+		if hash ip; then
+			output purple "ip addr show:"
+			ip addr show
+			echo
 
-		output purple "hostname -f:"
-		hostname -f
-		echo
+			output purple "ip route show:"
+			ip route show
+			echo
+		fi
 
-		output purple "ip addr show:"
-		ip addr show
-		echo
+		if hash ifconfig; then
+			output purple "ifconfig:"
+			ifconfig
+			echo
+		fi
 
-		output purple "ip route show:"
-		ip route show
-		echo
+		if hash netstat; then
+			output purple "netstat -nr:"
+			netstat -nr
+			echo
+		fi
 
-		output purple "ifconfig:"
-		ifconfig
-		echo
-
-		output purple "netstat -nr:"
-		netstat -nr
-		echo
-
-		output purple "resolv.conf:"
-		cat /etc/resolv.conf
+		if [[ -s /etc/resolv.conf ]]; then
+			output purple "resolv.conf:"
+			cat /etc/resolv.conf
+		fi
 	}
 
 	# Fake lsusb
