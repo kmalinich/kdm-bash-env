@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 21 Dec 2016 02:59:42 PM EST
+# Last modified : Wed 21 Dec 2016 06:48:33 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1116,7 +1116,7 @@ _show_bin() {
 	fi
 
 	# Get full file path, type, and MIME encoding/type
-	local FILE_PATH="$(which --skip-alias --skip-functions ${1})"
+	! FILE_PATH="$(which --skip-alias --skip-functions ${1} 2> /dev/null)" && FILE_PATH="$(which ${1} 2> /dev/null)"
 	local FILE_TYPE="$(file -bNn                             ${FILE_PATH})"
 	local FILE_MIME="$(file -bNn --mime-encoding --mime-type ${FILE_PATH})"
 

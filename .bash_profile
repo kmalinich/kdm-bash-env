@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Wed 21 Dec 2016 02:59:03 PM EST
+# Last modified : Wed 21 Dec 2016 06:43:37 PM EST
 
 #### Init functions ==start ####
 
@@ -356,14 +356,12 @@ fi
 [[ -d /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders ]] && export GDK_PIXBUF_MODULEDIR="/usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders"
 
 # Configure PATH from array if entry is present
-LS="$(which --skip-alias ls)"
 unset PATH
 for ENTRY in ${ARRAY_PATH[@]}; do
 	# Add entry from array if it is present and contains files
-	[[ -d ${ENTRY} && "$(${LS} -A ${ENTRY})" ]] && PATH="${PATH}${PATH+:}${ENTRY}"
+	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
 done
 export PATH
-unset LS
 
 # Disable input
 stty -echo
@@ -512,7 +510,8 @@ bash-env-loading # Output loading message
 
 # Set EDITOR and VISUAL variables to the proper vim path, if vim is installed
 if hash vim; then
-	VIM_PATH="$(which --skip-alias vim)"
+	VIM_PATH="$(which --skip-alias vim 2> /dev/null)"
+	[[ "${?}" != "0" ]] && VIM_PATH="$(which vim)"
 	unset EDITOR; export EDITOR="${VIM_PATH}"
 	unset VISUAL; export VISUAL="${VIM_PATH}"
 	unset VIM_PATH
