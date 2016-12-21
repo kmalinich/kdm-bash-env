@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Sun 18 Dec 2016 12:50:19 PM EST
+# Last modified : Wed 21 Dec 2016 02:59:03 PM EST
 
 #### Init functions ==start ####
 
@@ -67,6 +67,7 @@ export BASH_ENV_FILE_BASHHISTORY="${BASH_ENV_DIR_KDM}/history"
 export BASH_ENV_FILE_BASHLOGOUT="${HOME}/.bash_logout"
 export BASH_ENV_FILE_BASHPROFILE="${HOME}/.bash_profile"
 export BASH_ENV_FILE_BASHRC="${HOME}/.bashrc"
+export BASH_ENV_FILE_CONFIG="${BASH_ENV_DIR_KDM}/bash-env.conf"
 export BASH_ENV_FILE_DIGRC="${HOME}/.digrc"
 export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
 export BASH_ENV_FILE_GIT_CONFIG="${HOME}/.gitconfig"
@@ -86,7 +87,12 @@ export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
 export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
 
 ARRAY_INIT=(
+${BASH_ENV_FILE_CONFIG}
 ${BASH_ENV_FILE_BASHHISTORY}
+)
+
+ARRAY_INIT_CONFIG=(
+WARN_FACTER
 )
 
 ARRAY_MKDIR=(
@@ -410,6 +416,12 @@ done
 # Init files if missing
 for ENTRY in ${ARRAY_INIT[@]}; do
 	[[ ! -e ${ENTRY} ]] && echo 0 > ${ENTRY} && bash-env-loading
+done
+
+# Init entries in the config file if missing
+for ENTRY in ${ARRAY_INIT_CONFIG[@]}; do
+	grep -q ${ENTRY} ${BASH_ENV_FILE_CONFIG} || echo "${ENTRY}=0" >> ${BASH_ENV_FILE_CONFIG}
+	bash-env-loading
 done
 
 # Fix SSH dir permissions

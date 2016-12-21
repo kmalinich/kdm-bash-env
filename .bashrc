@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Sun 18 Dec 2016 12:42:05 PM EST
+# Last modified : Wed 21 Dec 2016 02:59:42 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -32,8 +32,9 @@ alias net-curl-usage='_net_curl_usage'
 alias net-curl='_net_curl'
 alias net-dns-lookup='_net_dns_lookup'
 alias net-info='_net_info'
-alias net-mac-format='_net_mac_format'
-alias net-mac-lookup='_net_mac_lookup'
+alias net-mac='_net_mac_format'
+#alias net-mac-format='_net_mac_format'
+#alias net-mac-lookup='_net_mac_lookup'
 alias net-ping-average-csv='_net_ping_average_csv'
 alias net-ping-average='_net_ping_average'
 alias net-ping-subnet='_net_ping_subnet'
@@ -45,7 +46,6 @@ alias setup-ssh-aliases='_setup_ssh_aliases'
 
 alias show-array-width='_show_array_width'
 alias show-bin='_show_bin'
-alias show-clock-loop='_show_clock_loop'
 alias show-clock='_show_clock'
 alias show-colors='_show_colors'
 alias show-motd='_show_motd'
@@ -1133,18 +1133,21 @@ _show_bin() {
 
 # Show a clock
 _show_clock() {
-	date '+%a %b %d %Y %r | %F %R:%S | %:z (%Z)'
-}
+	# Show a continuous clock if 1st arg is '-l'
+	if [[ ${1} == "-l" ]]; then
+		local CMD_ECHO="echo -en"
+		local CMD_LOOP="sleep 0.9"
+	else
+		local CMD_ECHO="echo -e"
+		local CMD_LOOP="break"
+	fi
 
-# Show a continuous clock
-_show_clock_loop() {
 	while true; do
-		echo -ne "$(date '+%a %b %d %Y %r | %F %R:%S | %:z (%Z)')   \r"
-		sleep 1
+		${CMD_ECHO} "$(date '+%a %b %d %Y %r | %F %R:%S | %:z (%Z)')   \r"; ${CMD_LOOP}
 	done
 }
 
-# Show all of the bash colors
+# Show all of the (256) colors
 _show_colors() {
 	echo " 30-37 : foreground color"
 	echo " 40-47 : background color"
@@ -1195,18 +1198,16 @@ _show_colors() {
 
 # Show most frequently executed commands
 _show_top_cmds() {
-	if [[ -s ${HISTFILE} ]]; then
-		local BASH_HISTORY_CMDS="$(grep -cv '#' ${HISTFILE})"
-		local COUNT="15"
+	[[ ! -s ${HISTFILE} ]] && output error "bash history file missing or empty"
 
-		output usage  "Bash history length: ${BASH_HISTORY_CMDS} commands"
-		output purple "-- Top commands --"
-		echo
+	local BASH_HISTORY_CMDS="$(grep -cv '#' ${HISTFILE})"
+	local COUNT="15"
 
-		grep -v '#' ${HISTFILE} | sort | uniq -c | sort -rn | head -n ${COUNT}
-	else
-		output error "bash history file missing or empty"
-	fi
+	output usage  "Bash history length: ${BASH_HISTORY_CMDS} commands"
+	output purple "-- Top commands --"
+	echo
+
+	grep -v '#' ${HISTFILE} | sort | uniq -c | sort -rn | head -n ${COUNT}
 }
 
 # Function to get the length of the longest string in an array
@@ -1258,10 +1259,6 @@ _prompt_generate() {
 
 	# Generate / export PS1 prompt with color specfied by BASH_ENV_COLOR
 	# It would also be neat to do a color-responsive system load monitor... but not today
-	#export PS1="${COLOR_BOLD}┌[${COLOR_RESET} \[${BASH_ENV_COLOR_BOLD}\]${HOST_SHORT}\[${COLOR_RESET}\]:\[${COLOR_FG_BOLD_BLU}\]${PWD_FINAL}\[${COLOR_RESET}\]\[${BASH_ENV_COLOR_BOLD}\]\[${COLOR_RESET}\] ${COLOR_BOLD}]\n└> "
-	#export PS1="${BASH_ENV_COLOR_BOLD}╔╣${COLOR_RESET}\[${BASH_ENV_COLOR_BOLD}\]${HOST_SHORT}\[${COLOR_RESET}\]:\[${COLOR_FG_BOLD_BLU}\]${PWD_FINAL}\[${COLOR_RESET}\]\[${BASH_ENV_COLOR_BOLD}\]\[${COLOR_RESET}\]${BASH_ENV_COLOR_BOLD}\n╚═${COLOR_RESET} "
-
-	# Older full PS1
 	export PS1="\[${BASH_ENV_COLOR}\]${HOST_SHORT}\[\e[0m\]:\[\e[34m\]${PWD_FINAL} \[${BASH_ENV_COLOR}\]\\$\[\e[0m\] "
 }
 
@@ -1269,9 +1266,14 @@ _prompt_generate() {
 _show_motd() {
 	# Use facter if possible, if not, too bad..
 	if ! hash facter; then
-		echo "Facter not installed; dynamic MOTD not possible"
-		echo
-		return 1
+		# Check if we already said this
+		if ! grep -q 'WARN_FACTER=1' ${BASH_ENV_FILE_CONFIG}; then
+			sed -i '/WARN_FACTER/d' ${BASH_ENV_FILE_CONFIG}
+			echo   'WARN_FACTER=1' >> ${BASH_ENV_FILE_CONFIG}
+
+			echo "Facter not installed; dynamic MOTD not possible"; echo
+			return 1
+		fi
 	fi
 
 	# Generate the OS info string differently, based on OS
