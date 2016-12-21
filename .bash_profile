@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Sun 18 Dec 2016 12:41:52 PM EST
+# Last modified : Sun 18 Dec 2016 12:50:19 PM EST
 
 #### Init functions ==start ####
 
@@ -262,15 +262,19 @@ visudo
 
 # Array of shell options to be set
 ARRAY_SHELL_OPTIONS=(
-autocd
 cdable_vars
 cdspell
 checkhash
 checkwinsize
-dirspell
 histappend
 no_empty_cmd_completion
 xpg_echo
+)
+
+# Array of shell options that only work with bash 4+
+ARRAY_SHELL_OPTIONS_BASH4=(
+autocd
+dirspell
 )
 
 #### Data arrays for init ==final ####
@@ -511,6 +515,13 @@ bash-env-loading # Output loading message
 for OPTION in ${ARRAY_SHELL_OPTIONS[@]}; do
 	shopt -s ${OPTION} && bash-env-loading
 done
+
+# Configure bash 4+ shell options, if we're running it
+if [[ "${BASH_VERSION%%.*}" -ge 4 ]]; then
+	for OPTION in ${ARRAY_SHELL_OPTIONS_BASH4[@]}; do
+		shopt -s ${OPTION} && bash-env-loading
+	done
+fi
 
 # Source the files from the array
 for ENTRY in ${ARRAY_SOURCE[@]}; do

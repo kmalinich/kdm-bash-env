@@ -1,7 +1,7 @@
 # kdm bash-env
 # .dircolors
 
-# Last modified : Thu 01 Dec 2016 06:37:17 PM EST
+# Last modified : Sat 17 Dec 2016 01:33:51 PM EST
 
 COLOR tty
 OPTIONS -F -T 0
@@ -160,11 +160,13 @@ FILE   38;2;240;240;240
 
 # Audio formats (cadet blue)
 .aac   38;2;108;113;196
+.aiff  38;2;108;113;196
 .au    38;2;108;113;196
 .axa   38;2;108;113;196
 .dff   38;2;108;113;196
 .dsf   38;2;108;113;196
 .flac  38;2;108;113;196
+.m4a   38;2;108;113;196
 .mid   38;2;108;113;196
 .midi  38;2;108;113;196
 .mka   38;2;108;113;196
