@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 21 Dec 2016 06:48:33 PM EST
+# Last modified : Fri 23 Dec 2016 12:01:51 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1270,10 +1270,9 @@ _show_motd() {
 		if ! grep -q 'WARN_FACTER=1' ${BASH_ENV_FILE_CONFIG}; then
 			sed -i '/WARN_FACTER/d' ${BASH_ENV_FILE_CONFIG}
 			echo   'WARN_FACTER=1' >> ${BASH_ENV_FILE_CONFIG}
-
 			echo "Facter not installed; dynamic MOTD not possible"; echo
-			return 1
 		fi
+		return 1
 	fi
 
 	# Generate the OS info string differently, based on OS
