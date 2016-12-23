@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 23 Dec 2016 12:04:00 PM EST
+# Last modified : Fri 23 Dec 2016 12:05:45 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1264,6 +1264,47 @@ _prompt_generate() {
 
 # Dynamic MOTD with facter (if present)
 _show_motd() {
+	# Example output:
+	#
+	# kdm > bash-env | #8af151d < v749
+	# cpu >  i7-3770 | 16G      < ram
+	#  os >    macOS | 10.11    < ver
+	#  up >     1:04 | 1.28     < load
+
+	# Set up printf format strings with BASH_ENV_COLOR
+	# PF_FMT_KEY : Outer strings, on far left or right
+
+	# Color shortcuts
+	local CLR_ENV="${BASH_ENV_COLOR_BOLD}"
+	local CLR_BLU="${COLOR_FG_BOLD_BLU}"
+	local CLR_BLK="${COLOR_FG_BOLD_BLK}"
+	local CLR_RST="${COLOR_RESET}"
+
+	local ARROW_L="${CLR_BLK}<${CLR_RST}"
+	local ARROW_R="${CLR_BLK}>${CLR_RST}"
+	local BAR="${CLR_BLK}|${CLR_RST}"
+
+	local BASE_KEY="%s${CLR_RST}"
+	local BASE_VAL1="%+${MAX_LEN}s${CLR_RST}"
+	local BASE_VAL2="%-${MAX_LEN}s${CLR_RST}"
+
+	local MOTD_KEY="${CLR_BLU}${BASE_KEY}"
+	local MOTD_VAL1="${CLR_ENV}${BASE_VAL1}"
+	local MOTD_VAL2="${CLR_ENV}${BASE_VAL2}"
+
+	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
+	local HEAD_VAL1="${CLR_BLU}${BASE_VAL1}"
+	local HEAD_VAL2="${CLR_BLU}${BASE_VAL2}"
+
+	# Assemble format strings
+	local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
+	local MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}\n"
+
+	# kdm bash-env git hash/revision info
+	local OLD_PWD="${PWD}"
+	local HASH="#$(cd ${HOME}; git log --pretty=format:'%h' -n 1; cd ${OLD_PWD})"
+	local REV="v$(awk -F ',' '{print $1}' ${BASH_ENV_FILE_REV})"
+
 	# Use facter if possible, if not, too bad..
 	if ! hash facter; then
 		# Check if we already said this
@@ -1274,11 +1315,7 @@ _show_motd() {
 		fi
 
 		# Print just the env hash and revision
-		local HASH="#$(cd ${HOME}; git log --pretty=format:'%h' -n 1; cd ${OLD_PWD})"
-		local REV="v$(awk -F ',' '{print $1}' ${BASH_ENV_FILE_REV})"
-		local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
 		printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "${REV}"
-
 		# Bail!
 		return 1
 	fi
@@ -1316,11 +1353,6 @@ _show_motd() {
 	local UPT="$( facter uptime)"
 	local LOAD="$(facter load_averages.5m)"
 
-	# kdm bash-env git hash/revision info
-	local OLD_PWD="${PWD}"
-	local HASH="#$(cd ${HOME}; git log --pretty=format:'%h' -n 1; cd ${OLD_PWD})"
-	local REV="v$(awk -F ',' '{print $1}' ${BASH_ENV_FILE_REV})"
-
 	# Format a couple things
 	local UPT="${UPT:0:8}"
 	local UPT="${UPT/\ hou/}"
@@ -1356,42 +1388,6 @@ _show_motd() {
 			return 2
 		fi
 	done
-
-	# Example output:
-	#
-	# kdm > bash-env | #8af151d < v749
-	# cpu >  i7-3770 | 16G      < ram
-	#  os >    macOS | 10.11    < ver
-	#  up >     1:04 | 1.28     < load
-
-	# Set up printf format strings with BASH_ENV_COLOR
-	# PF_FMT_KEY : Outer strings, on far left or right
-
-	# Color shortcuts
-	local CLR_ENV="${BASH_ENV_COLOR_BOLD}"
-	local CLR_BLU="${COLOR_FG_BOLD_BLU}"
-	local CLR_BLK="${COLOR_FG_BOLD_BLK}"
-	local CLR_RST="${COLOR_RESET}"
-
-	local ARROW_L="${CLR_BLK}<${CLR_RST}"
-	local ARROW_R="${CLR_BLK}>${CLR_RST}"
-	local BAR="${CLR_BLK}|${CLR_RST}"
-
-	local BASE_KEY="%s${CLR_RST}"
-	local BASE_VAL1="%+${MAX_LEN}s${CLR_RST}"
-	local BASE_VAL2="%-${MAX_LEN}s${CLR_RST}"
-
-	local MOTD_KEY="${CLR_BLU}${BASE_KEY}"
-	local MOTD_VAL1="${CLR_ENV}${BASE_VAL1}"
-	local MOTD_VAL2="${CLR_ENV}${BASE_VAL2}"
-
-	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
-	local HEAD_VAL1="${CLR_BLU}${BASE_VAL1}"
-	local HEAD_VAL2="${CLR_BLU}${BASE_VAL2}"
-
-	# Assemble format strings
-	local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
-	local MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}\n"
 
 	# Output the header line, then the MOTD
 	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "${REV}"
