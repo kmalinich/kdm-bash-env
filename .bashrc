@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 23 Dec 2016 12:05:45 PM EST
+# Last modified : Fri 23 Dec 2016 12:07:23 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1311,12 +1311,13 @@ _show_motd() {
 		if ! grep -q 'WARN_FACTER=1' ${BASH_ENV_FILE_CONFIG}; then
 			sed -i '/WARN_FACTER/d' ${BASH_ENV_FILE_CONFIG}
 			echo   'WARN_FACTER=1' >> ${BASH_ENV_FILE_CONFIG}
-			echo "Facter not installed; dynamic MOTD not possible"; echo
+
+			# Output warning message about facter being missing
+			echo -e "Facter not installed; dynamic MOTD not possible\n"
 		fi
 
 		# Print just the env hash and revision
-		printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "${REV}"
-		# Bail!
+		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "${REV}"
 		return 1
 	fi
 
@@ -1383,8 +1384,7 @@ _show_motd() {
 
 		# Quick dirty check if data exists
 		if [[ -z "${STRING}" ]]; then
-			echo "Failed evaluating data; dynamic MOTD not possible"
-			echo
+			echo -e "Failed evaluating data; dynamic MOTD not possible\n"
 			return 2
 		fi
 	done
@@ -1394,7 +1394,6 @@ _show_motd() {
 	printf "${MOTD_FMT}" "cpu"   "${CPU}" "${RAM}"  "ram"
 	printf "${MOTD_FMT}" " os"   "${DST}" "${VER}"  "ver"
 	printf "${MOTD_FMT}" " up"   "${UPT}" "${LOAD}" "load"
-
 	echo
 }
 
