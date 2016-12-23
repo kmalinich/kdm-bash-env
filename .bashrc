@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 23 Dec 2016 12:01:51 PM EST
+# Last modified : Fri 23 Dec 2016 12:04:00 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1272,6 +1272,14 @@ _show_motd() {
 			echo   'WARN_FACTER=1' >> ${BASH_ENV_FILE_CONFIG}
 			echo "Facter not installed; dynamic MOTD not possible"; echo
 		fi
+
+		# Print just the env hash and revision
+		local HASH="#$(cd ${HOME}; git log --pretty=format:'%h' -n 1; cd ${OLD_PWD})"
+		local REV="v$(awk -F ',' '{print $1}' ${BASH_ENV_FILE_REV})"
+		local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
+		printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "${REV}"
+
+		# Bail!
 		return 1
 	fi
 
