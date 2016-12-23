@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Wed 21 Dec 2016 06:43:37 PM EST
+# Last modified : Fri 23 Dec 2016 11:59:18 AM EST
 
 #### Init functions ==start ####
 
@@ -85,11 +85,6 @@ export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
 
 # Custom pip config file path
 export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
-
-ARRAY_INIT=(
-${BASH_ENV_FILE_CONFIG}
-${BASH_ENV_FILE_BASHHISTORY}
-)
 
 ARRAY_INIT_CONFIG=(
 WARN_FACTER
@@ -178,9 +173,11 @@ ${BASH_ENV_FILE_BASHRC}
 )
 
 ARRAY_TOUCH=(
-${BASH_ENV_FILE_SSH_CONFIG}
-${BASH_ENV_FILE_SSH_AUTHKEYS}
+${BASH_ENV_FILE_BASHHISTORY}
+${BASH_ENV_FILE_CONFIG}
 ${BASH_ENV_FILE_PROXY}
+${BASH_ENV_FILE_SSH_AUTHKEYS}
+${BASH_ENV_FILE_SSH_CONFIG}
 )
 
 # Array of automatic sudo-ing commands (macOS-only)
@@ -409,11 +406,6 @@ done
 # Touch files
 for ENTRY in ${ARRAY_TOUCH[@]}; do
 	[[ ! -e ${ENTRY} ]] && touch ${ENTRY} && bash-env-loading
-done
-
-# Init files if missing
-for ENTRY in ${ARRAY_INIT[@]}; do
-	[[ ! -e ${ENTRY} ]] && echo 0 > ${ENTRY} && bash-env-loading
 done
 
 # Init entries in the config file if missing
