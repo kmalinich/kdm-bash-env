@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 23 Dec 2016 12:07:23 PM EST
+# Last modified : Wed 28 Dec 2016 01:05:35 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1264,16 +1264,6 @@ _prompt_generate() {
 
 # Dynamic MOTD with facter (if present)
 _show_motd() {
-	# Example output:
-	#
-	# kdm > bash-env | #8af151d < v749
-	# cpu >  i7-3770 | 16G      < ram
-	#  os >    macOS | 10.11    < ver
-	#  up >     1:04 | 1.28     < load
-
-	# Set up printf format strings with BASH_ENV_COLOR
-	# PF_FMT_KEY : Outer strings, on far left or right
-
 	# Color shortcuts
 	local CLR_ENV="${BASH_ENV_COLOR_BOLD}"
 	local CLR_BLU="${COLOR_FG_BOLD_BLU}"
@@ -1285,20 +1275,7 @@ _show_motd() {
 	local BAR="${CLR_BLK}|${CLR_RST}"
 
 	local BASE_KEY="%s${CLR_RST}"
-	local BASE_VAL1="%+${MAX_LEN}s${CLR_RST}"
-	local BASE_VAL2="%-${MAX_LEN}s${CLR_RST}"
-
-	local MOTD_KEY="${CLR_BLU}${BASE_KEY}"
-	local MOTD_VAL1="${CLR_ENV}${BASE_VAL1}"
-	local MOTD_VAL2="${CLR_ENV}${BASE_VAL2}"
-
 	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
-	local HEAD_VAL1="${CLR_BLU}${BASE_VAL1}"
-	local HEAD_VAL2="${CLR_BLU}${BASE_VAL2}"
-
-	# Assemble format strings
-	local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
-	local MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}\n"
 
 	# kdm bash-env git hash/revision info
 	local OLD_PWD="${PWD}"
@@ -1317,6 +1294,10 @@ _show_motd() {
 		fi
 
 		# Print just the env hash and revision
+		# Assemble header format string
+		local HEAD_VAL1="${CLR_BLU}%+s${CLR_RST}"
+		local HEAD_VAL2="${CLR_BLU}%-s${CLR_RST}"
+		local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
 		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "${REV}"
 		return 1
 	fi
@@ -1388,6 +1369,30 @@ _show_motd() {
 			return 2
 		fi
 	done
+
+	# Example output:
+	#
+	# kdm > bash-env | #8af151d < v749
+	# cpu >  i7-3770 | 16G      < ram
+	#  os >    macOS | 10.11    < ver
+	#  up >     1:04 | 1.28     < load
+
+	# Set up printf format strings with BASH_ENV_COLOR
+	local BASE_KEY="%s${CLR_RST}"
+	local BASE_VAL1="%+${MAX_LEN}s${CLR_RST}"
+	local BASE_VAL2="%-${MAX_LEN}s${CLR_RST}"
+
+	local MOTD_KEY="${CLR_BLU}${BASE_KEY}"
+	local MOTD_VAL1="${CLR_ENV}${BASE_VAL1}"
+	local MOTD_VAL2="${CLR_ENV}${BASE_VAL2}"
+
+	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
+	local HEAD_VAL1="${CLR_BLU}${BASE_VAL1}"
+	local HEAD_VAL2="${CLR_BLU}${BASE_VAL2}"
+
+	# Assemble format strings
+	local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
+	local MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}\n"
 
 	# Output the header line, then the MOTD
 	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "${REV}"
