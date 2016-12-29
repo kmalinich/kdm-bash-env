@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 28 Dec 2016 01:05:35 PM EST
+# Last modified : Thu 29 Dec 2016 04:14:01 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -32,8 +32,8 @@ alias net-curl-usage='_net_curl_usage'
 alias net-curl='_net_curl'
 alias net-dns-lookup='_net_dns_lookup'
 alias net-info='_net_info'
-alias net-mac='_net_mac_format'
-#alias net-mac-format='_net_mac_format'
+alias net-mac='_net_mac'
+#alias net-mac-format='_net_mac'
 #alias net-mac-lookup='_net_mac_lookup'
 alias net-ping-average-csv='_net_ping_average_csv'
 alias net-ping-average='_net_ping_average'
@@ -864,9 +864,9 @@ _net_ping_average_csv() {
 }
 
 # Formats MAC address for all eventualities
-_net_mac_format() {
+_net_mac() {
 	# Quit if nothing is entered
-	local USAGE_STRING="net-mac-format <MAC address, any format>"
+	local USAGE_STRING="net-mac <MAC address, any format>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	# Strip mac of anything other than 0-9, a-f, and A-F
@@ -903,7 +903,7 @@ _net_mac_format() {
 
 	# Perform IEEE MAC lookup
 	echo
-	net-mac-lookup "${COLONS_LOWER}"
+	_net_mac_lookup "${COLONS_LOWER}"
 }
 
 # Look up MAC address against IEEE database
