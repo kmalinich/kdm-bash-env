@@ -1,7 +1,7 @@
 # kdm bash-env
 # .inputrc
 
-# Last modified : Fri 28 Oct 2016 07:20:23 PM EDT
+# Last modified : Fri 30 Dec 2016 02:44:27 PM EST
 
 # Escape code handlers for shells missing them
 "\e[5~": history-search-backward
