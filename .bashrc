@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 30 Dec 2016 11:51:13 AM EST
+# Last modified : Fri 30 Dec 2016 12:05:25 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1644,11 +1644,17 @@ _update_cpan() {
 		return 1
 	fi
 
-	# Update outdated CPAN modules
+	# Update outdated CPAN modules in packages
 	local COMMAND="cpan-outdated -p | cpanm"
 	output leadup "${COMMAND}"
 	# Custom due to command pipe
 	! cpan-outdated -p | cpanm &> /dev/null && output failure || output success
+
+	# Update outdated CPAN modules
+	local COMMAND="cpan-outdated | cpanm"
+	output leadup "${COMMAND}"
+	# Custom due to command pipe
+	! cpan-outdated | cpanm &> /dev/null && output failure || output success
 
 	output green "update-cpan complete"
 	return 0
@@ -1661,14 +1667,14 @@ _update_cpan() {
 
 if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	# Function aliases
-	alias macos-hostname='_osx_hostname'
-	alias macos-itunes='_osx_itunes'
-	alias macos-notify='_osx_notify'
-	alias macos-repair-office='_osx_repair-office'
-	alias macos-volume='_osx_volume'
+	alias macos-hostname='_macos_hostname'
+	alias macos-itunes='_macos_itunes'
+	alias macos-notify='_macos_notify'
+	alias macos-repair-office='_macos_repair_office'
+	alias macos-volume='_macos_volume'
 
 	# Hostname change function
-	_osx_hostname() {
+	_macos_hostname() {
 		local USAGE_STRING="macos-hostname <new hostname>"
 		[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
@@ -1680,7 +1686,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	}
 
 	# iTunes control
-	_osx_itunes() {
+	_macos_itunes() {
 		# Array of options
 		local ARRAY_USAGE_OPTIONS=(
 		pause
@@ -1726,7 +1732,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	}
 
 	# Volume config function
-	_osx_volume() {
+	_macos_volume() {
 		# Array of options
 		local ARRAY_USAGE_OPTIONS=(
 		mute
@@ -1805,7 +1811,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	}
 
 	# Reset all Office Mac 2011 files
-	_osx_repair_office() {
+	_macos_repair_office() {
 		# Check if they're sure
 		read -p "Are you sure? Enter Y/N: " RESET_YN
 
@@ -1829,7 +1835,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		output green "Complete; you should reboot, preferably"
 	}
 
-	_osx_notify() {
+	_macos_notify() {
 		local NOTIFY_TITLE="${1}"
 		local NOTIFY_MESSAGE="${2}"
 		local NOTIFY_SUBTITLE="${3}"
@@ -1852,10 +1858,10 @@ fi
 
 if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 	# Function aliases
-	alias kvm-destroy-all='_kvm_destroy-all'
+	alias kvm-destroy-all='_kvm_destroy_all'
 	alias kvm-running='_kvm_running'
-	alias kvm-shutdown-all='_kvm_shutdown-all'
-	alias kvm-start-all='_kvm_start-all'
+	alias kvm-shutdown-all='_kvm_shutdown_all'
+	alias kvm-start-all='_kvm_start_all'
 	alias kvm-undefine='_kvm_undefine'
 	alias kvm-watch='_kvm_watch'
 	alias sys-restart='_sys_restart'
@@ -2313,7 +2319,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 	export PING_WAIT="-W 1"
 
 	# Clean up old kernels, I can never remember this one
-	alias kernel-cleanup='package-cleanup --oldkernels --count=2'
+	alias kernel-cleanup='package-cleanup -y --oldkernels --count=2'
 fi
 
 #### Aliases: Linux-only ==final ####

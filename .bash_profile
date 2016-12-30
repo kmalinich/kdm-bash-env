@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 23 Dec 2016 11:59:18 AM EST
+# Last modified : Fri 30 Dec 2016 12:51:06 PM EST
 
 #### Init functions ==start ####
 
@@ -167,9 +167,9 @@ ${BASH_ENV_FILE_TIME_TOTAL}
 
 #/usr/local/etc/bash_completion
 ARRAY_SOURCE=(
-/usr/share/bash-completion/bash_completion
-/etc/bash_completion
 ${BASH_ENV_FILE_BASHRC}
+/etc/profile.d/bash_completion.sh
+/usr/local/etc/profile.d/bash_completion.sh
 )
 
 ARRAY_TOUCH=(
@@ -487,6 +487,7 @@ if hash jenv; then
 	[[ -d /usr/local/var/jenv ]] && export JENV_ROOT="/usr/local/var/jenv"
 	# Load jenv automatically
 	eval "$(jenv init - --no-rehash)"
+	bash-env-loading # Output loading message
 else
 	# If no jenv, setup JAVA_HOME variable.
 	# Check if the java_home binary is present
@@ -495,24 +496,21 @@ else
 		JAVA_HOME="$(/usr/libexec/java_home 2>&1 | grep '\/')"
 		# If the return is a path (aka not empty) - export it; otherwise, unset it
 		[[ "${JAVA_HOME}" ]] && export JAVA_HOME || unset JAVA_HOME
+		bash-env-loading # Output loading message
 	fi
 fi
 
-bash-env-loading # Output loading message
-
 # Set EDITOR and VISUAL variables to the proper vim path, if vim is installed
 if hash vim; then
-	VIM_PATH="$(which --skip-alias vim 2> /dev/null)"
-	[[ "${?}" != "0" ]] && VIM_PATH="$(which vim)"
+	! VIM_PATH="$(which --skip-alias vim 2> /dev/null)" && VIM_PATH="$(which vim)"
 	unset EDITOR; export EDITOR="${VIM_PATH}"
 	unset VISUAL; export VISUAL="${VIM_PATH}"
 	unset VIM_PATH
+	bash-env-loading # Output loading message
 fi
 
-bash-env-loading # Output loading message
-
 # Setup proxy based on proxy config file if it exists with data
-[[ -s ${BASH_ENV_FILE_PROXY} ]] && net-proxy-config "$(cat ${BASH_ENV_FILE_PROXY})"
+[[ -s ${BASH_ENV_FILE_PROXY} ]] && net-proxy-config "$(cat ${BASH_ENV_FILE_PROXY})" && bash-env-loading # Output loading message
 
 # Configure various shell options
 for OPTION in ${ARRAY_SHELL_OPTIONS[@]}; do
@@ -522,15 +520,24 @@ done
 # Configure bash 4+ shell options, if we're running it
 if [[ "${BASH_VERSION%%.*}" -ge 4 ]]; then
 	for OPTION in ${ARRAY_SHELL_OPTIONS_BASH4[@]}; do
-		shopt -s ${OPTION} && bash-env-loading
+		shopt -s ${OPTION} &> /dev/null && bash-env-loading
 	done
 fi
 
 # Source the files from the array
 for ENTRY in ${ARRAY_SOURCE[@]}; do
-	[[ -e ${ENTRY} ]] && . ${ENTRY}
-	bash-env-loading # Output loading message
+	[[ -e ${ENTRY} ]] && . ${ENTRY} && bash-env-loading # Output loading message
 done
+
+# If dircolors exists, run it
+if hash dircolors; then
+	# If ~/.dircolors exists, use it
+	[[ -s ${BASH_ENV_FILE_DIRCOLORS} ]] && DIRCOLOR_DATA="$(dircolors ${BASH_ENV_FILE_DIRCOLORS})" || DIRCOLOR_DATA="$(dircolors)"
+	bash-env-loading # Output loading message
+	[[ ! -z "${DIRCOLOR_DATA}" ]] && eval "${DIRCOLOR_DATA}" &> /dev/null
+	bash-env-loading # Output loading message
+	unset DIRCOLOR_DATA
+fi
 
 # Source bash libraries from the 'extra' dir
 for ENTRY in $(ls -A ${BASH_ENV_DIR_EXTRA} | grep -Ev '\.sw|\._|README'); do
@@ -538,21 +545,12 @@ for ENTRY in $(ls -A ${BASH_ENV_DIR_EXTRA} | grep -Ev '\.sw|\._|README'); do
 	bash-env-loading # Output loading message
 done
 
-# If dircolors exists, run it
-if hash dircolors; then
-	# If ~/.dircolors exists, use it
-	if [[ -s ${BASH_ENV_FILE_DIRCOLORS} ]]; then
-		eval $(dircolors ${BASH_ENV_FILE_DIRCOLORS}) &> /dev/null && bash-env-loading # Output loading message
-	else
-		eval $(dircolors) &> /dev/null && bash-env-loading # Output loading message
-	fi
-fi
-
-# Refresh SSH aliases from SSH config file
-setup-ssh-aliases
-
-# Init loading variables
 bash-env-loading # Output loading message
+# Refresh SSH aliases from SSH config file
+_setup_ssh_aliases
+
+bash-env-loading # Output loading message
+# Init loading variables
 unset LOADING_DOT_COUNT
 unset LOADING_WHITESPACE_COUNT
 
