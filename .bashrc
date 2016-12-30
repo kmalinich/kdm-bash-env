@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Thu 29 Dec 2016 04:14:01 PM EST
+# Last modified : Thu 29 Dec 2016 09:38:44 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -18,7 +18,7 @@ alias find-largest='_find_largest'
 
 alias fix-bash-pids='_fix_bash_pids'
 alias fix-hung-java='_fix_hung_java'
-alias fix-osx-files='_fix_osx_files'
+alias fix-macos-files='_fix_macos_files'
 
 alias g-gca='_g_gca'
 alias g-gpo='_g_gpo'
@@ -1040,7 +1040,7 @@ _fix_bash_pids() {
 }
 
 # Remove / clean macOS .DS_Store / attribute files
-_fix_osx_files() {
+_fix_macos_files() {
 	output purple "Finding all macOS metadata files under '${PWD}'"
 
 	# Backup current IFS, change IFS to \n\b so as to parse file array
@@ -1660,15 +1660,15 @@ _update_cpan() {
 
 if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	# Function aliases
-	alias osx-hostname='_osx_hostname'
-	alias osx-itunes='_osx_itunes'
-	alias osx-notify='_osx_notify'
-	alias osx-repair-office='_osx_repair-office'
-	alias osx-volume='_osx_volume'
+	alias macos-hostname='_osx_hostname'
+	alias macos-itunes='_osx_itunes'
+	alias macos-notify='_osx_notify'
+	alias macos-repair-office='_osx_repair-office'
+	alias macos-volume='_osx_volume'
 
 	# Hostname change function
 	_osx_hostname() {
-		local USAGE_STRING="osx-hostname <new hostname>"
+		local USAGE_STRING="macos-hostname <new hostname>"
 		[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 		local LOCAL_HOST_NAME="$(echo ${1} | awk -F '.' '{print $1}')"
@@ -1690,7 +1690,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		# Create variable of pipe-separated options from array
 		local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
 
-		local USAGE_STRING="osx-itunes <${USAGE_OPTIONS_STRING}>"
+		local USAGE_STRING="macos-itunes <${USAGE_OPTIONS_STRING}>"
 		[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 		case "${1}" in
@@ -1743,7 +1743,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		local VOLUME_SOUND_EFFECT="/System/Library/LoginPlugins/BezelServices.loginPlugin/Contents/Resources/volume.aiff"
 
 		if [[ -z "${1}" ]]; then
-			output usage "osx-volume <${USAGE_OPTIONS_STRING}>"
+			output usage "macos-volume <${USAGE_OPTIONS_STRING}>"
 			echo
 			output green "Current volume: ${VOLUME_CURRENT}%"
 			output green "Mute status:    ${VOLUME_MUTE}"
@@ -1833,7 +1833,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		local NOTIFY_MESSAGE="${2}"
 		local NOTIFY_SUBTITLE="${3}"
 
-		local USAGE_STRING="osx-notify <title> <message> [<subtitle>]"
+		local USAGE_STRING="macos-notify <title> <message> [<subtitle>]"
 		[[ -z "${NOTIFY_TITLE}" || -z "${NOTIFY_MESSAGE}" ]] && output usage "${USAGE_STRING}" && return
 
 		# Add subtitle to osascript string if present
@@ -2274,28 +2274,31 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	alias lsusb='system_profiler SPUSBDataType'
 
 	# Clear font cache
-	alias osx-repair-fontcache='sudo atsutil databases -remove'
+	alias macos-repair-fontcache='sudo atsutil databases -remove'
 
 	# Lock screen and screensaver shortcuts
-	alias osx-screen-off='pmset displaysleepnow'
-	alias osx-screen-lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
-	alias osx-screen-saver='open -a ScreenSaverEngine'
-	alias osx-sleep="osascript -e 'tell app \"System Events\" to sleep'"
+	alias macos-screen-off='pmset displaysleepnow'
+	alias macos-screen-lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+	alias macos-screen-saver='open -a ScreenSaverEngine'
+	alias macos-sleep="osascript -e 'tell app \"System Events\" to sleep'"
 
 	# El Capitan and up
-	if [[ "$(echo ${UNAME_KERNEL_RELEASE} | awk -F '.' '{print $1}')" -ge "15" ]]; then
+	if [[ "${UNAME_KERNEL_RELEASE%%.*}" -ge "15" ]]; then
 		# Enable and disable indexing
-		alias osx-indexing-enable='sudo mdutil -a -i on'
-		alias osx-indexing-disable='sudo mdutil -a -i off'
+		alias macos-indexing-enable='sudo mdutil -a -i on'
+		alias macos-indexing-disable='sudo mdutil -a -i off'
 
 		# Flush DNS cache
-		alias osx-repair-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
-
-		# Repair disk permissions
-		alias osx-repair-diskperms="sudo repair_packages --repair --standard-pkgs /; sudo chown -R ${USER}/usr/local"
+		alias macos-repair-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 	else # Pre-El Capitan
-		alias osx-repair-dns='sudo killall -HUP mDNSResponder'
-		alias osx-repair-diskperms="sudo diskutil repairPermissions /; sudo chown -R ${USER} /usr/local"
+		alias macos-repair-dns='sudo killall -HUP mDNSResponder'
+		alias macos-repair-diskperms="sudo diskutil repairPermissions /; sudo chown -R ${USER} /usr/local"
+	fi
+
+	# Yosemite/El Capitan
+	if [[ "${UNAME_KERNEL_RELEASE%%.*}" == "14" || "${UNAME_KERNEL_RELEASE%%.*}" == "15" ]]; then
+		# Repair disk permissions
+		alias macos-repair-diskperms="sudo repair_packages --repair --standard-pkgs /; sudo chown -R ${USER}/usr/local"
 	fi
 fi
 
