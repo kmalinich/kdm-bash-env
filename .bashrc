@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 30 Dec 2016 02:47:47 PM EST
+# Last modified : Fri 30 Dec 2016 06:50:01 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -28,7 +28,6 @@ alias g-gu='_g_gu'
 alias kdm-help='_kdm_help'
 alias kdm-pull='_kdm_pull'
 
-alias net-curl-usage='_net_curl_usage'
 alias net-curl='_net_curl'
 alias net-dns-lookup='_net_dns_lookup'
 alias net-info='_net_info'
@@ -646,19 +645,20 @@ _g_gpo() {
 
 #### Functions: Net ==start ####
 
+# Usage function for _net_curl
+_net_curl_usage() {
+	output usage "net-curl -u <URL> [-x <proxy>]"
+}
+
 # Check URL
 _net_curl() {
-	_net_curl_usage() {
-		output usage "net-curl -u <URL> [-x <proxy>]"
-	}
-
 	local OPTS=":hu:x:"
 	local OPTIND h u x
 
 	while getopts "${OPTS}" OPT; do
 		case "${OPT}" in
 			h)
-				net-curl-usage
+				_net_curl_usage
 				;;
 			u)
 				local URL="${OPTARG}"
@@ -669,15 +669,15 @@ _net_curl() {
 			:)
 				output usage "ERROR: Option -${OPTARG} requires an argument"
 				echo
-				net-curl-usage
+				_net_curl_usage
 				;;
 			\?)
 				output usage "ERROR: Option -${OPTARG} is not a valid command line switch"
 				echo
-				net-curl-usage
+				_net_curl_usage
 				;;
 			*)
-				net-curl-usage
+				_net_curl_usage
 				break
 				;;
 		esac
@@ -685,25 +685,23 @@ _net_curl() {
 
 	shift $((OPTIND-1))
 
-	if [[ -z "${URL}" ]]; then
-		net-curl-usage
+	[[ -z "${URL}" ]] && _net_curl_usage && return
+
+	output usage "Using URL   : '${URL}'"
+
+	if [[ -z "${CURL_PROXY}" ]]; then
+		local CURL_PROXY_STRING=''
 	else
-		output usage "Using URL   : '${URL}'"
-
-		if [[ -z "${CURL_PROXY}" ]]; then
-			local CURL_PROXY_STRING=''
-		else
-			output usage "Using proxy : 'http://${CURL_PROXY}:8080'"
-			local CURL_PROXY_STRING="-x http://${CURL_PROXY}:8080"
-		fi
-		echo
-
-		curl -fLsvv ${CURL_PROXY_STRING} -o /dev/null "${URL}" 2>&1
-		local CURL_EXIT="${?}"
-		echo
-
-		output usage "cURL exit code: ${CURL_EXIT}"
+		output usage "Using proxy : 'http://${CURL_PROXY}:8080'"
+		local CURL_PROXY_STRING="-x http://${CURL_PROXY}:8080"
 	fi
+	echo
+
+	curl -fLsvv ${CURL_PROXY_STRING} -o /dev/null "${URL}" 2>&1
+	local CURL_EXIT="${?}"
+	echo
+
+	output usage "cURL exit code: ${CURL_EXIT}"
 }
 
 # Python webserver
