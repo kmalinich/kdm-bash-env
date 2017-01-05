@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 30 Dec 2016 12:51:06 PM EST
+# Last modified : Thu 05 Jan 2017 04:24:05 PM EST
 
 #### Init functions ==start ####
 
@@ -475,8 +475,8 @@ export HISTIGNORE="l:ll:ls:ls -l:ls -lha:ls -lh:cd:..:cd ..:lll:..:g-gu:shutdown
 # Ignore duplicates and whitespace
 export HISTCONTROL="ignoredups:ignorespace"
 
-# Set prompt command to prompt-generate function and force prompt to write history after every command
-export PROMPT_COMMAND="prompt-generate; history -a"
+# Set prompt command to force write history after every command
+export PROMPT_COMMAND="history -a"
 
 bash-env-loading # Output loading message
 

@@ -1,10 +1,11 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 30 Dec 2016 06:50:01 PM EST
+# Last modified : Thu 05 Jan 2017 04:24:35 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
+
 
 #### Aliases: Function names ==start ####
 
@@ -1233,6 +1234,9 @@ _show_array_width() {
 
 
 #### Functions: PS1/bashrc ==start ####
+
+# Set prompt command to prompt-generate function and force prompt to write history after every command
+export PROMPT_COMMAND="_prompt_generate; ${PROMPT_COMMAND}"
 
 # Create ps1 prompt and do every-5-min timestamp
 _prompt_generate() {
