@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Thu 05 Jan 2017 04:24:35 PM EST
+# Last modified : Sun 15 Jan 2017 12:40:41 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1499,7 +1499,7 @@ _update_all() {
 		"brew")
 			local ARRAY_COMMANDS[0]="${PACKAGE_MANAGER} update"
 			local ARRAY_COMMANDS[1]="${PACKAGE_MANAGER} upgrade"
-			local ARRAY_COMMANDS[1]="${PACKAGE_MANAGER} cleanup"
+			local ARRAY_COMMANDS[2]="${PACKAGE_MANAGER} cleanup"
 			# macOS software update
 			local ARRAY_COMMANDS[3]="sudo softwareupdate -i -a"
 			;;
