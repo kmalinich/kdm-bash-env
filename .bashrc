@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Sun 15 Jan 2017 12:40:41 PM EST
+# Last modified : Wed 18 Jan 2017 11:21:51 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1305,37 +1305,37 @@ _show_motd() {
 	fi
 
 	# Generate the OS info string differently, based on OS
-	local OS_FAMILY="$(facter os.family)"
+	local OS_FAMILY="$(facter --no-ruby os.family)"
 	case ${OS_FAMILY} in
 		Darwin)
 			local DST="macOS"
-			local VER="$(facter os.macosx.version.major)"
+			local VER="$(facter --no-ruby os.macosx.version.major)"
 			;;
 		Debian)
-			local DST="$(facter os.distro.id)"
-			local VER="$( facter os.release.major)"
+			local DST="$(facter --no-ruby os.distro.id)"
+			local VER="$(facter --no-ruby os.release.major)"
 			;;
 		RedHat)
-			local DST="$(facter os.name)"
-			case "$(facter os.distro.id)" in
+			local DST="$(facter --no-ruby os.name)"
+			case "$(facter os--no-ruby .distro.id)" in
 				CentOS|RedHat*)
-					local VER="$(facter os.release.major).$(facter os.release.minor)"
+					local VER="$(facter --no-ruby os.release.major).$(facter --no-ruby os.release.minor)"
 					;;
 				Fedora)
-					local VER="$(facter os.release.major)"
+					local VER="$(facter --no-ruby os.release.major)"
 					;;
 				*)
-					local VER="$(facter os.release.full)"
+					local VER="$(facter --no-ruby os.release.full)"
 					;;
 			esac
 	esac
 
 	# Get CPU, RAM, uptime, sysload, perhaps do some formatting
-	local CPU="$( facter processors.models.0 | sed -r -e 's/(^\s?)|(\s?CPU)|(\s?@)|(\s?Processor)|(\(.?.?\))|(\s?[0-9]\.[0-9]{1,3}GHz\s?)|(\s[0-9]\s)|(Intel\(..?\)\sCore\(..?\)\s?)|Intel\sCore\s|\(|\)|Intel\(..?\)\s|Atom|Xeon|\sv[1-9]|\s//g' -e 's/(\s)+/\ /g')"
-	local RAM="$( facter memory.system.total)"
-	local RAMC="$(facter memory.system.capacity)"
-	local UPT="$( facter uptime)"
-	local LOAD="$(facter load_averages.5m)"
+	local CPU="$( facter --no-ruby processors.models.0 | sed -r -e 's/(^\s?)|(\s?CPU)|(\s?@)|(\s?Processor)|(\(.?.?\))|(\s?[0-9]\.[0-9]{1,3}GHz\s?)|(\s[0-9]\s)|(Intel\(..?\)\sCore\(..?\)\s?)|Intel\sCore\s|\(|\)|Intel\(..?\)\s|Atom|Xeon|\sv[1-9]|\s//g' -e 's/(\s)+/\ /g')"
+	local RAM="$( facter --no-ruby memory.system.total)"
+	local RAMC="$(facter --no-ruby memory.system.capacity)"
+	local UPT="$( facter --no-ruby uptime)"
+	local LOAD="$(facter --no-ruby load_averages.5m)"
 
 	# Format a couple things
 	local UPT="${UPT:0:8}"
