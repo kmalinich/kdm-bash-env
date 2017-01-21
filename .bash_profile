@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Sat 21 Jan 2017 03:42:14 PM EST
+# Last modified : Sat 21 Jan 2017 04:28:09 PM EST
 
 #### Init functions ==start ####
 
@@ -445,7 +445,6 @@ if hash ip; then
 fi
 
 export CURRENT_TTY="$(ps ax | awk '/'"${$}"'/ {printf $2; exit}')"
-
 bash-env-loading # Output loading message
 
 # If we have a hostname file, use it; otherwise call the hostname binary
@@ -457,7 +456,7 @@ DOMAIN_COUNT="${#DOMAIN_COUNT}"
 export DOMAIN_FULL="$(echo ${HOSTNAME_DATA} | cut -d '.' -f 2-)"
 export DOMAIN=$(      echo ${HOSTNAME_DATA} | cut -d '.' -f ${DOMAIN_COUNT}-)
 # Parse for hostname
-export HOST_SHORT="$(echo ${HOSTNAME_DATA} | cut -d '.' -f 1)"
+export HOST_SHORT="${HOSTNAME_DATA%%.*}"
 if [[ "${DOMAIN_COUNT}" -ge "3" ]]; then
 	HOST_SUB="${HOST_SHORT}.${DOMAIN_FULL/\.${DOMAIN}/}"
 fi

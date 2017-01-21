@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Sat 21 Jan 2017 03:43:26 PM EST
+# Last modified : Sat 21 Jan 2017 04:24:17 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1680,11 +1680,11 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		local USAGE_STRING="macos-hostname <new hostname>"
 		[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-		local LOCAL_HOST_NAME="$(echo ${1} | awk -F '.' '{print $1}')"
-		sudo scutil --set LocalHostName "${LOCAL_HOST_NAME}"
-		sudo scutil --set ComputerName "${1}"
-		sudo scutil --set HostName "${1}"
-		output green "Hostname set to ${1}"
+		sudo scutil --set LocalHostName "${1%%.*}"
+		sudo scutil --set ComputerName  "${1}"
+		sudo scutil --set HostName      "${1}"
+
+		output green "Hostname set to '${1}'"
 	}
 
 	# iTunes control
