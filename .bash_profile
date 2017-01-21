@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Thu 05 Jan 2017 04:24:05 PM EST
+# Last modified : Sat 21 Jan 2017 03:42:14 PM EST
 
 #### Init functions ==start ####
 
@@ -445,19 +445,25 @@ if hash ip; then
 fi
 
 export CURRENT_TTY="$(ps ax | awk '/'"${$}"'/ {printf $2; exit}')"
+
 bash-env-loading # Output loading message
 
 # If we have a hostname file, use it; otherwise call the hostname binary
 [[ -s /etc/hostname ]] && HOSTNAME_DATA="$(cat /etc/hostname)" || HOSTNAME_DATA="$(hostname -f)"
-# Parse the data
+# Determine subdomain count
+DOMAIN_COUNT="${HOSTNAME_DATA//[^.]}"
+DOMAIN_COUNT="${#DOMAIN_COUNT}"
+# Parse for domain
+export DOMAIN_FULL="$(echo ${HOSTNAME_DATA} | cut -d '.' -f 2-)"
+export DOMAIN=$(      echo ${HOSTNAME_DATA} | cut -d '.' -f ${DOMAIN_COUNT}-)
+# Parse for hostname
 export HOST_SHORT="$(echo ${HOSTNAME_DATA} | cut -d '.' -f 1)"
-export HOST_SUB="$(  echo ${HOSTNAME_DATA} | rev | cut -d '.' -f 3- | rev)"
-export DOMAIN="$(    echo ${HOSTNAME_DATA} | cut -d '.' -f 2-)"
-export DOMAIN_TLD=$( echo ${HOSTNAME_DATA} | rev | cut -d '.' -f -2 | rev)
+if [[ "${DOMAIN_COUNT}" -ge "3" ]]; then
+	HOST_SUB="${HOST_SHORT}.${DOMAIN_FULL/\.${DOMAIN}/}"
+fi
+export HOST_SUB="${HOST_SUB-${HOST_SHORT}}"
 # Populate ${HOSTNAME} environment variable if missing
 export HOSTNAME="${HOSTNAME-${HOSTNAME_DATA}}"
-# Clean up
-unset HOSTNAME_DATA
 
 bash-env-loading # Output loading message
 

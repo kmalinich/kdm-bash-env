@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 18 Jan 2017 11:21:51 AM EST
+# Last modified : Sat 21 Jan 2017 03:43:26 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1261,7 +1261,7 @@ _prompt_generate() {
 
 	# Generate / export PS1 prompt with color specfied by BASH_ENV_COLOR
 	# It would also be neat to do a color-responsive system load monitor... but not today
-	export PS1="\[${BASH_ENV_COLOR}\]${HOST_SHORT}\[\e[0m\]:\[\e[34m\]${PWD_FINAL} \[${BASH_ENV_COLOR}\]\\$\[\e[0m\] "
+	export PS1="\[${BASH_ENV_COLOR}\]${HOST_SUB}\[\e[0m\]:\[\e[34m\]${PWD_FINAL} \[${BASH_ENV_COLOR}\]\\$\[\e[0m\] "
 }
 
 # Dynamic MOTD with facter (if present)
