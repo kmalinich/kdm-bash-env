@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Sat 21 Jan 2017 04:28:09 PM EST
+# Last modified : Sat 21 Jan 2017 09:31:45 PM EST
 
 #### Init functions ==start ####
 
@@ -27,8 +27,10 @@ _bash_env_loading() {
 	# Assemble string
 	local LOADING_STRING="${LOADING_DOT_STRING}${LOADING_WHITESPACE_STRING}"
 
-	# Output message
-	echo -en "${COLOR_FG_BOLD_YLW}init ${LOADING_STRING}${COLOR_RESET}\r"
+	# Output message (if on Bash 4+)
+	if [[ "${BASH_VERSINFO[0]}" -ge "4" ]]; then
+		echo -en "${COLOR_FG_BOLD_YLW}init ${LOADING_STRING}${COLOR_RESET}\r"
+	fi
 
 	# Increment counter if until 24, then decrement
 	[[ "${LOADING_DOT_COUNT}" == "24" ]] && LOADING_DOT_DIRECTION="down"
