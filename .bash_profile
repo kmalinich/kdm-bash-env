@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Sat 21 Jan 2017 09:31:45 PM EST
+# Last modified : Sun 29 Jan 2017 06:29:47 PM EST
 
 #### Init functions ==start ####
 
@@ -111,6 +111,11 @@ ${HOME}/Library/Android/sdk/platform-tools
 /opt/local/sbin
 /opt/local/bin
 /opt/puppetlabs/bin
+/usr/lib/nvidia-367/bin
+/usr/lib/nvidia-361/bin
+/usr/lib/nvidia-340/bin
+/usr/lib/nvidia-304-updates/bin
+/usr/lib/nvidia-304/bin
 /usr/pgsql-9.6/bin
 /usr/pgsql-9.5/bin
 /usr/pgsql-9.4/bin
