@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 25 Jan 2017 10:14:39 AM EST
+# Last modified : Mon 30 Jan 2017 08:50:55 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1256,8 +1256,8 @@ _prompt_generate() {
 	# Generate titlebar text string
 	local TITLEBAR_TEXT="${HOST_SHORT}:${PWD_FINAL}"
 
-	# Only apply custom titlebar if we're in xterm
-	[[ "${TERM}" == *"xterm"* ]] && echo -en "\e]0;${TITLEBAR_TEXT}\007"
+	# Only apply custom titlebar if we're in xterm and on Bash 4+
+	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "4" ]] && echo -en "\e]0;${TITLEBAR_TEXT}\007"
 
 	# Generate / export PS1 prompt with color specfied by BASH_ENV_COLOR
 	# It would also be neat to do a color-responsive system load monitor... but not today
