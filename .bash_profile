@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Sun 29 Jan 2017 06:29:47 PM EST
+# Last modified : Mon 30 Jan 2017 08:42:34 AM EST
 
 #### Init functions ==start ####
 
@@ -460,14 +460,19 @@ bash-env-loading # Output loading message
 DOMAIN_COUNT="${HOSTNAME_DATA//[^.]}"
 DOMAIN_COUNT="${#DOMAIN_COUNT}"
 # Parse for domain
-export DOMAIN_FULL="$(echo ${HOSTNAME_DATA} | cut -d '.' -f 2-)"
-export DOMAIN=$(      echo ${HOSTNAME_DATA} | cut -d '.' -f ${DOMAIN_COUNT}-)
+if [[ "${DOMAIN_COUNT}" -ge "1" ]]; then
+	export DOMAIN_FULL="$(echo ${HOSTNAME_DATA} | cut -d '.' -f 2-)"
+fi
+export DOMAIN_FULL="${DOMAIN_FULL-local}"
 # Parse for hostname
 export HOST_SHORT="${HOSTNAME_DATA%%.*}"
 if [[ "${DOMAIN_COUNT}" -ge "3" ]]; then
+	export DOMAIN=$(echo ${HOSTNAME_DATA} | cut -d '.' -f ${DOMAIN_COUNT}-)
 	HOST_SUB="${HOST_SHORT}.${DOMAIN_FULL/\.${DOMAIN}/}"
 fi
+# Failstate catch
 export HOST_SUB="${HOST_SUB-${HOST_SHORT}}"
+export DOMAIN="${DOMAIN-local}"
 # Populate ${HOSTNAME} environment variable if missing
 export HOSTNAME="${HOSTNAME-${HOSTNAME_DATA}}"
 
