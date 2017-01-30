@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Sat 21 Jan 2017 09:31:50 PM EST
+# Last modified : Wed 25 Jan 2017 10:14:39 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1257,7 +1257,7 @@ _prompt_generate() {
 	local TITLEBAR_TEXT="${HOST_SHORT}:${PWD_FINAL}"
 
 	# Only apply custom titlebar if we're in xterm
-	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "4" ]] && echo -en "\e]0;${TITLEBAR_TEXT}\007"
+	[[ "${TERM}" == *"xterm"* ]] && echo -en "\e]0;${TITLEBAR_TEXT}\007"
 
 	# Generate / export PS1 prompt with color specfied by BASH_ENV_COLOR
 	# It would also be neat to do a color-responsive system load monitor... but not today
@@ -1751,11 +1751,17 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		local VOLUME_MUTE="$(osascript -e 'get output muted of (get volume settings)')"
 		local VOLUME_SOUND_EFFECT="/System/Library/LoginPlugins/BezelServices.loginPlugin/Contents/Resources/volume.aiff"
 
+		# Make sure it's doesn't have any missing values
+		if [[ "${VOLUME_CURRENT}" == *"missing"* || "${VOLUME_MUTE}" == *"missing"* ]]; then
+			output error "Unable to detect current volume; is there a controllable output device?"
+			return
+		fi
+
 		if [[ -z "${1}" ]]; then
 			output usage "macos-volume <${USAGE_OPTIONS_STRING}>"
 			echo
-			output green "Current volume: ${VOLUME_CURRENT}%"
-			output green "Mute status:    ${VOLUME_MUTE}"
+			output green "Current volume : ${VOLUME_CURRENT}%"
+			output green "Mute status    : ${VOLUME_MUTE}"
 			return
 		fi
 
