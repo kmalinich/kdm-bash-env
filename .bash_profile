@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 30 Jan 2017 08:42:34 AM EST
+# Last modified : Mon 30 Jan 2017 03:26:34 PM EST
 
 #### Init functions ==start ####
 
@@ -423,7 +423,8 @@ done
 
 # Fix SSH dir permissions
 chmod 0700 ${BASH_ENV_DIR_SSH} &> /dev/null
-chmod 0644 $(ls -1A ${BASH_ENV_DIR_SSH} | awk "\$0 "'!'"~ /^id_.sa\$/ {print \"${BASH_ENV_DIR_SSH}/\" \$0}") &> /dev/null
+chmod 0644 $(ls -1A ${BASH_ENV_DIR_SSH} | awk "\$0 "'!'"~ /^id_.sa\$/       {print \"${BASH_ENV_DIR_SSH}/\" \$0}") &> /dev/null
+chmod 0600 $(ls -1A ${BASH_ENV_DIR_SSH} | awk "\$0 "'!'"~ /^id_.sa.*.pub\$/ {print \"${BASH_ENV_DIR_SSH}/\" \$0}") &> /dev/null
 
 # Default "user color" configuration, overridden by library in 'extra' dir if present
 # Root = red, non-root = purple
