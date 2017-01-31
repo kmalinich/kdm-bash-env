@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+for FILE in $(ls -1A); do
+	mv ${FILE} ${HOME}/
+done
