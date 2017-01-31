@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Mon 30 Jan 2017 08:50:55 AM EST
+# Last modified : Tue 31 Jan 2017 11:46:01 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -83,14 +83,6 @@ hex2color() {
 hash() {
 	builtin hash ${1+"$@"} &> /dev/null
 	return "${?}"
-}
-
-# Convert squid timestamps to human date and time
-_convert_squid_timestamp() {
-	local USAGE_STRING="convert-squid-timestamp <squid log timestamp>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	echo "${1}" | perl -p -e 's/^([0-9]*)/"[".localtime($1)."]"/e'
 }
 
 #### Functions: Misc ==final ####
@@ -399,7 +391,15 @@ _time_elapsed_text() {
 #### Functions: Time ==final ####
 
 
-#### Functions: Number base conversion ==start ####
+#### Functions: Conversion ==start ####
+
+# Convert squid timestamps to human date and time
+_convert_squid_timestamp() {
+	local USAGE_STRING="convert-squid-timestamp <squid log timestamp>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	echo "${1}" | perl -p -e 's/^([0-9]*)/"[".localtime($1)."]"/e'
+}
 
 # Convert temperatures to other formats
 _convert_temperature() {
@@ -443,31 +443,41 @@ dechex() {
 	local USAGE_STRING="dec2hex <decimal number>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	# Add '0x0' to the hex string if single digit (under 16 in decimal)
-	# or just 0x if 2 or more digits
-	local PREFIX="0x"
-	[[ "${#HEX}" == "1" ]] && local PREFIX="0x0"
+	# Strip input of anything other than a-f, A-F, x, X, or numbers
+	local INPUT="${1//[^a-fA-FxX0-9]/}"
+	# Uppercase input (except x)
+	local INPUT=$(echo "${INPUT}" | tr '[:lower:]' '[:upper:]' | sed 's/^0X/0x/g')
 
-	# Detect if input is in hex or dec
-	if [[ "${1}" == *[x]* ]]; then
-		local PROCESS="hex2dec"
-		local HEX="${1#0x}"
-		local DEC="$((${PREFIX}${HEX}))"
+	# Detect input type
+	if [[ "${INPUT}" =~ ^0x[A-F0-9]? ]]; then
+		# Input is hexadecimal
+		local PROCESS="hex => dec"
+		[[ "${#INPUT}" == "2" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
+		local DEC="$((${INPUT}))" # Render decimal value
 	else
-		local PROCESS="dec2hex"
-		local DEC="${1}"
-		local HEX="$(printf '%x\n' ${DEC})"
+		# Input is decimal
+		local PROCESS="dec => hex"
+		local DEC="${INPUT}"
 	fi
 
-	output purple "Process     : ${PROCESS}"
-	output yellow "Decimal     : ${DEC}"
-	output green  "Hexadecimal : ${PREFIX}${HEX}"
+	# Render formatted hex value
+	local HEX="$(printf '0x%02X' ${INPUT})"
+
+	# Format decimal value if value is not "0"
+	if [[ "${DEC}" != "0" ]]; then
+		local DEC="${DEC##+(0)}"    # Remove leading zeros
+		local DEC="${DEC//[^0-9]/}" # Remove non-numbers
+		[[ "${#DEC}" == "0" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
+	fi
+
+	output purple "Process : ${PROCESS}"
+	output green  "Values  : ${DEC} | ${HEX}"
 }
 
 # Command aliases for above function
 alias hexdec='dechex'
 
-#### Functions: Number base conversion ==final ####
+#### Functions: Conversion ==final ####
 
 
 #### Functions: Android ==start ####
@@ -868,7 +878,7 @@ _net_mac() {
 	local USAGE_STRING="net-mac <MAC address, any format>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	# Strip mac of anything other than 0-9, a-f, and A-F
+	# Strip MAC of anything other than 0-9, a-f, and A-F
 	local CLEAN_MAC="${1//[^a-fA-F0-9 ]/}"
 
 	# Check the length of the cleaned MAC address. It should be 12 characters.
@@ -1607,6 +1617,7 @@ _update_cpan() {
 		output error "Could not detect package manager; cannot continue"
 		return 1
 	fi
+
 	# Install CPAN if missing
 	if ! hash cpan; then
 		local COMMAND="${PACKAGE_MANAGER} -y install perl-CPAN perl-App-cpanminus cpanminus"
