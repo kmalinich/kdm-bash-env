@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 31 Jan 2017 11:46:01 AM EST
+# Last modified : Wed 01 Feb 2017 10:51:13 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1277,14 +1277,14 @@ _prompt_generate() {
 # Dynamic MOTD with facter (if present)
 _show_motd() {
 	# Color shortcuts
-	local CLR_ENV="${BASH_ENV_COLOR_BOLD}"
-	local CLR_BLU="${COLOR_FG_BOLD_BLU}"
 	local CLR_BLK="${COLOR_FG_BOLD_BLK}"
+	local CLR_BLU="${COLOR_FG_BOLD_BLU}"
+	local CLR_ENV="${BASH_ENV_COLOR_BOLD}"
 	local CLR_RST="${COLOR_RESET}"
 
+	local BAR="${CLR_BLK}|${CLR_RST}"
 	local ARROW_L="${CLR_BLK}<${CLR_RST}"
 	local ARROW_R="${CLR_BLK}>${CLR_RST}"
-	local BAR="${CLR_BLK}|${CLR_RST}"
 
 	local BASE_KEY="%s${CLR_RST}"
 	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
