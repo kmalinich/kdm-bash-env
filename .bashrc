@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 01 Feb 2017 10:51:13 AM EST
+# Last modified : Wed 01 Feb 2017 11:59:22 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -2106,11 +2106,12 @@ alias mv='mv -i'
 alias mkdir='mkdir -p'
 
 # File list aliases
-alias ll='ls -Fhl   2> /dev/null'
-alias lll='ls -Fahl 2> /dev/null'
-alias la='ls -A     2> /dev/null'
-alias l.='ls -d .*  2> /dev/null'
-alias l='ls -CF     2> /dev/null'
+alias l.=' ls -d .*  2> /dev/null'
+alias l='  ls -CF    2> /dev/null'
+alias la=' ls -A     2> /dev/null'
+alias ll.='ls -dl .* 2> /dev/null'
+alias ll=' ls -Fhl   2> /dev/null'
+alias lll='ls -Fahl  2> /dev/null'
 
 # Quick up-directory-n-list
 alias ..='cd ..; ll'
