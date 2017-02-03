@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [[ "${PWD}" != "${HOME}/kdm-bash-env" ]]; then
+	echo "Please follow the install instructions at https://github.com/kmalinich/kdm-bash-env"
+	echo "The Git repo was not cloned under your home directory (the repo's full path should be '${HOME}/kdm-bash-env')"
+	exit 1
+fi
+
 echo "This will overwrite any identially named files/paths in your home directory."
 echo "Git repo directory listing:"
 
@@ -11,7 +17,7 @@ read -p "Install? Enter Y/N: " INSTALL_YN
 
 if [[ "${INSTALL_YN}" != [Yy] ]]; then
 	echo "Not installing"
-	exit 0
+	exit 2
 fi
 
 ARRAY_UNALIAS=(
@@ -63,6 +69,8 @@ for FILE in $(ls -1A); do
 done
 
 cd ${HOME}
+rm -rf kdm-bash-env
 git submodule update --init
 
 echo "Install complete"
+exit 0
