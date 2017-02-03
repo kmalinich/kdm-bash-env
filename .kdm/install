@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 
-echo "This will delete/overwrite any existing files in your home directory."
-echo "Directory listing:"
+echo "This will overwrite any identially named files/paths in your home directory."
+echo "Git repo directory listing:"
+
 echo
 ls -lha
 echo
@@ -13,10 +14,55 @@ if [[ "${INSTALL_YN}" != [Yy] ]]; then
 	exit 0
 fi
 
-for FILE in $(ls -1A | grep -Ev 'config'); do
+ARRAY_UNALIAS=(
+grep
+ls
+mkdir
+mv
+rm
+)
+
+for CMD in ${ARRAY_UNALIAS[@]}; do
+	unalias ${CMD} > /dev/null 2>&1
+done
+
+echo "Moving 'htoprc'"
+mkdir -p ${HOME}/.config/htop
+rm -f {HOME}/.config/htop/htoprc
+mv .config/htop/htoprc ${HOME}/.config/htop/
+rm -rf .config
+
+echo "Moving '.snmp/mibs'"
+mkdir -p ${HOME}/.snmp/mibs
+for MIB in $(ls -1A .snmp/mibs); do
+	rm -rf ${HOME}/${MIB}
+	mv ${MIB} ${HOME}/.snmp/mibs/
+done
+rm -rf .snmp
+
+echo "Moving '.nmap'"
+mkdir -p ${HOME}/.nmap
+for NSE in $(ls -1A .nmap); do
+	rm -rf ${HOME}/${NSE}
+	mv ${NSE} ${HOME}/.nmap/
+done
+rm -rf .nmap
+
+echo "Moving '.vim/bundle'"
+mkdir -p ${HOME}/.vim/bundle
+for BUNDLE in $(ls -1A .vim/bundle); do
+	rm -rf ${HOME}/${BUNDLE}
+	mv ${BUNDLE} ${HOME}/.vim/bundle/
+done
+rm -rf .vim
+
+for FILE in $(ls -1A); do
 	echo "Moving '${FILE}'"
 	rm -rf ${HOME}/${FILE}
 	mv ${FILE} ${HOME}/
 done
+
+cd ${HOME}
+git submodule update --init
 
 echo "Install complete"
