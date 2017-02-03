@@ -7,6 +7,8 @@ if [[ "${PWD}" != "${HOME}/kdm-bash-env" ]]; then
 fi
 
 echo "This will overwrite any identially named files/paths in your home directory."
+echo "It will also erase any current bash history entries."
+echo
 echo "Git repo directory listing:"
 
 echo
@@ -20,6 +22,7 @@ if [[ "${INSTALL_YN}" != [Yy] ]]; then
 	exit 2
 fi
 
+# Unalias the following commands to prevent conflicts
 ARRAY_UNALIAS=(
 grep
 ls
@@ -31,6 +34,7 @@ rm
 for CMD in ${ARRAY_UNALIAS[@]}; do
 	unalias ${CMD} > /dev/null 2>&1
 done
+
 
 echo "Moving 'htoprc'"
 mkdir -p ${HOME}/.config/htop
@@ -62,6 +66,24 @@ for BUNDLE in $(ls -1A .vim/bundle); do
 done
 rm -rf .vim
 
+echo "Moving '.kdm'"
+mkdir -p ${HOME}/.kdm/extra
+for EXTRA in $(ls -1A .kdm/extra); do
+	rm -rf ${HOME}/.kdm/extra/${EXTRA}
+	mv .kdm/extra/${EXTRA} ${HOME}/.kdm/extra/
+done
+
+mkdir -p ${HOME}/.kdm/toprc
+for TOPRC in $(ls -1A .kdm/toprc); do
+	rm -rf ${HOME}/.kdm/toprc/${TOPRC}
+	mv .kdm/toprc/${TOPRC} ${HOME}/.kdm/toprc/
+done
+
+rm -rf ${HOME}/.kdm/install
+mv .kdm/install ${HOME}/.kdm/install
+rm -rf .kdm
+
+# Move the rest of the files
 for FILE in $(ls -1A); do
 	echo "Moving '${FILE}'"
 	rm -rf ${HOME}/${FILE}
