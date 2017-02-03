@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 03 Feb 2017 01:08:35 PM EST
+# Last modified : Fri 03 Feb 2017 02:03:58 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1289,7 +1289,7 @@ _show_motd() {
 	local BASE_KEY="%s${CLR_RST}"
 	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
 
-	# kdm bash-env git hash/revision info
+	# kdm bash-env git hash
 	local OLD_PWD="${PWD}"
 	local HASH="#$(cd ${HOME}; git log --pretty=format:'%h' -n 1; cd ${OLD_PWD})"
 
@@ -1304,7 +1304,7 @@ _show_motd() {
 			echo -e "Facter not installed; dynamic MOTD not possible\n"
 		fi
 
-		# Print just the env hash and revision
+		# Print just the env hash
 		# Assemble header format string
 		local HEAD_VAL1="${CLR_BLU}%+s${CLR_RST}"
 		local HEAD_VAL2="${CLR_BLU}%-s${CLR_RST}"
