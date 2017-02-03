@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 03 Feb 2017 12:25:59 PM EST
+# Last modified : Fri 03 Feb 2017 01:08:35 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1292,7 +1292,6 @@ _show_motd() {
 	# kdm bash-env git hash/revision info
 	local OLD_PWD="${PWD}"
 	local HASH="#$(cd ${HOME}; git log --pretty=format:'%h' -n 1; cd ${OLD_PWD})"
-	local REV="v$(awk -F ',' '{print $1}' ${BASH_ENV_FILE_REV})"
 
 	# Use facter if possible, if not, too bad..
 	if ! hash facter; then
@@ -1310,7 +1309,7 @@ _show_motd() {
 		local HEAD_VAL1="${CLR_BLU}%+s${CLR_RST}"
 		local HEAD_VAL2="${CLR_BLU}%-s${CLR_RST}"
 		local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
-		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "${REV}"
+		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
 		return 1
 	fi
 
@@ -1359,7 +1358,6 @@ _show_motd() {
 	local ARRAY_VALUES=(
 	"bash-env"
 	"${HASH}"
-	"${REV}"
 	"${CPU}"
 	"${RAM}"
 	"${DST}"
@@ -1407,7 +1405,7 @@ _show_motd() {
 	local MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}\n"
 
 	# Output the header line, then the MOTD
-	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "${REV}"
+	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "rev"
 	printf "${MOTD_FMT}" "cpu"   "${CPU}" "${RAM}"  "ram"
 	printf "${MOTD_FMT}" " os"   "${DST}" "${VER}"  "ver"
 	printf "${MOTD_FMT}" " up"   "${UPT}" "${LOAD}" "load"

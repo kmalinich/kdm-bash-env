@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 03 Feb 2017 12:24:12 PM EST
+# Last modified : Fri 03 Feb 2017 01:13:49 PM EST
 
 #### Init functions ==start ####
 
@@ -60,6 +60,8 @@ hash() {
 # bash-env variable set
 export BASH_ENV_DIR_CODE="${HOME}/code"
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
+export BASH_ENV_DIR_NMAP="${HOME}/.nmap"
+export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
 export BASH_ENV_DIR_SSH="${HOME}/.ssh"
 export BASH_ENV_DIR_VIM="${HOME}/.vim"
 
@@ -70,14 +72,14 @@ export BASH_ENV_FILE_BASHLOGOUT="${HOME}/.bash_logout"
 export BASH_ENV_FILE_BASHPROFILE="${HOME}/.bash_profile"
 export BASH_ENV_FILE_BASHRC="${HOME}/.bashrc"
 export BASH_ENV_FILE_CONFIG="${BASH_ENV_DIR_KDM}/bash-env.conf"
-export BASH_ENV_FILE_DIGRC="${HOME}/.digrc"
 export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
-export BASH_ENV_FILE_GIT_CONFIG="${HOME}/.gitconfig"
-export BASH_ENV_FILE_GIT_IGNORE="${HOME}/.gitignore"
+export BASH_ENV_FILE_GEMRC="${HOME}/.gemrc"
+export BASH_ENV_FILE_GITCONFIG="${HOME}/.gitconfig"
+export BASH_ENV_FILE_GITIGNORE="${HOME}/.gitignore"
 export BASH_ENV_FILE_INPUTRC="${HOME}/.inputrc"
+export BASH_ENV_FILE_NLOAD="${HOME}/.nload"
 export BASH_ENV_FILE_PIPRC="${HOME}/.piprc"
 export BASH_ENV_FILE_PROXY="${BASH_ENV_DIR_KDM}/proxy"
-export BASH_ENV_FILE_REV="${BASH_ENV_DIR_KDM}/revision"
 export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
 export BASH_ENV_FILE_SSH_ALIAS="${BASH_ENV_DIR_KDM}/alias_ssh"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
@@ -160,7 +162,7 @@ ARRAY_NODE_PATH=(
 )
 
 ARRAY_MIBDIRS=(
-${HOME}/.snmp/mibs
+${BASH_ENV_DIR_SNMP}/mibs
 /usr/share/snmp/mibs
 )
 
