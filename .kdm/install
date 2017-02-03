@@ -1,5 +1,22 @@
 #!/usr/bin/env bash
 
-for FILE in $(ls -1A); do
+echo "This will delete/overwrite any existing files in your home directory."
+echo "Directory listing:"
+echo
+ls -lha
+echo
+
+read -p "Install? Enter Y/N: " INSTALL_YN
+
+if [[ "${INSTALL_YN}" != [Yy] ]]; then
+	echo "Not installing"
+	exit 0
+fi
+
+for FILE in $(ls -1A | grep -Ev 'config'); do
+	echo "Moving '${FILE}'"
+	rm -rf ${HOME}/${FILE}
 	mv ${FILE} ${HOME}/
 done
+
+echo "Install complete"
