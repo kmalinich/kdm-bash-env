@@ -35,24 +35,24 @@ rm -rf .config
 echo "Moving '.snmp/mibs'"
 mkdir -p ${HOME}/.snmp/mibs
 for MIB in $(ls -1A .snmp/mibs); do
-	rm -rf ${HOME}/${MIB}
-	mv ${MIB} ${HOME}/.snmp/mibs/
+	rm -rf ${HOME}/.snmp/mibs/${MIB}
+	mv .snmp/mibs/${MIB} ${HOME}/.snmp/mibs/
 done
 rm -rf .snmp
 
 echo "Moving '.nmap'"
 mkdir -p ${HOME}/.nmap
 for NSE in $(ls -1A .nmap); do
-	rm -rf ${HOME}/${NSE}
-	mv ${NSE} ${HOME}/.nmap/
+	rm -rf ${HOME}/.nmap/${NSE}
+	mv .nmap/${NSE} ${HOME}/.nmap/
 done
 rm -rf .nmap
 
 echo "Moving '.vim/bundle'"
 mkdir -p ${HOME}/.vim/bundle
 for BUNDLE in $(ls -1A .vim/bundle); do
-	rm -rf ${HOME}/${BUNDLE}
-	mv ${BUNDLE} ${HOME}/.vim/bundle/
+	rm -rf ${HOME}/.vim/bundle/${BUNDLE}
+	mv .vim/bundle/${BUNDLE} ${HOME}/.vim/bundle/
 done
 rm -rf .vim
 
