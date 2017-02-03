@@ -19,7 +19,6 @@ I test against:
 
 ViM plugins:
 * gmarik/Vundle.vim
-* WolfgangMehner/bash-support
 * amadeus/vim-evokai
 * ap/vim-css-color
 * ervandew/supertab
@@ -40,6 +39,22 @@ ViM plugins:
 * vim-scripts/indentpython.vim
 * vim-scripts/timestamp.vim
 
-ViM 8+ w/termguicolor support required, for best experience.
-Facter is required for the dynamic MOTD.
-Any other missing binaries/libraries it (probably) should warn you about.
+Other misc notes:
+* ViM 8+ w/termguicolor support required, for best experience
+* Facter is required for the dynamic MOTD
+* There's way, way, way too many SNMP MIBs in ~/.snmp/mibs - it slows down snmp commands
+* Any other missing binaries/libraries it (probably) should warn you about
+
+To install:
+
+```
+cd ${HOME}
+git clone https://github.com/kmalinich/kdm-bash-env.git
+cd kdm-bash-env
+.kdm/install
+cd ${HOME}
+```
+
+Then log out and back in, hopefully it doesn't break.
+
+I know, I know, it's awful. lol
