@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 01 Feb 2017 11:59:22 AM EST
+# Last modified : Fri 03 Feb 2017 12:25:59 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -2111,6 +2111,7 @@ alias l='  ls -CF    2> /dev/null'
 alias la=' ls -A     2> /dev/null'
 alias ll.='ls -dl .* 2> /dev/null'
 alias ll=' ls -Fhl   2> /dev/null'
+alias lld='ls -Fhld  2> /dev/null'
 alias lll='ls -Fahl  2> /dev/null'
 
 # Quick up-directory-n-list
@@ -2180,7 +2181,7 @@ fi
 # ping-slow : normal (1.0 second interval)
 #      ping : fast   (0.5 second interval)
 # ping-fast : faster (0.1 second interval)
-alias ping='ping -i 0.5'
+alias ping='     ping -i 0.5'
 alias ping-fast='ping -i 0.1'
 alias ping-slow='ping -i 1.0'
 
@@ -2188,11 +2189,11 @@ alias ping-slow='ping -i 1.0'
 if hash noping; then
 	# noping needs sudo if not root
 	if [[ "${UID}" != "0" ]]; then
-		alias noping='sudo noping -i 0.5'
+		alias noping='     sudo noping -i 0.5'
 		alias noping-fast='sudo noping -i 0.1'
 		alias noping-slow='sudo noping -i 1.0'
 	else
-		alias noping='noping -i 0.5'
+		alias noping='     noping -i 0.5'
 		alias noping-fast='noping -i 0.1'
 		alias noping-slow='noping -i 1.0'
 	fi
@@ -2217,12 +2218,50 @@ fi
 
 #### Aliases: Linux or macOS (with GNU conversion) ==start ####
 
+# grep/ls config
 if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-	# Color grep/ls, no stderr output
-	alias egrep='egrep --color=auto 2> /dev/null'
-	alias fgrep='fgrep --color=auto 2> /dev/null'
-	alias grep=' grep  --color=auto 2> /dev/null'
-	alias ls='   ls    --color=auto 2> /dev/null'
+	#     in a terminal : always enable/use color
+	# NOT in a terminal : disable color
+	[[ -t 2 ]] && CMD_COLOR="always"
+	CMD_COLOR="--color=${CMD_COLOR-never}"
+	GREP_BASE="grep ${CMD_COLOR} -s"
+
+	alias grep=" ${GREP_BASE}"
+	alias egrep="${GREP_BASE} -E"
+	alias fgrep="${GREP_BASE} -F"
+	alias igrep="${GREP_BASE} -i"
+	alias pgrep="${GREP_BASE} -P"
+	alias rgrep="${GREP_BASE} -r"
+	alias vgrep="${GREP_BASE} -v"
+
+	if hash zgrep; then
+		alias zgrep=" z${GREP_BASE}"
+		alias zegrep="z${GREP_BASE} -E"
+		alias zfgrep="z${GREP_BASE} -F"
+		alias zigrep="z${GREP_BASE} -i"
+		alias zpgrep="z${GREP_BASE} -P"
+		alias zrgrep="z${GREP_BASE} -r"
+		alias zvgrep="z${GREP_BASE} -v"
+	fi
+	if hash xzgrep; then
+		alias xzgrep=" xz${GREP_BASE}"
+		alias xzegrep="xz${GREP_BASE} -E"
+		alias xzfgrep="xz${GREP_BASE} -F"
+		alias xzigrep="xz${GREP_BASE} -i"
+		alias xzpgrep="xz${GREP_BASE} -P"
+		alias xzrgrep="xz${GREP_BASE} -r"
+		alias xzvgrep="xz${GREP_BASE} -v"
+	fi
+
+	alias cgrep=' grep -s --color=always' # Force enable color
+	alias ncgrep='grep -s --color=never'  # Force disable color
+
+	alias ls="  ls ${CMD_COLOR}   2> /dev/null"
+	alias cls=' ls --color=always 2> /dev/null' # Force enable color
+	alias ncls='ls --color=never  2> /dev/null' # Force disable color
+
+	unset CMD_COLOR
+	unset GREP_BASE
 
 	# Sort by IP address octets
 	alias sort-ip='sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n'

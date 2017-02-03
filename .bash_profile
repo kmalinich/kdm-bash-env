@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 30 Jan 2017 03:26:34 PM EST
+# Last modified : Fri 03 Feb 2017 12:24:12 PM EST
 
 #### Init functions ==start ####
 
@@ -558,7 +558,7 @@ if hash dircolors; then
 fi
 
 # Source bash libraries from the 'extra' dir
-for ENTRY in $(ls -A ${BASH_ENV_DIR_EXTRA} | grep -Ev '\.sw|\._|README'); do
+for ENTRY in $(ncls -A ${BASH_ENV_DIR_EXTRA} | ncgrep -Ev '\.sw|\._|README'); do
 	[[ -e ${BASH_ENV_DIR_EXTRA}/${ENTRY} ]] && . ${BASH_ENV_DIR_EXTRA}/${ENTRY}
 	bash-env-loading # Output loading message
 done

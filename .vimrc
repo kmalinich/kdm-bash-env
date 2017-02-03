@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Fri 09 Dec 2016 08:26:08 PM EST
+" Last Modified : Thu 02 Feb 2017 12:34:37 PM EST
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -144,7 +144,7 @@ au Filetype javascript set tabstop=2
 highlight bad_whitespace ctermbg=red guibg=red
 
 " Highlight bad whitespace by file type
-au Filetype c,cpp,css,html,javascript,perl,php,puppet,python,ruby,sh,vim match bad_whitespace /\s\+$/
+au Filetype c,cpp,css,html,javascript,perl,php,puppet,python,ruby,sh,spec,vim match bad_whitespace /\s\+$/
 "au Filetype c,cpp,javascript,html,python match bad_whitespace /^\t\+/
 
 " Highlight bad whitespace by file extension
