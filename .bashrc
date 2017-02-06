@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Mon 06 Feb 2017 10:30:07 AM EST
+# Last modified : Mon 06 Feb 2017 12:21:43 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -2228,7 +2228,6 @@ if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 	alias egrep="${GREP_BASE} -E"
 	alias fgrep="${GREP_BASE} -F"
 	alias igrep="${GREP_BASE} -i"
-	alias pgrep="${GREP_BASE} -P"
 	alias rgrep="${GREP_BASE} -r"
 	alias vgrep="${GREP_BASE} -v"
 
@@ -2237,7 +2236,6 @@ if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		alias zegrep="z${GREP_BASE} -E"
 		alias zfgrep="z${GREP_BASE} -F"
 		alias zigrep="z${GREP_BASE} -i"
-		alias zpgrep="z${GREP_BASE} -P"
 		alias zrgrep="z${GREP_BASE} -r"
 		alias zvgrep="z${GREP_BASE} -v"
 	fi
@@ -2246,7 +2244,6 @@ if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		alias xzegrep="xz${GREP_BASE} -E"
 		alias xzfgrep="xz${GREP_BASE} -F"
 		alias xzigrep="xz${GREP_BASE} -i"
-		alias xzpgrep="xz${GREP_BASE} -P"
 		alias xzrgrep="xz${GREP_BASE} -r"
 		alias xzvgrep="xz${GREP_BASE} -v"
 	fi
