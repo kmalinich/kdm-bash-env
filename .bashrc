@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 03 Feb 2017 02:03:58 PM EST
+# Last modified : Mon 06 Feb 2017 10:30:07 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -579,7 +579,7 @@ _ssh_xc() {
 
 # Create bash aliases of all the configured ssh hosts from ${BASH_ENV_FILE_SSH_CONFIG}
 _setup_ssh_aliases() {
-	awk -F ' ' '/^Host(\s){1,5}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' ${BASH_ENV_FILE_SSH_CONFIG} > ${BASH_ENV_FILE_SSH_ALIAS}
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' ${BASH_ENV_FILE_SSH_CONFIG} > ${BASH_ENV_FILE_SSH_ALIAS}
 	. ${BASH_ENV_FILE_SSH_ALIAS}
 }
 
