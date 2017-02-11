@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Mon 06 Feb 2017 12:21:43 PM EST
+# Last modified : Fri 10 Feb 2017 12:22:03 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -2331,8 +2331,11 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		fi
 	}
 
+	# Fake lspci
+	if hash dspci && ! hash lspci; then alias lspci='dspci'; fi
+
 	# Fake lsusb
-	alias lsusb='system_profiler SPUSBDataType'
+	hash system_profiler && alias lsusb='system_profiler SPUSBDataType'
 
 	# Clear font cache
 	alias macos-repair-fontcache='sudo atsutil databases -remove'

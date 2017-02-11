@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 03 Feb 2017 10:07:40 PM EST
+# Last modified : Fri 10 Feb 2017 12:22:24 PM EST
 
 #### Init functions ==start ####
 
@@ -194,6 +194,7 @@ cupsctl
 defaults
 diskutil
 dscacheutil
+dspci
 fs_usage
 gpt
 installer
