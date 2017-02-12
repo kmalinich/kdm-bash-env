@@ -67,3 +67,6 @@
 [submodule ".vim/bundle/bash-support"]
 	path = .vim/bundle/bash-support
 	url = https://github.com/WolfgangMehner/bash-support.git
+[submodule ".vim/bundle/nginx.vim"]
+	path = .vim/bundle/nginx.vim
+	url = https://github.com/vim-scripts/nginx.vim.git
