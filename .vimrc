@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Sat 11 Feb 2017 08:40:35 PM EST
+" Last Modified : Sat 11 Feb 2017 09:16:47 PM EST
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -104,6 +104,16 @@ augroup resCur
 	autocmd!
 	autocmd BufWinEnter * call ResCur()
 augroup END
+
+" Append modeline after last line in buffer
+" Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files
+function! AppendModeline()
+	let l:modeline = printf(" vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set :",
+				\ &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+	call append(line("$"), l:modeline)
+endfunction
+nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 " Interfaces file
 au BufRead /etc/network/interfaces :set syntax=interfaces
