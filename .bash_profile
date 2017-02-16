@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 10 Feb 2017 12:22:24 PM EST
+# Last modified : Thu 16 Feb 2017 02:43:51 AM UTC
 
 #### Init functions ==start ####
 
@@ -106,7 +106,10 @@ ${HOME}/.local/bin
 ${HOME}/perl5/bin
 ${HOME}/.composer/vendor/bin
 ${HOME}/Library/Android/sdk/platform-tools
-/var/www/charisma-dms/bash-tools
+/usr/local/rvm/gems/ruby-2.4.0/bin
+/usr/local/rvm/gems/ruby-2.4.0@global/bin
+/usr/local/rvm/rubies/ruby-2.4.0/bin
+/usr/local/rvm/bin
 /usr/local/opt/coreutils/libexec/gnubin
 /usr/local/sbin
 /usr/local/bin
