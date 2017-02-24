@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Fri 24 Feb 2017 01:30:55 PM EST
+" Last Modified : Fri 24 Feb 2017 01:34:18 PM EST
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -31,6 +31,7 @@ Plugin 'puppetlabs/puppet-syntax-vim'
 Plugin 'saltstack/salt-vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'shawncplus/phpcomplete.vim'
+Plugin 'stephpy/vim-yaml'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
