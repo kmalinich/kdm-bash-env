@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Sat 11 Feb 2017 09:16:47 PM EST
+" Last Modified : Fri 24 Feb 2017 01:30:55 PM EST
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -28,6 +28,7 @@ Plugin 'nvie/vim-flake8'
 Plugin 'othree/html5.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'puppetlabs/puppet-syntax-vim'
+Plugin 'saltstack/salt-vim'
 Plugin 'scrooloose/syntastic'
 Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'tpope/vim-fugitive'
