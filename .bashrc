@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Feb 2017 08:21:41 PM EST
+# Last modified : Wed 01 Mar 2017 01:01:55 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1162,6 +1162,7 @@ _show_colors() {
 	echo " 40-47 : background color"
 	echo " 1     : bold"
 	echo " 2     : dim"
+	echo " 3     : italic"
 	echo " 4     : underline"
 	echo " 5     : flashing"
 	echo " 7     : inverted"
