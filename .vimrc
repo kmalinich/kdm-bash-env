@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Wed 01 Mar 2017 01:27:57 PM EST
+" Last Modified : Wed 01 Mar 2017 02:05:10 PM EST
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -189,3 +189,6 @@ let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a
 let g:syntastic_php_checkers   = ['']
 " let g:syntastic_php_phpcs_args = '--tab-width = 4 --warning-severity = 6 --error-severity = 6'
 let g:syntastic_php_phpcs_args = ''
+
+" Salt config
+let g:sls_use_jinja_syntax = 0
