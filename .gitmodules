@@ -64,9 +64,6 @@
 [submodule ".vim/bundle/vim-brogrammer-theme"]
 	path = .vim/bundle/vim-brogrammer-theme
 	url = https://github.com/marciomazza/vim-brogrammer-theme.git
-[submodule ".vim/bundle/bash-support"]
-	path = .vim/bundle/bash-support
-	url = https://github.com/WolfgangMehner/bash-support.git
 [submodule ".vim/bundle/nginx.vim"]
 	path = .vim/bundle/nginx.vim
 	url = https://github.com/vim-scripts/nginx.vim.git
@@ -76,3 +73,6 @@
 [submodule ".vim/bundle/vim-yaml"]
 	path = .vim/bundle/vim-yaml
 	url = git@github.com:stephpy/vim-yaml.git
+[submodule ".vim/bundle/Vim-Jinja2-Syntax"]
+	path = .vim/bundle/Vim-Jinja2-Syntax
+	url = git@github.com:Glench/Vim-Jinja2-Syntax.git

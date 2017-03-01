@@ -18,7 +18,8 @@ I use/test against:
 
 (that's not to say everything is 100% working across all platforms - I fix the broken code as I find it)
 
-ViM plugins:
+ViM plugins (managed by Vundle):
+* Glench/Vim-Jinja2-Syntax
 * amadeus/vim-evokai
 * ap/vim-css-color
 * ervandew/supertab

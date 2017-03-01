@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Fri 24 Feb 2017 01:34:18 PM EST
+" Last Modified : Wed 01 Mar 2017 01:27:57 PM EST
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -17,7 +17,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins
-" Plugin 'WolfgangMehner/bash-support'
+Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'amadeus/vim-evokai'
 Plugin 'ap/vim-css-color'
 Plugin 'ervandew/supertab'
