@@ -9,16 +9,16 @@ Everything in this repo was done for the express purpose of automating or improv
 I update it almost every day.
 
 It got a wee bit out of control after a while, as it started a dumb challenge to write portable code.
-I test against:
+I use/test against:
+* Arch Linux 4.9
 * macOS 10.11+10.12 (w/GNU coreutils+findutils installed)
 * RHEL+CentOS
-* Ubuntu
 * Raspbian (Raspberry Pi Debian distro)
+* Ubuntu (occasionally)
 
 (that's not to say everything is 100% working across all platforms - I fix the broken code as I find it)
 
 ViM plugins:
-* gmarik/Vundle.vim
 * amadeus/vim-evokai
 * ap/vim-css-color
 * ervandew/supertab
@@ -29,19 +29,22 @@ ViM plugins:
 * othree/html5.vim
 * pangloss/vim-javascript
 * puppetlabs/puppet-syntax-vim
+* saltstack/salt-vim
 * scrooloose/syntastic
 * shawncplus/phpcomplete.vim
+* stephpy/vim-yaml
 * tpope/vim-fugitive
 * vim-airline/vim-airline
 * vim-airline/vim-airline-themes
 * vim-perl/vim-perl
 * vim-scripts/Align
 * vim-scripts/indentpython.vim
+* vim-scripts/nginx.vim
 * vim-scripts/timestamp.vim
 
 Other misc notes:
 * ViM 8+ w/termguicolor support required, for best experience
-* Facter is required for the dynamic MOTD
+* Facter is required for the dynamic MOTD (currently using 4.0.0)
 * There's way, way, way too many SNMP MIBs in ~/.snmp/mibs - it slows down snmp commands
 * Any other missing binaries/libraries it (probably) should warn you about
 
