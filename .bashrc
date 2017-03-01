@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Feb 2017 10:46:15 AM EST
+# Last modified : Tue 28 Feb 2017 08:21:41 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1316,6 +1316,10 @@ _show_motd() {
 	# Generate the OS info string differently, based on OS
 	local OS_FAMILY="$(facter --no-ruby os.family)"
 	case ${OS_FAMILY} in
+		Archlinux)
+			local DST="$(facter --no-ruby os.name)"
+			local VER="$(facter --no-ruby os.release.major).$(facter --no-ruby os.release.minor)"
+			;;
 		Darwin)
 			local DST="macOS"
 			local VER="$(facter --no-ruby os.macosx.version.major)"
@@ -1326,7 +1330,7 @@ _show_motd() {
 			;;
 		RedHat)
 			local DST="$(facter --no-ruby os.name)"
-			case "$(facter os--no-ruby .distro.id)" in
+			case "$(facter --no-ruby os.distro.id)" in
 				CentOS|RedHat*)
 					local VER="$(facter --no-ruby os.release.major).$(facter --no-ruby os.release.minor)"
 					;;
