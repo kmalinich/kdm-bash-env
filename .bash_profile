@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Thu 16 Feb 2017 02:43:51 AM UTC
+# Last modified : Tue 28 Feb 2017 10:46:07 AM EST
 
 #### Init functions ==start ####
 
@@ -193,6 +193,7 @@ ${BASH_ENV_FILE_SSH_CONFIG}
 # Array of automatic sudo-ing commands (macOS-only)
 export ARRAY_SUDO_MACOS=(
 atsutil
+chflags
 cupsctl
 defaults
 diskutil
@@ -208,13 +209,16 @@ kextstat
 kextunload
 keytool
 launchctl
+log
 mdutil
+newfs_apfs
 newfs_exfat
 newfs_hfs
 newfs_msdos
 newfs_udf
 nvram
 pmset
+productutil
 puppet
 reboot
 repair_packages
@@ -242,6 +246,7 @@ dnf-3
 ether-wake
 fdisk
 fedup
+pacman
 rpm
 service
 systemctl
@@ -271,6 +276,17 @@ sntop
 su
 syslog
 umount
+virsh
+virt-admin
+virt-clone
+virt-convert
+virt-host-validate
+virt-install
+virt-manager
+virt-pki-validate
+virt-viewer
+virt-xml
+virt-xml-validate
 visudo
 )
 
