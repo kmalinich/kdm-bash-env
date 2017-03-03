@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Thu 02 Mar 2017 09:07:31 PM EST
+# Last modified : Thu 02 Mar 2017 09:09:24 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1562,7 +1562,8 @@ _update_all() {
 	if hash _kdm_pull; then
 		local COMMAND="kdm-pull"
 		output leadup "${COMMAND}"
-		! ${COMMAND} &> /dev/null && output failure || output success
+		# Redefine this because it's not really real
+		! _kdm_pull &> /dev/null && output failure || output success
 	fi
 
 	# Check for npm, if it exists, update npm packages
