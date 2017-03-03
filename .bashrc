@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Thu 02 Mar 2017 08:44:34 PM EST
+# Last modified : Thu 02 Mar 2017 09:07:31 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1527,6 +1527,9 @@ _update_all() {
 			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -y update"
 			local ARRAY_COMMANDS[1]="sudo ${PACKAGE_MANAGER} -y upgrade"
 			;;
+		"pacman")
+			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -Syu"
+			;;
 		"zypper")
 			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -n update"
 			;;
@@ -1556,10 +1559,10 @@ _update_all() {
 	fi
 
 	# Update kdm-bash-env from Git
-	if hash kdm-pull; then
+	if hash _kdm_pull; then
 		local COMMAND="kdm-pull"
 		output leadup "${COMMAND}"
-		if ! ${COMMAND} &> /dev/null; then output failure; else output success; break; fi
+		! ${COMMAND} &> /dev/null && output failure || output success
 	fi
 
 	# Check for npm, if it exists, update npm packages
@@ -1574,6 +1577,21 @@ _update_all() {
 
 			# Increment loop counter
 			((NPM_UPDATE_COUNT++))
+		done
+	fi
+
+	# Check for ncu, if it exists, REALLY update npm packages
+	if hash ncu; then
+		local COMMAND="ncu -g -t"
+		output leadup "${COMMAND}"
+		local ARRAY_NPM_PACKAGES=($(${COMMAND} 2> /dev/null | sed '/^\s*$/d' | awk '$0 !~ /^All/ {print $1}'))
+		output success
+
+		# Perform update commands
+		for NPM_PACKAGE in "${ARRAY_NPM_PACKAGES[@]}"; do
+			local COMMAND="npm -g install ${NPM_PACKAGE}"
+			output leadup "${COMMAND}"
+			! ${COMMAND} &> /dev/null && output failure || output success
 		done
 	fi
 

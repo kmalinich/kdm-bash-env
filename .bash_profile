@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Tue 28 Feb 2017 10:46:07 AM EST
+# Last modified : Thu 02 Mar 2017 08:51:29 PM EST
 
 #### Init functions ==start ####
 
@@ -140,8 +140,9 @@ ${HOME}/Library/Android/sdk/platform-tools
 ARRAY_PACKAGE_MANAGERS=(
 apt-get
 brew
-dnf-3
 dnf
+dnf-3
+pacman
 yum
 zypper
 )
