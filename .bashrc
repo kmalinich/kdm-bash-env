@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 01 Mar 2017 01:01:55 PM EST
+# Last modified : Thu 02 Mar 2017 08:44:34 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1096,17 +1096,24 @@ _fix_macos_files() {
 # Find file function
 # Case insensitive, double wildcard search of CURRENT dir
 _find_file() {
-	local USAGE_STRING="find-file <filename>"
+	local USAGE_STRING="find-file <filename> [-e, escaped]"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	output usage "Finding '${1}' in '${PWD}'"
-	find . -iname "*${1}*" | sed 's/ /\\ /g' | sed 's/\[/\\\[/g' | sed 's/\]/\\\]/g' |sed 's/(/\\(/g' | sed 's/)/\\)/g' | sed 's/-/\\-/g' | sed "s/'/\\\'/g" | sed 's/!/\\!/g' | sed 's/&/\\\&/g' | sed 's/,/\\\,/g' | sed 's/\$/\\\$/g'
+	output stderr "Finding '${1}' under '${PWD}'"
+	output stderr " "
+
+	# in the ghettoooo
+	if [[ "${2}" == "-e" ]]; then
+		find . -iname "*${1}*" | sed 's/ /\\ /g' | sed 's/\[/\\\[/g' | sed 's/\]/\\\]/g' |sed 's/(/\\(/g' | sed 's/)/\\)/g' | sed 's/-/\\-/g' | sed "s/'/\\\'/g" | sed 's/!/\\!/g' | sed 's/&/\\\&/g' | sed 's/,/\\\,/g' | sed 's/\$/\\\$/g'
+	else
+		find . -iname "*${1}*"
+	fi
 }
 
 # Find ${COUNT} largest items in current directory
 _find_largest() {
 	local COUNT="10"
-	output stderr "Searching for ${COUNT} largest items in '${PWD_FINAL}'"
+	output stderr "Searching for ${COUNT} largest items under '${PWD_FINAL}'"
 	output stderr " "
 
 	du -hs * | sort -hr | head -n 10

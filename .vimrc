@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Wed 01 Mar 2017 02:05:10 PM EST
+" Last Modified : Thu 02 Mar 2017 08:46:02 PM EST
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -17,12 +17,12 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins
-Plugin 'Glench/Vim-Jinja2-Syntax'
 Plugin 'amadeus/vim-evokai'
 Plugin 'ap/vim-css-color'
 Plugin 'ervandew/supertab'
 Plugin 'fidian/hexmode'
 Plugin 'godlygeek/tabular'
+Plugin 'kmalinich/salt-jinja-vim'
 Plugin 'marciomazza/vim-brogrammer-theme'
 Plugin 'nvie/vim-flake8'
 Plugin 'othree/html5.vim'
@@ -162,6 +162,7 @@ au Filetype c,cpp,css,html,javascript,perl,php,puppet,python,ruby,sh,spec,vim ma
 
 " Highlight bad whitespace by file extension
 au BufRead,BufNewFile *.conf match bad_whitespace /\s\+$/
+au BufRead,BufNewFile *.sls match bad_whitespace /\s\+$/
 
 " Fix for editing crontabs with 'crontab -e' on macOS
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
@@ -189,6 +190,3 @@ let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a
 let g:syntastic_php_checkers   = ['']
 " let g:syntastic_php_phpcs_args = '--tab-width = 4 --warning-severity = 6 --error-severity = 6'
 let g:syntastic_php_phpcs_args = ''
-
-" Salt config
-let g:sls_use_jinja_syntax = 0
