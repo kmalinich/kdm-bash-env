@@ -69,10 +69,10 @@
 	url = https://github.com/vim-scripts/nginx.vim.git
 [submodule ".vim/bundle/salt-vim"]
 	path = .vim/bundle/salt-vim
-	url = git@github.com:saltstack/salt-vim.git
+	url = https://github.com/saltstack/salt-vim.git
 [submodule ".vim/bundle/vim-yaml"]
 	path = .vim/bundle/vim-yaml
-	url = git@github.com:stephpy/vim-yaml.git
+	url = https://github.com/stephpy/vim-yaml.git
 [submodule ".vim/bundle/salt-jinja-vim"]
 	path = .vim/bundle/salt-jinja-vim
-	url = git@github.com:kmalinich/salt-jinja-vim.git
+	url = https://github.com/kmalinich/salt-jinja-vim.git
