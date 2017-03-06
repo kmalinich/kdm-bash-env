@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Mon 06 Mar 2017 12:53:14 PM EST
+# Last modified : Mon 06 Mar 2017 12:55:00 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1536,7 +1536,7 @@ _update_all() {
 			local ARRAY_COMMANDS[1]="sudo ${PACKAGE_MANAGER} -y upgrade"
 			;;
 		"pacman")
-			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -Syu"
+			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -Syu --quiet --noconfirm --noprogressbar"
 			;;
 		"zypper")
 			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -n update"
