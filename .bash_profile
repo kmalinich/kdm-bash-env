@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 06 Mar 2017 12:33:59 PM EST
+# Last modified : Mon 06 Mar 2017 12:51:18 PM EST
 
 #### Init functions ==start ####
 
@@ -558,11 +558,8 @@ done
 # http://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history
 # Ignore/erase duplicates and space-prefixed commands ' ls'
 export HISTCONTROL="ignoredups:ignorespace"
-# Set bash history to:
-#  * -n : read all history lines not already read from the history file and append them to the history list
-#  * -a : write lines to history file
-# Also generate prompt with _prompt_generate function in .bashrc
-export PROMPT_COMMAND="history -n; history -a; _prompt_generate"
+# Also generate prompt with _prompt_generate function in .bashrc and write lines to history file
+export PROMPT_COMMAND="history -a; _prompt_generate"
 
 bash-env-loading # Output loading message
 
