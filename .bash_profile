@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Thu 02 Mar 2017 08:51:29 PM EST
+# Last modified : Mon 06 Mar 2017 12:33:59 PM EST
 
 #### Init functions ==start ####
 
@@ -81,7 +81,6 @@ export BASH_ENV_FILE_NLOAD="${HOME}/.nload"
 export BASH_ENV_FILE_PIPRC="${HOME}/.piprc"
 export BASH_ENV_FILE_PROXY="${BASH_ENV_DIR_KDM}/proxy"
 export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
-export BASH_ENV_FILE_SSH_ALIAS="${BASH_ENV_DIR_KDM}/alias_ssh"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
 export BASH_ENV_FILE_TOPRC="${HOME}/.toprc"
@@ -186,7 +185,6 @@ ${BASH_ENV_FILE_BASHRC}
 ARRAY_TOUCH=(
 ${BASH_ENV_FILE_BASHHISTORY}
 ${BASH_ENV_FILE_CONFIG}
-${BASH_ENV_FILE_PROXY}
 ${BASH_ENV_FILE_SSH_AUTHKEYS}
 ${BASH_ENV_FILE_SSH_CONFIG}
 )
@@ -498,25 +496,6 @@ export HOSTNAME="${HOSTNAME-${HOSTNAME_DATA}}"
 
 bash-env-loading # Output loading message
 
-# Set bash history size to unlimited
-export HISTFILESIZE=
-export HISTSIZE=
-# Set bash history format
-export HISTTIMEFORMAT="[%F %T] "
-# Set bash history file location, certain bash sessions truncate ~/.bash_history on close
-export HISTFILE=${BASH_ENV_FILE_BASHHISTORY}
-# Get number of lines in history
-[[ -s "${HISTFILE}" ]] && export HISTLENGTH="$(wc -l ${HISTFILE} | awk '{print $1}')"
-# Ignore bland commands
-export HISTIGNORE="l:ll:ls:ls -l:ls -lha:ls -lh:cd:..:cd ..:lll:..:g-gu:shutdown -r now:shutdown -h now:dt:dl:cd:uptime:ums-4.04"
-# Ignore duplicates and whitespace
-export HISTCONTROL="ignoredups:ignorespace"
-
-# Set prompt command to force write history after every command
-export PROMPT_COMMAND="history -a"
-
-bash-env-loading # Output loading message
-
 # jenv setup to manage multiple java versions
 # first, check if jenv is installed
 if hash jenv; then
@@ -546,8 +525,17 @@ if hash vim; then
 	bash-env-loading # Output loading message
 fi
 
-# Setup proxy based on proxy config file if it exists with data
-[[ -s ${BASH_ENV_FILE_PROXY} ]] && net-proxy-config "$(cat ${BASH_ENV_FILE_PROXY})" && bash-env-loading # Output loading message
+# Set bash history size to unlimited
+export HISTFILESIZE=
+export HISTSIZE=
+# Set bash history format
+export HISTTIMEFORMAT="[%F %T] "
+# Set bash history file location, certain bash sessions truncate ~/.bash_history on close
+export HISTFILE=${BASH_ENV_FILE_BASHHISTORY}
+# Get number of lines in history
+[[ -s "${HISTFILE}" ]] && export HISTLENGTH="$(cat ${HISTFILE} | wc -l)"
+# Ignore bland commands
+export HISTIGNORE="..:cd:cd ..:clear:dl:dt:l:ll:lll:ls:ls -A:ls -l:ls -lh:ls -lha:reboot:shutdown -h now:shutdown -r now"
 
 # Configure various shell options
 for OPTION in ${ARRAY_SHELL_OPTIONS[@]}; do
@@ -561,10 +549,22 @@ if [[ "${BASH_VERSION%%.*}" -ge 4 ]]; then
 	done
 fi
 
-# Source the files from the array
+# Source the files in ARRAY_SOURCE if they exist
 for ENTRY in ${ARRAY_SOURCE[@]}; do
-	[[ -e ${ENTRY} ]] && . ${ENTRY} && bash-env-loading # Output loading message
+	[[ -s ${ENTRY} ]] && . ${ENTRY} && bash-env-loading # Output loading message
 done
+
+# History control setup
+# http://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history
+# Ignore/erase duplicates and space-prefixed commands ' ls'
+export HISTCONTROL="ignoredups:ignorespace"
+# Set bash history to:
+#  * -n : read all history lines not already read from the history file and append them to the history list
+#  * -a : write lines to history file
+# Also generate prompt with _prompt_generate function in .bashrc
+export PROMPT_COMMAND="history -n; history -a; _prompt_generate"
+
+bash-env-loading # Output loading message
 
 # If dircolors exists, run it
 if hash dircolors; then
@@ -582,12 +582,11 @@ for ENTRY in $(ncls -A ${BASH_ENV_DIR_EXTRA} | ncgrep -Ev '\.sw|\._|README'); do
 	bash-env-loading # Output loading message
 done
 
+# Setup SSH aliases from SSH config file
+eval "$(awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' ${BASH_ENV_FILE_SSH_CONFIG})"
 bash-env-loading # Output loading message
-# Refresh SSH aliases from SSH config file
-_setup_ssh_aliases
 
-bash-env-loading # Output loading message
-# Init loading variables
+# Re-init loading variables
 unset LOADING_DOT_COUNT
 unset LOADING_WHITESPACE_COUNT
 

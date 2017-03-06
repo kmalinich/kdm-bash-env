@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Thu 02 Mar 2017 09:09:24 PM EST
+# Last modified : Mon 06 Mar 2017 12:39:38 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -29,12 +29,14 @@ alias g-gu='_g_gu'
 alias kdm-help='_kdm_help'
 alias kdm-pull='_kdm_pull'
 
+alias md5-clean='_md5_clean'
+alias md5-compare='_md5_compare'
+
 alias net-curl='_net_curl'
 alias net-dns-lookup='_net_dns_lookup'
 alias net-info='_net_info'
+alias net-mac-lookup='_net_mac_lookup'
 alias net-mac='_net_mac'
-#alias net-mac-format='_net_mac'
-#alias net-mac-lookup='_net_mac_lookup'
 alias net-ping-average-csv='_net_ping_average_csv'
 alias net-ping-average='_net_ping_average'
 alias net-ping-subnet='_net_ping_subnet'
@@ -42,10 +44,9 @@ alias net-webserver='_net_webserver'
 
 alias prompt-generate='_prompt_generate'
 
-alias setup-ssh-aliases='_setup_ssh_aliases'
-
 alias show-array-width='_show_array_width'
 alias show-bin='_show_bin'
+alias showbin='_show_bin'
 alias show-clock='_show_clock'
 alias show-colors='_show_colors'
 alias show-motd='_show_motd'
@@ -484,6 +485,7 @@ alias hexdec='dechex'
 
 # Make md5sum file for a Android recovery
 _android_make_md5() {
+	! hash md5sum && output error "md5sum not available, cannot continue" && return
 	local USAGE_STRING="android-make-md5 <filename>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
@@ -575,12 +577,6 @@ _ssh_xc() {
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	ssh -o Compression=yes -o ForwardX11=yes -o ForwardX11Trusted=yes ${1}
-}
-
-# Create bash aliases of all the configured ssh hosts from ${BASH_ENV_FILE_SSH_CONFIG}
-_setup_ssh_aliases() {
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' ${BASH_ENV_FILE_SSH_CONFIG} > ${BASH_ENV_FILE_SSH_ALIAS}
-	. ${BASH_ENV_FILE_SSH_ALIAS}
 }
 
 #### Functions: SSH ==final ####
@@ -760,7 +756,7 @@ _net_ping_subnet() {
 	local USAGE_STRING="net-ping-subnet <CIDR range>"
 
 	# Return if fping is missing
-	! hash fping && output error "fping not installed" && return
+	! hash fping && output error "fping not available, cannot continue" && return
 
 	output purple "Pinging subnet '${1}'"
 	# Sort by IP octets
@@ -882,10 +878,7 @@ _net_mac() {
 	local CLEAN_MAC="${1//[^a-fA-F0-9 ]/}"
 
 	# Check the length of the cleaned MAC address. It should be 12 characters.
-	if [[ "${#CLEAN_MAC}" != "12" ]]; then
-		output error "The provided MAC address, '${1}', was not the proper format (the string was '${CLEAN_MAC}' after sanitizing)"
-		return
-	fi
+	[[ "${#CLEAN_MAC}" != "12" ]] && output error "'${1}' is invalid ('${CLEAN_MAC}' after sanitizing)" && return
 
 	# If the MAC entered is kosher, build out the variables
 	# Lowercase
@@ -918,10 +911,7 @@ _net_mac() {
 # Look up MAC address against IEEE database
 _net_mac_lookup() {
 	# Check if oui npm package is installed
-	if ! hash oui; then
-		output error "oui not installed (via npm); cannot continue"
-		return
-	fi
+	hash oui || output error "oui not available, cannot continue" && return
 
 	local USAGE_STRING="net-mac-lookup <MAC address with colons [at least first 3 octets]>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
@@ -1127,7 +1117,7 @@ _find_largest() {
 # Check if an executable exists, if so, show info about it
 _show_bin() {
 	if ! hash "${1}"; then
-		output error "Could not find '${1}' in defined PATH"
+		output error "Could not find '${1}' in defined PATH, cannot continue"
 		return 1
 	fi
 
@@ -1165,16 +1155,24 @@ _show_clock() {
 
 # Show all of the (256) colors
 _show_colors() {
-	echo " 30-37 : foreground color"
-	echo " 40-47 : background color"
-	echo " 1     : bold"
-	echo " 2     : dim"
-	echo " 3     : italic"
-	echo " 4     : underline"
-	echo " 5     : flashing"
-	echo " 7     : inverted"
+  # Bounce if term not wide enough
+  [[ "${COLUMNS}" -le 195 ]] && output error "Terminal needs to be at least 196 columns to show-colors, cannot continue" && return
+
+	output stderr "--- Colors ---"
+	echo "30-37 : foreground"
+	echo "40-47 : background"
 	echo
 
+	output stderr "-- Modifiers --"
+	echo " 1 : bold"
+	echo " 2 : dim"
+	echo " 3 : italic"
+	echo " 4 : underline"
+	echo " 5 : flashing"
+	echo " 7 : inverted"
+	echo
+
+	output stderr "---- Demo ----"
 	# Foreground colors
 	for COLORS_FOREGROUND in {30..37}; do
 		# No background
@@ -1215,15 +1213,11 @@ _show_colors() {
 
 # Show most frequently executed commands
 _show_top_cmds() {
-	[[ ! -s ${HISTFILE} ]] && output error "bash history file missing or empty"
-
+	[[ ! -s ${HISTFILE} ]] && output error "bash history file missing or empty, cannot continue"
 	local BASH_HISTORY_CMDS="$(grep -cv '#' ${HISTFILE})"
 	local COUNT="15"
 
-	output usage  "Bash history length: ${BASH_HISTORY_CMDS} commands"
-	output purple "-- Top commands --"
-	echo
-
+	output stderr "-- ${BASH_HISTORY_CMDS} commands total -------------------- Top ${COUNT} --"
 	grep -v '#' ${HISTFILE} | sort | uniq -c | sort -rn | head -n ${COUNT}
 }
 
@@ -1250,11 +1244,22 @@ _show_array_width() {
 
 #### Functions: Show ==final ####
 
+# Format the output of md5sum command
+_md5_clean() {
+	! hash md5sum && output error "md5sum not available, cannot continue" && return
+	local USAGE_STRING="md5-clean <filename>, one file only"
+	[[ -z "${1}" || "${2}" ]] && output usage "${USAGE_STRING}" && return
+	md5sum "${1}" | awk '{print $1}'
+}
+
+# Do md5sum on two files and compare them
+_md5_compare() {
+	local USAGE_STRING="md5-compare <filename> <filename>, exit code only"
+	[[ -z "${1}" || -z "${2}" ]] && output usage "${USAGE_STRING}" && return
+	[[ $(_md5_clean "${1}") == $(_md5_clean "${2}") ]] && return 0 || return 1
+}
 
 #### Functions: PS1/bashrc ==start ####
-
-# Set prompt command to prompt-generate function and force prompt to write history after every command
-export PROMPT_COMMAND="_prompt_generate; ${PROMPT_COMMAND}"
 
 # Create ps1 prompt and do every-5-min timestamp
 _prompt_generate() {
@@ -1284,6 +1289,9 @@ _prompt_generate() {
 
 # Dynamic MOTD with facter (if present)
 _show_motd() {
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
+
 	# Color shortcuts
 	local CLR_BLK="${COLOR_FG_BOLD_BLK}"
 	local CLR_BLU="${COLOR_FG_BOLD_BLU}"
@@ -1309,7 +1317,7 @@ _show_motd() {
 			echo   'WARN_FACTER=1' >> ${BASH_ENV_FILE_CONFIG}
 
 			# Output warning message about facter being missing
-			echo -e "Facter not installed; dynamic MOTD not possible\n"
+			echo -e "facter not available; dynamic MOTD not possible\n"
 		fi
 
 		# Print just the env hash
@@ -1504,7 +1512,7 @@ _update_all() {
 
 	# Bounce if we couldn't find a supported package manager
 	if [[ -z "${PACKAGE_MANAGER}" ]]; then
-		output error "Could not detect package manager; cannot continue"
+		output error "Could not detect package manager, cannot continue"
 		return 1
 	fi
 
@@ -1643,7 +1651,7 @@ _update_cpan() {
 
 	# Bounce if we couldn't find a supported package manager
 	if [[ -z "${PACKAGE_MANAGER}" ]]; then
-		output error "Could not detect package manager; cannot continue"
+		output error "Could not detect package manager, cannot continue"
 		return 1
 	fi
 
@@ -1682,7 +1690,7 @@ _update_cpan() {
 
 	# Check for cpanm and cpanm-outdated again
 	if ! hash cpanm && hash cpan-outdated; then
-		output error "cpanminus and cpan-outdated could not be found; cannot continue"
+		output error "cpanminus and cpan-outdated could not be found, cannot continue"
 		return 1
 	fi
 
@@ -1919,7 +1927,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		local USAGE_STRING="sys-restart <process name>"
 		[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-		! hash systemctl && output error "systemctl not available; perhaps this is not a systemd-enabled OS" && return
+		! hash systemctl && output error "systemctl not available, cannot continue" && return
 
 		output yellow "Stopping '${1}'"
 		systemctl stop ${1}
@@ -2252,7 +2260,7 @@ fi
 if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 	#     in a terminal : always enable/use color
 	# NOT in a terminal : disable color
-	[[ -t 2 ]] && CMD_COLOR="always"
+	[[ -t 2 ]] && CMD_COLOR="auto"
 	CMD_COLOR="--color=${CMD_COLOR-never}"
 	GREP_BASE="grep ${CMD_COLOR} -s"
 
@@ -2317,13 +2325,13 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	export PING_WAIT="-t 1"
 
 	# EFI partition mount for disk0, disk1, and disk2
-	alias efi-mount-0='diskutil mount /dev/disk0s1; cd /Volumes/EFI/EFI'
-	alias efi-mount-1='diskutil mount /dev/disk1s1; cd /Volumes/EFI/EFI'
-	alias efi-mount-2='diskutil mount /dev/disk2s1; cd /Volumes/EFI/EFI'
+	[[ -b /dev/disk0s1 ]] && alias efi-mount-0='diskutil mount /dev/disk0s1; [[ -d /Volumes/EFI/EFI ]] && cd /Volumes/EFI/EFI'
+	[[ -b /dev/disk1s1 ]] && alias efi-mount-1='diskutil mount /dev/disk1s1; [[ -d /Volumes/EFI/EFI ]] && cd /Volumes/EFI/EFI'
+	[[ -b /dev/disk2s1 ]] && alias efi-mount-2='diskutil mount /dev/disk2s1; [[ -d /Volumes/EFI/EFI ]] && cd /Volumes/EFI/EFI'
 
 	# Show listening ports a bit easier
-	alias net-listening-ipv4="netstat -p tcp -an | grep -E '^(tcp4|udp4).*.LISTEN' | sort"
-	alias net-listening-ipv6="netstat -p tcp -an | grep -E '^(tcp6|udp6).*.LISTEN' | sort"
+	alias net-listening-ipv4="netstat -an | grep -E '^..p4.*.LISTEN' | sort"
+	alias net-listening-ipv6="netstat -an | grep -E '^..p6.*.LISTEN' | sort"
 
 	# Network config information
 	_net_info() {

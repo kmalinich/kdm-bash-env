@@ -35,6 +35,16 @@ for CMD in ${ARRAY_UNALIAS[@]}; do
 	unalias ${CMD} > /dev/null 2>&1
 done
 
+# Format the output of md5sum command
+md5_clean() {
+	! hash md5sum > /dev/null && echo "ERROR : md5sum not available, cannot continue" && exit 1
+	md5sum "${1}" | awk '{print $1}'
+}
+
+# Do md5sum on two files and compare them
+md5_compare() {
+	[[ $(md5_clean "${1}") == $(md5_clean "${2}") ]] && return 0 || return 1
+}
 
 echo "Moving 'htoprc'"
 mkdir -p ${HOME}/.config/htop
@@ -66,12 +76,24 @@ for BUNDLE in $(ls -1A .vim/bundle); do
 done
 rm -rf .vim
 
-echo "Moving '.kdm'"
-mkdir -p ${HOME}/.kdm/extra
-for EXTRA in $(ls -1A .kdm/extra); do
-	rm -rf ${HOME}/.kdm/extra/${EXTRA}
-	mv .kdm/extra/${EXTRA} ${HOME}/.kdm/extra/
+DIR=".kdm/extra"
+echo "Moving '${DIR}'"
+mkdir -p ${HOME}/${DIR}
+for FILE in $(ls -1A ${DIR}); do
+	FILE_REPO="${DIR}/${FILE}"
+	FILE_HOME="${HOME}/${FILE_REPO}"
+
+	# Does it already exist in the home directory?
+	if [[ -s ${FILE_HOME} ]]; then
+		if ! md5_compare ${FILE_REPO} ${FILE_HOME}; then
+			rm -rf ${FILE_HOME}
+			mv ${FILE_REPO} ${FILE_HOME}
+		fi
+	fi
 done
+unset FILE
+unset FILE_REPO
+unset FILE_HOME
 
 mkdir -p ${HOME}/.kdm/toprc
 for TOPRC in $(ls -1A .kdm/toprc); do
