@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Mon 06 Mar 2017 12:39:38 PM EST
+# Last modified : Mon 06 Mar 2017 12:53:14 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1615,6 +1615,38 @@ _update_all() {
 		# Perform update commands
 		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
 			local COMMAND="pip install --upgrade ${PIP_PACKAGE}"
+			output leadup "${COMMAND}"
+			! ${COMMAND} &> /dev/null && output failure || output success
+		done
+	fi
+
+	# Check for python-pip2, if it exists, update python-pip2 packages
+	if hash pip2; then
+		# Array of pip2 packages to update, with pip2 and setuptools being first
+		local COMMAND="pip2 list -o"
+		output leadup "${COMMAND}"
+		local ARRAY_PIP_PACKAGES=(pip setuptools $(pip2 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		output success
+
+		# Perform update commands
+		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
+			local COMMAND="pip2 install --upgrade ${PIP_PACKAGE}"
+			output leadup "${COMMAND}"
+			! ${COMMAND} &> /dev/null && output failure || output success
+		done
+	fi
+
+	# Check for python-pip3, if it exists, update python-pip3 packages
+	if hash pip3; then
+		# Array of pip3 packages to update, with pip3 and setuptools being first
+		local COMMAND="pip3 list -o"
+		output leadup "${COMMAND}"
+		local ARRAY_PIP_PACKAGES=(pip setuptools $(pip3 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		output success
+
+		# Perform update commands
+		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
+			local COMMAND="pip3 install --upgrade ${PIP_PACKAGE}"
 			output leadup "${COMMAND}"
 			! ${COMMAND} &> /dev/null && output failure || output success
 		done
