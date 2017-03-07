@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 06 Mar 2017 12:51:18 PM EST
+# Last modified : Mon 06 Mar 2017 08:17:46 PM EST
 
 #### Init functions ==start ####
 
@@ -175,11 +175,11 @@ ${HOME}/.profile
 ${BASH_ENV_FILE_TIME_TOTAL}
 )
 
-#/usr/local/etc/bash_completion
 ARRAY_SOURCE=(
-${BASH_ENV_FILE_BASHRC}
 /etc/profile.d/bash_completion.sh
 /usr/local/etc/profile.d/bash_completion.sh
+/usr/local/etc/bash_completion
+${BASH_ENV_FILE_BASHRC}
 )
 
 ARRAY_TOUCH=(
