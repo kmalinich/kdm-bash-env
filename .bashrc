@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 10 Mar 2017 11:54:13 AM EST
+# Last modified : Fri 10 Mar 2017 04:44:08 PM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -1055,8 +1055,8 @@ _fix_macos_files() {
 	[[ -z "${FILES_TO_REMOVE}" ]] && output purple "No macOS attribute/Finder files under '${PWD}' to remove" && return
 
 	output yellow "Removing these macOS attribute/Finder files under '${PWD}':"
-
 	echo
+
 	for FILE in "${FILES_TO_REMOVE[@]}"; do
 		output yellow "${FILE}"
 	done
@@ -1065,17 +1065,15 @@ _fix_macos_files() {
 	read -p "Are you sure you want to remove these files? Enter Y/N: " FIX_MACOS_FILES_YN
 	echo
 
-	if [[ "${FIX_MACOS_FILES_YN}" != [Yy] ]]; then
-		output purple "No macOS attribute/Finder files under '${PWD}' removed"
-	else
-		for FILE in "${FILES_TO_REMOVE[@]}"; do
-			output yellow "Removing '${FILE}'"
-			rm -f "${FILE}"
-		done
-		echo
+	[[ "${FIX_MACOS_FILES_YN}" != [Yy] ]] && output purple "No macOS attribute/Finder files under '${PWD}' removed" && return
 
-		output green "All macOS attribute/Finder files under '${PWD}' removed"
-	fi
+	for FILE in "${FILES_TO_REMOVE[@]}"; do
+		output yellow "Removing '${FILE}'"
+		rm -f "${FILE}"
+	done
+	echo
+
+	output green "All macOS attribute/Finder files under '${PWD}' removed"
 }
 
 #### Functions: Fix ==final ####
