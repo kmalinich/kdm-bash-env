@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Mon 06 Mar 2017 12:55:00 PM EST
+# Last modified : Fri 10 Mar 2017 11:54:13 AM EST
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -2111,7 +2111,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 
 	# Start all VMs
 	_kvm_start_all() {
-		local ARRAY_START=($(virsh list --all | awk '/shut off/ {print $2}' | sed '/Name/d' | sed '/^$/d'))
+		local ARRAY_START=($(virsh list --all | awk '/shut off/ {print $2}' | sed -e '/Name/d' -e '/^$/d'))
 		[[ -z "${ARRAY_START}" ]] && output purple "No shut off VMs" && return
 
 		output purple "These VMs will be started:"
