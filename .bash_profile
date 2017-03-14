@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 06 Mar 2017 08:17:46 PM EST
+# Last modified : Tue 14 Mar 2017 10:39:22 AM EDT
 
 #### Init functions ==start ####
 
@@ -29,7 +29,7 @@ _bash_env_loading() {
 
 	# Output message (if on Bash 4+)
 	if [[ "${BASH_VERSINFO[0]}" -ge "4" ]]; then
-		echo -en "${COLOR_FG_BOLD_YLW}init ${LOADING_STRING}${COLOR_RESET}\r"
+		echo -en "${C_YLW_BLD}init ${LOADING_STRING}${COLOR_RESET}\r"
 	fi
 
 	# Increment counter if until 24, then decrement
@@ -71,6 +71,7 @@ export BASH_ENV_FILE_BASHHISTORY="${BASH_ENV_DIR_KDM}/history"
 export BASH_ENV_FILE_BASHLOGOUT="${HOME}/.bash_logout"
 export BASH_ENV_FILE_BASHPROFILE="${HOME}/.bash_profile"
 export BASH_ENV_FILE_BASHRC="${HOME}/.bashrc"
+export BASH_ENV_FILE_COLORS="${BASH_ENV_DIR_KDM}/bash-env-colors"
 export BASH_ENV_FILE_CONFIG="${BASH_ENV_DIR_KDM}/bash-env.conf"
 export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
 export BASH_ENV_FILE_GEMRC="${HOME}/.gemrc"
@@ -79,7 +80,6 @@ export BASH_ENV_FILE_GITIGNORE="${HOME}/.gitignore"
 export BASH_ENV_FILE_INPUTRC="${HOME}/.inputrc"
 export BASH_ENV_FILE_NLOAD="${HOME}/.nload"
 export BASH_ENV_FILE_PIPRC="${HOME}/.piprc"
-export BASH_ENV_FILE_PROXY="${BASH_ENV_DIR_KDM}/proxy"
 export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
@@ -312,44 +312,8 @@ dirspell
 unset LOADING_DOT_COUNT
 unset LOADING_WHITESPACE_COUNT
 
-# Output color variables
-export COLOR_RESET='\e[m'
-export COLOR_BOLD='\e[1m'
-export COLOR_ALERT='\e[41;5m'
-export COLOR_FG_BLK='\e[30m'
-export COLOR_FG_BLU='\e[34m'
-export COLOR_FG_CYN='\e[36m'
-export COLOR_FG_GRN='\e[32m'
-export COLOR_FG_PRP='\e[35m'
-export COLOR_FG_RED='\e[31m'
-export COLOR_FG_WHT='\e[37m'
-export COLOR_FG_YLW='\e[33m'
-# Bold
-export COLOR_FG_BOLD_BLK='\e[30;1m'
-export COLOR_FG_BOLD_BLU='\e[34;1m'
-export COLOR_FG_BOLD_CYN='\e[36;1m'
-export COLOR_FG_BOLD_GRN='\e[32;1m'
-export COLOR_FG_BOLD_PRP='\e[35;1m'
-export COLOR_FG_BOLD_RED='\e[31;1m'
-export COLOR_FG_BOLD_WHT='\e[37;1m'
-export COLOR_FG_BOLD_YLW='\e[33;1m'
-# Flashing
-export COLOR_FG_FLASH_BLK='\e[30;5m'
-export COLOR_FG_FLASH_BLU='\e[34;5m'
-export COLOR_FG_FLASH_CYN='\e[36;5m'
-export COLOR_FG_FLASH_GRN='\e[32;5m'
-export COLOR_FG_FLASH_PRP='\e[35;5m'
-export COLOR_FG_FLASH_RED='\e[31;5m'
-export COLOR_FG_FLASH_YLW='\e[33;5m'
-# Bold+flashing
-export COLOR_FG_BOLD_FLASH_BLK='\e[30;5;1m'
-export COLOR_FG_BOLD_FLASH_BLU='\e[34;5;1m'
-export COLOR_FG_BOLD_FLASH_CYN='\e[36;5;1m'
-export COLOR_FG_BOLD_FLASH_GRN='\e[32;5;1m'
-export COLOR_FG_BOLD_FLASH_PRP='\e[35;5;1m'
-export COLOR_FG_BOLD_FLASH_RED='\e[31;5;1m'
-export COLOR_FG_BOLD_FLASH_WHT='\e[37;5;1m'
-export COLOR_FG_BOLD_FLASH_YLW='\e[33;5;1m'
+# Source color library first
+source ${BASH_ENV_FILE_COLORS}
 
 # Locale configuration
 # (mostly because OS X chokes on them over SSH for some reason..)
@@ -445,7 +409,7 @@ chmod 0700 ${BASH_ENV_DIR_SSH} &> /dev/null
 
 # Default "user color" configuration, overridden by library in 'extra' dir if present
 # Root = red, non-root = purple
-[[ "${UID}" == "0" ]] && BASH_ENV_COLOR="${COLOR_FG_RED}" || BASH_ENV_COLOR="${BASH_ENV_COLOR-${COLOR_FG_PRP}}"
+[[ "${UID}" == "0" ]] && BASH_ENV_COLOR="${C_RED}" || BASH_ENV_COLOR="${BASH_ENV_COLOR-${C_PRP}}"
 export BASH_ENV_COLOR
 export BASH_ENV_COLOR_BOLD="${COLOR_BOLD}${BASH_ENV_COLOR}"
 

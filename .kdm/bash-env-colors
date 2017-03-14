@@ -1,0 +1,322 @@
+#!/usr/bin/env bash
+
+# Output styles
+export C_RST="\e[0m"
+export C_BLD="\e[1m"
+export C_DIM="\e[2m"
+export C_FLS="\e[5m"
+export C_INV="\e[7m"
+export C_ITA="\e[3m"
+export C_UDL="\e[4m"
+
+export C_ALT="\e[41;5m"
+
+
+# Regular
+export C_BLK="${C_RST}\e[38;2;94;94;94m"
+export C_BLU="${C_RST}\e[38;2;51;152;219m"
+export C_CYN="${C_RST}\e[38;2;0;200;200m"
+export C_GRN="${C_RST}\e[38;2;47;204;113m"
+export C_GRY="${C_RST}\e[38;2;144;144;144m"
+export C_ORN="${C_RST}\e[38;2;234;120;44m"
+export C_PRP="${C_RST}\e[38;2;97;113;196m"
+export C_RED="${C_RST}\e[38;2;231;76;60m"
+export C_WHT="${C_RST}\e[38;2;224;224;224m"
+export C_YLW="${C_RST}\e[38;2;241;196;13m"
+
+# Bright
+export C_BLK_BRT="${C_RST}\e[38;2;0;0;0m"
+export C_BLU_BRT="${C_RST}\e[38;2;43;168;225m"
+export C_CYN_BRT="${C_RST}\e[38;2;0;255;255m"
+export C_GRN_BRT="${C_RST}\e[38;2;7;215;116m"
+export C_GRY_BRT="${C_RST}\e[38;2;192;192;192m"
+export C_ORN_BRT="${C_RST}\e[38;2;255;128;0m"
+export C_PRP_BRT="${C_RST}\e[38;2;102;104;198m"
+export C_RED_BRT="${C_RST}\e[38;2;252;45;30m"
+export C_WHT_BRT="${C_RST}\e[38;2;255;255;255m"
+export C_YLW_BRT="${C_RST}\e[38;2;246;199;0m"
+
+
+# Bold
+export C_BLK_BLD="${C_BLK}${C_BLD}"
+export C_BLU_BLD="${C_BLU}${C_BLD}"
+export C_CYN_BLD="${C_CYN}${C_BLD}"
+export C_GRN_BLD="${C_GRN}${C_BLD}"
+export C_GRY_BLD="${C_GRY}${C_BLD}"
+export C_ORN_BLD="${C_ORN}${C_BLD}"
+export C_PRP_BLD="${C_PRP}${C_BLD}"
+export C_RED_BLD="${C_RED}${C_BLD}"
+export C_WHT_BLD="${C_WHT}${C_BLD}"
+export C_YLW_BLD="${C_YLW}${C_BLD}"
+
+# Dim
+export C_BLK_DIM="${C_BLK}${C_DIM}"
+export C_BLU_DIM="${C_BLU}${C_DIM}"
+export C_CYN_DIM="${C_CYN}${C_DIM}"
+export C_GRN_DIM="${C_GRN}${C_DIM}"
+export C_GRY_DIM="${C_GRY}${C_DIM}"
+export C_ORN_DIM="${C_ORN}${C_DIM}"
+export C_PRP_DIM="${C_PRP}${C_DIM}"
+export C_RED_DIM="${C_RED}${C_DIM}"
+export C_WHT_DIM="${C_WHT}${C_DIM}"
+export C_YLW_DIM="${C_YLW}${C_DIM}"
+
+# Flashing
+export C_BLK_FLS="${C_BLK}${C_FLS}"
+export C_BLU_FLS="${C_BLU}${C_FLS}"
+export C_CYN_FLS="${C_CYN}${C_FLS}"
+export C_GRN_FLS="${C_GRN}${C_FLS}"
+export C_GRY_FLS="${C_GRY}${C_FLS}"
+export C_ORN_FLS="${C_ORN}${C_FLS}"
+export C_PRP_FLS="${C_PRP}${C_FLS}"
+export C_RED_FLS="${C_RED}${C_FLS}"
+export C_WHT_FLS="${C_WHT}${C_FLS}"
+export C_YLW_FLS="${C_YLW}${C_FLS}"
+
+# Inverted
+export C_BLK_INV="${C_BLK}${C_INV}"
+export C_BLU_INV="${C_BLU}${C_INV}"
+export C_CYN_INV="${C_CYN}${C_INV}"
+export C_GRN_INV="${C_GRN}${C_INV}"
+export C_GRY_INV="${C_GRY}${C_INV}"
+export C_ORN_INV="${C_ORN}${C_INV}"
+export C_PRP_INV="${C_PRP}${C_INV}"
+export C_RED_INV="${C_RED}${C_INV}"
+export C_WHT_INV="${C_WHT}${C_INV}"
+export C_YLW_INV="${C_YLW}${C_INV}"
+
+# Italic
+export C_BLK_ITA="${C_BLK}${C_ITA}"
+export C_BLU_ITA="${C_BLU}${C_ITA}"
+export C_CYN_ITA="${C_CYN}${C_ITA}"
+export C_GRN_ITA="${C_GRN}${C_ITA}"
+export C_GRY_ITA="${C_GRY}${C_ITA}"
+export C_ORN_ITA="${C_ORN}${C_ITA}"
+export C_PRP_ITA="${C_PRP}${C_ITA}"
+export C_RED_ITA="${C_RED}${C_ITA}"
+export C_WHT_ITA="${C_WHT}${C_ITA}"
+export C_YLW_ITA="${C_YLW}${C_ITA}"
+
+# Underline
+export C_BLK_UDL="${C_BLK}${C_UDL}"
+export C_BLU_UDL="${C_BLU}${C_UDL}"
+export C_CYN_UDL="${C_CYN}${C_UDL}"
+export C_GRN_UDL="${C_GRN}${C_UDL}"
+export C_GRY_UDL="${C_GRY}${C_UDL}"
+export C_ORN_UDL="${C_ORN}${C_UDL}"
+export C_PRP_UDL="${C_PRP}${C_UDL}"
+export C_RED_UDL="${C_RED}${C_UDL}"
+export C_WHT_UDL="${C_WHT}${C_UDL}"
+export C_YLW_UDL="${C_YLW}${C_UDL}"
+
+
+
+# Bold+Flashing
+export C_BLK_BRT_FLS="${C_BLK_BLD}${C_FLS}"
+export C_BLU_BRT_FLS="${C_BLU_BLD}${C_FLS}"
+export C_CYN_BRT_FLS="${C_CYN_BLD}${C_FLS}"
+export C_GRN_BRT_FLS="${C_GRN_BLD}${C_FLS}"
+export C_GRY_BRT_FLS="${C_GRY_BLD}${C_FLS}"
+export C_ORN_BRT_FLS="${C_ORN_BLD}${C_FLS}"
+export C_PRP_BRT_FLS="${C_PRP_BLD}${C_FLS}"
+export C_RED_BRT_FLS="${C_RED_BLD}${C_FLS}"
+export C_WHT_BRT_FLS="${C_WHT_BLD}${C_FLS}"
+export C_YLW_BRT_FLS="${C_YLW_BLD}${C_FLS}"
+
+
+
+# Bold+Bright
+export C_BLK_BLD_BRT="${C_BLK_BRT}${C_BLD}"
+export C_BLU_BLD_BRT="${C_BLU_BRT}${C_BLD}"
+export C_CYN_BLD_BRT="${C_CYN_BRT}${C_BLD}"
+export C_GRN_BLD_BRT="${C_GRN_BRT}${C_BLD}"
+export C_GRY_BLD_BRT="${C_GRY_BRT}${C_BLD}"
+export C_ORN_BLD_BRT="${C_ORN_BRT}${C_BLD}"
+export C_PRP_BLD_BRT="${C_PRP_BRT}${C_BLD}"
+export C_RED_BLD_BRT="${C_RED_BRT}${C_BLD}"
+export C_WHT_BLD_BRT="${C_WHT_BRT}${C_BLD}"
+export C_YLW_BLD_BRT="${C_YLW_BRT}${C_BLD}"
+
+# Bold+Bright+Flashing
+export C_BLK_BLD_BRT_FLS="${C_BLK_BLD_BRT}${C_FLS}"
+export C_BLU_BLD_BRT_FLS="${C_BLU_BLD_BRT}${C_FLS}"
+export C_CYN_BLD_BRT_FLS="${C_CYN_BLD_BRT}${C_FLS}"
+export C_GRN_BLD_BRT_FLS="${C_GRN_BLD_BRT}${C_FLS}"
+export C_GRY_BLD_BRT_FLS="${C_GRY_BLD_BRT}${C_FLS}"
+export C_ORN_BLD_BRT_FLS="${C_ORN_BLD_BRT}${C_FLS}"
+export C_PRP_BLD_BRT_FLS="${C_PRP_BLD_BRT}${C_FLS}"
+export C_RED_BLD_BRT_FLS="${C_RED_BLD_BRT}${C_FLS}"
+export C_WHT_BLD_BRT_FLS="${C_WHT_BLD_BRT}${C_FLS}"
+export C_YLW_BLD_BRT_FLS="${C_YLW_BLD_BRT}${C_FLS}"
+
+# Bold+Bright+Italic
+export C_BLK_BLD_BRT_ITA="${C_BLK_BLD_BRT}${C_ITA}"
+export C_BLU_BLD_BRT_ITA="${C_BLU_BLD_BRT}${C_ITA}"
+export C_CYN_BLD_BRT_ITA="${C_CYN_BLD_BRT}${C_ITA}"
+export C_GRN_BLD_BRT_ITA="${C_GRN_BLD_BRT}${C_ITA}"
+export C_GRY_BLD_BRT_ITA="${C_GRY_BLD_BRT}${C_ITA}"
+export C_ORN_BLD_BRT_ITA="${C_ORN_BLD_BRT}${C_ITA}"
+export C_PRP_BLD_BRT_ITA="${C_PRP_BLD_BRT}${C_ITA}"
+export C_RED_BLD_BRT_ITA="${C_RED_BLD_BRT}${C_ITA}"
+export C_WHT_BLD_BRT_ITA="${C_WHT_BLD_BRT}${C_ITA}"
+export C_YLW_BLD_BRT_ITA="${C_YLW_BLD_BRT}${C_ITA}"
+
+_test_24bit() {
+  local TEST_STRING="${1-TESTING_TEXT}"
+
+	echo -e "C_BLD : ${C_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_DIM : ${C_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_FLS : ${C_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_INV : ${C_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_ITA : ${C_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_UDL : ${C_UDL}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_ALT : ${C_ALT}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK : ${C_BLK}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU : ${C_BLU}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN : ${C_CYN}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN : ${C_GRN}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY : ${C_GRY}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN : ${C_ORN}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP : ${C_PRP}${TEST_STRING}${C_RST}"
+	echo -e "C_RED : ${C_RED}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT : ${C_WHT}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW : ${C_YLW}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_BRT : ${C_BLK_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_BRT : ${C_BLU_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_BRT : ${C_CYN_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_BRT : ${C_GRN_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_BRT : ${C_GRY_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_BRT : ${C_ORN_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_BRT : ${C_PRP_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_BRT : ${C_RED_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_BRT : ${C_WHT_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_BRT : ${C_YLW_BRT}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_BLD : ${C_BLK_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_BLD : ${C_BLU_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_BLD : ${C_CYN_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_BLD : ${C_GRN_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_BLD : ${C_GRY_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_BLD : ${C_ORN_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_BLD : ${C_PRP_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_BLD : ${C_RED_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_BLD : ${C_WHT_BLD}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_BLD : ${C_YLW_BLD}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_DIM : ${C_BLK_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_DIM : ${C_BLU_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_DIM : ${C_CYN_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_DIM : ${C_GRN_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_DIM : ${C_GRY_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_DIM : ${C_ORN_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_DIM : ${C_PRP_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_DIM : ${C_RED_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_DIM : ${C_WHT_DIM}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_DIM : ${C_YLW_DIM}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_FLS : ${C_BLK_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_FLS : ${C_BLU_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_FLS : ${C_CYN_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_FLS : ${C_GRN_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_FLS : ${C_GRY_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_FLS : ${C_ORN_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_FLS : ${C_PRP_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_FLS : ${C_RED_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_FLS : ${C_WHT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_FLS : ${C_YLW_FLS}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_INV : ${C_BLK_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_INV : ${C_BLU_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_INV : ${C_CYN_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_INV : ${C_GRN_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_INV : ${C_GRY_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_INV : ${C_ORN_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_INV : ${C_PRP_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_INV : ${C_RED_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_INV : ${C_WHT_INV}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_INV : ${C_YLW_INV}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_ITA : ${C_BLK_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_ITA : ${C_BLU_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_ITA : ${C_CYN_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_ITA : ${C_GRN_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_ITA : ${C_GRY_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_ITA : ${C_ORN_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_ITA : ${C_PRP_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_ITA : ${C_RED_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_ITA : ${C_WHT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_ITA : ${C_YLW_ITA}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_UDL : ${C_BLK_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_UDL : ${C_BLU_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_UDL : ${C_CYN_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_UDL : ${C_GRN_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_UDL : ${C_GRY_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_UDL : ${C_ORN_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_UDL : ${C_PRP_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_UDL : ${C_RED_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_UDL : ${C_WHT_UDL}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_UDL : ${C_YLW_UDL}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_BRT_FLS : ${C_BLK_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_BRT_FLS : ${C_BLU_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_BRT_FLS : ${C_CYN_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_BRT_FLS : ${C_GRN_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_BRT_FLS : ${C_GRY_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_BRT_FLS : ${C_ORN_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_BRT_FLS : ${C_PRP_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_BRT_FLS : ${C_RED_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_BRT_FLS : ${C_WHT_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_BRT_FLS : ${C_YLW_BRT_FLS}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_BLD_BRT : ${C_BLK_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_BLD_BRT : ${C_BLU_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_BLD_BRT : ${C_CYN_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_BLD_BRT : ${C_GRN_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_BLD_BRT : ${C_GRY_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_BLD_BRT : ${C_ORN_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_BLD_BRT : ${C_PRP_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_BLD_BRT : ${C_RED_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_BLD_BRT : ${C_WHT_BLD_BRT}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_BLD_BRT : ${C_YLW_BLD_BRT}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_BLD_BRT_FLS : ${C_BLK_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_BLD_BRT_FLS : ${C_BLU_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_BLD_BRT_FLS : ${C_CYN_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_BLD_BRT_FLS : ${C_GRN_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_BLD_BRT_FLS : ${C_GRY_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_BLD_BRT_FLS : ${C_ORN_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_BLD_BRT_FLS : ${C_PRP_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_BLD_BRT_FLS : ${C_RED_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_BLD_BRT_FLS : ${C_WHT_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_BLD_BRT_FLS : ${C_YLW_BLD_BRT_FLS}${TEST_STRING}${C_RST}"
+  echo
+
+	echo -e "C_BLK_BLD_BRT_ITA : ${C_BLK_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_BLU_BLD_BRT_ITA : ${C_BLU_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_CYN_BLD_BRT_ITA : ${C_CYN_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_GRN_BLD_BRT_ITA : ${C_GRN_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_GRY_BLD_BRT_ITA : ${C_GRY_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_ORN_BLD_BRT_ITA : ${C_ORN_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_PRP_BLD_BRT_ITA : ${C_PRP_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_RED_BLD_BRT_ITA : ${C_RED_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_WHT_BLD_BRT_ITA : ${C_WHT_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+	echo -e "C_YLW_BLD_BRT_ITA : ${C_YLW_BLD_BRT_ITA}${TEST_STRING}${C_RST}"
+}
+
+alias test-24bit='_test_24bit'

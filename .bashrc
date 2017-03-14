@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Fri 10 Mar 2017 04:44:08 PM EST
+# Last modified : Tue 14 Mar 2017 10:41:56 AM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -76,7 +76,7 @@ hex2color() {
 
 	COLOR_HEX="${1//\#/}"
 	COLOR="38;2;$((0x${COLOR_HEX:0:2}));$((0x${COLOR_HEX:2:2}));$((0x${COLOR_HEX:4:2}))"
-	echo -e "\e[${COLOR};m#${COLOR_HEX} -> ${COLOR}${COLOR_RESET}"
+	echo -e "\e[${COLOR};m#${COLOR_HEX} -> ${COLOR}${C_RST}"
 }
 
 # Check if a binary is installed/present in ${PATH}, without stdout/stderr
@@ -103,8 +103,10 @@ output() {
 	cyan
 	error
 	failure
+	gray
 	green
 	leadup
+	orange
 	purple
 	red
 	stderr
@@ -121,29 +123,32 @@ output() {
 	# Case statement for output color/format
 	case "${1}" in
 		alert)
-			local COLOR_SELECTED="${COLOR_ALERT}"
+			local COLOR_SELECTED="${C_ALT}"
 			;;
 		black)
-			local COLOR_SELECTED="${COLOR_FG_BLK}"
+			local COLOR_SELECTED="${C_BLK}"
 			;;
 		blue)
-			local COLOR_SELECTED="${COLOR_FG_BLU}"
+			local COLOR_SELECTED="${C_BLU}"
 			;;
 		cyan)
-			local COLOR_SELECTED="${COLOR_FG_CYN}"
+			local COLOR_SELECTED="${C_CYN}"
 			;;
 		error)
 			# Special function to output to stderr
 			local OUTPUT_STDERR="1"
-			local OUTPUT_FORMAT="${COLOR_FG_BOLD_RED}Error${COLOR_RESET} : ${COLOR_FG_RED}%s${COLOR_RESET}\n"
+			local OUTPUT_FORMAT="${C_RED_BLD}Error${C_RST} : ${C_RED}%s${C_RST}\n"
 			;;
 		failure)
 			# Special function for failure message, no string input
-			local COLOR_SELECTED="${COLOR_FG_BOLD_RED}"
+			local COLOR_SELECTED="${C_RED_BLD}"
 			local OUTPUT_STRING="failure"
 			;;
+		gray)
+			local COLOR_SELECTED="${C_GRY}"
+			;;
 		green)
-			local COLOR_SELECTED="${COLOR_FG_GRN}"
+			local COLOR_SELECTED="${C_GRN}"
 			;;
 		leadup)
 			# Special function for leadup to status message, no newline
@@ -152,38 +157,41 @@ output() {
 			# Create dot string
 			printf -v LOADING_DOT_STRING '%*s' ${LOADING_DOT_COUNT} ''
 			local LOADING_DOT_STRING=$(printf '%s' ${LOADING_DOT_STRING// /.})
-			local OUTPUT_FORMAT="${COLOR_RESET}Performing ${COLOR_BOLD}'${COLOR_FG_YLW}%s${COLOR_RESET}${COLOR_BOLD}'${COLOR_RESET} ${LOADING_DOT_STRING} ${COLOR_RESET}"
+			local OUTPUT_FORMAT="${C_RST}Performing ${C_BLD}'${C_YLW}%s${C_RST}${C_BLD}'${C_RST} ${LOADING_DOT_STRING} ${C_RST}"
+			;;
+		orange)
+			local COLOR_SELECTED="${C_ORN}"
 			;;
 		purple)
-			local COLOR_SELECTED="${COLOR_FG_PRP}"
+			local COLOR_SELECTED="${C_PRP}"
 			;;
 		red)
-			local COLOR_SELECTED="${COLOR_FG_RED}"
+			local COLOR_SELECTED="${C_RED}"
 			;;
 		stderr)
 			# Special function to output to stderr
-			local COLOR_SELECTED="${COLOR_FG_BLU}"
+			local COLOR_SELECTED="${C_BLU}"
 			local OUTPUT_STDERR="1>&2"
 			;;
 		success)
 			# Special function for success message, no string
-			local COLOR_SELECTED="${COLOR_FG_BOLD_GRN}"
+			local COLOR_SELECTED="${C_GRN_BLD}"
 			local OUTPUT_STRING="success"
 			;;
 		usage)
 			# Special function to output formatted usage string, with stderr output
-			local OUTPUT_FORMAT="${COLOR_FG_BOLD_YLW}Usage${COLOR_RESET} : ${COLOR_FG_YLW}%s${COLOR_RESET}\n"
+			local OUTPUT_FORMAT="${C_YLW_BLD}Usage${C_RST} : ${C_YLW}%s${C_RST}\n"
 			local OUTPUT_STDERR="1>&2"
 			;;
 		white)
-			COLOR_SELECTED="${COLOR_FG_WHT}"
+			COLOR_SELECTED="${C_WHT}"
 			;;
 		yellow)
-			local COLOR_SELECTED="${COLOR_FG_YLW}"
+			local COLOR_SELECTED="${C_YLW}"
 			;;
 		*)
 			# If nothing matches, reset color
-			local COLOR_SELECTED="${COLOR_RESET}"
+			local COLOR_SELECTED="${C_RST}"
 			;;
 	esac
 
@@ -195,7 +203,7 @@ output() {
 
 	# Output to stdout or stderr based on switch
 	#[[ "${OUTPUT_STDERR}" == "1" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 || printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
-	printf "${OUTPUT_FORMAT-${COLOR_SELECTED}%s${COLOR_RESET}\n}" "${OUTPUT_STRING-${2}}"
+	printf "${OUTPUT_FORMAT-${COLOR_SELECTED}%s${C_RST}\n}" "${OUTPUT_STRING-${2}}"
 }
 
 #### Functions: Text ==final ####
@@ -430,7 +438,7 @@ _convert_temperature() {
 	[[ -z "${TEMP_R}" ]] && local TEMP_R=$(echo "scale=${SCALE}; ${TEMP_K}*(9/5)"          | bc)
 
 	# Set margin for printf commands
-	local PF_FMT="%-8s${COLOR_FG_PRP}%s${COLOR_RESET}\n"
+	local PF_FMT="%-8s${C_PRP}%s${C_RST}\n"
 
 	# Output temperatures in various formats! yay!
 	printf "${PF_FMT}" "${TEMP_C}" "C"
@@ -539,9 +547,9 @@ _show_scp_path() {
 	echo
 	output purple "Download ${FILE_NAME} from ${HOST_SHORT}:"
 
-	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOST_SHORT}${COLOR_RESET}:${COLOR_FG_BLU}${SCP_PATH}${COLOR_RESET} ."
-	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOSTNAME}${COLOR_RESET}:${COLOR_FG_BLU}${SCP_PATH}${COLOR_RESET} ."
-	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOST_IP}${COLOR_RESET}:${COLOR_FG_BLU}${SCP_PATH}${COLOR_RESET} ."
+	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
+	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
+	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
 	echo
 
 	# Output upload instructions if FILE_TYPE is folder
@@ -549,9 +557,9 @@ _show_scp_path() {
 
 	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"
 
-	echo -e "${COLOR_FG_CYN}FILE${COLOR_RESET}=${COLOR_FG_YLW}\"\"; ${COLOR_RESET}scp ${COLOR_FG_PRP}-r ${COLOR_FG_YLW}\"${COLOR_FG_PRP}\${FILE}${COLOR_FG_YLW}\"${COLOR_RESET} ${BASH_ENV_COLOR}${USER}@${HOST_SHORT}${COLOR_RESET}:${COLOR_FG_BLU}${SCP_PATH}/${COLOR_RESET}"
-	echo -e "${COLOR_FG_CYN}FILE${COLOR_RESET}=${COLOR_FG_YLW}\"\"; ${COLOR_RESET}scp ${COLOR_FG_PRP}-r ${COLOR_FG_YLW}\"${COLOR_FG_PRP}\${FILE}${COLOR_FG_YLW}\"${COLOR_RESET} ${BASH_ENV_COLOR}${USER}@${HOSTNAME}${COLOR_RESET}:${COLOR_FG_BLU}${SCP_PATH}/${COLOR_RESET}"
-	echo -e "${COLOR_FG_CYN}FILE${COLOR_RESET}=${COLOR_FG_YLW}\"\"; ${COLOR_RESET}scp ${COLOR_FG_PRP}-r ${COLOR_FG_YLW}\"${COLOR_FG_PRP}\${FILE}${COLOR_FG_YLW}\"${COLOR_RESET} ${BASH_ENV_COLOR}${USER}@${HOST_IP}${COLOR_RESET}:${COLOR_FG_BLU}${SCP_PATH}/${COLOR_RESET}"
+	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${BASH_ENV_COLOR}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
+	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${BASH_ENV_COLOR}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
+	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${BASH_ENV_COLOR}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
 	echo
 }
 
@@ -772,7 +780,7 @@ _net_ping_average() {
 	local PF_FMT="%-7s %s"
 
 	# Print header
-	printf "${COLOR_FG_PRP}${PF_FMT}${COLOR_RESET}\n" "Count" "Average (ms)"
+	printf "${C_PRP}${PF_FMT}${C_RST}\n" "Count" "Average (ms)"
 
 	# Use the 2nd argument (ping total) if present, if not present, default of 100
 	local PING_COUNT_FINAL="${2-100}"
@@ -781,10 +789,10 @@ _net_ping_average() {
 	local PING_COUNT="0"
 	local PING_TOTAL="0"
 	local PING_AVERAGE="0"
-	local PING_COLOR="${COLOR_FG_GRN}"
+	local PING_COLOR="${C_GRN}"
 
 	# Print inital line so you have something to stare at before the first ping returns
-	printf "${PING_COLOR}${PF_FMT}${COLOR_RESET}\r" "${PING_COUNT}" "${PING_AVERAGE}"
+	printf "${PING_COLOR}${PF_FMT}${C_RST}\r" "${PING_COUNT}" "${PING_AVERAGE}"
 
 	# Loop until PING_COUNT reaches limit (PING_COUNT_FINAL)
 	while [[ "${PING_COUNT}" -lt "${PING_COUNT_FINAL}" ]]; do
@@ -800,8 +808,8 @@ _net_ping_average() {
 		#
 		# Also, set output color to green if PING_CURRENT is populated,
 		# else, set to red
-		local PING_COLOR="${COLOR_FG_GRN}"
-		[[ -z "${PING_CURRENT}" ]] && local PING_CURRENT="${PING_AVERAGE}" && local PING_COLOR="${COLOR_FG_RED}"
+		local PING_COLOR="${C_GRN}"
+		[[ -z "${PING_CURRENT}" ]] && local PING_CURRENT="${PING_AVERAGE}" && local PING_COLOR="${C_RED}"
 
 		# Increment counter
 		((PING_COUNT++))
@@ -811,7 +819,7 @@ _net_ping_average() {
 		local PING_AVERAGE=$(echo "scale=5; ${PING_TOTAL}/${PING_COUNT}"   | bc)
 
 		# Output string
-		printf "${PING_COLOR}${PF_FMT}${COLOR_RESET}\r" "${PING_COUNT}" "${PING_AVERAGE}"
+		printf "${PING_COLOR}${PF_FMT}${C_RST}\r" "${PING_COUNT}" "${PING_AVERAGE}"
 	done
 	echo
 }
@@ -825,7 +833,7 @@ _net_ping_average_csv() {
 	local PF_FMT="%-7s %s"
 
 	# Print header
-	printf "${COLOR_FG_PRP}${PF_FMT}${COLOR_RESET}\n" "Count" "Average (ms)" 1>&2
+	printf "${C_PRP}${PF_FMT}${C_RST}\n" "Count" "Average (ms)" 1>&2
 
 	# Use the 2nd argument (ping total) if present, if not present, default of 100
 	local PING_COUNT_FINAL="${2-100}"
@@ -834,7 +842,7 @@ _net_ping_average_csv() {
 	local PING_COUNT="0"
 	local PING_TOTAL="0"
 	local PING_AVERAGE="0"
-	local PING_COLOR="${COLOR_FG_YLW}"
+	local PING_COLOR="${C_YLW}"
 
 	# Loop until PING_COUNT reaches limit (PING_COUNT_FINAL)
 	while [[ "${PING_COUNT}" -lt "${PING_COUNT_FINAL}" ]]; do
@@ -859,7 +867,7 @@ _net_ping_average_csv() {
 		local PING_AVERAGE=$(echo "scale=5; ${PING_TOTAL}/${PING_COUNT}"   | bc)
 
 		# Output data string to stderr
-		printf "${PING_COLOR}${PF_FMT}${COLOR_RESET}\r" "${PING_COUNT}" "${PING_AVERAGE}" 1>&2
+		printf "${PING_COLOR}${PF_FMT}${C_RST}\r" "${PING_COUNT}" "${PING_AVERAGE}" 1>&2
 	done
 	echo -e "\n"             1>&2
 	output purple "Results:" 1>&2
@@ -894,7 +902,7 @@ _net_mac() {
 	local SPACES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
 
 	# Set margin for printf commands
-	local PF_FMT="${COLOR_FG_PRP}%-10s${COLOR_RESET}%-20s%s\n"
+	local PF_FMT="${C_PRP}%-10s${C_RST}%-20s%s\n"
 
 	# Output MAC address in various formats
 	output purple "------------------------------ Formatted MAC --"
@@ -921,7 +929,7 @@ _net_mac_lookup() {
 	local IEEE_ADDRESS="$(echo ${IEEE_STRING} | awk -F ',' '{print $2 ", " $3}')"
 	local IEEE_COUNTRY="$(echo ${IEEE_STRING} | awk -F ',' '{print $4}')"
 
-	local PF_FMT="${COLOR_FG_PRP}%-10s${COLOR_RESET}%s\n"
+	local PF_FMT="${C_PRP}%-10s${C_RST}%s\n"
 
 	output purple "-------------------------------- IEEE lookup --"
 	printf "${PF_FMT}" "Company" "${IEEE_COMPANY}"
@@ -951,11 +959,11 @@ _net_dns_lookup() {
 	local LOOKUP_REVERSE=($(${HOST_CMD_IP} | awk -F 'domain name pointer ' '/domain name pointer / {print $2}' | sed 's/\.$//g'))
 
 	# Set margin for printf commands
-	local PF_FMT="${COLOR_FG_PRP}%-10s${COLOR_RESET}%s\n"
+	local PF_FMT="${C_PRP}%-10s${C_RST}%s\n"
 
 	# Set color output to red if failed
 	local PF_FMT_REV="${PF_FMT}"
-	[[ -z "${LOOKUP_REVERSE}" ]] && local LOOKUP_REVERSE="Failed" && local PF_FMT_REV="${COLOR_FG_PRP}%-10s${COLOR_FG_RED}%s${COLOR_RESET}\n"
+	[[ -z "${LOOKUP_REVERSE}" ]] && local LOOKUP_REVERSE="Failed" && local PF_FMT_REV="${C_PRP}%-10s${C_RED}%s${C_RST}\n"
 
 	# Output returned data
 	printf "${PF_FMT}" "Input" "${LOOKUP_INPUT}"
@@ -1291,10 +1299,10 @@ _show_motd() {
 	[[ -t 2 ]] || return
 
 	# Color shortcuts
-	local CLR_BLK="${COLOR_FG_BOLD_BLK}"
-	local CLR_BLU="${COLOR_FG_BOLD_BLU}"
+	local CLR_BLK="${C_BLK_BLD}"
+	local CLR_BLU="${C_BLU_BLD}"
 	local CLR_ENV="${BASH_ENV_COLOR_BOLD}"
-	local CLR_RST="${COLOR_RESET}"
+	local CLR_RST="${C_RST}"
 
 	local BAR="${CLR_BLK}|${CLR_RST}"
 	local ARROW_L="${CLR_BLK}<${CLR_RST}"
@@ -2019,7 +2027,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 
 			[[ -z "${ARRAY_WATCH}" ]] && output green "No VMs running" && break
 
-			echo -en "${VM_COUNT} VMs ${COLOR_FG_GRN}running${COLOR_RESET}. ${KVM_COUNTER} sec elapsed     \r"
+			echo -en "${VM_COUNT} VMs ${C_GRN}running${C_RST}. ${KVM_COUNTER} sec elapsed     \r"
 
 			sleep 1
 			local KVM_COUNTER=$((KVM_COUNTER+1))
