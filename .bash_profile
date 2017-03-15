@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Tue 14 Mar 2017 10:39:22 AM EDT
+# Last modified : Wed 15 Mar 2017 03:48:40 PM EDT
 
 #### Init functions ==start ####
 
@@ -409,9 +409,9 @@ chmod 0700 ${BASH_ENV_DIR_SSH} &> /dev/null
 
 # Default "user color" configuration, overridden by library in 'extra' dir if present
 # Root = red, non-root = purple
-[[ "${UID}" == "0" ]] && BASH_ENV_COLOR="${C_RED}" || BASH_ENV_COLOR="${BASH_ENV_COLOR-${C_PRP}}"
-export BASH_ENV_COLOR
-export BASH_ENV_COLOR_BOLD="${COLOR_BOLD}${BASH_ENV_COLOR}"
+[[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_PRP}}"
+export C_ENV
+export C_ENV_BOLD="${COLOR_BOLD}${C_ENV}"
 
 # Machine uname variables
 export UNAME_KERNEL_NAME="$(uname -s)"

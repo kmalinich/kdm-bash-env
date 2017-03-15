@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 14 Mar 2017 10:41:56 AM EDT
+# Last modified : Wed 15 Mar 2017 03:48:23 PM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -48,7 +48,6 @@ alias show-array-width='_show_array_width'
 alias show-bin='_show_bin'
 alias showbin='_show_bin'
 alias show-clock='_show_clock'
-alias show-colors='_show_colors'
 alias show-motd='_show_motd'
 alias show-scp-path='_show_scp_path'
 alias show-top-cmds='_show_top_cmds'
@@ -67,17 +66,52 @@ alias update-cpan='_update_cpan'
 #### Aliases: Function names ==final ####
 
 
-#### Functions: Misc ==start ####
+#### Functions: Color ==start ####
 
 # Renders a hex color code in 24bit color output, and generates the corresponding ANSI escape sequence
 hex2color() {
 	local USAGE_STRING="hex2color '#4e0d92'"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
+	# Remove leading hash mark if present
 	COLOR_HEX="${1//\#/}"
-	COLOR="38;2;$((0x${COLOR_HEX:0:2}));$((0x${COLOR_HEX:2:2}));$((0x${COLOR_HEX:4:2}))"
-	echo -e "\e[${COLOR};m#${COLOR_HEX} -> ${COLOR}${C_RST}"
+
+	# Convert to decimal values
+	DEC_VAL_1="$((0x${COLOR_HEX:0:2}))"
+	DEC_VAL_2="$((0x${COLOR_HEX:2:2}))"
+	DEC_VAL_3="$((0x${COLOR_HEX:4:2}))"
+
+	# Render ANSI string
+	ANSI_COLOR="[38;2;${DEC_VAL_1};${DEC_VAL_2};${DEC_VAL_3}m"
+
+	# Output info and sample
+	echo "#${COLOR_HEX} | ${DEC_VAL_1} ${DEC_VAL_2} ${DEC_VAL_3} | \\\e${ANSI_COLOR} | http://www.color-hex.com/color/${COLOR_HEX,,} | \e${ANSI_COLOR}TESTING color${C_RST}"
 }
+
+# Render RGB values into hex string, then feed to hex2color function
+rgb2hex() {
+	# Validate input
+	local INPUT_ERRORS="0"
+	[[ -z "${1}" ]] && output error "Missing 1st argument" && ((INPUT_ERRORS++))
+	[[ -z "${2}" ]] && output error "Missing 2nd argument" && ((INPUT_ERRORS++))
+	[[ -z "${3}" ]] && output error "Missing 3rd argument" && ((INPUT_ERRORS++))
+
+	local USAGE_STRING="rgb2hex <R value> <G value> <B value>"
+	[[ "${INPUT_ERRORS}" != "0" ]] && echo && output usage "${USAGE_STRING}" && return
+
+	# Convert to hex values
+	local HEX_VAL_1="$(dechex ${1} -s)"
+	local HEX_VAL_2="$(dechex ${2} -s)"
+	local HEX_VAL_3="$(dechex ${3} -s)"
+	local HEX_STRING="${HEX_VAL_1}${HEX_VAL_2}${HEX_VAL_3}"
+
+	hex2color "#${HEX_STRING}"
+}
+
+#### Functions: Color ==final ####
+
+
+#### Functions: Misc ==start ####
 
 # Check if a binary is installed/present in ${PATH}, without stdout/stderr
 # This is for bash, not for POSIX
@@ -105,6 +139,7 @@ output() {
 	failure
 	gray
 	green
+	keyval
 	leadup
 	orange
 	purple
@@ -137,11 +172,11 @@ output() {
 		error)
 			# Special function to output to stderr
 			local OUTPUT_STDERR="1"
-			local OUTPUT_FORMAT="${C_RED_BLD}Error${C_RST} : ${C_RED}%s${C_RST}\n"
+			local OUTPUT_FORMAT="${C_RED_BRT_BLD}Error ${C_WHT_BRT}: ${C_RST}%s\n"
 			;;
 		failure)
 			# Special function for failure message, no string input
-			local COLOR_SELECTED="${C_RED_BLD}"
+			local COLOR_SELECTED="${C_RED_BRT_BLD}"
 			local OUTPUT_STRING="failure"
 			;;
 		gray)
@@ -149,6 +184,18 @@ output() {
 			;;
 		green)
 			local COLOR_SELECTED="${C_GRN}"
+			;;
+		keyval)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			# Output special format and immediately return
+			local OUTPUT_FORMAT="${C_BLU}%s ${C_WHT_BRT}: ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
 			;;
 		leadup)
 			# Special function for leadup to status message, no newline
@@ -180,7 +227,7 @@ output() {
 			;;
 		usage)
 			# Special function to output formatted usage string, with stderr output
-			local OUTPUT_FORMAT="${C_YLW_BLD}Usage${C_RST} : ${C_YLW}%s${C_RST}\n"
+			local OUTPUT_FORMAT="${C_YLW_BRT_BLD}Usage ${C_WHT_BRT}: ${C_RST}%s\n"
 			local OUTPUT_STDERR="1>&2"
 			;;
 		white)
@@ -449,7 +496,7 @@ _convert_temperature() {
 
 # Convert hexadecimal<->decimal
 dechex() {
-	local USAGE_STRING="dec2hex <decimal number>"
+	local USAGE_STRING="dec2hex <decimal number> [-s, script output]"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	# Strip input of anything other than a-f, A-F, x, X, or numbers
@@ -460,12 +507,12 @@ dechex() {
 	# Detect input type
 	if [[ "${INPUT}" =~ ^0x[A-F0-9]? ]]; then
 		# Input is hexadecimal
-		local PROCESS="hex => dec"
+		local PROCESS="hex2dec"
 		[[ "${#INPUT}" == "2" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
 		local DEC="$((${INPUT}))" # Render decimal value
 	else
 		# Input is decimal
-		local PROCESS="dec => hex"
+		local PROCESS="dec2hex"
 		local DEC="${INPUT}"
 	fi
 
@@ -479,8 +526,21 @@ dechex() {
 		[[ "${#DEC}" == "0" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
 	fi
 
-	output purple "Process : ${PROCESS}"
-	output green  "Values  : ${DEC} | ${HEX}"
+	if [[ "${2}" != "-s" ]]; then
+		output purple "Process : ${PROCESS}"
+		output green  "Values  : ${DEC} | ${HEX}"
+	else
+		case "${PROCESS}" in
+			dec2hex)
+				local OUTPUT="${HEX/0x/}"
+				;;
+			hex2dec)
+				local OUTPUT="${DEC}"
+				;;
+		esac
+
+		echo "${OUTPUT}"
+	fi
 }
 
 # Command aliases for above function
@@ -547,9 +607,9 @@ _show_scp_path() {
 	echo
 	output purple "Download ${FILE_NAME} from ${HOST_SHORT}:"
 
-	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
-	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
-	echo -e "${SCP_CMD} ${BASH_ENV_COLOR}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
+	echo -e "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
+	echo -e "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
+	echo -e "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
 	echo
 
 	# Output upload instructions if FILE_TYPE is folder
@@ -557,9 +617,9 @@ _show_scp_path() {
 
 	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"
 
-	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${BASH_ENV_COLOR}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
-	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${BASH_ENV_COLOR}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
-	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${BASH_ENV_COLOR}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
+	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
+	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
+	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
 	echo
 }
 
@@ -717,6 +777,45 @@ _net_curl() {
 	echo
 
 	output usage "cURL exit code: ${CURL_EXIT}"
+}
+
+# Network config information
+_net_info() {
+	if hash hostname; then
+		output keyval "hostname   " "$(hostname)"
+		output keyval "hostname -s" "$(hostname -s)"
+		[[ "${UNAME_KERNEL_NAME}" == "Linux" ]] && output keyval "hostname -d" "$(hostname -d)"
+		output keyval "hostname -f" "$(hostname -f)"
+		echo
+	fi
+
+	if hash ifconfig; then
+		output purple "ifconfig:"
+		ifconfig
+		echo
+	fi
+
+	if hash netstat; then
+		output purple "netstat -nr:"
+		netstat -nr
+		echo
+	fi
+
+	if [[ -s /etc/resolv.conf ]]; then
+		output purple "resolv.conf:"
+		cat /etc/resolv.conf
+		echo
+	fi
+
+	if hash ip; then
+		output purple "ip route show:"
+		ip route show
+		echo
+
+		output purple "ip addr show ${DEFROUTE_NIC}:"
+		ip addr show ${DEFROUTE_NIC}
+		echo
+	fi
 }
 
 # Python webserver
@@ -1159,64 +1258,6 @@ _show_clock() {
 	done
 }
 
-# Show all of the (256) colors
-_show_colors() {
-  # Bounce if term not wide enough
-  [[ "${COLUMNS}" -le 195 ]] && output error "Terminal needs to be at least 196 columns to show-colors, cannot continue" && return
-
-	output stderr "--- Colors ---"
-	echo "30-37 : foreground"
-	echo "40-47 : background"
-	echo
-
-	output stderr "-- Modifiers --"
-	echo " 1 : bold"
-	echo " 2 : dim"
-	echo " 3 : italic"
-	echo " 4 : underline"
-	echo " 5 : flashing"
-	echo " 7 : inverted"
-	echo
-
-	output stderr "---- Demo ----"
-	# Foreground colors
-	for COLORS_FOREGROUND in {30..37}; do
-		# No background
-		local COLOR_VALS="${COLORS_FOREGROUND:+$COLORS_FOREGROUND;}"
-		local COLOR_VALS="${COLOR_VALS%%;}"
-		local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
-
-		printf " %-6s" "${SEQUENCE:-(default)}"
-		printf " ${SEQUENCE}text\e[m"
-		printf " \e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\e[m"
-
-		# Flashing
-		local COLOR_VALS="${COLORS_FOREGROUND:+$COLORS_FOREGROUND;}5"
-		local COLOR_VALS="${COLOR_VALS%%;}"
-		local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
-
-		printf " %-6s" "${SEQUENCE:-(default)}"
-		printf " ${SEQUENCE}text\e[m"
-		printf " \e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\e[m"
-
-		# Background colors
-		for COLORS_BACKGROUND in {40..47}; do
-			# White
-			local COLORS_FOREGROUND=${COLORS_FOREGROUND#37}
-
-			# Black
-			local COLOR_VALS="${COLORS_FOREGROUND:+$COLORS_FOREGROUND;}${COLORS_BACKGROUND}"
-			local COLOR_VALS="${COLOR_VALS%%;}"
-			local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
-
-			printf " %-9s" "${SEQUENCE:-(default)}"
-			printf " ${SEQUENCE}text\e[m"
-			printf " \e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\e[m"
-		done
-		echo
-	done
-}
-
 # Show most frequently executed commands
 _show_top_cmds() {
 	[[ ! -s ${HISTFILE} ]] && output error "bash history file missing or empty, cannot continue"
@@ -1288,9 +1329,9 @@ _prompt_generate() {
 	# Only apply custom titlebar if we're in xterm and on Bash 4+
 	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "4" ]] && echo -en "\e]0;${TITLEBAR_TEXT}\007"
 
-	# Generate / export PS1 prompt with color specfied by BASH_ENV_COLOR
+	# Generate / export PS1 prompt with color specfied by C_ENV
 	# It would also be neat to do a color-responsive system load monitor... but not today
-	export PS1="\[${BASH_ENV_COLOR}\]${HOST_SUB}\[\e[0m\]:\[\e[34m\]${PWD_FINAL} \[${BASH_ENV_COLOR}\]\\$\[\e[0m\] "
+	export PS1="\[${C_ENV}\]${HOST_SUB}\[\e[0m\]:\[\e[34m\]${PWD_FINAL} \[${C_ENV}\]\\$\[\e[0m\] "
 }
 
 # Dynamic MOTD with facter (if present)
@@ -1299,17 +1340,12 @@ _show_motd() {
 	[[ -t 2 ]] || return
 
 	# Color shortcuts
-	local CLR_BLK="${C_BLK_BLD}"
-	local CLR_BLU="${C_BLU_BLD}"
-	local CLR_ENV="${BASH_ENV_COLOR_BOLD}"
-	local CLR_RST="${C_RST}"
+	local BAR="${C_BLK_BLD}|${C_RST}"
+	local ARROW_L="${C_BLK_BLD}<${C_RST}"
+	local ARROW_R="${C_BLK_BLD}>${C_RST}"
 
-	local BAR="${CLR_BLK}|${CLR_RST}"
-	local ARROW_L="${CLR_BLK}<${CLR_RST}"
-	local ARROW_R="${CLR_BLK}>${CLR_RST}"
-
-	local BASE_KEY="%s${CLR_RST}"
-	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
+	local BASE_KEY="%s${C_RST}"
+	local HEAD_KEY="${C_ENV}${BASE_KEY}"
 
 	# kdm bash-env git hash
 	local OLD_PWD="${PWD}"
@@ -1328,8 +1364,8 @@ _show_motd() {
 
 		# Print just the env hash
 		# Assemble header format string
-		local HEAD_VAL1="${CLR_BLU}%+s${CLR_RST}"
-		local HEAD_VAL2="${CLR_BLU}%-s${CLR_RST}"
+		local HEAD_VAL1="${C_BLU_BLD}%+s${C_RST}"
+		local HEAD_VAL2="${C_BLU_BLD}%-s${C_RST}"
 		local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
 		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
 		return 1
@@ -1413,22 +1449,22 @@ _show_motd() {
 	#  os >    macOS | 10.11    < ver
 	#  up >     1:04 | 1.28     < load
 
-	# Set up printf format strings with BASH_ENV_COLOR
-	local BASE_KEY="%s${CLR_RST}"
-	local BASE_VAL1="%+${MAX_LEN}s${CLR_RST}"
-	local BASE_VAL2="%-${MAX_LEN}s${CLR_RST}"
+	# Set up printf format strings with C_ENV
+	local BASE_KEY="%s${C_RST}"
+	local BASE_VAL1="%+${MAX_LEN}s${C_RST}"
+	local BASE_VAL2="%-${MAX_LEN}s${C_RST}"
 
-	local MOTD_KEY="${CLR_BLU}${BASE_KEY}"
-	local MOTD_VAL1="${CLR_ENV}${BASE_VAL1}"
-	local MOTD_VAL2="${CLR_ENV}${BASE_VAL2}"
+	local MOTD_KEY="${C_BLU_BLD}${BASE_KEY}"
+	local MOTD_VAL1="${C_ENV}${BASE_VAL1}"
+	local MOTD_VAL2="${C_ENV}${BASE_VAL2}"
 
-	local HEAD_KEY="${CLR_ENV}${BASE_KEY}"
-	local HEAD_VAL1="${CLR_BLU}${BASE_VAL1}"
-	local HEAD_VAL2="${CLR_BLU}${BASE_VAL2}"
+	local HEAD_KEY="${C_ENV}${BASE_KEY}"
+	local HEAD_VAL1="${C_BLU_BLD}${BASE_VAL1}"
+	local HEAD_VAL2="${C_BLU_BLD}${BASE_VAL2}"
 
 	# Assemble format strings
-	local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
-	local MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}\n"
+	local HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}${C_RST}\n"
+	local MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}${C_RST}\n"
 
 	# Output the header line, then the MOTD
 	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "rev"
@@ -2196,16 +2232,7 @@ alias ..='cd ..; ll'
 # Downloads and Desktop folder alases
 [[ -d ${HOME}/Desktop   ]] && alias dt="cd ${HOME}/Desktop"
 [[ -d ${HOME}/Downloads ]] && alias dl="cd ${HOME}/Downloads"
-
-# Typo aliases
-alias bim='vim'
-alias cim='vim'
-alias ehco='echo'
-alias grpe='grep'
-alias kk='ll'
-alias namp='nmap'
-alias pign='ping'
-alias tial='tail'
+[[ -d ${HOME}/Documents ]] && alias dc="cd ${HOME}/Documents"
 
 # If it has dnsmasq
 [[ -f "/etc/dnsmasq.conf" ]] && alias config-dnsmasq='vim /etc/dnsmasq.conf'
@@ -2231,6 +2258,16 @@ alias tial='tail'
 # If it has libvirt
 [[ -d "/var/lib/libvirt" ]] && alias config-libvirt='cd /var/lib/libvirt'
 [[ -d "/var/log/libvirt" ]] && alias log-libvirt='cd /var/log/libvirt'
+
+# Typo aliases
+alias bim='vim'
+alias cim='vim'
+alias ehco='echo'
+alias grpe='grep'
+alias kk='ll'
+alias namp='nmap'
+alias pign='ping'
+alias tial='tail'
 
 # If it has nmap binary:
 # only open ports, grepable output, aggressive and verbose aliases
@@ -2276,17 +2313,19 @@ if hash noping; then
 fi
 
 # Prettyprint+colorize various formats, if supporting binaries are installed
-if hash tidy && hash highlight; then
-	alias html-format='tidy -i -w 200 -ashtml -utf8 2> /dev/null | pygmentize -l html -f terminal256 -O style=monokai'
-	alias format-html='html-format'
-fi
-if hash json_reformat && hash pygmentize; then
-	alias json-format='json_reformat | pygmentize -l json -f terminal256 -O style=monokai'
-	alias format-json='json-format'
-fi
-if hash xmllint && hash pygmentize; then
-	alias xml-format='xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal256 -O style=monokai'
-	alias format-xml='xml-format'
+if hash pygmentize; then
+	if hash json_reformat; then
+		alias json-format='json_reformat | pygmentize -l json -f terminal256 -O style=monokai'
+		alias format-json='json-format'
+	fi
+	if hash tidy; then
+		alias html-format='tidy -i -w 200 -ashtml -utf8 2> /dev/null | pygmentize -l html -f terminal256 -O style=monokai'
+		alias format-html='html-format'
+	fi
+	if hash xmllint; then
+		alias xml-format='xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal256 -O style=monokai'
+		alias format-xml='xml-format'
+	fi
 fi
 
 #### Aliases: Global ==final ####
@@ -2370,44 +2409,6 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 	# Show listening ports a bit easier
 	alias net-listening-ipv4="netstat -an | grep -E '^..p4.*.LISTEN' | sort"
 	alias net-listening-ipv6="netstat -an | grep -E '^..p6.*.LISTEN' | sort"
-
-	# Network config information
-	_net_info() {
-		if hash hostname; then
-			output purple "hostname    : '$(hostname)"
-			output purple "hostname -s : '$(hostname -s)'"
-			output purple "hostname -d : '$(hostname -d)'"
-			output purple "hostname -f : '$(hostname -f)'"
-			echo
-		fi
-
-		if hash ip; then
-			output purple "ip addr show:"
-			ip addr show
-			echo
-
-			output purple "ip route show:"
-			ip route show
-			echo
-		fi
-
-		if hash ifconfig; then
-			output purple "ifconfig:"
-			ifconfig
-			echo
-		fi
-
-		if hash netstat; then
-			output purple "netstat -nr:"
-			netstat -nr
-			echo
-		fi
-
-		if [[ -s /etc/resolv.conf ]]; then
-			output purple "resolv.conf:"
-			cat /etc/resolv.conf
-		fi
-	}
 
 	# Fake lspci
 	if hash dspci && ! hash lspci; then alias lspci='dspci'; fi
