@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 15 Mar 2017 03:48:23 PM EDT
+# Last modified : Wed 15 Mar 2017 05:57:04 PM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -677,6 +677,7 @@ _g_gca() {
 _g_gpo() {
 	# Array of options
 	local ARRAY_USAGE_OPTIONS=(
+	c
 	d
 	t
 	m
@@ -698,21 +699,37 @@ _g_gpo() {
 	local BRANCHES_STRING="$(echo ${ARRAY_BRANCHES[@]} | sed 's/ /|/g')"
 
 	case "${1}" in
+		c)
+			local CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
+			[[ -z "${CURRENT_BRANCH}" ]] && output error "No branch detected" && return
+			local SELECTED_BRANCH="${CURRENT_BRANCH}"
+			;;
 		d)
-			git push origin development
+			local SELECTED_BRANCH="development"
 			;;
 		t)
-			git push origin testing
+			local SELECTED_BRANCH="testing"
 			;;
 		m)
-			git push origin master
+			local SELECTED_BRANCH="master"
 			;;
 		p)
-			git push origin production
+			local SELECTED_BRANCH="production"
 			;;
 		*)
-			output usage  "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}>"
+			output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}>"
+			return
 	esac
+
+	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
+
+	read -p "Continue? Enter Y/N: " GIT_PUSH_YN
+	if [[ "${GIT_PUSH_YN}" != [Yy] ]]; then
+		output yellow "Push cancelled"
+		return
+	fi
+
+	git push origin "${SELECTED_BRANCH}"
 }
 
 #### Functions: Git ==final ####
@@ -1126,17 +1143,18 @@ _fix_bash_pids() {
 
 				if [[ "${FIX_BASH_PIDS_YN}" != [Yy] ]]; then
 					output purple "No PIDs killed"
-				else
-					for PID in ${FIX_BASH_PIDS_PID_LIST[@]}; do
-						output yellow "Killing PID ${PID}"
-						kill -9 ${PID}
-					done
-
-					output green "Complete"
-
-					# Check the PIDs again
-					fix-bash-pids show
+					return
 				fi
+
+				for PID in ${FIX_BASH_PIDS_PID_LIST[@]}; do
+					output yellow "Killing PID ${PID}"
+					kill -9 ${PID}
+				done
+
+				output green "Complete"
+
+				# Check the PIDs again
+				fix-bash-pids show
 				;;
 			*)
 				output usage "fix-bash-pids <${USAGE_OPTIONS_STRING}>"
