@@ -103,6 +103,8 @@ done
 
 rm -rf ${HOME}/.kdm/install
 mv .kdm/install ${HOME}/.kdm/install
+rm -rf ${HOME}/.kdm/bash-env-colors
+mv .kdm/install ${HOME}/.kdm/bash-env-colors
 rm -rf .kdm
 
 # Move the rest of the files
