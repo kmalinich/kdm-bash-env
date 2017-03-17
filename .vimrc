@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Thu 02 Mar 2017 08:46:02 PM EST
+" Last Modified : Wed 15 Mar 2017 06:15:10 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -190,3 +190,7 @@ let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a
 let g:syntastic_php_checkers   = ['']
 " let g:syntastic_php_phpcs_args = '--tab-width = 4 --warning-severity = 6 --error-severity = 6'
 let g:syntastic_php_phpcs_args = ''
+
+" JS check config
+let g:syntastic_javascript_checkers    = ['eslint']
+let g:syntastic_javascript_eslint_exec = '/usr/local/bin/eslint'

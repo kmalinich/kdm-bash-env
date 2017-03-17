@@ -1,7 +1,7 @@
 # kdm bash-env
 # bash-env-colors
 
-# Last modified : Wed 15 Mar 2017 03:26:22 PM EDT
+# Last modified : Fri 17 Mar 2017 02:49:15 PM EDT
 
 
 #### Color variables ==start ####
@@ -22,11 +22,11 @@ export C_ALT="\e[41;5m"
 export C_BLK="${C_RST}\e[38;2;48;48;48m"
 export C_BLU="${C_RST}\e[38;2;51;152;219m"
 export C_CYN="${C_RST}\e[38;2;0;200;200m"
-export C_GRN="${C_RST}\e[38;2;47;255;100m"
+export C_GRN="${C_RST}\e[38;2;47;223;100m"
 export C_GRY="${C_RST}\e[38;2;144;144;144m"
 export C_ORN="${C_RST}\e[38;2;255;153;50m"
 export C_PNK="${C_RST}\e[38;2;178;0;140m"
-export C_PRP="${C_RST}\e[38;2;85;33;140m"
+export C_PRP="${C_RST}\e[38;2;114;83;178m"
 export C_RED="${C_RST}\e[38;2;231;76;60m"
 export C_WHT="${C_RST}\e[38;2;224;224;224m"
 export C_YLW="${C_RST}\e[38;2;255;204;50m"
@@ -39,7 +39,7 @@ export C_GRN_BRT="${C_RST}\e[38;2;0;255;0m"
 export C_GRY_BRT="${C_RST}\e[38;2;192;192;192m"
 export C_ORN_BRT="${C_RST}\e[38;2;255;128;0m"
 export C_PNK_BRT="${C_RST}\e[38;2;255;0;224m"
-export C_PRP_BRT="${C_RST}\e[38;2;123;48;202m"
+export C_PRP_BRT="${C_RST}\e[38;2;123;70;232m"
 export C_RED_BRT="${C_RST}\e[38;2;255;0;0m"
 export C_WHT_BRT="${C_RST}\e[38;2;255;255;255m"
 export C_YLW_BRT="${C_RST}\e[38;2;255;255;0m"
