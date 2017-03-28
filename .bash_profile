@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Wed 15 Mar 2017 03:48:40 PM EDT
+# Last modified : Tue 28 Mar 2017 11:36:42 AM EDT
 
 #### Init functions ==start ####
 
@@ -105,6 +105,8 @@ ${HOME}/.local/bin
 ${HOME}/perl5/bin
 ${HOME}/.composer/vendor/bin
 ${HOME}/Library/Android/sdk/platform-tools
+/usr/local/opt/libxml2/bin
+/usr/local/opt/libxslt/bin
 /usr/local/rvm/gems/ruby-2.4.0/bin
 /usr/local/rvm/gems/ruby-2.4.0@global/bin
 /usr/local/rvm/rubies/ruby-2.4.0/bin

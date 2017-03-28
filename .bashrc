@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Wed 15 Mar 2017 05:57:04 PM EDT
+# Last modified : Tue 28 Mar 2017 11:36:34 AM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -2327,6 +2327,20 @@ if hash noping; then
 		alias noping='     noping -i 0.5'
 		alias noping-fast='noping -i 0.1'
 		alias noping-slow='noping -i 1.0'
+	fi
+fi
+
+# oping commands, if oping is present
+if hash oping; then
+	# oping needs sudo if not root
+	if [[ "${UID}" != "0" ]]; then
+		alias oping='     sudo oping -i 0.5'
+		alias oping-fast='sudo oping -i 0.1'
+		alias oping-slow='sudo oping -i 1.0'
+	else
+		alias oping='     oping -i 0.5'
+		alias oping-fast='oping -i 0.1'
+		alias oping-slow='oping -i 1.0'
 	fi
 fi
 
