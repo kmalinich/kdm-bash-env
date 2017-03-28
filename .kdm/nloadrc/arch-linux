@@ -1,0 +1,8 @@
+Version="1"
+AverageWindow="60000"
+BarMaxIn="1000000"
+BarMaxOut="250000"
+DataFormat="Human Readable (Byte)"
+Devices="enp2s0"
+RefreshInterval="100"
+TrafficFormat="Human Readable (Bit)"
