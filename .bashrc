@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Mar 2017 06:18:08 PM EDT
+# Last modified : Tue 28 Mar 2017 06:34:10 PM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -742,10 +742,6 @@ _g_gu() {
 		echo
 	fi
 
-	_g_gs
-	local CMD_EXIT="${?}"
-	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
-
 	# Generate temp file for output (until I learn how to do it without that)
 	local TEMP_FILE="$(mktemp)"
 
@@ -757,9 +753,12 @@ _g_gu() {
 		cat ${TEMP_FILE}
 		echo
 	fi
-	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
 
 	rm -rf ${TEMP_FILE} &> /dev/null
+	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+
+	_g_gs
+	local CMD_EXIT="${?}"
 	return ${CMD_EXIT}
 }
 
