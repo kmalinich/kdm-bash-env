@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Mar 2017 01:15:52 PM EDT
+# Last modified : Tue 28 Mar 2017 01:23:47 PM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -823,7 +823,7 @@ _g_gpo() {
 	# Generate temp file for output (until I learn how to do it without that)
 	local TEMP_FILE="$(mktemp)"
 
-	git -c color.push=always push origin "${SELECTED_BRANCH}" 2>&1 > ${TEMP_FILE}
+	git push origin "${SELECTED_BRANCH}" > ${TEMP_FILE} 2>&1
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
