@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Mar 2017 03:09:39 PM EDT
+# Last modified : Tue 28 Mar 2017 06:18:08 PM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -655,16 +655,45 @@ _ssh_xc() {
 
 # Show Git-related info
 _g_gi() {
+	local GIT_PATH="$(  git rev-parse --show-toplevel)"
+	local GIT_DIR="$(   git rev-parse --git-dir      )"
+	local GIT_CONFIG="${GIT_PATH}/${GIT_DIR}/config"
+
 	local GIT_BRANCH="$(git symbolic-ref --short HEAD)"
-	local GIT_URL="$(grep -A 1 'remote' .git/config | awk '/url\ =\ / {printf $3}')"
+	local GIT_COMMIT="$(git rev-parse HEAD           )"
+	local GIT_URL="$(   git config remote.origin.url )"
+
+	[[ -z "${GIT_DIR}"    ]] && output error "No repo detected"   && return
+	[[ -z "${GIT_PATH}"   ]] && output error "No path detected"   && return
+	[[ -z "${GIT_CONFIG}" ]] && output error "No config detected" && return
 
 	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
-	[[ -z "${GIT_URL}"    ]] && output error "No URL detected" && return
+	[[ -z "${GIT_COMMIT}" ]] && output error "No commit detected" && return
+	[[ -z "${GIT_URL}"    ]] && output error "No URL detected"    && return
 
-	output orange "--= git info =--"; echo
-	output keyval "Branch" "${GIT_BRANCH}"
-	output keyval "   URL" "${GIT_URL}"
+	# Git tag-related data
+	local GIT_TAGS="$(   git describe --tags 2> /dev/null)"
+	local GIT_HASH=$(    echo ${GIT_TAGS##v} | awk -F '-' '{print $3}')
+	local GIT_TAG=$(     echo ${GIT_TAGS##v} | awk -F '-' '{print $1}')
+	local GIT_RELEASE="$(echo ${GIT_TAGS##v} | awk -F '-' '{print $2}').git${HASH##g}"
+
+	output orange "---------------------= git info =---------------------"
+	output keyval "    URL" "${GIT_URL}"
+	output keyval " Branch" "${GIT_BRANCH}"
+	output keyval "   Path" "${GIT_PATH}"
+	output keyval " Config" "${GIT_CONFIG}"
+	output keyval " Commit" "${GIT_COMMIT}"
+
+	if [[ "${GIT_TAGS}" ]]; then
+		output keyval "   Tags" "${GIT_TAGS}"
+		output keyval "   Hash" "${GIT_HASH}"
+		output keyval "Version" "${GIT_TAG}"
+		output keyval "Release" "${GIT_RELEASE}"
+	fi
+
 	echo
+
+	_g_gs
 }
 
 # Git command wrapper for formatted output
@@ -679,7 +708,7 @@ _g_wrapper() {
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] --= git ${GIT_CMD} =--"
+		output orange "[${CMD_EXIT}] ----------------= git ${GIT_CMD} =--------------------"
 		cat ${TEMP_FILE}
 		echo
 	fi
@@ -709,7 +738,8 @@ _g_gu() {
 		local CMD_EXIT="${?}"
 		[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
 	else
-		output cyan "No superproject update available"
+		output blue "No git update available"
+		echo
 	fi
 
 	_g_gs
@@ -723,7 +753,7 @@ _g_gu() {
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] --= git submodule update --init =--"
+		output orange "[${CMD_EXIT}] ----------= git submodule update --init =-------------"
 		cat ${TEMP_FILE}
 		echo
 	fi
@@ -749,7 +779,7 @@ _g_gca() {
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] --= git commit -a -m '${COMMIT_MSG}' =--"
+		output orange "[${CMD_EXIT}] -------= git commit -a -m '${COMMIT_MSG}' =-----------"
 		cat ${TEMP_FILE}
 		echo
 	fi
@@ -824,7 +854,7 @@ _g_gpo() {
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] --= git push origin ${SELECTED_BRANCH} =--"
+		output orange "[${CMD_EXIT}] ------= git push origin ${SELECTED_BRANCH} =----------"
 		cat ${TEMP_FILE}
 		echo
 	fi
