@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Mar 2017 11:36:34 AM EDT
+# Last modified : Tue 28 Mar 2017 01:00:18 PM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -22,6 +22,7 @@ alias fix-hung-java='_fix_hung_java'
 alias fix-macos-files='_fix_macos_files'
 
 alias g-gca='_g_gca'
+alias g-gi='_g_gi'
 alias g-gpo='_g_gpo'
 alias g-gs='_g_gs'
 alias g-gu='_g_gu'
@@ -553,7 +554,7 @@ alias hexdec='dechex'
 
 # Make md5sum file for a Android recovery
 _android_make_md5() {
-	! hash md5sum && output error "md5sum not available, cannot continue" && return
+	! hash md5sum && output error "md5sum not available" && return
 	local USAGE_STRING="android-make-md5 <filename>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
@@ -652,47 +653,133 @@ _ssh_xc() {
 
 #### Functions: Git ==start ####
 
+# Show Git-related info
+_g_gi() {
+	local GIT_BRANCH="$(git symbolic-ref --short HEAD)"
+	local GIT_URL="$(grep -A 1 'remote' .git/config | awk '/url\ =\ / {printf $3}')"
+
+	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
+	[[ -z "${GIT_URL}"    ]] && output error "No URL detected" && return
+
+	output orange "--= git info =--"; echo
+	output keyval "Branch" "${GIT_BRANCH}"
+	output keyval "   URL" "${GIT_URL}"
+	echo
+}
+
+# Git command wrapper for formatted output
+_g_wrapper() {
+	[[ -z "${1}" ]] && output error "No command provided to _g_wrapper" && return 254
+	local GIT_CMD="${1}"
+
+	# Generate temp file for output (until I learn how to do it without that)
+	local TEMP_FILE="$(mktemp)"
+
+	git -c color.${GIT_CMD}=always ${GIT_CMD} > ${TEMP_FILE}
+	local CMD_EXIT="${?}"
+
+	if [[ -s "${TEMP_FILE}" ]]; then
+		output orange "[${CMD_EXIT}] --= git ${GIT_CMD} =--"
+		echo
+
+		cat ${TEMP_FILE}
+		echo
+	fi
+
+	rm -rf ${TEMP_FILE} &> /dev/null
+	return ${CMD_EXIT}
+}
+
 # Git status
 _g_gs() {
-	git status
+	_g_wrapper status
 }
 
 # Git fetch, git pull
 _g_gu() {
-	git fetch
-	git pull
-	git status
+	local GIT_BRANCH="$(git symbolic-ref --short HEAD)"
+	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
+
+	_g_wrapper fetch
+	local CMD_EXIT="${?}"
+	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+
+	# Check if there is an update
+	if [[ "$(git log HEAD..origin/${GIT_BRANCH} --oneline 2>&1)" ]]; then
+		# Perform git pull
+		_g_wrapper pull
+		local CMD_EXIT="${?}"
+		[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+	else
+		output cyan "No superproject update available"
+	fi
+
+	_g_gs
+	local CMD_EXIT="${?}"
+	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+
+	git -c color.submodule=always submodule update --init > ${TEMP_FILE}
+	local CMD_EXIT="${?}"
+
+	if [[ -s "${TEMP_FILE}" ]]; then
+		output orange "[${CMD_EXIT}] --= git submodule update --init =--"
+		echo
+
+		cat ${TEMP_FILE}
+		echo
+	fi
+	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+
+	rm -rf ${TEMP_FILE} &> /dev/null
+	return ${CMD_EXIT}
 }
 
-# Git commit all
+# Git commit all w/message
 _g_gca() {
 	local USAGE_STRING="g-gca <commit message>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+	local COMMIT_MSG="${1}"
 
-	git commit -a -m "${1}"
-	git status
+	output keyval "Committing changes, with message" "${COMMIT_MSG}"
+	echo
+
+	# Generate temp file for output (until I learn how to do it without that)
+	local TEMP_FILE="$(mktemp)"
+
+	git commit -a -m "${COMMIT_MSG}" > ${TEMP_FILE}
+	local CMD_EXIT="${?}"
+
+	if [[ -s "${TEMP_FILE}" ]]; then
+		output orange "[${CMD_EXIT}] --= git commit -a -m '${COMMIT_MSG}' =--"
+		echo
+
+		cat ${TEMP_FILE}
+		echo
+	fi
+
+	rm -rf ${TEMP_FILE} &> /dev/null
+
+	if [[ "${CMD_EXIT}" == "0" ]]; then
+		_g_gs
+		local CMD_EXIT="${?}"
+	fi
+
+	return ${CMD_EXIT}
 }
 
 # Git push origin
 _g_gpo() {
-	# Array of options
-	local ARRAY_USAGE_OPTIONS=(
-	c
-	d
-	t
-	m
-	p
-	)
-
 	# Create variable of pipe-separated options from array
+	local ARRAY_USAGE_OPTIONS=(c d t m p pp)
 	local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
 
 	# Array of branches
 	local ARRAY_BRANCHES=(
-	development
+	develop
 	testing
 	master
 	production
+	postprod
 	)
 
 	# Create variable of pipe-separated branches from array
@@ -705,7 +792,7 @@ _g_gpo() {
 			local SELECTED_BRANCH="${CURRENT_BRANCH}"
 			;;
 		d)
-			local SELECTED_BRANCH="development"
+			local SELECTED_BRANCH="develop"
 			;;
 		t)
 			local SELECTED_BRANCH="testing"
@@ -716,20 +803,45 @@ _g_gpo() {
 		p)
 			local SELECTED_BRANCH="production"
 			;;
+		p)
+			local SELECTED_BRANCH="postprod"
+			;;
 		*)
 			output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}>"
 			return
 	esac
 
 	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
-
 	read -p "Continue? Enter Y/N: " GIT_PUSH_YN
+	echo
+
 	if [[ "${GIT_PUSH_YN}" != [Yy] ]]; then
-		output yellow "Push cancelled"
-		return
+		output red "Push cancelled"
+		return 254
 	fi
 
-	git push origin "${SELECTED_BRANCH}"
+	# Generate temp file for output (until I learn how to do it without that)
+	local TEMP_FILE="$(mktemp)"
+
+	git push origin "${SELECTED_BRANCH}" > ${TEMP_FILE}
+	local CMD_EXIT="${?}"
+
+	if [[ -s "${TEMP_FILE}" ]]; then
+		output orange "[${CMD_EXIT}] --= git push origin ${SELECTED_BRANCH} =--"
+		echo
+
+		cat ${TEMP_FILE}
+		echo
+	fi
+
+	rm -rf ${TEMP_FILE} &> /dev/null
+
+	if [[ "${CMD_EXIT}" == "0" ]]; then
+		_g_gs
+		local CMD_EXIT="${?}"
+	fi
+
+	return ${CMD_EXIT}
 }
 
 #### Functions: Git ==final ####
@@ -880,7 +992,7 @@ _net_ping_subnet() {
 	local USAGE_STRING="net-ping-subnet <CIDR range>"
 
 	# Return if fping is missing
-	! hash fping && output error "fping not available, cannot continue" && return
+	! hash fping && output error "fping not available" && return
 
 	output purple "Pinging subnet '${1}'"
 	# Sort by IP octets
@@ -1035,7 +1147,7 @@ _net_mac() {
 # Look up MAC address against IEEE database
 _net_mac_lookup() {
 	# Check if oui npm package is installed
-	hash oui || output error "oui not available, cannot continue" && return
+	hash oui || output error "oui not available" && return
 
 	local USAGE_STRING="net-mac-lookup <MAC address with colons [at least first 3 octets]>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
@@ -1240,7 +1352,7 @@ _find_largest() {
 # Check if an executable exists, if so, show info about it
 _show_bin() {
 	if ! hash "${1}"; then
-		output error "Could not find '${1}' in defined PATH, cannot continue"
+		output error "Could not find '${1}' in defined PATH"
 		return 1
 	fi
 
@@ -1278,7 +1390,7 @@ _show_clock() {
 
 # Show most frequently executed commands
 _show_top_cmds() {
-	[[ ! -s ${HISTFILE} ]] && output error "bash history file missing or empty, cannot continue"
+	[[ ! -s ${HISTFILE} ]] && output error "bash history file missing or empty"
 	local BASH_HISTORY_CMDS="$(grep -cv '#' ${HISTFILE})"
 	local COUNT="15"
 
@@ -1311,7 +1423,7 @@ _show_array_width() {
 
 # Format the output of md5sum command
 _md5_clean() {
-	! hash md5sum && output error "md5sum not available, cannot continue" && return
+	! hash md5sum && output error "md5sum not available" && return
 	local USAGE_STRING="md5-clean <filename>, one file only"
 	[[ -z "${1}" || "${2}" ]] && output usage "${USAGE_STRING}" && return
 	md5sum "${1}" | awk '{print $1}'
@@ -1526,33 +1638,11 @@ _kdm_pull() {
 	local OLD_PWD=${PWD}
 	cd ${HOME}
 
-	output purple "Fetching superproject"
-	if ! git fetch &> /dev/null; then
-		output red "Failed fetching superproject"
-		return
-	fi
+	_g_gu
+	local CMD_EXIT="${?}"
 
-	# Check if there is an update
-	if [[ "$(git log HEAD..origin/master --oneline 2>&1)" ]]; then
-		# Perform git pull
-		output yellow "Updating superproject"
-
-		if ! git pull origin master &> /dev/null; then
-			output red "Failed updating superproject"
-			return
-		fi
-		output green "Superproject updated"
-	else
-		output cyan "No superproject update available"
-	fi
-
-	if ! git submodule update --init &> /dev/null; then
-		output red "Failed updating submodules"
-		return
-	fi
-	output green "Submodules updated"
-
-	cd ${OLD_PWD}
+	cd "${OLD_PWD}"
+	return ${CMD_EXIT}
 }
 
 #### Functions: kdm-bash-env ==final ####
@@ -1572,7 +1662,7 @@ _update_all() {
 
 	# Bounce if we couldn't find a supported package manager
 	if [[ -z "${PACKAGE_MANAGER}" ]]; then
-		output error "Could not detect package manager, cannot continue"
+		output error "Could not detect package manager"
 		return 1
 	fi
 
@@ -1743,7 +1833,7 @@ _update_cpan() {
 
 	# Bounce if we couldn't find a supported package manager
 	if [[ -z "${PACKAGE_MANAGER}" ]]; then
-		output error "Could not detect package manager, cannot continue"
+		output error "Could not detect package manager"
 		return 1
 	fi
 
@@ -1782,7 +1872,7 @@ _update_cpan() {
 
 	# Check for cpanm and cpanm-outdated again
 	if ! hash cpanm && hash cpan-outdated; then
-		output error "cpanminus and cpan-outdated could not be found, cannot continue"
+		output error "cpanminus and cpan-outdated could not be found"
 		return 1
 	fi
 
@@ -1861,16 +1951,17 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 				;;
 		esac
 
-		local ITUNES_NAME="$(osascript -e 'tell application "iTunes"' -e 'get name of current track' -e 'end tell')"
+		local ITUNES_NAME="$(  osascript -e 'tell application "iTunes"' -e 'get name of current track'   -e 'end tell')"
 		local ITUNES_ARTIST="$(osascript -e 'tell application "iTunes"' -e 'get artist of current track' -e 'end tell')"
-		local ITUNES_ALBUM="$(osascript -e 'tell application "iTunes"' -e 'get album of current track' -e 'end tell')"
+		local ITUNES_ALBUM="$( osascript -e 'tell application "iTunes"' -e 'get album of current track'  -e 'end tell')"
+		echo
 
+		output orange "--= Currently playing =--"
 		echo
-		output cyan "Currently playing:"
-		echo
-		output purple "Name:   ${ITUNES_NAME}"
-		output purple "Artist: ${ITUNES_ARTIST}"
-		output purple "Album:  ${ITUNES_ALBUM}"
+
+		output purple "  Name : '${ITUNES_NAME}'"
+		output purple "Artist : '${ITUNES_ARTIST}'"
+		output purple " Album : '${ITUNES_ALBUM}'"
 	}
 
 	# Volume config function
@@ -1893,7 +1984,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 
 		# Make sure it's doesn't have any missing values
 		if [[ "${VOLUME_CURRENT}" == *"missing"* || "${VOLUME_MUTE}" == *"missing"* ]]; then
-			output error "Unable to detect current volume; is there a controllable output device?"
+			output error "Unable to detect current volume"
 			return
 		fi
 
@@ -1915,10 +2006,12 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 					output green "Volume unmuted"
 				fi
 				;;
+
 			max)
 				osascript -e 'set volume output volume 100'
 				output green "Volume set to 100%"
 				;;
+
 			up)
 				if [[ "${VOLUME_CURRENT}" -lt "95" ]]; then
 					osascript -e "set volume output volume $((VOLUME_CURRENT+5))"
@@ -1930,6 +2023,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 					output red "Volume is already set to ${VOLUME_CURRENT}%"
 				fi
 				;;
+
 			down)
 				if [[ "${VOLUME_CURRENT}" -gt "5" ]]; then
 					osascript -e "set volume output volume $((VOLUME_CURRENT-5))"
@@ -1941,6 +2035,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 					output red "Volume is already set to ${VOLUME_CURRENT}%"
 				fi
 				;;
+
 			*)
 				local VOLUME_CLEAN="${1//[^0-9]}"
 				if [[ "${#VOLUME_CLEAN}" == "0" || "${#VOLUME_CLEAN}" -gt "100" ]]; then
@@ -1966,17 +2061,17 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		[[ "${RESET_YN}" != [Yy] ]] && output purple "No changes" && return
 
 		output red "Resetting all Microsoft Office data"
-		rm -rf                                                                                                                                \
-			${HOME}/Documents/Microsoft\ User\ Data                                                                                             \
-			${HOME}/Library/Application\ Support/CrashReporter/Microsoft*                                                                       \
-			${HOME}/Library/Application\ Support/Microsoft                                                                                      \
-			${HOME}/Library/Application\ Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.microsoft.* \
-			${HOME}/Library/Caches/Microsoft                                                                                                    \
-			${HOME}/Library/Caches/com.apple.helpd/Generated/com.microsoft.*                                                                    \
-			${HOME}/Library/Caches/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/com.microsoft.*                                   \
-			${HOME}/Library/Caches/com.microsoft.*                                                                                              \
-			${HOME}/Library/Preferences/Microsoft                                                                                               \
-			${HOME}/Library/Preferences/com.microsoft.* &> /dev/null
+		rm -rf                                                             \
+			${HOME}/Documents/Microsoft\ User\ Data                          \
+			${HOME}/Library/Application\ Support/CrashReporter/Microsoft*    \
+			${HOME}/Library/Application\ Support/Microsoft                   \
+			${HOME}/Library/Caches/Microsoft                                 \
+			${HOME}/Library/Caches/com.apple.helpd/Generated/com.microsoft.* \
+			${HOME}/Library/Caches/com.microsoft.*                           \
+			${HOME}/Library/Preferences/Microsoft                            \
+			${HOME}/Library/Preferences/com.microsoft.*                      \
+			${HOME}/Library/Caches/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/com.microsoft.* \
+			${HOME}/Library/Application\ Support/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.microsoft.*  &> /dev/null
 
 		defaults delete com.microsoft.Outlook &> /dev/null
 		killall cfprefsd                      &> /dev/null
@@ -2019,7 +2114,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		local USAGE_STRING="sys-restart <process name>"
 		[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-		! hash systemctl && output error "systemctl not available, cannot continue" && return
+		! hash systemctl && output error "systemctl not available" && return
 
 		output yellow "Stopping '${1}'"
 		systemctl stop ${1}
@@ -2037,23 +2132,29 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 	# Network config information
 	_net_info() {
 		if hash hostname; then
-			output purple "hostname    : '$(hostname)"
-			output purple "hostname -s : '$(hostname -s)'"
-			output purple "hostname -d : '$(hostname -d)'"
-			output purple "hostname -f : '$(hostname -f)'"
+			output keyval "hostname"    "$(hostname)"
+			output keyval "hostname -s" "$(hostname -s)"
+			output keyval "hostname -d" "$(hostname -d)"
+			output keyval "hostname -f" "$(hostname -f)"
 		fi
 
 		if [[ -s /etc/resolv.conf ]]; then
-			output purple "resolv.conf :"
+			output orange "--= resolv.conf =--"
+			echo
+
 			grep -Ev '^#' /etc/resolv.conf
 		fi
 
 		if hash ip; then
-			output purple "ip route    :"
+			output orange "--= ip route show =--"
+			echo
+
 			ip route show
 			echo
 
-			output purple "ip addr     :"
+			output orange "--= ip addr =--"
+			echo
+
 			ip addr show ${DEFROUTE_NIC}
 			echo
 		fi
@@ -2064,8 +2165,9 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		local ARRAY_RUNNING="$(virsh list | awk '/running/ {print $2}')"
 		[[ -z "${ARRAY_RUNNING}" ]] && output purple "No VMs running" && return
 
-		output purple "Running VMs:"
+		output orange "--= Running VMs =--"
 		echo
+
 		for VM in ${ARRAY_RUNNING[@]}; do
 			output green "${VM}"
 		done
