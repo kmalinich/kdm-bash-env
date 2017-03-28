@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Mar 2017 01:24:24 PM EDT
+# Last modified : Tue 28 Mar 2017 03:09:39 PM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -675,13 +675,11 @@ _g_wrapper() {
 	# Generate temp file for output (until I learn how to do it without that)
 	local TEMP_FILE="$(mktemp)"
 
-	git -c color.${GIT_CMD}=always ${GIT_CMD} 2>&1 > ${TEMP_FILE}
+	git -c color.${GIT_CMD}=always ${GIT_CMD} > ${TEMP_FILE} 2>&1
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
 		output orange "[${CMD_EXIT}] --= git ${GIT_CMD} =--"
-		echo
-
 		cat ${TEMP_FILE}
 		echo
 	fi
@@ -718,13 +716,14 @@ _g_gu() {
 	local CMD_EXIT="${?}"
 	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
 
-	git -c color.submodule=always submodule update --init 2>&1 > ${TEMP_FILE}
+	# Generate temp file for output (until I learn how to do it without that)
+	local TEMP_FILE="$(mktemp)"
+
+	git -c color.submodule=always submodule update --init > ${TEMP_FILE} 2>&1
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
 		output orange "[${CMD_EXIT}] --= git submodule update --init =--"
-		echo
-
 		cat ${TEMP_FILE}
 		echo
 	fi
@@ -746,13 +745,11 @@ _g_gca() {
 	# Generate temp file for output (until I learn how to do it without that)
 	local TEMP_FILE="$(mktemp)"
 
-	git -c color.commit=always commit -a -m "${COMMIT_MSG}" 2>&1 > ${TEMP_FILE}
+	git -c color.commit=always commit -a -m "${COMMIT_MSG}" > ${TEMP_FILE} 2>&1
 	local CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
 		output orange "[${CMD_EXIT}] --= git commit -a -m '${COMMIT_MSG}' =--"
-		echo
-
 		cat ${TEMP_FILE}
 		echo
 	fi
@@ -828,8 +825,6 @@ _g_gpo() {
 
 	if [[ -s "${TEMP_FILE}" ]]; then
 		output orange "[${CMD_EXIT}] --= git push origin ${SELECTED_BRANCH} =--"
-		echo
-
 		cat ${TEMP_FILE}
 		echo
 	fi
