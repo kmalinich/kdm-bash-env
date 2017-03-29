@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bashrc
 
-# Last modified : Tue 28 Mar 2017 06:34:10 PM EDT
+# Last modified : Wed 29 Mar 2017 10:50:58 AM EDT
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -142,6 +142,7 @@ output() {
 	green
 	keyval
 	leadup
+	leadup-custom
 	orange
 	purple
 	red
@@ -153,39 +154,36 @@ output() {
 	)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
-	local USAGE_STRING="output <${USAGE_OPTIONS_STRING}> <string>"
+	local USAGE_STRING="output <$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')> <string>"
 
 	# Case statement for output color/format
 	case "${1}" in
-		alert)
-			local COLOR_SELECTED="${C_ALT}"
-			;;
-		black)
-			local COLOR_SELECTED="${C_BLK}"
-			;;
-		blue)
-			local COLOR_SELECTED="${C_BLU}"
-			;;
-		cyan)
-			local COLOR_SELECTED="${C_CYN}"
-			;;
+		# Basic colors
+		alert)  local COLOR_SELECTED="${C_ALT}";;
+		black)  local COLOR_SELECTED="${C_BLK}";;
+		blue)   local COLOR_SELECTED="${C_BLU}";;
+		cyan)   local COLOR_SELECTED="${C_CYN}";;
+		gray)   local COLOR_SELECTED="${C_GRY}";;
+		green)  local COLOR_SELECTED="${C_GRN}";;
+		orange) local COLOR_SELECTED="${C_ORN}";;
+		purple) local COLOR_SELECTED="${C_PRP}";;
+		red)    local COLOR_SELECTED="${C_RED}";;
+		white)  local COLOR_SELECTED="${C_WHT}";;
+		yellow) local COLOR_SELECTED="${C_YLW}";;
+
+		# Below are special output formats
 		error)
 			# Special function to output to stderr
-			local OUTPUT_STDERR="1"
+			local OUTPUT_STDERR="1>&2"
 			local OUTPUT_FORMAT="${C_RED_BRT_BLD}Error ${C_WHT_BRT}: ${C_RST}%s\n"
 			;;
+
 		failure)
 			# Special function for failure message, no string input
 			local COLOR_SELECTED="${C_RED_BRT_BLD}"
 			local OUTPUT_STRING="failure"
 			;;
-		gray)
-			local COLOR_SELECTED="${C_GRY}"
-			;;
-		green)
-			local COLOR_SELECTED="${C_GRN}"
-			;;
+
 		keyval)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
@@ -193,54 +191,53 @@ output() {
 				return
 			fi
 
+			local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
+
 			# Output special format and immediately return
-			local OUTPUT_FORMAT="${C_BLU}%s ${C_WHT_BRT}: ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
 			return
 			;;
-		leadup)
-			# Special function for leadup to status message, no newline
-			local LOADING_DOT_COUNT="$((50-${#2}))"
 
-			# Create dot string
-			printf -v LOADING_DOT_STRING '%*s' ${LOADING_DOT_COUNT} ''
-			local LOADING_DOT_STRING=$(printf '%s' ${LOADING_DOT_STRING// /.})
-			local OUTPUT_FORMAT="${C_RST}Performing ${C_BLD}'${C_YLW}%s${C_RST}${C_BLD}'${C_RST} ${LOADING_DOT_STRING} ${C_RST}"
+		leadup) # Special function for leadup to status message, no newline
+			# Create dot string and output format
+			printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
+			local OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
 			;;
-		orange)
-			local COLOR_SELECTED="${C_ORN}"
+
+		leadup-custom) # Special function for leadup to status message, no newline, with custom command name
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			# Create dot string and output format
+			printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
+			local OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
+
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
 			;;
-		purple)
-			local COLOR_SELECTED="${C_PRP}"
-			;;
-		red)
-			local COLOR_SELECTED="${C_RED}"
-			;;
+
 		stderr)
 			# Special function to output to stderr
 			local COLOR_SELECTED="${C_BLU}"
 			local OUTPUT_STDERR="1>&2"
 			;;
+
 		success)
 			# Special function for success message, no string
-			local COLOR_SELECTED="${C_GRN_BLD}"
+			local COLOR_SELECTED="${C_GRN_BRT_BLD}"
 			local OUTPUT_STRING="success"
 			;;
+
 		usage)
 			# Special function to output formatted usage string, with stderr output
 			local OUTPUT_FORMAT="${C_YLW_BRT_BLD}Usage ${C_WHT_BRT}: ${C_RST}%s\n"
 			local OUTPUT_STDERR="1>&2"
 			;;
-		white)
-			COLOR_SELECTED="${C_WHT}"
-			;;
-		yellow)
-			local COLOR_SELECTED="${C_YLW}"
-			;;
-		*)
-			# If nothing matches, reset color
-			local COLOR_SELECTED="${C_RST}"
-			;;
+
+		*) local COLOR_SELECTED="${C_RST}";; # If nothing matches, reset color
 	esac
 
 	# Check for variables and throw usage message if issue
@@ -249,9 +246,13 @@ output() {
 		return
 	fi
 
+	# Finalize vars
+	local OUTPUT_FORMAT="${OUTPUT_FORMAT-${COLOR_SELECTED}%s${C_RST}\n}"
+	local OUTPUT_STRING="${OUTPUT_STRING-${2}}"
+
 	# Output to stdout or stderr based on switch
-	#[[ "${OUTPUT_STDERR}" == "1" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 || printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
-	printf "${OUTPUT_FORMAT-${COLOR_SELECTED}%s${C_RST}\n}" "${OUTPUT_STRING-${2}}"
+	[[ "${OUTPUT_STDERR}" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 && return
+	printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
 }
 
 #### Functions: Text ==final ####

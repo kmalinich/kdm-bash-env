@@ -1,7 +1,7 @@
 # kdm bash-env
 # bash-env-colors
 
-# Last modified : Fri 17 Mar 2017 02:49:15 PM EDT
+# Last modified : Wed 29 Mar 2017 10:33:55 AM EDT
 
 
 #### Color variables ==start ####
@@ -222,6 +222,20 @@ _show_colors_16m() {
 	# Refresh color palette
 	source ${BASH_ENV_FILE_COLORS}
 
+	_show_colors_16m_work
+}
+
+_show_colors_256() {
+	# Bounce if term not wide enough
+	[[ "${COLUMNS}" -lt 196 ]] && output error "Terminal needs to be at least 196 columns to show-colors-256, cannot continue" && return
+
+	# Refresh color palette
+	source ${BASH_ENV_FILE_COLORS}
+
+	_show_colors_256_work
+}
+
+_show_colors_16m_work() {
 	# Clear screen
 	clear
 
@@ -317,9 +331,9 @@ _show_colors_16m() {
 }
 
 # Show all of the (256) colors
-_show_colors_256() {
-	# Bounce if term not wide enough
-	[[ "${COLUMNS}" -lt 196 ]] && output error "Terminal needs to be at least 196 columns to show-colors-256, cannot continue" && return
+_show_colors_256_work() {
+	# Clear screen
+	clear
 
 	output stderr "--= Colors =--"
 	echo "30-37 : foreground"
@@ -372,6 +386,7 @@ _show_colors_256() {
 		done
 		echo
 	done
+	echo
 }
 
 #### Color test functions ==final ####
