@@ -104,8 +104,7 @@ for KDM_SCRIPT in ${ARRAY_KDM_SCRIPTS[@]}; do
 	rm -f ${HOME}/${DIR}/${KDM_SCRIPT}
 	mv ${DIR}/${KDM_SCRIPT} ${HOME}/${DIR}/${KDM_SCRIPT}
 done
-
-rm -f ${DIR}
+rm -rf ${DIR}
 
 # Move the rest of the files
 for FILE in $(ls -1A); do
