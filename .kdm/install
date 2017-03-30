@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-if [[ "${PWD}" != "${HOME}/kdm-bash-env" ]]; then
-	echo "Please follow the install instructions at https://github.com/kmalinich/kdm-bash-env"
-	echo "The Git repo was not cloned under your home directory (the repo's full path should be '${HOME}/kdm-bash-env')"
+REPO_NAME="kdm-bash-env"
+
+if [[ "${PWD}" != "${HOME}/${REPO_NAME}" ]]; then
+	echo "Please follow the install instructions at https://github.com/kmalinich/${REPO_NAME}"
+	echo "The Git repo was not cloned under your home directory (the repo's full path should be '${HOME}/${REPO_NAME}')"
 	exit 1
 fi
 
@@ -35,6 +37,7 @@ for CMD in ${ARRAY_UNALIAS[@]}; do
 	unalias ${CMD} > /dev/null 2>&1
 done
 
+
 # Format the output of md5sum command
 md5_clean() {
 	! hash md5sum > /dev/null && echo "ERROR : md5sum not available, cannot continue" && exit 1
@@ -46,39 +49,36 @@ md5_compare() {
 	[[ $(md5_clean "${1}") == $(md5_clean "${2}") ]] && return 0 || return 1
 }
 
-echo "Moving 'htoprc'"
+
+echo -e "\nMoving 'htoprc'"
 mkdir -p ${HOME}/.config/htop
 rm -f {HOME}/.config/htop/htoprc
 mv .config/htop/htoprc ${HOME}/.config/htop/
 rm -rf .config
 
-echo "Moving '.snmp/mibs'"
-mkdir -p ${HOME}/.snmp/mibs
-for MIB in $(ls -1A .snmp/mibs); do
-	rm -rf ${HOME}/.snmp/mibs/${MIB}
-	mv .snmp/mibs/${MIB} ${HOME}/.snmp/mibs/
-done
-rm -rf .snmp
 
-echo "Moving '.nmap'"
-mkdir -p ${HOME}/.nmap
-for NSE in $(ls -1A .nmap); do
-	rm -rf ${HOME}/.nmap/${NSE}
-	mv .nmap/${NSE} ${HOME}/.nmap/
-done
-rm -rf .nmap
+# Move a few dirs with lots of files in them
+ARRAY_DIRS_MOVE=(.kdm/nloadrc .kdm/toprc .nmap .snmp/mibs .vim/bundle)
 
-echo "Moving '.vim/bundle'"
-mkdir -p ${HOME}/.vim/bundle
-for BUNDLE in $(ls -1A .vim/bundle); do
-	rm -rf ${HOME}/.vim/bundle/${BUNDLE}
-	mv .vim/bundle/${BUNDLE} ${HOME}/.vim/bundle/
+for DIR in ${ARRAY_DIRS_MOVE[@]}; do
+	echo "Moving '${DIR}'"
+	mkdir -p ${HOME}/${DIR}
+	for FILE in $(ls -1A ${DIR}); do
+		rm -rf ${HOME}/${DIR}/${FILE}
+		mv ${DIR}/${FILE} ${HOME}/${DIR}/
+	done
 done
-rm -rf .vim
 
+rm -rf .kdm/nloadrc .kdm/toprc .nmap .snmp .vim
+
+# Check/move/update contents of .kdm/extra/
 DIR=".kdm/extra"
 echo "Moving '${DIR}'"
 mkdir -p ${HOME}/${DIR}
+
+rm -f ${HOME}/${DIR}/README
+mv ${DIR}/README ${HOME}/${DIR}/README
+
 for FILE in $(ls -1A ${DIR}); do
 	FILE_REPO="${DIR}/${FILE}"
 	FILE_HOME="${HOME}/${FILE_REPO}"
@@ -95,17 +95,17 @@ unset FILE
 unset FILE_REPO
 unset FILE_HOME
 
-mkdir -p ${HOME}/.kdm/toprc
-for TOPRC in $(ls -1A .kdm/toprc); do
-	rm -rf ${HOME}/.kdm/toprc/${TOPRC}
-	mv .kdm/toprc/${TOPRC} ${HOME}/.kdm/toprc/
+
+# Move scripts in .kdm/ dir
+ARRAY_KDM_SCRIPTS=(bash-env-colors install)
+DIR=".kdm"
+echo "Moving '${DIR}/*'"
+for KDM_SCRIPT in ${ARRAY_KDM_SCRIPTS[@]}; do
+	rm -f ${HOME}/${DIR}/${KDM_SCRIPT}
+	mv ${DIR}/${KDM_SCRIPT} ${HOME}/${DIR}/${KDM_SCRIPT}
 done
 
-rm -rf ${HOME}/.kdm/install
-mv .kdm/install ${HOME}/.kdm/install
-rm -rf ${HOME}/.kdm/bash-env-colors
-mv .kdm/install ${HOME}/.kdm/bash-env-colors
-rm -rf .kdm
+rm -f ${DIR}
 
 # Move the rest of the files
 for FILE in $(ls -1A); do
@@ -115,8 +115,14 @@ for FILE in $(ls -1A); do
 done
 
 cd ${HOME}
-rm -rf kdm-bash-env
+
+# Git reset hard just in case
+git reset --hard HEAD &> /dev/null
+rm -rf ${REPO_NAME}
+
+echo -e "\nPopulating submodules\n"
 git submodule update --init
 
-echo "Install complete"
+echo -e "\nInstall complete"
+
 exit 0
