@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Tue 28 Mar 2017 12:20:58 PM EDT
+# Last modified : Fri 31 Mar 2017 10:24:56 AM EDT
 
 #### Init functions ==start ####
 
@@ -70,7 +70,7 @@ export BASH_ENV_FILE_BASHHISTORY="${BASH_ENV_DIR_KDM}/history"
 
 export BASH_ENV_FILE_BASHLOGOUT="${HOME}/.bash_logout"
 export BASH_ENV_FILE_BASHPROFILE="${HOME}/.bash_profile"
-export BASH_ENV_FILE_BASHRC="${HOME}/.bashrc"
+export BASH_ENV_FILE_BASHRC="${BASH_ENV_DIR_KDM}/bashrc"
 export BASH_ENV_FILE_COLORS="${BASH_ENV_DIR_KDM}/bash-env-colors"
 export BASH_ENV_FILE_CONFIG="${BASH_ENV_DIR_KDM}/bash-env.conf"
 export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
@@ -315,7 +315,7 @@ unset LOADING_DOT_COUNT
 unset LOADING_WHITESPACE_COUNT
 
 # Source color library first
-source ${BASH_ENV_FILE_COLORS}
+. ${BASH_ENV_FILE_COLORS}
 
 # Locale configuration
 # (mostly because OS X chokes on them over SSH for some reason..)
