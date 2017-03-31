@@ -1,7 +1,10 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 31 Mar 2017 10:24:56 AM EDT
+# Last modified : Fri 31 Mar 2017 10:43:38 AM EDT
+
+# Exit if we're not in a terminal
+[[ -t 2 ]] || exit
 
 #### Init functions ==start ####
 
