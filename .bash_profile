@@ -1,10 +1,11 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Fri 31 Mar 2017 10:43:38 AM EDT
+# Last modified : Mon 03 Apr 2017 12:05:45 PM EDT
 
-# Exit if we're not in a terminal
-[[ -t 2 ]] || exit
+SCRIPT_NAME=".bash_profile"
+echo "[$(date '+%a %b %d %R:%S')] ${SCRIPT_NAME}" >> ~/.loadlog
+unset SCRIPT_NAME
 
 #### Init functions ==start ####
 

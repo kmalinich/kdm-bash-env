@@ -1,7 +1,10 @@
 # kdm bash-env
-# .bashrc
+# .kdm/bashrc
 
-# Last modified : Fri 31 Mar 2017 10:32:38 AM EDT
+# Last modified : Mon 03 Apr 2017 12:04:54 PM EDT
+SCRIPT_NAME=".kdm/bashrc"
+echo "[$(date '+%a %b %d %R:%S')] ${SCRIPT_NAME}" >> ~/.loadlog
+unset SCRIPT_NAME
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
