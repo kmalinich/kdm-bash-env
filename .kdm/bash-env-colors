@@ -1,7 +1,5 @@
 # kdm bash-env
-# bash-env-colors
-
-# Last modified : Wed 29 Mar 2017 10:33:55 AM EDT
+# .kdm/bash-env-colors
 
 
 #### Color variables ==start ####
@@ -390,3 +388,6 @@ _show_colors_256_work() {
 }
 
 #### Color test functions ==final ####
+
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

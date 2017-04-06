@@ -1,11 +1,7 @@
 # kdm bash-env
 # .bashrc (wrapper)
 
-# Last modified : Mon 03 Apr 2017 12:05:42 PM EDT
-
-SCRIPT_NAME=".bash_profile"
-echo "[$(date '+%a %b %d %R:%S')] ${SCRIPT_NAME}" >> ~/.loadlog
-unset SCRIPT_NAME
+# Last modified : Wed 05 Apr 2017 02:03:31 PM EDT
 
 # File paths
 FILE_RC="${HOME}/.kdm/bashrc"

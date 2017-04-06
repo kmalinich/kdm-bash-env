@@ -1,10 +1,8 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Mon 03 Apr 2017 12:04:54 PM EDT
-SCRIPT_NAME=".kdm/bashrc"
-echo "[$(date '+%a %b %d %R:%S')] ${SCRIPT_NAME}" >> ~/.loadlog
-unset SCRIPT_NAME
+# Last modified : Thu 06 Apr 2017 08:19:00 AM EDT
+
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc
@@ -613,9 +611,9 @@ _show_scp_path() {
 	echo
 	output purple "Download ${FILE_NAME} from ${HOST_SHORT}:"
 
-	echo -e "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
-	echo -e "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
-	echo -e "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} ."
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
 	echo
 
 	# Output upload instructions if FILE_TYPE is folder
@@ -623,9 +621,9 @@ _show_scp_path() {
 
 	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"
 
-	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
-	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
-	echo -e "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}"
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
 	echo
 }
 
@@ -1176,7 +1174,7 @@ _net_mac() {
 # Look up MAC address against IEEE database
 _net_mac_lookup() {
 	# Check if oui npm package is installed
-	hash oui || output error "oui not available" && return
+	! hash oui && output error "oui not available" && return
 
 	local USAGE_STRING="net-mac-lookup <MAC address with colons [at least first 3 octets]>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
@@ -1366,11 +1364,11 @@ _find_file() {
 
 # Find ${COUNT} largest items in current directory
 _find_largest() {
-	local COUNT="10"
+	local COUNT="${1-10}"
 	output stderr "Searching for ${COUNT} largest items under '${PWD_FINAL}'"
 	output stderr " "
 
-	du -hs * | sort -hr | head -n 10
+	du -hs * | sort -hr | head -n ${COUNT}
 }
 
 #### Functions: Find ==final ####
@@ -1450,6 +1448,9 @@ _show_array_width() {
 
 #### Functions: Show ==final ####
 
+
+#### Functions: md5sum ==start ####
+
 # Format the output of md5sum command
 _md5_clean() {
 	! hash md5sum && output error "md5sum not available" && return
@@ -1464,6 +1465,9 @@ _md5_compare() {
 	[[ -z "${1}" || -z "${2}" ]] && output usage "${USAGE_STRING}" && return
 	[[ $(_md5_clean "${1}") == $(_md5_clean "${2}") ]] && return 0 || return 1
 }
+
+#### Functions: md5sum ==final ####
+
 
 #### Functions: PS1/bashrc ==start ####
 
@@ -1483,10 +1487,13 @@ _prompt_generate() {
 	[[ "${PWD_FMT_DEPTH}" -lt "3" ]] && export PWD_FINAL="${PWD_FMT}" || export PWD_FINAL="${PWD_CUSTOM}"
 
 	# Generate titlebar text string
-	local TITLEBAR_TEXT="${HOST_SHORT}:${PWD_FINAL}"
+	local TITLEBAR_TEXT="${HOST_SUB}:${PWD_FINAL}"
 
-	# Only apply custom titlebar if we're in xterm and on Bash 4+
-	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "4" ]] && echo -en "\e]0;${TITLEBAR_TEXT}\007"
+	# Add '[SSH]' to titlebar if in SSH session
+	[[ "${SSH_CONNECTION}" ]] && local TITLEBAR_SSH="[SSH] "
+
+	# Only apply custom titlebar if we're in xterm and on Bash 3+
+	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && echo -en "\033]0;${TITLEBAR_SSH}${HOST_SUB}\007"
 
 	# Generate / export PS1 prompt with color specfied by C_ENV
 	# It would also be neat to do a color-responsive system load monitor... but not today
@@ -2629,3 +2636,6 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 fi
 
 #### Aliases: Linux-only ==final ####
+
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

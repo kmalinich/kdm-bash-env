@@ -1,11 +1,8 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 03 Apr 2017 12:05:45 PM EDT
+# Last modified : Thu 06 Apr 2017 08:20:11 AM EDT
 
-SCRIPT_NAME=".bash_profile"
-echo "[$(date '+%a %b %d %R:%S')] ${SCRIPT_NAME}" >> ~/.loadlog
-unset SCRIPT_NAME
 
 #### Init functions ==start ####
 
@@ -140,6 +137,7 @@ ${HOME}/Library/Android/sdk/platform-tools
 /usr/games
 /usr/lib/mit/bin
 /usr/lib/mit/sbin
+$(echo ${PATH} | sed 's/:/\n/g')
 )
 
 ARRAY_PACKAGE_MANAGERS=(
@@ -211,6 +209,7 @@ ioreg
 kextcache
 kextload
 kextstat
+kextutil
 kextunload
 keytool
 launchctl
@@ -243,6 +242,7 @@ xcodebuild
 
 # Array of automatic sudo-ing commands (Linux-only)
 export ARRAY_SUDO_LINUX=(
+apt
 apt-cache
 apt-get
 crontab
@@ -348,13 +348,26 @@ fi
 [[ -d /usr/local/Cellar/coreutils                  ]] && export MACOS_GNU="1"
 [[ -d /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders ]] && export GDK_PIXBUF_MODULEDIR="/usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders"
 
-# Configure PATH from array if entry is present
+# Configure PATH from ARRAY_PATH
 unset PATH
 for ENTRY in ${ARRAY_PATH[@]}; do
-	# Add entry from array if it is present and contains files
-	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
+  # Skip entry if it's already in PATH
+	[[ "${PATH}" =~ (:|^)${ENTRY}(:|$) ]] && continue
+  # Skip entry if it is a symlink
+  [[ -h ${ENTRY} ]] && continue;
+  # Add entry from array if it is present and a directory
+  [[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
 done
 export PATH
+
+#unset PATH
+#for ENTRY in ${ARRAY_PATH[@]}; do
+#	# Skip entry if it is a symlink
+#	[[ -h ${ENTRY} ]] && continue;
+#	# Add entry from array if it is present and a directory
+#	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
+#done
+#export PATH
 
 # Disable input
 stty -echo
@@ -504,8 +517,39 @@ export HISTTIMEFORMAT="[%F %T] "
 export HISTFILE=${BASH_ENV_FILE_BASHHISTORY}
 # Get number of lines in history
 [[ -s "${HISTFILE}" ]] && export HISTLENGTH="$(cat ${HISTFILE} | wc -l)"
+
 # Ignore bland commands
-export HISTIGNORE="..:cd:cd ..:clear:dl:dt:l:ll:lll:ls:ls -A:ls -l:ls -lh:ls -lha:reboot:shutdown -h now:shutdown -r now"
+ARRAY_HISTIGNORE=(
+..
+[bf]g
+cd
+clear
+dc
+dl
+dt
+env
+env-sort
+exit
+screen
+g-gi
+g-gs
+g-gu
+l
+l.
+l1
+la
+ll
+ll.
+lld
+lll
+ls
+mount
+pwd
+umount
+)
+
+# Generate HISTIGNORE from array
+export HISTIGNORE="$(for IGNORE in ${ARRAY_HISTIGNORE[@]}; do echo -n "${IGNORE}:"; done | sed 's/:$//g'; echo)"
 
 # Configure various shell options
 for OPTION in ${ARRAY_SHELL_OPTIONS[@]}; do
@@ -562,3 +606,6 @@ show-motd
 
 # Re-enable input
 stty echo
+
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
