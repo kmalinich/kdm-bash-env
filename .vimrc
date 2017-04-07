@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Wed 15 Mar 2017 06:15:10 PM EDT
+" Last Modified : Thu 06 Apr 2017 12:29:46 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -115,7 +115,7 @@ function! AppendModeline()
 	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
 	call append(line("$"), l:modeline)
 endfunction
-nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+nnoremap ml :call AppendModeline()<CR>
 
 " Interfaces file
 au BufRead /etc/network/interfaces :set syntax=interfaces

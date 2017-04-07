@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Thu 06 Apr 2017 08:19:00 AM EDT
+# Last modified : Fri 07 Apr 2017 01:44:39 PM EDT
 
 
 # Source global bashrc
@@ -135,6 +135,7 @@ output() {
 	# Array of options
 	local ARRAY_USAGE_OPTIONS=(
 	alert
+	backtick
 	black
 	blue
 	cyan
@@ -174,6 +175,11 @@ output() {
 		yellow) local COLOR_SELECTED="${C_YLW}";;
 
 		# Below are special output formats
+
+		backtick) # Output the input string with backticks
+			local OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
+			;;
+
 		error)
 			# Special function to output to stderr
 			local OUTPUT_STDERR="1>&2"

@@ -42,6 +42,9 @@ export C_RED_BRT="${C_RST}\e[38;2;255;0;0m"
 export C_WHT_BRT="${C_RST}\e[38;2;255;255;255m"
 export C_YLW_BRT="${C_RST}\e[38;2;255;255;0m"
 
+# Code (backtick) colors
+export C_CODE="${C_RST}\e[48;2;247;247;249;38;2;205;38;89m"
+
 
 # Normal+Bold
 export C_BLK_BLD="${C_BLK}${C_BLD}"
