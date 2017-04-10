@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Thu 06 Apr 2017 08:20:11 AM EDT
+# Last modified : Mon 10 Apr 2017 01:12:28 PM EDT
 
 
 #### Init functions ==start ####
@@ -337,8 +337,8 @@ if [[ -d "${HOME}/perl5" ]]; then
 	export PERL_MM_OPT="INSTALL_BASE='${HOME}/perl5'"
 fi
 
-# Set timeout to something more reasonable
-if [[ "${TMOUT}" ]]; then
+# Set timeout to something reasonable, if missing
+if [[ -z "${TMOUT}" ]]; then
 	unset TMOUT
 	export TMOUT="3600"
 fi
