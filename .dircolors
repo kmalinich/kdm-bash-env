@@ -1,7 +1,7 @@
 # kdm bash-env
 # .dircolors
 
-# Last modified : Sat 17 Dec 2016 01:33:51 PM EST
+# Last modified : Tue 11 Apr 2017 11:23:44 AM EDT
 
 COLOR tty
 OPTIONS -F -T 0
@@ -182,11 +182,16 @@ FILE   38;2;240;240;240
 # Data blobs (orange)
 .csv   38;2;252;106;8
 .json  38;2;252;106;8
+.sls   38;2;252;106;8
 .xml   38;2;252;106;8
 
 # Config files (yellow)
-.cfg   38;2;170;115;220
-.conf  38;2;170;115;220
+.cfg        38;2;170;115;220
+.conf       38;2;170;115;220
+.conf.tmpl  38;2;170;115;220
+.jinja      38;2;170;115;220
+.repo       38;2;170;115;220
+.repo.tmpl  38;2;170;115;220
 
 # Binary documents (dark yellow/brown)
 .abw   38;2;209;117;67
