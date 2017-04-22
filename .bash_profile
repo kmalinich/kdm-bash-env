@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 10 Apr 2017 01:12:28 PM EDT
+# Last modified : Sat 22 Apr 2017 01:26:20 PM EDT
 
 
 #### Init functions ==start ####
@@ -249,9 +249,12 @@ crontab
 dnf
 dnf-3
 ether-wake
+etherwake
 fdisk
 fedup
+journalctl
 pacman
+rpi-update
 rpm
 service
 systemctl
