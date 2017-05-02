@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Thu 06 Apr 2017 12:29:46 PM EDT
+" Last Modified : Tue 02 May 2017 12:10:46 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -52,6 +52,11 @@ set sw=2
 " Make scrolling and highlighters fast
 set ttyfast
 "set lazyredraw
+
+" Correct xterm-16mcolor TERM variable
+if &term=~'xterm-16mcolor'
+	set term=xterm-256color
+endif
 
 " Disable line wrapping
 set wrap!
@@ -110,8 +115,7 @@ augroup END
 " Append modeline after last line in buffer
 " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files
 function! AppendModeline()
-	let l:modeline = printf(" vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set :",
-				\ &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+	let l:modeline = printf(" vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set :", &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
 	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
 	call append(line("$"), l:modeline)
 endfunction
@@ -187,7 +191,7 @@ let g:syntastic_check_on_wq              = 0
 let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a variable in void context'}
 
 " PHP check config
-let g:syntastic_php_checkers   = ['']
+let g:syntastic_php_checkers = ['php', 'phpmd']
 " let g:syntastic_php_phpcs_args = '--tab-width = 4 --warning-severity = 6 --error-severity = 6'
 let g:syntastic_php_phpcs_args = ''
 
