@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Thu 27 Apr 2017 04:28:44 PM EDT
+# Last modified : Wed 03 May 2017 11:28:13 AM EDT
 
 
 #### Init functions ==start ####
@@ -601,6 +601,9 @@ if [[ -t 2 ]]; then
 		_bash_env_loading # Output loading message
 		unset DIRCOLOR_DATA
 	fi
+
+	# Change TERM from xterm-16mcolor to xterm-256color
+	[[ "${TERM}" == "xterm-16mcolor" ]] && export TERM="xterm-256color"
 
 	# Source bash libraries from the 'extra' dir
 	for ENTRY in $(ls --color=never -A ${BASH_ENV_DIR_EXTRA} | grep --color=never -Ev '\.sw|\._|README'); do
