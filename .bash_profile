@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Wed 03 May 2017 11:28:13 AM EDT
+# Last modified : Wed 17 May 2017 11:40:07 AM EDT
 
 
 #### Init functions ==start ####
@@ -602,8 +602,13 @@ if [[ -t 2 ]]; then
 		unset DIRCOLOR_DATA
 	fi
 
-	# Change TERM from xterm-16mcolor to xterm-256color
-	[[ "${TERM}" == "xterm-16mcolor" ]] && export TERM="xterm-256color"
+	if [[ "${TERM}" == "xterm-16mcolor" ]]; then
+		# Change TERM from xterm-16mcolor to xterm-256color
+		export TERM="xterm-256color"
+
+		# Enable true color in Neovim, if present
+		hash nvim && export NVIM_TUI_ENABLE_TRUE_COLOR="1"
+	fi
 
 	# Source bash libraries from the 'extra' dir
 	for ENTRY in $(ls --color=never -A ${BASH_ENV_DIR_EXTRA} | grep --color=never -Ev '\.sw|\._|README'); do
