@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Wed 17 May 2017 02:01:18 PM EDT
+# Last modified : Wed 17 May 2017 02:02:21 PM EDT
 
 
 #### Init functions ==start ####
@@ -537,7 +537,7 @@ if [[ -t 2 ]]; then
 		alias vi="${EDITOR_PATH}"
 		alias vim="${EDITOR_PATH}"
 		alias nvim="${EDITOR_PATH}"
-		#unset EDITOR_PATH
+		unset EDITOR_PATH
 		_bash_env_loading # Output loading message
 	fi
 
