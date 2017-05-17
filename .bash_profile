@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Wed 17 May 2017 11:40:07 AM EDT
+# Last modified : Wed 17 May 2017 02:01:18 PM EDT
 
 
 #### Init functions ==start ####
@@ -512,12 +512,32 @@ if [[ -t 2 ]]; then
 		fi
 	fi
 
-	# Set EDITOR and VISUAL variables to the proper vim path, if vim is installed
-	if hash vim; then
-		! VIM_PATH="$(which --skip-alias vim 2> /dev/null)" && VIM_PATH="$(which vim)"
-		unset EDITOR; export EDITOR="${VIM_PATH}"
-		unset VISUAL; export VISUAL="${VIM_PATH}"
-		unset VIM_PATH
+	# Enable true color in Neovim, if present
+	[[ "${TERM}" == "xterm-16mcolor" ]] && export NVIM_TUI_ENABLE_TRUE_COLOR="1"
+
+	# Editor config
+	if hash nvim; then
+		EDITOR_NAME="nvim"
+	elif hash vim; then
+		EDITOR_NAME="vim"
+	elif hash vi; then
+		EDITOR_NAME="vi"
+	fi
+	_bash_env_loading # Output loading message
+
+	# Set EDITOR and VISUAL variables to the proper path, if possible
+	if [[ "${EDITOR_NAME}" ]]; then
+		! EDITOR_PATH="$(which --skip-alias ${EDITOR_NAME} 2> /dev/null)" && EDITOR_PATH="$(which ${EDITOR_NAME})"
+		export EDITOR="${EDITOR_PATH}"
+		export VISUAL="${EDITOR_PATH}"
+		_bash_env_loading # Output loading message
+
+		# Set aliases
+		alias v="${EDITOR_PATH}"
+		alias vi="${EDITOR_PATH}"
+		alias vim="${EDITOR_PATH}"
+		alias nvim="${EDITOR_PATH}"
+		#unset EDITOR_PATH
 		_bash_env_loading # Output loading message
 	fi
 
@@ -602,13 +622,8 @@ if [[ -t 2 ]]; then
 		unset DIRCOLOR_DATA
 	fi
 
-	if [[ "${TERM}" == "xterm-16mcolor" ]]; then
-		# Change TERM from xterm-16mcolor to xterm-256color
-		export TERM="xterm-256color"
-
-		# Enable true color in Neovim, if present
-		hash nvim && export NVIM_TUI_ENABLE_TRUE_COLOR="1"
-	fi
+	# Change TERM from xterm-16mcolor to xterm-256color
+	[[ "${TERM}" == "xterm-16mcolor" ]] && export TERM="xterm-256color"
 
 	# Source bash libraries from the 'extra' dir
 	for ENTRY in $(ls --color=never -A ${BASH_ENV_DIR_EXTRA} | grep --color=never -Ev '\.sw|\._|README'); do

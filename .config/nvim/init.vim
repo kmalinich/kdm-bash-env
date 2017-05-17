@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Wed 17 May 2017 11:35:25 AM EDT
+" Last Modified : Wed 17 May 2017 01:29:17 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -198,3 +198,7 @@ let g:syntastic_php_phpcs_args = ''
 " JS check config
 let g:syntastic_javascript_checkers    = ['eslint']
 let g:syntastic_javascript_eslint_exec = '/usr/local/bin/eslint'
+
+" Neovim Python config
+let g:python_host_prog  = '/usr/local/bin/python2.7'
+let g:python3_host_prog = '/usr/local/bin/python3.6'
