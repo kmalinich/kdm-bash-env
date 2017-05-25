@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Thu 25 May 2017 05:21:19 PM EDT
+# Last modified : Thu 25 May 2017 05:21:38 PM EDT
 
 
 # Source global bashrc
@@ -847,6 +847,8 @@ _g_gpo() {
 	esac
 
 	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
+	echo
+
 	if [[ "${2##\-}" != [Yy] ]]; then
 		read -p "Continue? [Y/n] " GIT_PUSH_YN
 		echo
