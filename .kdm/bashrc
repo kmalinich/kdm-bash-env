@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Thu 25 May 2017 05:11:31 PM EDT
+# Last modified : Thu 25 May 2017 05:19:50 PM EDT
 
 
 # Source global bashrc
@@ -842,10 +842,14 @@ _g_gpo() {
 			local SELECTED_BRANCH="postprod"
 			;;
 		*)
-			output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}> <-y>"
+			output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}> <y>"
 			return
 	esac
 
+	echo
+	output keyval " 3" "${3}"
+	output keyval "-3" "${3##\-}"
+	echo
 	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
 	if [[ "${3##\-}" != [Yy] ]]; then
 		read -p "Continue? [Y/n] " GIT_PUSH_YN
