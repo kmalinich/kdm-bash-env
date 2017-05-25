@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc
 
-" Last Modified : Wed 17 May 2017 01:29:17 PM EDT
+" Last Modified : Thu 25 May 2017 05:14:58 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -98,7 +98,7 @@ set backspace=indent,eol,start
 set history=1000
 
 " Tell vim to remember certain things when we exit (cursor position)
-set viminfo='10,\"100,:20,%,n~/.nviminfo
+" set viminfo='10,\"100,:20,%,n~/.nviminfo
 
 " Restore cursor position properly
 function! ResCur()
@@ -170,6 +170,9 @@ au BufRead,BufNewFile *.sls match bad_whitespace /\s\+$/
 
 " Fix for editing crontabs with 'crontab -e' on macOS
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
+
+" Fix to restore cursor style when exiting
+au VimLeave * set guicursor=a:block-blinkon0
 
 " Use UTF8 encoding
 set encoding=utf8
