@@ -1,7 +1,7 @@
 # kdm bash-env
 # .dircolors
 
-# Last modified : Tue 02 May 2017 12:02:21 PM EDT
+# Last modified : Fri 26 May 2017 01:43:09 AM EDT
 
 # This is all 24bit/16 million colors - may very likely not work in your terminal emulator
 
@@ -215,6 +215,7 @@ FILE   38;2;240;240;240
 
 # Binary files (dark yellow/brown)
 .abw   38;2;209;117;67
+.bin   38;2;209;117;67
 .doc   38;2;209;117;67
 .docx  38;2;209;117;67
 .epub  38;2;209;117;67
