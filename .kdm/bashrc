@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Thu 25 May 2017 05:21:38 PM EDT
+# Last modified : Fri 26 May 2017 04:04:43 PM EDT
 
 
 # Source global bashrc
@@ -144,6 +144,8 @@ output() {
 	gray
 	green
 	keyval
+	keyval-f
+	keyval-t
 	leadup
 	leadup-custom
 	orange
@@ -193,6 +195,34 @@ output() {
 		;;
 
 	keyval)
+		# Check for 2nd and 3rd args
+		if [[ -z "${2}" || -z "${3}" ]]; then
+			output usage "${USAGE_STRING}"
+			return
+		fi
+
+		local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\n"
+
+		# Output special format and immediately return
+		printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+		return
+		;;
+
+	keyval-f)
+		# Check for 2nd and 3rd args
+		if [[ -z "${2}" || -z "${3}" ]]; then
+			output usage "${USAGE_STRING}"
+			return
+		fi
+
+		local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\n"
+
+		# Output special format and immediately return
+		printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+		return
+		;;
+
+	keyval-t)
 		# Check for 2nd and 3rd args
 		if [[ -z "${2}" || -z "${3}" ]]; then
 			output usage "${USAGE_STRING}"
