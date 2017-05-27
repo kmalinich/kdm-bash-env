@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Fri 26 May 2017 04:04:43 PM EDT
+# Last modified : Fri 26 May 2017 07:46:24 PM EDT
 
 
 # Source global bashrc
@@ -2455,7 +2455,7 @@ alias pign='ping'
 alias tial='tail'
 
 # Alias to pass thru the 16mcolor hack over SSH
-[[ "${TERM}" == "xterm-16mcolor" ]] && alias ssh="TERM=${TERM} ssh"
+# [[ "${TERM}" == "xterm-16mcolor" ]] && alias ssh="TERM=${TERM} ssh"
 
 # If it has nmap binary:
 # only open ports, grepable output, aggressive and verbose aliases
