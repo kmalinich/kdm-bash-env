@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Sun 28 May 2017 09:05:26 PM EDT
+" Last Modified : Sun 28 May 2017 10:21:51 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -25,6 +25,7 @@ Plugin 'godlygeek/tabular'
 Plugin 'kmalinich/salt-jinja-vim'
 Plugin 'marciomazza/vim-brogrammer-theme'
 Plugin 'nvie/vim-flake8'
+Plugin 'othree/html5-syntax.vim'
 Plugin 'othree/html5.vim'
 Plugin 'pangloss/vim-javascript'
 Plugin 'puppetlabs/puppet-syntax-vim'
@@ -115,7 +116,7 @@ augroup END
 " Append modeline after last line in buffer
 " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files
 function! AppendModeline()
-	let l:modeline = printf("vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set :", &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+	let l:modeline = printf("vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set : ", &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
 	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
 	call append(line("$"), l:modeline)
 endfunction
@@ -141,16 +142,23 @@ au Filetype css set softtabstop=2
 au Filetype css set tabstop=2
 
 " HTML
-au Filetype html let b:comment_leader = '<!--'
+au Filetype html let b:comment_leader = '<!-- '
 au Filetype html set autoindent
 au Filetype html set fileformat=unix
-au Filetype html set filetype=xml
 au Filetype html set shiftwidth=2
 au Filetype html set softtabstop=2
 au Filetype html set tabstop=2
 
+" JS
+au Filetype javascript let b:comment_leader = '// '
+au Filetype javascript set autoindent
+au Filetype javascript set fileformat=unix
+au Filetype javascript set shiftwidth=2
+au Filetype javascript set softtabstop=2
+au Filetype javascript set tabstop=2
+
 " nginx
-au Filetype nginx let b:comment_leader = '#'
+au Filetype nginx let b:comment_leader = '# '
 au Filetype nginx set autoindent
 au Filetype nginx set fileformat=unix
 au Filetype nginx set shiftwidth=2
@@ -158,7 +166,7 @@ au Filetype nginx set softtabstop=2
 au Filetype nginx set tabstop=2
 
 " PHP
-au Filetype php let b:comment_leader = '//'
+au Filetype php let b:comment_leader = '// '
 au Filetype php set autoindent
 au Filetype php set fileformat=unix
 au Filetype php set shiftwidth=2
@@ -166,7 +174,7 @@ au Filetype php set softtabstop=2
 au Filetype php set tabstop=2
 
 " Python
-au Filetype python let b:comment_leader = '#'
+au Filetype python let b:comment_leader = '# '
 au Filetype python set autoindent
 au Filetype python set expandtab
 au Filetype python set fileformat=unix
@@ -174,13 +182,13 @@ au Filetype python set shiftwidth=4
 au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
 
-" JS
-au Filetype javascript let b:comment_leader = '//'
-au Filetype javascript set autoindent
-au Filetype javascript set fileformat=unix
-au Filetype javascript set shiftwidth=2
-au Filetype javascript set softtabstop=2
-au Filetype javascript set tabstop=2
+" sh/bash
+au Filetype sh let b:comment_leader = '# '
+au Filetype sh set autoindent
+au Filetype sh set fileformat=unix
+au Filetype sh set shiftwidth=2
+au Filetype sh set softtabstop=2
+au Filetype sh set tabstop=2
 
 " Mark extra whitespace in red
 highlight bad_whitespace ctermbg=red guibg=red

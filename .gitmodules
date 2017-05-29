@@ -76,3 +76,6 @@
 [submodule ".vim/bundle/salt-jinja-vim"]
 	path = .vim/bundle/salt-jinja-vim
 	url = https://github.com/kmalinich/salt-jinja-vim.git
+[submodule ".vim/bundle/html5-syntax.vim"]
+	path = .vim/bundle/html5-syntax.vim
+	url = https://github.com/othree/html5-syntax.vim.git
