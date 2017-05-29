@@ -1,7 +1,7 @@
 " kdm bash-env
-" .vimrc
+" .vimrc / neovim init.vim
 
-" Last Modified : Thu 25 May 2017 05:14:58 PM EDT
+" Last Modified : Sun 28 May 2017 09:05:26 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -115,7 +115,7 @@ augroup END
 " Append modeline after last line in buffer
 " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files
 function! AppendModeline()
-	let l:modeline = printf(" vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set :", &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+	let l:modeline = printf("vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set :", &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
 	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
 	call append(line("$"), l:modeline)
 endfunction
@@ -125,29 +125,54 @@ nnoremap ml :call AppendModeline()<CR>
 au BufRead /etc/network/interfaces :set syntax=interfaces
 
 " C
-au Filetype c,cpp set expandtab
-au Filetype c,cpp set tabstop=4
-au Filetype c,cpp set shiftwidth=4
-au Filetype c,cpp set autoindent
 au Filetype c,cpp let b:comment_leader = '/* '
+au Filetype c,cpp set autoindent
+au Filetype c,cpp set expandtab
 au Filetype c,cpp set fileformat=unix
+au Filetype c,cpp set shiftwidth=4
+au Filetype c,cpp set tabstop=4
 
-" Python
-au Filetype python set expandtab
-au Filetype python set tabstop=4
-au Filetype python set softtabstop=4
-au Filetype python set shiftwidth=4
-au Filetype python set autoindent
-au Filetype python set fileformat=unix
+" CSS
+au Filetype css let b:comment_leader = '/* '
+au Filetype css set autoindent
+au Filetype css set fileformat=unix
+au Filetype css set shiftwidth=2
+au Filetype css set softtabstop=2
+au Filetype css set tabstop=2
 
 " HTML
-au Filetype html set filetype=xml
-au Filetype html set tabstop=4
-au Filetype html set softtabstop=4
-au Filetype html set shiftwidth=4
-au Filetype html set autoindent
 au Filetype html let b:comment_leader = '<!--'
+au Filetype html set autoindent
 au Filetype html set fileformat=unix
+au Filetype html set filetype=xml
+au Filetype html set shiftwidth=2
+au Filetype html set softtabstop=2
+au Filetype html set tabstop=2
+
+" nginx
+au Filetype nginx let b:comment_leader = '#'
+au Filetype nginx set autoindent
+au Filetype nginx set fileformat=unix
+au Filetype nginx set shiftwidth=2
+au Filetype nginx set softtabstop=2
+au Filetype nginx set tabstop=2
+
+" PHP
+au Filetype php let b:comment_leader = '//'
+au Filetype php set autoindent
+au Filetype php set fileformat=unix
+au Filetype php set shiftwidth=2
+au Filetype php set softtabstop=2
+au Filetype php set tabstop=2
+
+" Python
+au Filetype python let b:comment_leader = '#'
+au Filetype python set autoindent
+au Filetype python set expandtab
+au Filetype python set fileformat=unix
+au Filetype python set shiftwidth=4
+au Filetype python set softtabstop=4
+au Filetype python set tabstop=4
 
 " JS
 au Filetype javascript let b:comment_leader = '//'
