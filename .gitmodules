@@ -76,3 +76,6 @@
 [submodule ".vim/bundle/html5-syntax.vim"]
 	path = .vim/bundle/html5-syntax.vim
 	url = https://github.com/othree/html5-syntax.vim.git
+[submodule ".vim/bundle/nginx.vim"]
+	path = .vim/bundle/nginx.vim
+	url = https://github.com/chr4/nginx.vim.git
