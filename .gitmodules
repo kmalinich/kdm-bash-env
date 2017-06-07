@@ -64,9 +64,6 @@
 [submodule ".vim/bundle/vim-brogrammer-theme"]
 	path = .vim/bundle/vim-brogrammer-theme
 	url = https://github.com/marciomazza/vim-brogrammer-theme.git
-[submodule ".vim/bundle/nginx.vim"]
-	path = .vim/bundle/nginx.vim
-	url = https://github.com/vim-scripts/nginx.vim.git
 [submodule ".vim/bundle/salt-vim"]
 	path = .vim/bundle/salt-vim
 	url = https://github.com/saltstack/salt-vim.git
