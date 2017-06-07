@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Fri 26 May 2017 07:46:24 PM EDT
+# Last modified : Tue 06 Jun 2017 08:27:03 PM EDT
 
 
 # Source global bashrc
@@ -178,8 +178,15 @@ output() {
 
 		# Below are special output formats
 
-		backtick) # Output the input string with backticks
+	backtick) # Output the input string with backticks (for Slack, mainly)
 		local OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
+
+		# Copy string to clipboard if not connected via SSH and binary is present
+		if [[ -z "${SSH_CONNECTION}" ]]; then
+			if hash pbcopy; then
+				printf "\`%s\`" "${2}" | pbcopy
+			fi
+		fi
 		;;
 
 	error)
