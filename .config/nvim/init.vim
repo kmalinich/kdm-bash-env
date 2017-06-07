@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Sun 28 May 2017 10:21:51 PM EDT
+" Last Modified : Wed 07 Jun 2017 06:11:38 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -39,7 +39,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'vim-perl/vim-perl'
 Plugin 'vim-scripts/Align'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'vim-scripts/nginx.vim'
+Plugin 'chr4/nginx.vim'
 Plugin 'vim-scripts/timestamp.vim'
 
 " All of your Plugins must be added before the following line
