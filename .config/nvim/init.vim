@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Wed 07 Jun 2017 06:11:38 PM EDT
+" Last Modified : Thu 15 Jun 2017 02:10:14 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -138,7 +138,7 @@ au Filetype css let b:comment_leader = '/* '
 au Filetype css set autoindent
 au Filetype css set fileformat=unix
 au Filetype css set shiftwidth=2
-au Filetype css set softtabstop=2
+" au Filetype css set softtabstop=2
 au Filetype css set tabstop=2
 
 " HTML
@@ -146,7 +146,7 @@ au Filetype html let b:comment_leader = '<!-- '
 au Filetype html set autoindent
 au Filetype html set fileformat=unix
 au Filetype html set shiftwidth=2
-au Filetype html set softtabstop=2
+" au Filetype html set softtabstop=2
 au Filetype html set tabstop=2
 
 " JS
@@ -154,7 +154,7 @@ au Filetype javascript let b:comment_leader = '// '
 au Filetype javascript set autoindent
 au Filetype javascript set fileformat=unix
 au Filetype javascript set shiftwidth=2
-au Filetype javascript set softtabstop=2
+" au Filetype javascript set softtabstop=2
 au Filetype javascript set tabstop=2
 
 " nginx
@@ -162,7 +162,7 @@ au Filetype nginx let b:comment_leader = '# '
 au Filetype nginx set autoindent
 au Filetype nginx set fileformat=unix
 au Filetype nginx set shiftwidth=2
-au Filetype nginx set softtabstop=2
+" au Filetype nginx set softtabstop=2
 au Filetype nginx set tabstop=2
 
 " PHP
@@ -170,7 +170,7 @@ au Filetype php let b:comment_leader = '// '
 au Filetype php set autoindent
 au Filetype php set fileformat=unix
 au Filetype php set shiftwidth=2
-au Filetype php set softtabstop=2
+" au Filetype php set softtabstop=2
 au Filetype php set tabstop=2
 
 " Python
@@ -187,7 +187,7 @@ au Filetype sh let b:comment_leader = '# '
 au Filetype sh set autoindent
 au Filetype sh set fileformat=unix
 au Filetype sh set shiftwidth=2
-au Filetype sh set softtabstop=2
+" au Filetype sh set softtabstop=2
 au Filetype sh set tabstop=2
 
 " Mark extra whitespace in red
