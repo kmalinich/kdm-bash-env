@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Fri 16 Jun 2017 05:02:40 PM EDT
+" Last Modified : Fri 16 Jun 2017 05:05:04 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -189,6 +189,10 @@ au Filetype sh set fileformat=unix
 au Filetype sh set shiftwidth=2
 " au Filetype sh set softtabstop=2
 au Filetype sh set tabstop=2
+
+" VMWare vmx
+au BufRead *.vmx :set filetype=cfg
+
 
 " Fix for editing crontabs with 'crontab -e' on macOS
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
