@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Tue 06 Jun 2017 08:27:03 PM EDT
+# Last modified : Fri 16 Jun 2017 07:43:41 PM EDT
 
 
 # Source global bashrc
@@ -518,7 +518,7 @@ _convert_temperature() {
 		local TEMP_K=$(echo "scale=${SCALE}; ${TEMP_C}+273.15" | bc)
 	elif [[ "${1}" == *[Ff]* ]]; then
 		local TEMP_F=${1//[!0-9]/}
-		local TEMP_K=$(echo "scale=${SCALE}; (${TEMP_F}+459.67)*(5/9)" | bc)
+		local TEMP_K=$(echo "scale=${SCALE}; ((${TEMP_F}-32)*(5/9))+273.15" | bc)
 	elif [[ "${1}" == *[Kk]* ]]; then
 		local TEMP_K=${1//[!0-9]/}
 	elif [[ "${1}" == *[Rr]* ]]; then
@@ -527,9 +527,9 @@ _convert_temperature() {
 	fi
 
 	# Calculate missing values (yes, I shave off a single CPU cycle not computing, only to spend it evaluating)
-	[[ -z "${TEMP_C}" ]] && local TEMP_C=$(echo "scale=${SCALE}; ${TEMP_K}-273.15"         | bc)
-	[[ -z "${TEMP_F}" ]] && local TEMP_F=$(echo "scale=${SCALE}; (${TEMP_K}*(9/5))-459.67" | bc)
-	[[ -z "${TEMP_R}" ]] && local TEMP_R=$(echo "scale=${SCALE}; ${TEMP_K}*(9/5)"          | bc)
+	[[ -z "${TEMP_C}" ]] && local TEMP_C=$(echo "scale=${SCALE}; ${TEMP_K}-273.15"           | bc)
+	[[ -z "${TEMP_F}" ]] && local TEMP_F=$(echo "scale=${SCALE}; ((${TEMP_K}-273)*(9/5))+32" | bc)
+	[[ -z "${TEMP_R}" ]] && local TEMP_R=$(echo "scale=${SCALE}; ${TEMP_K}*(9/5)"            | bc)
 
 	# Set margin for printf commands
 	local PF_FMT="%-8s${C_PRP}%s${C_RST}\n"
