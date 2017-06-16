@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Thu 15 Jun 2017 02:10:14 PM EDT
+" Last Modified : Fri 16 Jun 2017 05:02:40 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -190,22 +190,17 @@ au Filetype sh set shiftwidth=2
 " au Filetype sh set softtabstop=2
 au Filetype sh set tabstop=2
 
-" Mark extra whitespace in red
-highlight bad_whitespace ctermbg=red guibg=red
-
-" Highlight bad whitespace by file type
-au Filetype c,cpp,css,html,javascript,perl,php,puppet,python,ruby,sh,spec,vim match bad_whitespace /\s\+$/
-"au Filetype c,cpp,javascript,html,python match bad_whitespace /^\t\+/
-
-" Highlight bad whitespace by file extension
-au BufRead,BufNewFile *.conf match bad_whitespace /\s\+$/
-au BufRead,BufNewFile *.sls match bad_whitespace /\s\+$/
-
 " Fix for editing crontabs with 'crontab -e' on macOS
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
 " Fix to restore cursor style when exiting
 au VimLeave * set guicursor=a:block-blinkon0
+
+" Mark extra whitespace in red
+highlight bad_whitespace ctermbg=red guibg=red
+
+" Highlight bad whitespace by file type
+au Filetype * match bad_whitespace /\s\+$/
 
 " Use UTF8 encoding
 set encoding=utf8
