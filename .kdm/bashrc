@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Fri 16 Jun 2017 07:43:41 PM EDT
+# Last modified : Sun 18 Jun 2017 04:21:24 PM EDT
 
 
 # Source global bashrc
@@ -11,6 +11,9 @@
 #### Aliases: Function names ==start ####
 
 alias android-make-md5='_android_make_md5'
+
+alias array-dedupe='_array_dedupe'
+alias array-width='_array_width'
 
 alias convert-squid-timestamp='_convert_squid_timestamp'
 alias convert-temperature='_convert_temperature'
@@ -47,7 +50,6 @@ alias net-webserver='_net_webserver'
 
 alias prompt-generate='_prompt_generate'
 
-alias show-array-width='_show_array_width'
 alias show-bin='_show_bin'
 alias showbin='_show_bin'
 alias show-clock='_show_clock'
@@ -178,7 +180,7 @@ output() {
 
 		# Below are special output formats
 
-	backtick) # Output the input string with backticks (for Slack, mainly)
+		backtick) # Output the input string with backticks (for Slack, mainly)
 		local OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
 
 		# Copy string to clipboard if not connected via SSH and binary is present
@@ -492,6 +494,58 @@ _time_elapsed_text() {
 }
 
 #### Functions: Time ==final ####
+
+
+#### Functions: Array ==start ####
+
+# Function to remove duplicates from array
+_array_dedupe() {
+	if [[ -z "${1}" ]]; then
+		output usage "array-dedupe array[@]"
+		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
+		output red   "Don't say I didn't warn you"
+		return
+	fi
+
+	# Magic BASH function array argument workaround
+	declare -a ARRAY=("${!1}")
+
+	# Convert array to string, swap spaces with newlines, unique sort
+	echo "${ARRAY[@]}" | sed 's/\ /\n/g' | sort -u
+}
+
+# Function to get the length of the longest string in an array
+_array_width() {
+	if [[ -z "${1}" ]]; then
+		output usage "array-width array[@]"
+		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
+		output red   "Don't say I didn't warn you"
+		return
+	fi
+
+	# Magic BASH function array argument workaround
+	declare -a ARRAY=("${!1}")
+
+	# Init counter
+	local WIDTH_MAX="0"
+
+	# Loop through array
+	for VALUE in ${ARRAY[@]}; do
+		[[ "${#VALUE}" -le "${WIDTH_MAX}" ]] && continue
+		local WIDTH_MAX="${#VALUE}"
+	done
+
+	# Output value plaintext if in subshell
+	if [[ "${BASH_SUBSHELL}" != "0" ]]; then
+		echo "${WIDTH_MAX}"
+		return
+	fi
+
+	# Colorized/formatted output if not in subshell
+	output keyval "Array width" "${WIDTH_MAX}"
+}
+
+#### Functions: Array ==final ####
 
 
 #### Functions: Conversion ==start ####
@@ -1463,27 +1517,6 @@ _show_top_cmds() {
 
 	output stderr "-- ${BASH_HISTORY_CMDS} commands total -------------------- Top ${COUNT} --"
 	grep -v '#' ${HISTFILE} | sort | uniq -c | sort -rn | head -n ${COUNT}
-}
-
-# Function to get the length of the longest string in an array
-_show_array_width() {
-	if [[ -z "${1}" ]]; then
-		output usage "show-array-width array[@]"
-		output error "NOTICE how there are NO curly brackets or quotes when you pass the variable"
-		output error "Don't say I didn't warn you"
-		return
-	fi
-
-	declare -a ARRAY=("${!1}")
-
-	for STRING in ${ARRAY[@]}; do
-		local STRING_LENGTH=${#STRING}
-		[[ "${STRING_LENGTH}" -gt "${LONGEST_LENGTH}" ]] && local LONGEST_LENGTH="${STRING_LENGTH}"
-	done
-
-	# Add 1 to the length
-	((LONGEST_LENGTH++))
-	echo "${LONGEST_LENGTH}"
 }
 
 #### Functions: Show ==final ####
