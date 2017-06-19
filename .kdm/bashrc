@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Sun 18 Jun 2017 04:21:24 PM EDT
+# Last modified : Mon 19 Jun 2017 04:50:14 PM EDT
 
 
 # Source global bashrc
@@ -31,9 +31,9 @@ alias g-gpo='_g_gpo'
 alias g-gs='_g_gs'
 alias g-gu='_g_gu'
 
-alias kdm-extra='_kdm_extra'
 alias kdm-help='_kdm_help'
 alias kdm-pull='_kdm_pull'
+alias kdm-source='_kdm_source'
 
 alias md5-clean='_md5_clean'
 alias md5-compare='_md5_compare'
@@ -136,28 +136,11 @@ hash() {
 output() {
 	# Array of options
 	local ARRAY_USAGE_OPTIONS=(
-	alert
-	backtick
-	black
-	blue
-	cyan
-	error
-	failure
-	gray
-	green
-	keyval
-	keyval-f
-	keyval-t
-	leadup
-	leadup-custom
-	orange
-	purple
-	red
-	stderr
-	success
-	usage
-	white
-	yellow
+	alert    backtick black  blue          cyan
+	error    failure  gray   green         keyval
+	keyval-f keyval-t leadup leadup-custom orange
+	pink     purple   red    stderr        success
+	usage    white    yellow
 	)
 
 	# Create variable of pipe-separated options from array
@@ -173,133 +156,129 @@ output() {
 		gray)   local COLOR_SELECTED="${C_GRY}";;
 		green)  local COLOR_SELECTED="${C_GRN}";;
 		orange) local COLOR_SELECTED="${C_ORN}";;
+		pink)   local COLOR_SELECTED="${C_PNK}";;
 		purple) local COLOR_SELECTED="${C_PRP}";;
 		red)    local COLOR_SELECTED="${C_RED}";;
 		white)  local COLOR_SELECTED="${C_WHT}";;
 		yellow) local COLOR_SELECTED="${C_YLW}";;
 
-		# Below are special output formats
+		backtick)
+			# Output the input string with backticks (for Slack, mainly)
+			local OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
 
-		backtick) # Output the input string with backticks (for Slack, mainly)
-		local OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
+			# Copy string to clipboard if not connected via SSH and binary is present
+			[[ -z "${SSH_CONNECTION}" ]] && hash pbcopy && printf "\`%s\`" "${2}" | pbcopy
+			;;
 
-		# Copy string to clipboard if not connected via SSH and binary is present
-		if [[ -z "${SSH_CONNECTION}" ]]; then
-			if hash pbcopy; then
-				printf "\`%s\`" "${2}" | pbcopy
+		error)
+			# Special function to output to stderr
+			local OUTPUT_STDERR="1>&2"
+			local OUTPUT_FORMAT="${C_RED_BRT_BLD}Error ${C_WHT_BRT}: ${C_RST}%s\n"
+			;;
+
+		failure)
+			# Special function for failure message, no string input
+			local COLOR_SELECTED="${C_RED_BRT_BLD}"
+			local OUTPUT_STRING="failure"
+			;;
+
+		keyval)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
 			fi
-		fi
-		;;
 
-	error)
-		# Special function to output to stderr
-		local OUTPUT_STDERR="1>&2"
-		local OUTPUT_FORMAT="${C_RED_BRT_BLD}Error ${C_WHT_BRT}: ${C_RST}%s\n"
-		;;
+			local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\n"
 
-	failure)
-		# Special function for failure message, no string input
-		local COLOR_SELECTED="${C_RED_BRT_BLD}"
-		local OUTPUT_STRING="failure"
-		;;
-
-	keyval)
-		# Check for 2nd and 3rd args
-		if [[ -z "${2}" || -z "${3}" ]]; then
-			output usage "${USAGE_STRING}"
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
 			return
-		fi
+			;;
 
-		local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\n"
+		keyval-f)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
 
-		# Output special format and immediately return
-		printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-		return
-		;;
+			local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\n"
 
-	keyval-f)
-		# Check for 2nd and 3rd args
-		if [[ -z "${2}" || -z "${3}" ]]; then
-			output usage "${USAGE_STRING}"
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
 			return
-		fi
+			;;
 
-		local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\n"
+		keyval-t)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
 
-		# Output special format and immediately return
-		printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-		return
-		;;
+			local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
 
-	keyval-t)
-		# Check for 2nd and 3rd args
-		if [[ -z "${2}" || -z "${3}" ]]; then
-			output usage "${USAGE_STRING}"
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
 			return
-		fi
+			;;
 
-		local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
+		leadup) # Special function for leadup to status message, no newline
+			# Create dot string and output format
+			printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
+			local OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
+			;;
 
-		# Output special format and immediately return
-		printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-		return
-		;;
+		leadup-custom) # Special function for leadup to status message, no newline, with custom command name
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
 
-	leadup) # Special function for leadup to status message, no newline
-		# Create dot string and output format
-		printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
-		local OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
-		;;
+			# Create dot string and output format
+			printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
+			local OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
 
-	leadup-custom) # Special function for leadup to status message, no newline, with custom command name
-		# Check for 2nd and 3rd args
-		if [[ -z "${2}" || -z "${3}" ]]; then
-			output usage "${USAGE_STRING}"
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
 			return
-		fi
+			;;
 
-		# Create dot string and output format
-		printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
-		local OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
+		stderr)
+			# Special function to output to stderr
+			local COLOR_SELECTED="${C_BLU}"
+			local OUTPUT_STDERR="1>&2"
+			;;
 
-		printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+		success)
+			# Special function for success message, no string
+			local COLOR_SELECTED="${C_GRN_BRT_BLD}"
+			local OUTPUT_STRING="success"
+			;;
+
+		usage)
+			# Special function to output formatted usage string, with stderr output
+			local OUTPUT_FORMAT="${C_YLW_BRT_BLD}Usage ${C_WHT_BRT}: ${C_RST}%s\n"
+			local OUTPUT_STDERR="1>&2"
+			;;
+
+		*) local COLOR_SELECTED="${C_RST}";; # If nothing matches, reset color
+	esac
+
+	# Check for variables and throw usage message if issue
+	if [[ -z "${OUTPUT_STRING-${2}}" ]]; then
+		output usage "${USAGE_STRING}"
 		return
-		;;
+	fi
 
-	stderr)
-		# Special function to output to stderr
-		local COLOR_SELECTED="${C_BLU}"
-		local OUTPUT_STDERR="1>&2"
-		;;
+	# Finalize vars
+	local OUTPUT_FORMAT="${OUTPUT_FORMAT-${COLOR_SELECTED}%s${C_RST}\n}"
+	local OUTPUT_STRING="${OUTPUT_STRING-${2}}"
 
-	success)
-		# Special function for success message, no string
-		local COLOR_SELECTED="${C_GRN_BRT_BLD}"
-		local OUTPUT_STRING="success"
-		;;
-
-	usage)
-		# Special function to output formatted usage string, with stderr output
-		local OUTPUT_FORMAT="${C_YLW_BRT_BLD}Usage ${C_WHT_BRT}: ${C_RST}%s\n"
-		local OUTPUT_STDERR="1>&2"
-		;;
-
-	*) local COLOR_SELECTED="${C_RST}";; # If nothing matches, reset color
-esac
-
-# Check for variables and throw usage message if issue
-if [[ -z "${OUTPUT_STRING-${2}}" ]]; then
-	output usage "${USAGE_STRING}"
-	return
-fi
-
-# Finalize vars
-local OUTPUT_FORMAT="${OUTPUT_FORMAT-${COLOR_SELECTED}%s${C_RST}\n}"
-local OUTPUT_STRING="${OUTPUT_STRING-${2}}"
-
-# Output to stdout or stderr based on switch
-[[ "${OUTPUT_STDERR}" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 && return
-printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
+	# Output to stdout or stderr based on switch
+	[[ "${OUTPUT_STDERR}" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 && return
+	printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
 }
 
 #### Functions: Text ==final ####
@@ -1718,10 +1697,12 @@ _show_motd() {
 
 #### Functions: kdm-bash-env ==start ####
 
-# Re-source files in the 'extra' dir
-_kdm_extra() {
+# Re-source ${HOME}/.kdm/bashrc, then files in the 'source' dir
+_kdm_source() {
+	[[ -e ${BASH_ENV_FILE_BASHRC} ]] && . ${BASH_ENV_FILE_BASHRC} && output keyval-t "Loaded" "${BASH_ENV_FILE_BASHRC}" || output keyval-f "Failed" "${BASH_ENV_FILE_BASHRC}"
+
 	for ENTRY in $(ncls -A ${BASH_ENV_DIR_EXTRA} | ncgrep -Ev '\.sw|\._|README'); do
-		[[ -e ${BASH_ENV_DIR_EXTRA}/${ENTRY} ]] && . ${BASH_ENV_DIR_EXTRA}/${ENTRY} && output keyval "Loaded" "${BASH_ENV_DIR_EXTRA}/${ENTRY}"
+		[[ -e ${BASH_ENV_DIR_EXTRA}/${ENTRY} ]] && . ${BASH_ENV_DIR_EXTRA}/${ENTRY} && output keyval-t "Loaded" "${BASH_ENV_DIR_EXTRA}/${ENTRY}" || output keyval-f "Failed to load" "${BASH_ENV_DIR_EXTRA}/${ENTRY}"
 	done
 }
 
