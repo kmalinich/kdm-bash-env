@@ -79,3 +79,6 @@
 [submodule ".vim/bundle/nginx.vim"]
 	path = .vim/bundle/nginx.vim
 	url = https://github.com/chr4/nginx.vim.git
+[submodule ".snmp/mibs"]
+	path = .snmp/mibs
+	url = https://github.com/kmalinich/snmp-mibs.git
