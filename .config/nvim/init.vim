@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Fri 16 Jun 2017 05:05:04 PM EDT
+" Last Modified : Sun 25 Jun 2017 04:14:45 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -130,8 +130,8 @@ au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
 au Filetype c,cpp set expandtab
 au Filetype c,cpp set fileformat=unix
-au Filetype c,cpp set shiftwidth=4
-au Filetype c,cpp set tabstop=4
+au Filetype c,cpp set shiftwidth=2
+au Filetype c,cpp set tabstop=2
 
 " CSS
 au Filetype css let b:comment_leader = '/* '
