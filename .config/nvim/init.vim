@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Sun 25 Jun 2017 04:14:45 PM EDT
+" Last Modified : Fri 30 Jun 2017 02:45:58 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -75,11 +75,11 @@ if (has("termguicolors"))
 	set termguicolors
 
 	" Italic support
-	let &t_ZH = "\<Esc>[3m"
-	let &t_ZR = "\<Esc>[23m"
+	let &t_ZH="\e[3m"
+	let &t_ZR="\e[23m"
 
 	" Format comments in italic
-	highlight Comment cterm=italic
+	highlight Comment cterm=italic gui=italic
 
 	" Color scheme
 	colorscheme brogrammer
@@ -87,6 +87,9 @@ if (has("termguicolors"))
 	" iTerm2 cursor shape in insert mode
 	let &t_SI = "\<Esc>]50;CursorShape=2\x7"
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+
+	" Fix to restore cursor style when exiting
+	au VimLeave * set guicursor=a:block-blinkon0
 endif
 
 " Allow backspacing over everything in insert mode
@@ -196,9 +199,6 @@ au BufRead *.vmx :set filetype=cfg
 
 " Fix for editing crontabs with 'crontab -e' on macOS
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
-
-" Fix to restore cursor style when exiting
-au VimLeave * set guicursor=a:block-blinkon0
 
 " Mark extra whitespace in red
 highlight bad_whitespace ctermbg=red guibg=red
