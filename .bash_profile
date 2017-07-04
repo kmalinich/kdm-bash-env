@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Wed 17 May 2017 02:02:21 PM EDT
+# Last modified : Tue 27 Jun 2017 01:10:00 PM EDT
 
 
 #### Init functions ==start ####
@@ -95,6 +95,7 @@ if [[ -t 2 ]]; then
 
 	ARRAY_INIT_CONFIG=(
 	WARN_FACTER
+	COLOR_16M
 	)
 
 	ARRAY_MKDIR=(
@@ -541,6 +542,9 @@ if [[ -t 2 ]]; then
 		_bash_env_loading # Output loading message
 	fi
 
+	# bash builtin time format
+	export TIMEFORMAT=$'\n Real |  User | Systm | CPU%%\n%3R | %3U | %3S | %P'
+
 	# Set bash history size to unlimited
 	export HISTFILESIZE=
 	export HISTSIZE=
@@ -611,6 +615,9 @@ if [[ -t 2 ]]; then
 	export PROMPT_COMMAND="history -a; _prompt_generate"
 
 	_bash_env_loading # Output loading message
+
+	# If 16m color is enabled, change TERM to xterm-16mcolor
+	grep -q 'COLOR_16M=1' ${BASH_ENV_FILE_CONFIG} && export TERM="xterm-16mcolor"
 
 	# If dircolors exists, run it
 	if hash dircolors; then
