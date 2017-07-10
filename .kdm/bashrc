@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Mon 19 Jun 2017 04:50:14 PM EDT
+# Last modified : Mon 10 Jul 2017 09:30:55 AM EDT
 
 
 # Source global bashrc
@@ -226,7 +226,7 @@ output() {
 
 		leadup) # Special function for leadup to status message, no newline
 			# Create dot string and output format
-			printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
+			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
 			local OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
 			;;
 
@@ -238,7 +238,7 @@ output() {
 			fi
 
 			# Create dot string and output format
-			printf -v LOADING_DOT_STRING '%*s' $((60-${#2}-${#3})) ''
+			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
 			local OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
 
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
