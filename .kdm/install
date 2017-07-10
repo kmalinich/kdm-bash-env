@@ -58,7 +58,7 @@ rm -rf .config
 
 
 # Move a few dirs with lots of files in them
-ARRAY_DIRS_MOVE=(.kdm/nloadrc .kdm/toprc .nmap .snmp/mibs .vim/bundle)
+ARRAY_DIRS_MOVE=(.kdm/nloadrc .kdm/toprc .nmap .vim/bundle)
 
 for DIR in ${ARRAY_DIRS_MOVE[@]}; do
 	echo "Moving '${DIR}'"
@@ -69,7 +69,7 @@ for DIR in ${ARRAY_DIRS_MOVE[@]}; do
 	done
 done
 
-rm -rf .kdm/nloadrc .kdm/toprc .nmap .snmp .vim
+rm -rf .kdm/nloadrc .kdm/toprc .nmap .vim
 
 # Check/move/update contents of .kdm/extra/
 DIR=".kdm/extra"
