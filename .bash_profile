@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Tue 27 Jun 2017 01:10:00 PM EDT
+# Last modified : Mon 10 Jul 2017 01:29:23 PM EDT
 
 
 #### Init functions ==start ####
@@ -67,6 +67,7 @@ if [[ -t 2 ]]; then
 	export BASH_ENV_DIR_NMAP="${HOME}/.nmap"
 	export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
 	export BASH_ENV_DIR_SSH="${HOME}/.ssh"
+	export BASH_ENV_DIR_SSH_CONFIG="${HOME}/.ssh/config.d"
 	export BASH_ENV_DIR_VIM="${HOME}/.vim"
 
 	export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
@@ -100,7 +101,7 @@ if [[ -t 2 ]]; then
 
 	ARRAY_MKDIR=(
 	${BASH_ENV_DIR_KDM}
-	${BASH_ENV_DIR_SSH}
+	${BASH_ENV_DIR_SSH_CONFIG}
 	${BASH_ENV_DIR_VIM}
 	)
 fi
@@ -639,7 +640,7 @@ if [[ -t 2 ]]; then
 	done
 
 	# Setup SSH aliases from SSH config file
-	eval "$(awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' ${BASH_ENV_FILE_SSH_CONFIG})"
+	eval "$(awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' ${BASH_ENV_DIR_SSH_CONFIG}/*)"
 	_bash_env_loading # Output loading message
 
 	# Re-init loading variables

@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Fri 30 Jun 2017 02:45:58 PM EDT
+" Last Modified : Mon 10 Jul 2017 12:45:27 PM EDT
 
 " Be iMproved, required for Vundle
 set nocompatible
@@ -125,6 +125,11 @@ function! AppendModeline()
 endfunction
 nnoremap ml :call AppendModeline()<CR>
 
+
+" Mark extra whitespace in red
+highlight bad_whitespace ctermbg=red guibg=red
+
+
 " Interfaces file
 au BufRead /etc/network/interfaces :set syntax=interfaces
 
@@ -196,15 +201,13 @@ au Filetype sh set tabstop=2
 " VMWare vmx
 au BufRead *.vmx :set filetype=cfg
 
-
 " Fix for editing crontabs with 'crontab -e' on macOS
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
-" Mark extra whitespace in red
-highlight bad_whitespace ctermbg=red guibg=red
 
 " Highlight bad whitespace by file type
 au Filetype * match bad_whitespace /\s\+$/
+
 
 " Use UTF8 encoding
 set encoding=utf8
