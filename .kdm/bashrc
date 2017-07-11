@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Mon 10 Jul 2017 09:30:55 AM EDT
+# Last modified : Mon 10 Jul 2017 09:04:37 PM EDT
 
 
 # Source global bashrc
@@ -29,6 +29,7 @@ alias g-gca='_g_gca'
 alias g-gi='_g_gi'
 alias g-gpo='_g_gpo'
 alias g-gs='_g_gs'
+alias g-gsu='_g_gsu'
 alias g-gu='_g_gu'
 
 alias kdm-help='_kdm_help'
@@ -799,6 +800,46 @@ _g_wrapper() {
 # Git status
 _g_gs() {
 	_g_wrapper status
+}
+
+# Git fetch, git pull, git update-all-the-submodules-to-latest
+_g_gsu() {
+	local GIT_BRANCH="$(git symbolic-ref --short HEAD)"
+	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
+
+	_g_wrapper fetch
+	local CMD_EXIT="${?}"
+	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+
+	# Check if there is an update
+	if [[ "$(git log HEAD..origin/${GIT_BRANCH} --oneline 2>&1)" ]]; then
+		# Perform git pull
+		_g_wrapper pull
+		local CMD_EXIT="${?}"
+		[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+	else
+		output blue "No git update available"
+		echo
+	fi
+
+	# Generate temp file for output (until I learn how to do it without that)
+	local TEMP_FILE="$(mktemp)"
+
+	git -c color.submodule=always submodule foreach --recursive 'git checkout master; git fetch; git pull' > ${TEMP_FILE} 2>&1
+	local CMD_EXIT="${?}"
+
+	if [[ -s "${TEMP_FILE}" ]]; then
+		output orange "[${CMD_EXIT}] ----------= git submodule update =-------------"
+		cat ${TEMP_FILE}
+		echo
+	fi
+
+	rm -rf ${TEMP_FILE} &> /dev/null
+	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+
+	_g_gs
+	local CMD_EXIT="${?}"
+	return ${CMD_EXIT}
 }
 
 # Git fetch, git pull
