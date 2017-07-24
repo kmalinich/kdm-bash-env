@@ -1,12 +1,13 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Mon 10 Jul 2017 12:45:27 PM EDT
+" Last Modified : Sun 23 Jul 2017 10:34:43 PM EDT
+
 
 " Be iMproved, required for Vundle
 set nocompatible
 
-" Turn off native filetype handling, required for Vundle
+" Disable native filetype handling, required for Vundle
 filetype off
 
 " Set the runtime path to include Vundle, and initialize
@@ -19,11 +20,13 @@ Plugin 'gmarik/Vundle.vim'
 " Plugins
 Plugin 'amadeus/vim-evokai'
 Plugin 'ap/vim-css-color'
+Plugin 'chr4/nginx.vim'
 Plugin 'ervandew/supertab'
 Plugin 'fidian/hexmode'
 Plugin 'godlygeek/tabular'
 Plugin 'kmalinich/salt-jinja-vim'
 Plugin 'marciomazza/vim-brogrammer-theme'
+Plugin 'moll/vim-node'
 Plugin 'nvie/vim-flake8'
 Plugin 'othree/html5-syntax.vim'
 Plugin 'othree/html5.vim'
@@ -39,12 +42,16 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'vim-perl/vim-perl'
 Plugin 'vim-scripts/Align'
 Plugin 'vim-scripts/indentpython.vim'
-Plugin 'chr4/nginx.vim'
 Plugin 'vim-scripts/timestamp.vim'
 
-" All of your Plugins must be added before the following line
-call vundle#end()         " Required
-filetype plugin indent on " Required
+" All of your plugins must be added before the following line
+call vundle#end()
+
+" Re-enable native filetype handling
+filetype plugin indent on
+
+" Enable syntax highlighting
+syntax on
 
 " Tabwidth to half size
 set ts=2
@@ -52,7 +59,7 @@ set sw=2
 
 " Make scrolling and highlighters fast
 set ttyfast
-"set lazyredraw
+set lazyredraw
 
 " Correct xterm-16mcolor TERM variable
 if &term=~'xterm-16mcolor'
@@ -64,9 +71,6 @@ set wrap!
 
 " Highlight all Python syntax
 let python_highlight_all=1
-
-" Syntax highlighting
-syntax on
 
 " True color support
 if (has("termguicolors"))
@@ -125,10 +129,36 @@ function! AppendModeline()
 endfunction
 nnoremap ml :call AppendModeline()<CR>
 
+" Super-re-indent the file
+function! SuperReIndent()
+	call StripTrailingWhitespace()
+	" Save cursor position
+	let l:save = winsaveview()
+	" Remove all indentation
+	:execute 'normal! %le'
+	:execute 'normal! gg=G'
+	" Move cursor to original position
+	call winrestview(l:save)
+	" echo "Reindented file"
+endfunction
+nnoremap re :call SuperReIndent()<CR>
+
+function! StripTrailingWhitespace()
+	" Save cursor position
+	let l:save = winsaveview()
+	" Remove trailing whitespace
+	%s/\s\+$//e
+	" Remove trailing tabs
+	%s/\t\+$//e
+	" Move cursor to original position
+	call winrestview(l:save)
+	" echo "Removed trailing whitespace"
+endfunction
+nnoremap rw :call StripTrailingWhitespace()<CR>
+
 
 " Mark extra whitespace in red
 highlight bad_whitespace ctermbg=red guibg=red
-
 
 " Interfaces file
 au BufRead /etc/network/interfaces :set syntax=interfaces
@@ -139,47 +169,42 @@ au Filetype c,cpp set autoindent
 au Filetype c,cpp set expandtab
 au Filetype c,cpp set fileformat=unix
 au Filetype c,cpp set shiftwidth=2
+au Filetype c,cpp set softtabstop=2
 au Filetype c,cpp set tabstop=2
 
 " CSS
 au Filetype css let b:comment_leader = '/* '
-au Filetype css set autoindent
+" au Filetype css set autoindent
+au Filetype css set expandtab!
+au Filetype css setlocal expandtab!
 au Filetype css set fileformat=unix
-au Filetype css set shiftwidth=2
-" au Filetype css set softtabstop=2
-au Filetype css set tabstop=2
 
 " HTML
 au Filetype html let b:comment_leader = '<!-- '
-au Filetype html set autoindent
+" au Filetype html set autoindent
+au Filetype html set expandtab!
+au Filetype html setlocal expandtab!
 au Filetype html set fileformat=unix
-au Filetype html set shiftwidth=2
-" au Filetype html set softtabstop=2
-au Filetype html set tabstop=2
 
 " JS
 au Filetype javascript let b:comment_leader = '// '
-au Filetype javascript set autoindent
+au Filetype javascript set expandtab!
+au Filetype javascript setlocal expandtab!
 au Filetype javascript set fileformat=unix
-au Filetype javascript set shiftwidth=2
-" au Filetype javascript set softtabstop=2
-au Filetype javascript set tabstop=2
 
 " nginx
 au Filetype nginx let b:comment_leader = '# '
-au Filetype nginx set autoindent
+" au Filetype nginx set autoindent
+au Filetype nginx set expandtab!
+au Filetype nginx setlocal expandtab!
 au Filetype nginx set fileformat=unix
-au Filetype nginx set shiftwidth=2
-" au Filetype nginx set softtabstop=2
-au Filetype nginx set tabstop=2
 
 " PHP
 au Filetype php let b:comment_leader = '// '
-au Filetype php set autoindent
+" au Filetype php set autoindent
+au Filetype php set expandtab!
+au Filetype php setlocal expandtab!
 au Filetype php set fileformat=unix
-au Filetype php set shiftwidth=2
-" au Filetype php set softtabstop=2
-au Filetype php set tabstop=2
 
 " Python
 au Filetype python let b:comment_leader = '# '
@@ -192,11 +217,10 @@ au Filetype python set tabstop=4
 
 " sh/bash
 au Filetype sh let b:comment_leader = '# '
-au Filetype sh set autoindent
+" au Filetype sh set autoindent
+au Filetype sh set expandtab!
+au Filetype sh setlocal expandtab!
 au Filetype sh set fileformat=unix
-au Filetype sh set shiftwidth=2
-" au Filetype sh set softtabstop=2
-au Filetype sh set tabstop=2
 
 " VMWare vmx
 au BufRead *.vmx :set filetype=cfg
