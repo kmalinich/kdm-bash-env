@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Sun 23 Jul 2017 10:34:43 PM EDT
+" Last Modified : Mon 24 Jul 2017 12:03:18 AM EDT
 
 
 " Be iMproved, required for Vundle
@@ -231,6 +231,10 @@ au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
 " Highlight bad whitespace by file type
 au Filetype * match bad_whitespace /\s\+$/
+
+
+" Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
+set mouse=
 
 
 " Use UTF8 encoding
