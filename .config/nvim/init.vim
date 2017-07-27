@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Mon 24 Jul 2017 12:03:18 AM EDT
+" Last Modified : Thu 27 Jul 2017 03:58:53 PM EDT
 
 
 " Be iMproved, required for Vundle
@@ -18,7 +18,6 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins
-Plugin 'amadeus/vim-evokai'
 Plugin 'ap/vim-css-color'
 Plugin 'chr4/nginx.vim'
 Plugin 'ervandew/supertab'
@@ -27,7 +26,6 @@ Plugin 'godlygeek/tabular'
 Plugin 'kmalinich/salt-jinja-vim'
 Plugin 'marciomazza/vim-brogrammer-theme'
 Plugin 'moll/vim-node'
-Plugin 'nvie/vim-flake8'
 Plugin 'othree/html5-syntax.vim'
 Plugin 'othree/html5.vim'
 Plugin 'pangloss/vim-javascript'
@@ -58,8 +56,8 @@ set ts=2
 set sw=2
 
 " Make scrolling and highlighters fast
-set ttyfast
-set lazyredraw
+" set ttyfast
+" set lazyredraw
 
 " Correct xterm-16mcolor TERM variable
 if &term=~'xterm-16mcolor'
