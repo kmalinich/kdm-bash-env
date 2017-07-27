@@ -52,9 +52,6 @@
 [submodule ".vim/bundle/vim-airline-themes"]
 	path = .vim/bundle/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes.git
-[submodule ".vim/bundle/vim-deep-space"]
-	path = .vim/bundle/vim-deep-space
-	url = https://github.com/tyrannicaltoucan/vim-deep-space.git
 [submodule ".vim/bundle/vim-brogrammer-theme"]
 	path = .vim/bundle/vim-brogrammer-theme
 	url = https://github.com/marciomazza/vim-brogrammer-theme.git
