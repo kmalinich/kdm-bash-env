@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Thu 27 Jul 2017 03:58:53 PM EDT
+" Last Modified : Thu 27 Jul 2017 04:05:09 PM EDT
 
 
 " Be iMproved, required for Vundle
@@ -159,7 +159,11 @@ nnoremap rw :call StripTrailingWhitespace()<CR>
 highlight bad_whitespace ctermbg=red guibg=red
 
 " Interfaces file
-au BufRead /etc/network/interfaces :set syntax=interfaces
+au BufRead /etc/network/interfaces set expandtab!
+au BufRead /etc/network/interfaces set fileformat=unix
+au BufRead /etc/network/interfaces set filetype=interfaces
+au BufRead /etc/network/interfaces set syntax=interfaces
+au BufRead /etc/network/interfaces setlocal expandtab!
 
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
@@ -266,3 +270,5 @@ let g:syntastic_javascript_eslint_exec = '/usr/local/bin/eslint'
 " Neovim Python config
 let g:python_host_prog  = '/usr/local/bin/python2.7'
 let g:python3_host_prog = '/usr/local/bin/python3.6'
+
+" vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
