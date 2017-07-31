@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 10 Jul 2017 01:29:23 PM EDT
+# Last modified : Mon 31 Jul 2017 11:00:08 AM EDT
 
 
 #### Init functions ==start ####
@@ -613,7 +613,12 @@ if [[ -t 2 ]]; then
 	# Ignore/erase duplicates and space-prefixed commands ' ls'
 	export HISTCONTROL="ignoredups:ignorespace"
 	# Also generate prompt with _prompt_generate function in .bashrc and write lines to history file
-	export PROMPT_COMMAND="history -a; _prompt_generate"
+	if [[ -s ${BASH_ENV_DIR_EXTRA}/powerline ]]; then
+		# export PROMPT_COMMAND="_powerline_status_wrapper _powerline_set_prompt; history -a; _prompt_generate"
+		export PROMPT_COMMAND="_powerline_status_wrapper _powerline_set_prompt; history -a"
+	else
+		export PROMPT_COMMAND="history -a; _prompt_generate"
+	fi
 
 	_bash_env_loading # Output loading message
 

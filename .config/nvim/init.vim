@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Thu 27 Jul 2017 04:05:09 PM EDT
+" Last Modified : Mon 31 Jul 2017 03:47:06 PM EDT
 
 
 " Be iMproved, required for Vundle
@@ -18,6 +18,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugins
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 Plugin 'ap/vim-css-color'
 Plugin 'chr4/nginx.vim'
 Plugin 'ervandew/supertab'
@@ -26,27 +27,37 @@ Plugin 'godlygeek/tabular'
 Plugin 'kmalinich/salt-jinja-vim'
 Plugin 'marciomazza/vim-brogrammer-theme'
 Plugin 'moll/vim-node'
+Plugin 'moon-musick/vim-logrotate'
 Plugin 'othree/html5-syntax.vim'
 Plugin 'othree/html5.vim'
 Plugin 'pangloss/vim-javascript'
-Plugin 'puppetlabs/puppet-syntax-vim'
 Plugin 'saltstack/salt-vim'
+Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'shawncplus/phpcomplete.vim'
 Plugin 'stephpy/vim-yaml'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'vim-perl/vim-perl'
+Plugin 'paranoida/vim-airlineish'
 Plugin 'vim-scripts/Align'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'vim-scripts/timestamp.vim'
+
+" Plugin 'puppetlabs/puppet-syntax-vim'
+" Plugin 'vim-perl/vim-perl'
 
 " All of your plugins must be added before the following line
 call vundle#end()
 
 " Re-enable native filetype handling
 filetype plugin indent on
+
+
+" Pull in some environment variables
+let term_program=$TERM_PROGRAM
+let term_type=$TERM
+
+
 
 " Enable syntax highlighting
 syntax on
@@ -59,52 +70,68 @@ set sw=2
 " set ttyfast
 " set lazyredraw
 
-" Correct xterm-16mcolor TERM variable
-if &term=~'xterm-16mcolor'
-	set term=xterm-256color
-endif
-
 " Disable line wrapping
 set wrap!
 
 " Highlight all Python syntax
 let python_highlight_all=1
 
-" True color support
-if (has("termguicolors"))
-	let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+" Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
+set mouse=
+
+" Use UTF8 encoding
+set encoding=utf8
+
+" Allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+" Keep 1000 lines of command line history
+set history=10000
+
+" Tell vim to remember certain things when we exit (like cursor position)
+if !has('nvim')
+	set viminfo='10,\"100,:20,%,n~/.viminfo
+endif
+
+" Delete comment character when joining commented lines
+set formatoptions+=j
+
+" Correct xterm-16mcolor TERM variable
+if term_type == 'xterm-16mcolor'
+	set term=xterm-256color
+endif
+
+
+" True (24-bit) color support (requires supporting terminal emulator)
+if has('termguicolors') && term_type == 'xterm-256color'
+	let &t_8f = "\e[38;2;%lu;%lu;%lum"
+	let &t_8b = "\e[48;2;%lu;%lu;%lum"
 	set termguicolors
-
-	" Italic support
-	let &t_ZH="\e[3m"
-	let &t_ZR="\e[23m"
-
-	" Format comments in italic
-	highlight Comment cterm=italic gui=italic
 
 	" Color scheme
 	colorscheme brogrammer
 
-	" iTerm2 cursor shape in insert mode
-	let &t_SI = "\<Esc>]50;CursorShape=2\x7"
+	" Italic support (requires proper ~/.terminfo)
+	if has('nvim')
+		let &t_ZH="\e[3m"
+		let &t_ZR="\e[23m"
+
+		" Format comments in italic
+		highlight Comment cterm=italic gui=italic
+	endif
+endif
+
+
+if term_program == 'iTerm.app'
+	" Change iTerm2 cursor shape when changing modes
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+	let &t_SI = "\<Esc>]50;CursorShape=2\x7"
+	let &t_SR = "\<Esc>]50;CursorShape=1\x7"
 
 	" Fix to restore cursor style when exiting
 	au VimLeave * set guicursor=a:block-blinkon0
 endif
 
-" Allow backspacing over everything in insert mode
-set backspace=indent,eol,start
-
-" Show the cursor position all the time
-"set ruler
-
-" Keep 1000 lines of command line history
-set history=1000
-
-" Tell vim to remember certain things when we exit (cursor position)
-" set viminfo='10,\"100,:20,%,n~/.nviminfo
 
 " Restore cursor position properly
 function! ResCur()
@@ -113,10 +140,12 @@ function! ResCur()
 		return 1
 	endif
 endfunction
+
 augroup resCur
 	autocmd!
 	autocmd BufWinEnter * call ResCur()
 augroup END
+
 
 " Append modeline after last line in buffer
 " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files
@@ -154,9 +183,6 @@ function! StripTrailingWhitespace()
 endfunction
 nnoremap rw :call StripTrailingWhitespace()<CR>
 
-
-" Mark extra whitespace in red
-highlight bad_whitespace ctermbg=red guibg=red
 
 " Interfaces file
 au BufRead /etc/network/interfaces set expandtab!
@@ -224,6 +250,13 @@ au Filetype sh set expandtab!
 au Filetype sh setlocal expandtab!
 au Filetype sh set fileformat=unix
 
+" sls (salt)
+au BufRead *.sls let b:comment_leader = '# '
+" au BufRead *.sls set autoindent
+au BufRead *.sls set expandtab!
+au BufRead *.sls setlocal expandtab!
+au BufRead *.sls set fileformat=unix
+
 " VMWare vmx
 au BufRead *.vmx :set filetype=cfg
 
@@ -231,25 +264,66 @@ au BufRead *.vmx :set filetype=cfg
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
 
+" Show visible whitespace
+set list
+
+" Mark extra whitespace in red
+highlight bad_whitespace ctermbg=red guibg=red
+
 " Highlight bad whitespace by file type
 au Filetype * match bad_whitespace /\s\+$/
 
 
-" Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
-set mouse=
+" Neovim Python config
+let g:python_host_prog  = '/usr/local/bin/python2.7'
+let g:python3_host_prog = '/usr/local/bin/python3.6'
 
 
-" Use UTF8 encoding
-set encoding=utf8
+" NERDTree config
+" Automatically open NERDTree on vim open
+" autocmd vimenter * NERDTree
+" Ctrl-T to toggle NERDTree
+map <C-t> :NERDTreeToggle<CR>
 
-" vim-airline configuration
+
+" vim-airline config
 set laststatus=2
-set ttimeoutlen=10
-set noshowmode
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts            = 1
+let g:airline#extensions#branch#enabled     = 1
+let g:airline#extensions#syntastic#enabled  = 1
+let g:airline#extensions#tabline#enabled    = 1
+let g:airline#extensions#tagbar#enabled     = 1
+let g:airline#extensions#virtualenv#enabled = 1
 
-" Syntastic options
+let g:airline_powerline_fonts     = 1
+let g:airline_skip_empty_sections = 1
+let g:airline_theme               = 'airlineish'
+
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
+
+" let g:airline#extensions#branch#prefix        = '⤴''
+" let g:airline#extensions#linecolumn#prefix    = '¶'
+" let g:airline#extensions#paste#symbol         = 'ρ'
+" let g:airline#extensions#readonly#symbol      = '⊘'
+" let g:airline#extensions#tabline#left_alt_sep = '|'
+" let g:airline#extensions#tabline#left_sep     = ' '
+
+
+" powerline symbols
+let g:airline_left_sep      = ''
+let g:airline_left_alt_sep  = ''
+let g:airline_right_sep     = ''
+let g:airline_right_alt_sep = ''
+
+let g:airline_symbols.branch   = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr   = ''
+" let g:airline_symbols.paste      = 'ρ'
+" let g:airline_symbols.whitespace = 'Ξ'
+
+
+" Syntastic config
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list            = 1
 let g:syntastic_check_on_open            = 1
@@ -267,8 +341,5 @@ let g:syntastic_php_phpcs_args = ''
 let g:syntastic_javascript_checkers    = ['eslint']
 let g:syntastic_javascript_eslint_exec = '/usr/local/bin/eslint'
 
-" Neovim Python config
-let g:python_host_prog  = '/usr/local/bin/python2.7'
-let g:python3_host_prog = '/usr/local/bin/python3.6'
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :

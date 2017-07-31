@@ -1,10 +1,7 @@
 # kdm bash-env
 # .screenrc
 
-# Last modified : Tue 03 Jan 2017 08:00:46 PM EST
-
-# Set terminal variable, 'screen-256color' allows home/end keys to work properly
-term screen-256color
+# Last modified : Mon 31 Jul 2017 10:39:49 AM EDT
 
 # Do not display the copyright page
 startup_message off
@@ -20,4 +17,7 @@ hardstatus alwayslastline
 hardstatus string "%{= kb}[ %=%{w}%?%-Lw%?%{C}(%{W}%n*%f %t%?(%u)%?%{C})%{w}%?%+Lw%?%?%= %{b}][%{C} %Y.%m.%d %{W}%0c"
 
 # Make mouse wheel scroll work (at least, in iTerm2 2.9)
-termcapinfo xterm* ti@:te@
+# termcapinfo xterm* ti@:te@
+
+# Set terminal variable, 'screen-256color' allows home/end keys to work properly
+# term screen-256color
