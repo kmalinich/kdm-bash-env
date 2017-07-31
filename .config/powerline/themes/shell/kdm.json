@@ -1,0 +1,109 @@
+{
+	"default_module": "powerline.segments.common",
+	"spaces": 1,
+	"dividers": {
+		"left": {
+			"hard": " ",
+			"soft": ""
+		},
+		"right": {
+			"hard": " ",
+			"soft": " "
+		}
+	},
+	"segment_data": {
+		"branch": {
+			"after": "",
+			"before": " ",
+			"args": {
+				"status_colors": true
+			}
+		},
+		"stash": {
+			"after": "",
+			"before": "⌆ "
+		},
+		"cwd": {
+			"after": "",
+			"before": "",
+			"args": {
+				"dir_limit_depth": 3,
+				"use_path_separator": true,
+				"ellipsis": ".."
+			}
+		},
+		"powerline.segments.common.net.hostname": {
+			"after": "",
+			"before": "",
+			"args": {
+				"exclude_domain": true,
+				"only_if_ssh": false
+			}
+		},
+		"powerline.segments.common.wthr.weather": {
+			"after": "",
+			"before": "",
+			"args": {
+				"unit": "F",
+				"icons": {
+					"day": "〇 ",
+					"blustery": "⚑ ",
+					"rainy": "☔ ",
+					"cloudy": "☁ ",
+					"snowy": "❅ ",
+					"stormy": "☈ ",
+					"foggy": "≡ ",
+					"sunny": "☼ ",
+					"night": "☾ ",
+					"windy": "☴ ",
+					"not_available": "� ",
+					"unknown": "⚠ "
+				}
+			}
+		},
+		"user": {
+			"args": {
+				"hide_user": "kdm"
+			}
+		}
+	},
+	"segments": {
+		"left": [
+			{
+				"function": "powerline.segments.common.net.hostname",
+				"name": "hostname",
+				"priority": 20
+			},
+			{
+				"function": "powerline.segments.common.env.user",
+				"name": "user",
+				"priority": 30
+			},
+			{
+				"function": "powerline.segments.common.wthr.weather",
+				"display": true,
+				"priority": 50
+			},
+			{
+				"function": "powerline.segments.shell.cwd",
+				"name": "cwd",
+				"priority": 10
+			},
+			{
+				"function": "powerline.segments.common.vcs.branch",
+				"name": "branch",
+				"priority": 40
+			}
+		],
+		"right": [
+			{
+				"function": "powerline.segments.common.time.date",
+				"priority": 60
+			},
+			{
+				"function": "powerline.segments.shell.last_pipe_status",
+				"priority": 70
+			}
+		]
+	}
+}

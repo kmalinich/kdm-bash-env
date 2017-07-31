@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Mon 31 Jul 2017 03:54:43 PM EDT
+" Last Modified : Mon 31 Jul 2017 04:05:11 PM EDT
 
 
 " Be iMproved, required for Vundle
@@ -288,6 +288,7 @@ map <C-t> :NERDTreeToggle<CR>
 
 " vim-airline config
 set laststatus=2
+set noshowmode
 let g:airline#extensions#branch#enabled     = 1
 let g:airline#extensions#syntastic#enabled  = 1
 let g:airline#extensions#tabline#enabled    = 1

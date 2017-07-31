@@ -1,7 +1,7 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Mon 31 Jul 2017 11:16:27 AM EDT
+# Last modified : Mon 31 Jul 2017 05:11:57 PM EDT
 
 
 # Source global bashrc
@@ -2609,9 +2609,7 @@ fi
 if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 	#     in a terminal : always enable/use color
 	# NOT in a terminal : disable color
-	[[ -t 2 ]] && CMD_COLOR="auto"
-	CMD_COLOR="--color=${CMD_COLOR-never}"
-	GREP_BASE="grep ${CMD_COLOR} -s"
+	GREP_BASE="grep --color=if-tty -s"
 
 	alias grep=" ${GREP_BASE}"
 	alias egrep="${GREP_BASE} -E"
@@ -2640,7 +2638,7 @@ if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 	alias cgrep=' grep -s --color=always' # Force enable color
 	alias ncgrep='grep -s --color=never'  # Force disable color
 
-	alias ls="  ls ${CMD_COLOR}   2> /dev/null"
+	alias ls="  ls --color=if-tty 2> /dev/null"
 	alias cls=' ls --color=always 2> /dev/null' # Force enable color
 	alias ncls='ls --color=never  2> /dev/null' # Force disable color
 
