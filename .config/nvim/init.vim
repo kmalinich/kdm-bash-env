@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Mon 31 Jul 2017 03:47:06 PM EDT
+" Last Modified : Mon 31 Jul 2017 03:54:43 PM EDT
 
 
 " Be iMproved, required for Vundle
@@ -302,13 +302,14 @@ if !exists('g:airline_symbols')
 	let g:airline_symbols = {}
 endif
 
-" let g:airline#extensions#branch#prefix        = '⤴''
-" let g:airline#extensions#linecolumn#prefix    = '¶'
-" let g:airline#extensions#paste#symbol         = 'ρ'
-" let g:airline#extensions#readonly#symbol      = '⊘'
-" let g:airline#extensions#tabline#left_alt_sep = '|'
-" let g:airline#extensions#tabline#left_sep     = ' '
+" let g:airline#extensions#branch#prefix     = '⤴''
+" let g:airline#extensions#linecolumn#prefix = '¶'
+" let g:airline#extensions#paste#symbol      = 'ρ'
+" let g:airline#extensions#readonly#symbol   = '⊘'
 
+" Straight tabs
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#left_sep     = ' '
 
 " powerline symbols
 let g:airline_left_sep      = ''
