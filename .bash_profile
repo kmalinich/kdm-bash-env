@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 31 Jul 2017 06:18:53 PM EDT
+# Last modified : Mon 31 Jul 2017 06:50:06 PM EDT
 
 
 #### Init functions ==start ####
@@ -9,7 +9,6 @@
 # Output loading message with auto-increment
 alias _bash_env_loading='_bash_env_loading'
 _bash_env_loading() {
-	return;
 	[[ -t 2 ]] || return
 
 	# Clear line function - 29 spaces
@@ -33,7 +32,7 @@ _bash_env_loading() {
 
 	# Output message (if on Bash 4+)
 	if [[ "${BASH_VERSINFO[0]}" -ge "4" ]]; then
-		echo -en "${C_YLW_BLD}init ${LOADING_STRING}${COLOR_RESET}\r"
+		echo -en "${C_YLW_BLD}init ${LOADING_STRING}${C_RST}\r"
 	fi
 
 	# Increment counter if until 24, then decrement
