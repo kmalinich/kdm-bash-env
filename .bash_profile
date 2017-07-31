@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 31 Jul 2017 11:00:08 AM EDT
+# Last modified : Mon 31 Jul 2017 06:18:53 PM EDT
 
 
 #### Init functions ==start ####
@@ -9,6 +9,7 @@
 # Output loading message with auto-increment
 alias _bash_env_loading='_bash_env_loading'
 _bash_env_loading() {
+	return;
 	[[ -t 2 ]] || return
 
 	# Clear line function - 29 spaces
@@ -88,6 +89,7 @@ if [[ -t 2 ]]; then
 	export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
 	export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 	export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
+	export BASH_ENV_FILE_SUDOCACHE="${BASH_ENV_DIR_KDM}/sudocache"
 	export BASH_ENV_FILE_TOPRC="${HOME}/.toprc"
 	export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
 
@@ -200,6 +202,7 @@ if [[ -t 2 ]]; then
 	${BASH_ENV_FILE_CONFIG}
 	${BASH_ENV_FILE_SSH_AUTHKEYS}
 	${BASH_ENV_FILE_SSH_CONFIG}
+	${BASH_ENV_FILE_SUDOCACHE}
 	)
 
 	# Array of automatic sudo-ing commands (macOS-only)
@@ -612,13 +615,16 @@ if [[ -t 2 ]]; then
 	# http://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history
 	# Ignore/erase duplicates and space-prefixed commands ' ls'
 	export HISTCONTROL="ignoredups:ignorespace"
-	# Also generate prompt with _prompt_generate function in .bashrc and write lines to history file
-	if [[ -s ${BASH_ENV_DIR_EXTRA}/powerline ]]; then
-		# export PROMPT_COMMAND="_powerline_status_wrapper _powerline_set_prompt; history -a; _prompt_generate"
-		export PROMPT_COMMAND="_powerline_status_wrapper _powerline_set_prompt; history -a"
+
+	# Generate prompt with _prompt_generate function in .bashrc, or with powerline
+	if hash powerline-daemon && test -s ${BASH_ENV_DIR_EXTRA}/powerline; then
+		PROMPT_COMMAND="_powerline_status_wrapper _powerline_set_prompt"
 	else
-		export PROMPT_COMMAND="history -a; _prompt_generate"
+		PROMPT_COMMAND="_prompt_generate"
 	fi
+
+	# Always write lines to history file on each prompt
+	export PROMPT_COMMAND="${PROMPT_COMMAND}; history -a"
 
 	_bash_env_loading # Output loading message
 
@@ -653,7 +659,7 @@ if [[ -t 2 ]]; then
 	unset LOADING_WHITESPACE_COUNT
 
 	# Show the MOTD
-	_show_motd
+	# _show_motd
 
 	# Re-enable input
 	stty echo
