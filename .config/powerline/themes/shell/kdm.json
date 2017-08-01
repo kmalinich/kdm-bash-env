@@ -1,6 +1,5 @@
 {
 	"default_module": "powerline.segments.common",
-	"spaces": 1,
 	"dividers": {
 		"left": {
 			"hard": " ",
@@ -12,54 +11,57 @@
 		}
 	},
 	"segment_data": {
-		"powerline.segments.common.vcs.branch": {
+		"branch": {
 			"after": "",
-			"before": " ",
 			"args": {
 				"status_colors": true
-			}
+			},
+			"before": " "
+		},
+		"powerline.segments.common.net.hostname": {
+			"after": "",
+			"args": {
+				"exclude_domain": true,
+				"only_if_ssh": false
+			},
+			"before": ""
 		},
 		"powerline.segments.common.vcs.stash": {
 			"after": "",
 			"before": "⌆ "
 		},
-		"powerline.segments.shell.cwd": {
-			"after": "",
-			"before": "",
-			"args": {
-				"dir_limit_depth": 3,
-				"use_path_separator": true,
-				"ellipsis": ".."
-			}
-		},
-		"powerline.segments.common.net.hostname": {
-			"after": "",
-			"before": "",
-			"args": {
-				"exclude_domain": true,
-				"only_if_ssh": false
-			}
-		},
 		"powerline.segments.common.wthr.weather": {
 			"after": "",
-			"before": "",
 			"args": {
-				"unit": "F",
 				"icons": {
-					"day": "〇 ",
-					"blustery": "⚑ ",
-					"rainy": "☔ ",
-					"cloudy": "☁ ",
-					"snowy": "❅ ",
-					"stormy": "☈ ",
-					"foggy": "≡ ",
-					"sunny": "☼ ",
-					"night": "☾ ",
-					"windy": "☴ ",
-					"not_available": "� ",
-					"unknown": "⚠ "
-				}
-			}
+					"blustery": "💨 ",
+					"cloudy": "☁️ ",
+					"day": "☀️ ",
+					"foggy": "🌫️ ",
+					"night": "🌙 ",
+					"not_available": "❓ ",
+					"rainy": "🌧️ ",
+					"snowy": "❄️ ",
+					"stormy": "⛈️ ",
+					"sunny": "☀️ ",
+					"unknown": "⚠️ ",
+					"windy": "💨 "
+				},
+				"temp_coldest": -30,
+				"temp_format": "{temp:.0f}°",
+				"temp_hottest": 45,
+				"unit": "C"
+			},
+			"before": ""
+		},
+		"powerline.segments.shell.cwd": {
+			"after": "",
+			"args": {
+				"dir_limit_depth": 3,
+				"ellipsis": "..",
+				"use_path_separator": true
+			},
+			"before": ""
 		},
 		"user": {
 			"args": {
@@ -70,17 +72,17 @@
 	"segments": {
 		"left": [
 			{
+				"display": true,
+				"function": "powerline.segments.common.wthr.weather",
+				"priority": 50
+			},
+			{
 				"function": "powerline.segments.common.net.hostname",
 				"priority": 20
 			},
 			{
 				"function": "powerline.segments.common.env.user",
 				"priority": 30
-			},
-			{
-				"function": "powerline.segments.common.wthr.weather",
-				"display": true,
-				"priority": 50
 			},
 			{
 				"function": "powerline.segments.shell.cwd",
@@ -101,5 +103,6 @@
 				"priority": 70
 			}
 		]
-	}
+	},
+	"spaces": 1
 }
