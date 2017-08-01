@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Tue 01 Aug 2017 01:06:48 PM EDT
+" Last Modified : Tue 01 Aug 2017 01:10:51 PM EDT
 
 
 " Pull in some environment variables
@@ -16,6 +16,9 @@ filetype plugin indent on
 " Enable syntax highlighting
 syntax on
 
+" Highlight all Python syntax
+let python_highlight_all=1
+
 " Tabwidth to half size
 set ts=2
 set sw=2
@@ -26,9 +29,6 @@ set sw=2
 
 " Disable line wrapping
 set wrap!
-
-" Highlight all Python syntax
-let python_highlight_all=1
 
 " Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
 set mouse=
@@ -49,11 +49,6 @@ endif
 
 " Delete comment character when joining commented lines
 set formatoptions+=j
-
-" Correct xterm-16mcolor TERM variable
-if term_type == 'xterm-16mcolor'
-	set term=xterm-256color
-endif
 
 
 " True (24-bit) color support (requires supporting terminal emulator)
@@ -112,7 +107,10 @@ nnoremap ml :call AppendModeline()<CR>
 
 " Super-re-indent the file
 function! SuperReIndent()
+	" Strip whitespace first
 	call StripTrailingWhitespace()
+	" Set no expandtab
+	set noet
 	" Save cursor position
 	let l:save = winsaveview()
 	" Remove all indentation
