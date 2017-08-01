@@ -12,18 +12,18 @@
 		}
 	},
 	"segment_data": {
-		"branch": {
+		"powerline.segments.common.vcs.branch": {
 			"after": "",
 			"before": " ",
 			"args": {
 				"status_colors": true
 			}
 		},
-		"stash": {
+		"powerline.segments.common.vcs.stash": {
 			"after": "",
 			"before": "⌆ "
 		},
-		"cwd": {
+		"powerline.segments.shell.cwd": {
 			"after": "",
 			"before": "",
 			"args": {
@@ -71,12 +71,10 @@
 		"left": [
 			{
 				"function": "powerline.segments.common.net.hostname",
-				"name": "hostname",
 				"priority": 20
 			},
 			{
 				"function": "powerline.segments.common.env.user",
-				"name": "user",
 				"priority": 30
 			},
 			{
@@ -86,12 +84,10 @@
 			},
 			{
 				"function": "powerline.segments.shell.cwd",
-				"name": "cwd",
 				"priority": 10
 			},
 			{
 				"function": "powerline.segments.common.vcs.branch",
-				"name": "branch",
 				"priority": 40
 			}
 		],
