@@ -1,9 +1,6 @@
 [submodule ".vim/bundle/Align"]
 	path = .vim/bundle/Align
 	url = https://github.com/vim-scripts/Align.git
-[submodule ".vim/bundle/Vundle.vim"]
-	path = .vim/bundle/Vundle.vim
-	url = https://github.com/VundleVim/Vundle.vim.git
 [submodule ".vim/bundle/hexmode"]
 	path = .vim/bundle/hexmode
 	url = https://github.com/fidian/hexmode.git

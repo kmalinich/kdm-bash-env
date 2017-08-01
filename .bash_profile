@@ -1,7 +1,7 @@
 # kdm bash-env
 # .bash_profile
 
-# Last modified : Mon 31 Jul 2017 06:50:06 PM EDT
+# Last modified : Tue 01 Aug 2017 12:43:29 PM EDT
 
 
 #### Init functions ==start ####
@@ -628,7 +628,12 @@ if [[ -t 2 ]]; then
 	_bash_env_loading # Output loading message
 
 	# If 16m color is enabled, change TERM to xterm-16mcolor
-	grep -q 'COLOR_16M=1' ${BASH_ENV_FILE_CONFIG} && export TERM="xterm-16mcolor"
+	if grep -q 'COLOR_16M=1' ${BASH_ENV_FILE_CONFIG}; then
+		export TERM="xterm-16mcolor"
+		export BASH_ENV_COLOR_16M="true"
+	else
+		export BASH_ENV_COLOR_16M="false"
+	fi
 
 	# If dircolors exists, run it
 	if hash dircolors; then
