@@ -1,0 +1,34 @@
+# bash-env variable set
+export BASH_ENV_DIR_CODE="${HOME}/code"
+export BASH_ENV_DIR_NMAP="${HOME}/.nmap"
+export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
+export BASH_ENV_DIR_SSH="${HOME}/.ssh"
+export BASH_ENV_DIR_SSH_CONFIG="${HOME}/.ssh/config.d"
+export BASH_ENV_DIR_VIM="${HOME}/.vim"
+
+export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
+export BASH_ENV_FILE_BASHHISTORY="${BASH_ENV_DIR_KDM}/history"
+
+export BASH_ENV_FILE_BASHLOGOUT="${HOME}/.bash_logout"
+export BASH_ENV_FILE_BASHPROFILE="${HOME}/.bash_profile"
+export BASH_ENV_FILE_BASHRC="${BASH_ENV_DIR_KDM}/bashrc"
+export BASH_ENV_FILE_COLORS="${BASH_ENV_DIR_KDM}/bash-env-colors"
+export BASH_ENV_FILE_CONFIG="${BASH_ENV_DIR_KDM}/bash-env.conf"
+export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
+export BASH_ENV_FILE_GEMRC="${HOME}/.gemrc"
+export BASH_ENV_FILE_GITCONFIG="${HOME}/.gitconfig"
+export BASH_ENV_FILE_GITIGNORE="${HOME}/.gitignore"
+export BASH_ENV_FILE_INPUTRC="${HOME}/.inputrc"
+export BASH_ENV_FILE_NLOAD="${HOME}/.nload"
+export BASH_ENV_FILE_PIPRC="${HOME}/.piprc"
+export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
+export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
+export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
+export BASH_ENV_FILE_SUDOCACHE="${BASH_ENV_DIR_KDM}/sudocache"
+export BASH_ENV_FILE_TOPRC="${HOME}/.toprc"
+export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
+
+# Custom pip config file path
+export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

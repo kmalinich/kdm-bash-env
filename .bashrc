@@ -1,8 +1,6 @@
 # kdm bash-env
 # .bashrc (wrapper)
 
-# Last modified : Wed 05 Apr 2017 02:03:31 PM EDT
-
 # File paths
 FILE_RC="${HOME}/.kdm/bashrc"
 FILE_PF="${HOME}/.bash_profile"

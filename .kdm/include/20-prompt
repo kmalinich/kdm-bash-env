@@ -1,0 +1,11 @@
+# Generate prompt with _prompt_generate function in .bashrc, or with powerline
+if hash powerline-daemon && test -s ${BASH_ENV_DIR_EXTRA}/powerline; then
+	PROMPT_COMMAND="_powerline_status_wrapper _powerline_set_prompt"
+else
+	PROMPT_COMMAND="_prompt_generate"
+fi
+
+# Always write lines to history file on each prompt
+export PROMPT_COMMAND="${PROMPT_COMMAND}; history -a"
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

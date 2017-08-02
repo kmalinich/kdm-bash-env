@@ -1,0 +1,12 @@
+# Machine uname variables
+export UNAME_KERNEL_NAME="$(uname -s)"
+export UNAME_KERNEL_RELEASE="$(uname -r)"
+# Commented these out as they are unused (for now)
+#export UNAME="$(uname)"
+#export UNAME_ALL="$(uname -a)"
+#export UNAME_KERNEL_VERSION="$(uname -v)"
+#export UNAME_MACHINE="$(uname -m)"
+#export UNAME_NODE="$(uname -n)"
+#export UNAME_PROCESSOR="$(uname -p)"
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -206,14 +206,6 @@ export C_YLW_BRT_UDL="${C_YLW_BRT}${C_UDL}"
 #### Color variables ==final ####
 
 
-#### Color test function aliases ==start ####
-
-alias show-colors-16m='_show_colors_16m'
-alias show-colors-256='_show_colors_256'
-
-#### Color test function aliases ==final ####
-
-
 #### Color test functions ==start ####
 
 _show_colors_16m() {
@@ -391,6 +383,25 @@ _show_colors_256_work() {
 }
 
 #### Color test functions ==final ####
+
+
+#### Color test function aliases ==start ####
+
+alias show-colors-16m='_show_colors_16m'
+alias show-colors-256='_show_colors_256'
+
+#### Color test function aliases ==final ####
+
+
+#### Environment color config ==start ####
+
+# Default "user color" configuration, overridden by library in 'extra' dir if present
+# Root = red, non-root = purple
+[[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_GRN}}"
+export C_ENV
+export C_ENV_BOLD="${C_BLD}${C_ENV}"
+
+#### Environment color config ==final ####
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -64,9 +64,6 @@
 [submodule ".vim/bundle/nginx.vim"]
 	path = .vim/bundle/nginx.vim
 	url = https://github.com/chr4/nginx.vim.git
-[submodule ".snmp/mibs"]
-	path = .snmp/mibs
-	url = https://github.com/kmalinich/snmp-mibs.git
 [submodule ".vim/bundle/vim-node"]
 	path = .vim/bundle/vim-node
 	url = https://github.com/moll/vim-node.git
@@ -82,3 +79,6 @@
 [submodule ".vim/bundle/vim-airlineish"]
 	path = .vim/bundle/vim-airlineish
 	url = https://github.com/paranoida/vim-airlineish.git
+[submodule ".snmp/mibs"]
+	path = .snmp/mibs
+	url = https://github.com/kmalinich/snmp-mibs.git

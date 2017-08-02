@@ -1,0 +1,41 @@
+# Configure PATH from ARRAY_PATH
+unset PATH
+for ENTRY in ${ARRAY_PATH[@]}; do
+	# Skip entry if it's already in PATH
+	[[ "${PATH}" =~ (:|^)${ENTRY}(:|$) ]] && continue
+
+	# Skip entry if it is a symlink
+	[[ -h ${ENTRY} ]] && continue;
+
+	# Add entry from array if it is present and a directory
+	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
+done
+export PATH
+
+
+# Configure MANPATH from array if entry is present
+unset MANPATH
+for ENTRY in ${ARRAY_MANPATH[@]}; do
+	[[ -d ${ENTRY} ]] && MANPATH="${MANPATH}${MANPATH+:}${ENTRY}"
+done
+export MANPATH
+
+
+# Configure NODE_PATH from array if entry is present
+unset NODE_PATH
+for ENTRY in ${ARRAY_NODE_PATH[@]}; do
+	[[ -d ${ENTRY} ]] && NODE_PATH="${NODE_PATH}${NODE_PATH+:}${ENTRY}"
+done
+export NODE_PATH
+
+
+# Configure MIBDIRS from array if entry is present
+unset MIBDIRS
+for ENTRY in ${ARRAY_MIBDIRS[@]}; do
+	[[ -d ${ENTRY} ]] && MIBDIRS="${MIBDIRS}${MIBDIRS+:}${ENTRY}"
+done
+export MIBDIRS
+export MIBS="ALL"
+
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -1,0 +1,24 @@
+# Editor config
+if hash nvim; then
+	EDITOR_NAME="nvim"
+elif hash vim; then
+	EDITOR_NAME="vim"
+elif hash vi; then
+	EDITOR_NAME="vi"
+fi
+
+# Set EDITOR and VISUAL variables to the proper path, if possible
+if [[ "${EDITOR_NAME}" ]]; then
+	! EDITOR_PATH="$(which --skip-alias ${EDITOR_NAME} 2> /dev/null)" && EDITOR_PATH="$(which ${EDITOR_NAME})"
+	export EDITOR="${EDITOR_PATH}"
+	export VISUAL="${EDITOR_PATH}"
+
+	# Set aliases
+	alias v="${EDITOR_PATH}"
+	alias vi="${EDITOR_PATH}"
+	alias vim="${EDITOR_PATH}"
+	alias nvim="${EDITOR_PATH}"
+	unset EDITOR_PATH
+fi
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

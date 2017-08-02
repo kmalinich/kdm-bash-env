@@ -1,8 +1,6 @@
 # kdm bash-env
 # .kdm/bashrc
 
-# Last modified : Mon 31 Jul 2017 06:20:57 PM EDT
-
 
 # Source global bashrc
 [[ -f /etc/bashrc ]] && . /etc/bashrc

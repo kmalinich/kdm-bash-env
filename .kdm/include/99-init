@@ -1,0 +1,24 @@
+# Create directories if missing
+for ENTRY in ${ARRAY_MKDIR[@]}; do
+	[[ ! -d ${ENTRY} ]] && mkdir -p ${ENTRY}
+done
+
+
+# Remove files if present
+for ENTRY in ${ARRAY_RM[@]}; do
+	[[ -e ${ENTRY} ]] && rm -rf ${ENTRY}
+done
+
+
+# Touch files
+for ENTRY in ${ARRAY_TOUCH[@]}; do
+	[[ ! -e ${ENTRY} ]] && touch ${ENTRY}
+done
+
+
+# Init entries in the config file if missing
+for ENTRY in ${ARRAY_CONF_INIT[@]}; do
+	grep -q ${ENTRY} ${BASH_ENV_FILE_CONFIG} || echo "${ENTRY}=0" >> ${BASH_ENV_FILE_CONFIG}
+done
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

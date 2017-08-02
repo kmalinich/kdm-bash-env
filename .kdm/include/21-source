@@ -1,0 +1,11 @@
+# Source the files in ARRAY_SOURCE if they exist
+for ENTRY in ${ARRAY_SOURCE[@]}; do
+	[[ -s ${ENTRY} ]] && . ${ENTRY}
+done
+
+# Source bash libraries from the 'extra' dir
+for ENTRY in $(ls --color=never -A ${BASH_ENV_DIR_EXTRA} | grep --color=never -Ev '\.sw|\._|README'); do
+	. ${BASH_ENV_DIR_EXTRA}/${ENTRY}
+done
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

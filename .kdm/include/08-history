@@ -1,0 +1,19 @@
+# Set bash history size to unlimited
+export HISTFILESIZE=
+export HISTSIZE=
+
+# Set bash history format
+export HISTTIMEFORMAT="[%F %T] "
+
+# Set bash history file location, certain bash sessions truncate ~/.bash_history on close
+export HISTFILE=${BASH_ENV_FILE_BASHHISTORY}
+
+# Get number of lines in history
+[[ -s "${HISTFILE}" ]] && export HISTLENGTH="$(wc -l < ${HISTFILE})"
+
+# History control setup
+# http://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history
+# Ignore/erase duplicates and space-prefixed commands ' ls'
+export HISTCONTROL="ignoredups:ignorespace"
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

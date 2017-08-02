@@ -1,0 +1,58 @@
+# kdm bash-env
+# init functions
+
+# Output loading message with auto-increment
+_bash_env_loading() {
+	[[ -t 2 ]] || return
+
+	# Clear line function - 29 spaces
+	if [[ "${1}" == "clear" ]]; then
+		printf '%*s\r' 29 ''
+		return
+	fi
+
+	# Init variables
+	LOADING_DOT_COUNT="${LOADING_DOT_COUNT-1}"
+	LOADING_WHITESPACE_COUNT="${LOADING_WHITESPACE_COUNT-23}"
+
+	# Create dot string
+	local LOADING_DOT_STRING="$(printf '%*s' ${LOADING_DOT_COUNT} '' | sed 's/\ /\./g')"
+
+	# Create whitespace string
+	printf -v LOADING_WHITESPACE_STRING '%*s' ${LOADING_WHITESPACE_COUNT} ''
+
+	# Assemble string
+	local LOADING_STRING="${LOADING_DOT_STRING}${LOADING_WHITESPACE_STRING}"
+
+	# Output message (if on Bash 4+)
+	if [[ "${BASH_VERSINFO[0]}" -ge "4" ]]; then
+		echo -en "${C_YLW_BLD}init ${LOADING_STRING}${C_RST}\r"
+	fi
+
+	# Increment counter if until 24, then decrement
+	[[ "${LOADING_DOT_COUNT}" == "24" ]] && LOADING_DOT_DIRECTION="down"
+	[[ "${LOADING_DOT_COUNT}" == "1"  ]] && LOADING_DOT_DIRECTION="up"
+
+	if [[ "${LOADING_DOT_DIRECTION}" == "up" ]]; then
+		((LOADING_DOT_COUNT++))
+		((LOADING_WHITESPACE_COUNT--))
+	else
+		((LOADING_DOT_COUNT--))
+		((LOADING_WHITESPACE_COUNT++))
+	fi
+}
+
+# Check if a binary is installed/present in ${PATH}, without stdout/stderr
+# This is for bash, not for POSIX
+hash() {
+	builtin hash ${1+"$@"} &> /dev/null
+	return "${?}"
+}
+
+alias _bash_env_loading='_bash_env_loading'
+
+# Init loading variables
+unset LOADING_DOT_COUNT
+unset LOADING_WHITESPACE_COUNT
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

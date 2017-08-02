@@ -1,0 +1,6 @@
+# macOS -> GNU conversion
+# Export variable for later use in detection OS X -> GNU conversion
+[[ -d /usr/local/Cellar/coreutils                  ]] && export MACOS_GNU="1"
+[[ -d /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders ]] && export GDK_PIXBUF_MODULEDIR="/usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders"
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
