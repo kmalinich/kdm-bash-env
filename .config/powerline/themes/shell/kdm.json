@@ -33,20 +33,6 @@
 		"powerline.segments.common.wthr.weather": {
 			"after": " ",
 			"args": {
-				"icons": {
-					"blustery": "💨 ",
-					"cloudy": "☁️ ",
-					"day": "☀️ ",
-					"foggy": "🌫️ ",
-					"night": "🌙 ",
-					"not_available": "❓ ",
-					"rainy": "🌧️ ",
-					"snowy": "❄️ ",
-					"stormy": "⛈️ ",
-					"sunny": "☀️ ",
-					"unknown": "⚠️ ",
-					"windy": "💨 "
-				},
 				"temp_coldest": -30,
 				"temp_format": "{temp:.0f}°",
 				"temp_hottest": 45,
@@ -72,11 +58,6 @@
 	"segments": {
 		"left": [
 			{
-				"display": true,
-				"function": "powerline.segments.common.wthr.weather",
-				"priority": 50
-			},
-			{
 				"function": "powerline.segments.common.net.hostname",
 				"priority": 20
 			},
@@ -91,16 +72,6 @@
 			{
 				"function": "powerline.segments.common.vcs.branch",
 				"priority": 40
-			}
-		],
-		"right": [
-			{
-				"function": "powerline.segments.common.time.date",
-				"priority": 60
-			},
-			{
-				"function": "powerline.segments.shell.last_pipe_status",
-				"priority": 70
 			}
 		]
 	},
