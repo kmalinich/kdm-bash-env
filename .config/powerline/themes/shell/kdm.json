@@ -7,7 +7,7 @@
 		},
 		"right": {
 			"hard": " ",
-			"soft": " "
+			"soft": ""
 		}
 	},
 	"segment_data": {
@@ -16,10 +16,10 @@
 			"args": {
 				"status_colors": true
 			},
-			"before": " "
+			"before": ""
 		},
 		"powerline.segments.common.net.hostname": {
-			"after": "",
+			"after": " ",
 			"args": {
 				"exclude_domain": true,
 				"only_if_ssh": false
@@ -31,7 +31,7 @@
 			"before": "⌆ "
 		},
 		"powerline.segments.common.wthr.weather": {
-			"after": "",
+			"after": " ",
 			"args": {
 				"icons": {
 					"blustery": "💨 ",
@@ -55,9 +55,9 @@
 			"before": ""
 		},
 		"powerline.segments.shell.cwd": {
-			"after": "",
+			"after": " ",
 			"args": {
-				"dir_limit_depth": 3,
+				"dir_limit_depth": 2,
 				"ellipsis": "..",
 				"use_path_separator": true
 			},
@@ -104,5 +104,5 @@
 			}
 		]
 	},
-	"spaces": 1
+	"spaces": 0
 }

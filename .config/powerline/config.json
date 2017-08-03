@@ -5,11 +5,11 @@
 	"ext": {
 		"shell": {
 			"colorscheme": "default",
-			"theme": "kdm",
 			"local_themes": {
 				"continuation": "continuation",
 				"select": "select"
-			}
+			},
+			"theme": "kdm"
 		}
 	}
 }
