@@ -30,16 +30,6 @@
 			"after": "",
 			"before": "⌆ "
 		},
-		"powerline.segments.common.wthr.weather": {
-			"after": " ",
-			"args": {
-				"temp_coldest": -30,
-				"temp_format": "{temp:.0f}°",
-				"temp_hottest": 45,
-				"unit": "C"
-			},
-			"before": ""
-		},
 		"powerline.segments.shell.cwd": {
 			"after": " ",
 			"args": {
