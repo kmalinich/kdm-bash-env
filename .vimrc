@@ -1,7 +1,7 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Tue 01 Aug 2017 01:10:51 PM EDT
+" Last Modified : Sat 12 Aug 2017 04:16:00 AM EDT
 
 
 " Pull in some environment variables
@@ -120,7 +120,6 @@ function! SuperReIndent()
 	call winrestview(l:save)
 	" echo "Reindented file"
 endfunction
-nnoremap re :call SuperReIndent()<CR>
 
 function! StripTrailingWhitespace()
 	" Save cursor position
@@ -133,7 +132,17 @@ function! StripTrailingWhitespace()
 	call winrestview(l:save)
 	" echo "Removed trailing whitespace"
 endfunction
-nnoremap rw :call StripTrailingWhitespace()<CR>
+
+
+" Shortcut key maps
+" Ctrl-E to reindent files
+map <C-e> :call SuperReIndent()<CR>
+" Ctrl-L to enable/disable whitespace indicators
+map <C-l> :set list!<CR>
+" Ctrl-T to toggle NERDTree
+map <C-t> :NERDTreeToggle<CR>
+" Ctrl-W to strip trailing whitespace
+map <C-w> :call StripTrailingWhitespace()<CR>
 
 
 " Default set no expandtab
@@ -219,15 +228,22 @@ let g:python3_host_prog = '/usr/local/bin/python3.6'
 " NERDTree config
 " Automatically open NERDTree on vim open
 " autocmd vimenter * NERDTree
-" Ctrl-T to toggle NERDTree
-map <C-t> :NERDTreeToggle<CR>
 
 
-" vim-airline config
+" ale (Asynchronous Lint Engine) config
+" Always keep the sign gutter open
+" let g:ale_sign_column_always = 1
+
+" ale (Asynchronous Lint Engine) symbol config
+let g:ale_sign_error   = '>>'
+let g:ale_sign_warning = '--'
+
+
+" airline/powerline config
 set laststatus=2
 set noshowmode
+let g:airline#extensions#ale#enabled        = 1
 let g:airline#extensions#branch#enabled     = 1
-let g:airline#extensions#syntastic#enabled  = 1
 let g:airline#extensions#tabline#enabled    = 1
 let g:airline#extensions#tagbar#enabled     = 1
 let g:airline#extensions#virtualenv#enabled = 1
@@ -236,49 +252,30 @@ let g:airline_powerline_fonts     = 1
 let g:airline_skip_empty_sections = 1
 let g:airline_theme               = 'airlineish'
 
-if !exists('g:airline_symbols')
-	let g:airline_symbols = {}
-endif
-
-" let g:airline#extensions#branch#prefix     = '⤴''
-" let g:airline#extensions#linecolumn#prefix = '¶'
-" let g:airline#extensions#paste#symbol      = 'ρ'
-" let g:airline#extensions#readonly#symbol   = '⊘'
-
 " Straight tabs
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline#extensions#tabline#left_sep     = ' '
 
-" powerline symbols
+" airline/powerline symbol config
 let g:airline_left_sep      = ''
 let g:airline_left_alt_sep  = ''
 let g:airline_right_sep     = ''
 let g:airline_right_alt_sep = ''
 
-let g:airline_symbols.branch   = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.linenr   = ''
-" let g:airline_symbols.paste      = 'ρ'
-" let g:airline_symbols.whitespace = 'Ξ'
+if !exists('g:airline_symbols')
+	let g:airline_symbols = {}
+endif
 
+let g:airline_symbols.branch     = ''
+let g:airline_symbols.linenr     = ''
+let g:airline_symbols.paste      = 'ρ'
+let g:airline_symbols.readonly   = ''
+let g:airline_symbols.whitespace = 'Ξ'
 
-" Syntastic config
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list            = 1
-let g:syntastic_check_on_open            = 1
-let g:syntastic_check_on_wq              = 0
-
-" eruby checker config
-let g:syntastic_eruby_ruby_quiet_messages = {'regex': 'possibly useless use of a variable in void context'}
-
-" PHP check config
-let g:syntastic_php_checkers = ['php', 'phpmd']
-" let g:syntastic_php_phpcs_args = '--tab-width = 4 --warning-severity = 6 --error-severity = 6'
-let g:syntastic_php_phpcs_args = ''
-
-" JS check config
-let g:syntastic_javascript_checkers    = ['eslint']
-let g:syntastic_javascript_eslint_exec = '/usr/local/bin/eslint'
+" let g:airline#extensions#branch#prefix     = ''
+" let g:airline#extensions#linecolumn#prefix = '¶'
+" let g:airline#extensions#paste#symbol      = 'ρ'
+" let g:airline#extensions#readonly#symbol   = '⊘'
 
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :

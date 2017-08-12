@@ -61,9 +61,6 @@
 [submodule ".vim/pack/kdm/supertab"]
 	path = .vim/pack/kdm/supertab
 	url = https://github.com/ervandew/supertab.git
-[submodule ".vim/pack/kdm/syntastic"]
-	path = .vim/pack/kdm/syntastic
-	url = https://github.com/scrooloose/syntastic.git
 [submodule ".vim/pack/kdm/tabular"]
 	path = .vim/pack/kdm/tabular
 	url = https://github.com/godlygeek/tabular.git
