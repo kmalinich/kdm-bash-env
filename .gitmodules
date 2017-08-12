@@ -4,6 +4,9 @@
 [submodule ".vim/pack/kdm/airlineish"]
 	path = .vim/pack/kdm/airlineish
 	url = https://github.com/paranoida/vim-airlineish.git
+[submodule ".vim/pack/kdm/ale"]
+	path = .vim/pack/kdm/ale
+	url = https://github.com/w0rp/ale
 [submodule ".vim/pack/kdm/align"]
 	path = .vim/pack/kdm/align
 	url = https://github.com/vim-scripts/Align.git
@@ -79,6 +82,3 @@
 [submodule ".snmp/mibs"]
 	path = .snmp/mibs
 	url = https://github.com/kmalinich/snmp-mibs.git
-[submodule ".vim/pack/kdm/ale"]
-	path = .vim/pack/kdm/ale
-	url = https://github.com/w0rp/ale
