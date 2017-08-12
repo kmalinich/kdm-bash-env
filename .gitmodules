@@ -67,9 +67,6 @@
 [submodule ".vim/pack/kdm/yaml"]
 	path = .vim/pack/kdm/yaml
 	url = https://github.com/stephpy/vim-yaml.git
-[submodule ".vim/pack/kdm/nginx"]
-	path = .vim/pack/kdm/nginx
-	url = https://github.com/chr4/nginx.vim.git
 [submodule ".vim/pack/kdm/html5-syntax"]
 	path = .vim/pack/kdm/html5-syntax
 	url = https://github.com/othree/html5-syntax.vim.git
