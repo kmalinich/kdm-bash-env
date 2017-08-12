@@ -1,13 +1,11 @@
 " kdm bash-env
 " .vimrc / neovim init.vim
 
-" Last Modified : Sat 12 Aug 2017 04:16:00 AM EDT
-
 
 " Pull in some environment variables
-let color_16m=$BASH_ENV_COLOR_16M
-let term_program=$TERM_PROGRAM
-let term_type=$TERM
+let g:color_16m=$BASH_ENV_COLOR_16M
+let g:term_program=$TERM_PROGRAM
+let g:term_type=$TERM
 
 
 " Enable native filetype handling
@@ -16,16 +14,13 @@ filetype plugin indent on
 " Enable syntax highlighting
 syntax on
 
-" Highlight all Python syntax
-let python_highlight_all=1
-
 " Tabwidth to half size
-set ts=2
-set sw=2
+set tabstop=2
+set shiftwidth=2
 
 " Make scrolling and highlighters fast
-" set ttyfast
-" set lazyredraw
+set lazyredraw
+set ttyfast
 
 " Disable line wrapping
 set wrap!
@@ -52,7 +47,7 @@ set formatoptions+=j
 
 
 " True (24-bit) color support (requires supporting terminal emulator)
-if has('termguicolors') && color_16m == 'true'
+if has('termguicolors') && g:color_16m ==# 'true'
 	let &t_8f = "\e[38;2;%lu;%lu;%lum"
 	let &t_8b = "\e[48;2;%lu;%lu;%lum"
 	set termguicolors
@@ -71,14 +66,14 @@ if has('termguicolors') && color_16m == 'true'
 endif
 
 
-if term_program == 'iTerm.app'
+if g:term_program ==# 'iTerm.app'
 	" Change iTerm2 cursor shape when changing modes
 	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
 	let &t_SI = "\<Esc>]50;CursorShape=2\x7"
 	let &t_SR = "\<Esc>]50;CursorShape=1\x7"
 
 	" Fix to restore cursor style when exiting
-	au VimLeave * set guicursor=a:block-blinkon0
+	au VimLeave * set guicursor=a:hor30-iCursor-blinkwait250-blinkon250-blinkoff250
 endif
 
 
@@ -110,7 +105,7 @@ function! SuperReIndent()
 	" Strip whitespace first
 	call StripTrailingWhitespace()
 	" Set no expandtab
-	set noet
+	set noexpandtab
 	" Save cursor position
 	let l:save = winsaveview()
 	" Remove all indentation
@@ -137,6 +132,11 @@ endfunction
 " Shortcut key maps
 " Ctrl-E to reindent files
 map <C-e> :call SuperReIndent()<CR>
+" Ctrl-H Enable/disable code concealing
+map <C-h> :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
+" Ctrl-J and Ctrl-K to navigate ale errors
+nmap <silent> <C-j> <Plug>(ale_previous_wrap)
+nmap <silent> <C-k> <Plug>(ale_next_wrap)
 " Ctrl-L to enable/disable whitespace indicators
 map <C-l> :set list!<CR>
 " Ctrl-T to toggle NERDTree
@@ -146,7 +146,7 @@ map <C-w> :call StripTrailingWhitespace()<CR>
 
 
 " Default set no expandtab
-set noet
+set noexpandtab
 
 " Interfaces file
 au BufRead /etc/network/interfaces set fileformat=unix
@@ -225,42 +225,32 @@ let g:python_host_prog  = '/usr/local/bin/python2.7'
 let g:python3_host_prog = '/usr/local/bin/python3.6'
 
 
-" NERDTree config
-" Automatically open NERDTree on vim open
-" autocmd vimenter * NERDTree
+" ale (Asynchronous Lint Engine) shellcheck config
+" Disable 'Can't follow non-constant source' and 'file was not specified as input' errors on sourced scripts
+let g:ale_sh_shellcheck_options = '-e 1090 -e SC1091'
 
+" ale (Asynchronous Lint Engine) message config
+" let g:ale_echo_msg_error_str   = 'E'
+" let g:ale_echo_msg_warning_str = 'W'
+" let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]'
 
-" ale (Asynchronous Lint Engine) config
-" Always keep the sign gutter open
-" let g:ale_sign_column_always = 1
 
 " ale (Asynchronous Lint Engine) symbol config
-let g:ale_sign_error   = '>>'
-let g:ale_sign_warning = '--'
+let g:ale_sign_error   = ''
+let g:ale_sign_warning = ''
 
 
 " airline/powerline config
 set laststatus=2
 set noshowmode
-let g:airline#extensions#ale#enabled        = 1
-let g:airline#extensions#branch#enabled     = 1
-let g:airline#extensions#tabline#enabled    = 1
-let g:airline#extensions#tagbar#enabled     = 1
-let g:airline#extensions#virtualenv#enabled = 1
+let g:airline_theme = 'airlineish'
 
-let g:airline_powerline_fonts     = 1
-let g:airline_skip_empty_sections = 1
-let g:airline_theme               = 'airlineish'
-
-" Straight tabs
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#left_sep     = ' '
 
 " airline/powerline symbol config
-let g:airline_left_sep      = ''
-let g:airline_left_alt_sep  = ''
-let g:airline_right_sep     = ''
-let g:airline_right_alt_sep = ''
+let g:airline_powerline_fonts = 1
+let g:airline_left_sep        = ''
+let g:airline_right_sep       = ''
+let g:airline_right_alt_sep   = ''
 
 if !exists('g:airline_symbols')
 	let g:airline_symbols = {}
@@ -272,10 +262,48 @@ let g:airline_symbols.paste      = 'ρ'
 let g:airline_symbols.readonly   = ''
 let g:airline_symbols.whitespace = 'Ξ'
 
-" let g:airline#extensions#branch#prefix     = ''
-" let g:airline#extensions#linecolumn#prefix = '¶'
-" let g:airline#extensions#paste#symbol      = 'ρ'
-" let g:airline#extensions#readonly#symbol   = '⊘'
+
+" airline/powerline extension config
+let g:airline#extensions#ale#enabled        = 1
+let g:airline#extensions#branch#enabled     = 1
+let g:airline#extensions#tabline#enabled    = 1
+let g:airline#extensions#tagbar#enabled     = 1
+let g:airline#extensions#virtualenv#enabled = 1
+" Straight tabs
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline#extensions#tabline#left_sep     = ' '
+
+
+" airline/powerline extension symbol config
+let g:airline#extensions#branch#prefix     = ''
+let g:airline#extensions#linecolumn#prefix = '¶'
+let g:airline#extensions#paste#symbol      = 'ρ'
+let g:airline#extensions#readonly#symbol   = '⊘'
+
+
+" Python plugin config
+" Highlight all Python syntax
+let g:python_highlight_all=1
+
+
+" JavaScript plugin config
+" Enable syntax highlighting for JSDoc
+let g:javascript_plugin_jsdoc = 1
+let g:javascript_plugin_ngdoc = 1
+
+" JavaScript plugin code concealing config
+let g:javascript_conceal_NaN       = 'ℕ'
+let g:javascript_conceal_function  = 'ƒ'
+let g:javascript_conceal_null      = 'ø'
+let g:javascript_conceal_prototype = '¶'
+let g:javascript_conceal_return    = '⇚'
+let g:javascript_conceal_static    = '•'
+let g:javascript_conceal_super     = 'Ω'
+let g:javascript_conceal_this      = '@'
+let g:javascript_conceal_undefined = '¿'
+
+" Enable code concealing
+set conceallevel=1
 
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
