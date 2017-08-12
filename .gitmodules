@@ -40,9 +40,6 @@
 [submodule ".vim/pack/kdm/phpcomplete"]
 	path = .vim/pack/kdm/phpcomplete
 	url = https://github.com/shawncplus/phpcomplete.vim.git
-[submodule ".vim/pack/kdm/puppet-syntax"]
-	path = .vim/pack/kdm/puppet-syntax
-	url = https://github.com/puppetlabs/puppet-syntax-vim.git
 [submodule ".vim/pack/kdm/salt"]
 	path = .vim/pack/kdm/salt
 	url = https://github.com/saltstack/salt-vim.git
