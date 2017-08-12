@@ -15,7 +15,7 @@ set tabstop=2
 set shiftwidth=2
 
 " Make scrolling and highlighters fast
-set lazyredraw
+" set lazyredraw
 set ttyfast
 
 " Disable line wrapping

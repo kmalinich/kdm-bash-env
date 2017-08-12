@@ -63,7 +63,6 @@ ${BASH_ENV_DIR_VIM}
 ARRAY_NODE_PATH=(
 /usr/lib/nodejs
 /usr/lib/node_modules
-/usr/share/javascript
 /usr/local/lib/node_modules
 )
 
@@ -261,12 +260,10 @@ ${BASH_ENV_DIR_SSH_CONFIG}/00-base
 )
 
 
-
-
-
 export ARRAY_SUDO
 export ARRAY_SUDO_LINUX
 export ARRAY_SUDO_MACOS
 export HISTIGNORE
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
