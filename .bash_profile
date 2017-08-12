@@ -1,6 +1,9 @@
 # kdm bash-env
 # .bash_profile
 
+# Disable echo output
+stty -echo
+
 # kdm bash-env variables
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_INCLUDE="${BASH_ENV_DIR_KDM}/include"
@@ -13,5 +16,8 @@ done
 
 # Show MOTD
 _show_motd
+
+# Re-enable echo output
+stty echo
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
