@@ -7,10 +7,9 @@ export BASH_ENV_DIR_INCLUDE="${BASH_ENV_DIR_KDM}/include"
 
 # Source data from include dir
 echo -en "\nLoading...\r"
-for i in {0..21}; do
+for i in {0..22}; do
 	. ${BASH_ENV_DIR_INCLUDE}/$(printf '%02d' ${i})-*
 done
-echo -en "          \r"
 
 # Show MOTD
 _show_motd
