@@ -1,7 +1,3 @@
-" kdm bash-env
-" .vimrc / neovim init.vim
-
-
 " Pull in some environment variables
 let g:color_16m=$BASH_ENV_COLOR_16M
 let g:term_program=$TERM_PROGRAM
@@ -94,9 +90,9 @@ augroup END
 " Append modeline after last line in buffer
 " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX files
 function! AppendModeline()
-	let l:modeline = printf("vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set : ", &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
-	let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-	call append(line("$"), l:modeline)
+	let l:modeline = printf('vim: set syntax=%s filetype=%s ts=%d sw=%d tw=%d %set : ', &syntax, &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+	let l:modeline = substitute(&commentstring, '%s', l:modeline, '')
+	call append(line('$'), l:modeline)
 endfunction
 nnoremap ml :call AppendModeline()<CR>
 
