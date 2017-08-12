@@ -52,9 +52,6 @@
 [submodule ".vim/pack/kdm/tabular"]
 	path = .vim/pack/kdm/tabular
 	url = https://github.com/godlygeek/tabular.git
-[submodule ".vim/pack/kdm/yaml"]
-	path = .vim/pack/kdm/yaml
-	url = https://github.com/stephpy/vim-yaml.git
 [submodule ".snmp/mibs"]
 	path = .snmp/mibs
 	url = https://github.com/kmalinich/snmp-mibs.git
