@@ -79,3 +79,6 @@
 [submodule ".snmp/mibs"]
 	path = .snmp/mibs
 	url = https://github.com/kmalinich/snmp-mibs.git
+[submodule ".vim/pack/kdm/ale"]
+	path = .vim/pack/kdm/ale
+	url = https://github.com/w0rp/ale
