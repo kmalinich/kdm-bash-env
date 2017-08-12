@@ -58,6 +58,12 @@ if has('termguicolors') && g:color_16m ==# 'true'
 
 		" Format comments in italic
 		highlight Comment cterm=italic gui=italic
+
+		" Show visible whitespace
+		set list
+
+		" Ctrl-L to enable/disable whitespace indicators
+		map <C-l> :set list!<CR>
 	endif
 endif
 
@@ -133,8 +139,6 @@ map <C-h> :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
 " Ctrl-J and Ctrl-K to navigate ale errors
 nmap <silent> <C-j> <Plug>(ale_previous_wrap)
 nmap <silent> <C-k> <Plug>(ale_next_wrap)
-" Ctrl-L to enable/disable whitespace indicators
-map <C-l> :set list!<CR>
 " Ctrl-T to toggle NERDTree
 map <C-t> :NERDTreeToggle<CR>
 " Ctrl-W to strip trailing whitespace
@@ -205,9 +209,6 @@ au BufRead *.vmx :set filetype=cfg
 " Fix for editing crontabs with 'crontab -e' on macOS
 au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 
-
-" Show visible whitespace
-set list
 
 " Mark extra whitespace in red
 highlight bad_whitespace ctermbg=red guibg=red
