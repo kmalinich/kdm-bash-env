@@ -31,9 +31,6 @@
 [submodule ".vim/pack/kdm/interfaces"]
 	path = .vim/pack/kdm/interfaces
 	url = https://github.com/vim-scripts/interfaces.git
-[submodule ".vim/pack/kdm/javascript"]
-	path = .vim/pack/kdm/javascript
-	url = https://github.com/pangloss/vim-javascript.git
 [submodule ".vim/pack/kdm/logrotate"]
 	path = .vim/pack/kdm/logrotate
 	url = https://github.com/moon-musick/vim-logrotate.git
