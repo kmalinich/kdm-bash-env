@@ -1,7 +1,7 @@
 # Overview
 * ~2700+ lines of code/functions that _should probably be individual scripts_
   * It used to be a lot longer - but I'm getting smarter, slowly
-* I originally most of this for work
+* I originally wrote most of this for/at work
 * Everything in this repo was done for the express purpose of automating or improving a process
   * Even if it was just shaving off 10ms - everything adds up in the end, and eventually you'll start going home earlier
 * It got a wee bit out of control after a while
