@@ -300,7 +300,7 @@ let g:javascript_conceal_this      = '@'
 let g:javascript_conceal_undefined = '¿'
 
 " Enable code concealing
-set conceallevel=1
+" set conceallevel=1
 
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
