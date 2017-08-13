@@ -1,27 +1,24 @@
-My bash environment.  
-Use bash 4+ and true color terminal for best results.  
-Actually, for best results, don't use this at all.  
-
 # Overview
-My .bashrc has ~2700+ lines of code/functions that _should probably be individual scripts_.  
-(it used to be a lot longer - but I'm getting smarter, slowly) . 
-I slowly wrote this over 3 years at work, then stripped it of company specifics.
+* ~2700+ lines of code/functions that _should probably be individual scripts_
+  * It used to be a lot longer - but I'm getting smarter, slowly
+* I originally most of this for work
+* Everything in this repo was done for the express purpose of automating or improving a process
+  * Even if it was just shaving off 10ms - everything adds up in the end, and eventually you'll start going home earlier
+* It got a wee bit out of control after a while
 
-Everything in this repo was done for the express purpose of automating or improving a process.  
-(Even if it was just shaving off 100ms - everything adds up in the end)  
-It got a wee bit out of control after a while, as it started a dumb challenge to write portable code.  
-
-# "Tested" with:
-* Arch Linux 4.9+
-* macOS 10.11+
-  * Requires w/GNU coreutils+findutils installed via brew, force linked
-* RHEL/CentOS 6+
-* Raspbian jessie+
-* Ubuntu 14.04+
-
-"Tested" is in air quotes.  
-This isn't to say everything is 100% working across all platforms.  
-I fix the broken code as/if I find it.  
+# "Tested" against
+* **Frequently**
+  * Arch Linux 4.9+
+  * macOS 10.11+
+    * Requires w/GNU coreutils+findutils installed via brew, force linked
+  * RHEL/CentOS 6+
+  * Raspbian jessie+
+* **Infrequently**
+  * Ubuntu 14.04+
+* **Notes**
+  * This isn't to say everything is 100% working across all platforms
+  * "Tested" is in air quotes
+  * I fix the broken code as/if I find it
 
 # [Submodules](.gitmodules)
 * **ViM plugins**
@@ -45,7 +42,6 @@ I fix the broken code as/if I find it.
 * **Other**
   * kmalinich/snmp-mibs
 
-
 # Notes
 * **ViM plugins**
   * All vim plugins are loaded using native vim package management
@@ -64,10 +60,8 @@ I fix the broken code as/if I find it.
     * It slows down snmp commands quite a lot
     * If you don't want/need ~500 SNMP MIBs, remove the submodule
   * Any missing binaries/libraries it (probably) should warn you about
-  
 
 # Install
-
 ```
 cd ${HOME}
 git clone https://github.com/kmalinich/kdm-bash-env.git
@@ -75,10 +69,9 @@ cd kdm-bash-env
 .kdm/install
 cd ${HOME}
 ```
-
 Then log out and back in, hopefully it doesn't break.
 
-## Disclaimers
+# Disclaimers
 * It's the worst.
 * I'm the worst.
 * Don't use it.
