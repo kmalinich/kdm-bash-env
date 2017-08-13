@@ -3,12 +3,13 @@ Use bash 4+ and true color terminal for best results.
 Actually, for best results, don't use this at all.  
 
 # Overview
-My .bashrc has ~2700+ lines of code/functions that should probably be individual scripts, and it used to be a lot longer.  
-I slowly wrote this over 3 years at work, then stripped it of company-specific code/info and put it on GitHub.
+My .bashrc has ~2700+ lines of code/functions that _should probably be individual scripts_.  
+(it used to be a lot longer - but I'm getting smarter, slowly) . 
+I slowly wrote this over 3 years at work, then stripped it of company specifics.
 
-Everything in this repo was done for the express purpose of automating or improving a process, even if it was just shaving off 100ms.  
-Everything adds up in the end.  
-It got a wee bit out of control after a while, as it started a dumb challenge to write portable code.  
+Everything in this repo was done for the express purpose of automating or improving a process.  
+(Even if it was just shaving off 100ms - everything adds up in the end)  
+It got a wee bit out of control after a while, as it started a dumb challenge to write portable code.  
 
 # "Tested" with:
 * Arch Linux 4.9+
