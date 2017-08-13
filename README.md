@@ -6,6 +6,12 @@
   * Even if it was just shaving off 10ms - everything adds up in the end, and eventually you'll start going home earlier
 * It got a wee bit out of control after a while
 
+# Disclaimers
+* It's the worst.
+* I'm the worst.
+* Don't use it.
+  * (or do)
+
 # "Tested" against
 * **Frequently**
   * Arch Linux 4.9+
@@ -70,9 +76,3 @@ cd kdm-bash-env
 cd ${HOME}
 ```
 Then log out and back in, hopefully it doesn't break.
-
-# Disclaimers
-* It's the worst.
-* I'm the worst.
-* Don't use it.
-  * (or do)
