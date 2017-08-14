@@ -1,3 +1,7 @@
+" Use UTF8 encoding
+set encoding=utf8
+scriptencoding utf-8
+
 " Pull in some environment variables
 let g:color_16m=$BASH_ENV_COLOR_16M
 let g:term_program=$TERM_PROGRAM
@@ -23,9 +27,6 @@ set wrap!
 
 " Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
 set mouse=
-
-" Use UTF8 encoding
-set encoding=utf8
 
 " Allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -75,8 +76,16 @@ if g:term_program ==# 'iTerm.app'
 	let &t_SR = "\<Esc>]50;CursorShape=1\x7"
 
 	" Fix to restore cursor style when exiting
-	au VimLeave * set guicursor=a:hor30-iCursor-blinkwait250-blinkon250-blinkoff250
+	augroup fix_cursor
+		au!
+		au VimLeave * set guicursor=a:hor30-iCursor-blinkwait250-blinkon250-blinkoff250
+	augroup END
 endif
+
+augroup reload_vimrc
+	au!
+	au BufWritePost .vimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+augroup END
 
 
 " Restore cursor position properly
@@ -122,9 +131,9 @@ function! StripTrailingWhitespace()
 	" Save cursor position
 	let l:save = winsaveview()
 	" Remove trailing whitespace
-	%s/\s\+$//e
+	:bufdo %s/\s\+$//e
 	" Remove trailing tabs
-	%s/\t\+$//e
+	:bufdo %s/\t\+$//e
 	" Move cursor to original position
 	call winrestview(l:save)
 	" echo "Removed trailing whitespace"
@@ -145,6 +154,10 @@ map <C-t> :NERDTreeToggle<CR>
 map <C-w> :call StripTrailingWhitespace()<CR>
 
 
+
+" Enable code concealing
+" set conceallevel=1
+
 " Default set no expandtab
 set noexpandtab
 
@@ -153,8 +166,11 @@ set fileformat=unix
 
 
 " Interfaces file
-au BufRead /etc/network/interfaces set filetype=interfaces
-au BufRead /etc/network/interfaces set syntax=interfaces
+augroup ft_interfaces
+	au!
+	au BufRead /etc/network/interfaces set filetype=interfaces
+	au BufRead /etc/network/interfaces set syntax=interfaces
+augroup END
 
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
@@ -189,14 +205,23 @@ au Filetype python set tabstop=4
 au Filetype sh let b:comment_leader = '# '
 
 " sls (salt)
-au BufRead *.sls let b:comment_leader = '# '
-au BufRead *.sls set filetype=sls
+augroup ft_sls
+	au!
+	au BufRead *.sls let b:comment_leader = '# '
+	au BufRead *.sls set filetype=sls
+augroup END
 
 " VMWare vmx
-au BufRead *.vmx :set filetype=cfg
+augroup ft_vmx
+	au!
+	au BufRead *.vmx :set filetype=cfg
+augroup END
 
 " Fix for editing crontabs with 'crontab -e' on macOS
-au BufEnter /private/tmp/crontab.* setl backupcopy=yes
+augroup ft_crontab_macos
+	au!
+	au BufEnter /private/tmp/crontab.* setl backupcopy=yes
+augroup END
 
 
 " Mark extra whitespace in red
@@ -211,17 +236,14 @@ let g:python_host_prog  = '/usr/local/bin/python2.7'
 let g:python3_host_prog = '/usr/local/bin/python3.6'
 
 
+" ale (Asynchronous Lint Engine) base config
+" Increase lint delay to 1 second
+let g:ale_lint_delay = 1000
+
+
 " ale (Asynchronous Lint Engine) shellcheck config
 " Disable 'Can't follow non-constant source' and 'file was not specified as input' errors on sourced scripts
 let g:ale_sh_shellcheck_options = '-e 1090 -e SC1091'
-
-" ale (Asynchronous Lint Engine) yaml config
-" let g:ale_yaml_yamllint_options = ''
-
-" ale (Asynchronous Lint Engine) message config
-" let g:ale_echo_msg_error_str   = 'E'
-" let g:ale_echo_msg_warning_str = 'W'
-" let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]'
 
 
 " ale (Asynchronous Lint Engine) symbol config
@@ -229,7 +251,7 @@ let g:ale_sign_error   = ''
 let g:ale_sign_warning = ''
 
 
-" airline/powerline config
+" airline/powerline base config
 set laststatus=2
 set noshowmode
 let g:airline_theme = 'airlineish'
@@ -290,9 +312,6 @@ let g:javascript_conceal_static    = '•'
 let g:javascript_conceal_super     = 'Ω'
 let g:javascript_conceal_this      = '@'
 let g:javascript_conceal_undefined = '¿'
-
-" Enable code concealing
-" set conceallevel=1
 
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
