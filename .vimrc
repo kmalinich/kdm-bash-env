@@ -7,6 +7,12 @@ let g:color_16m=$BASH_ENV_COLOR_16M
 let g:term_program=$TERM_PROGRAM
 let g:term_type=$TERM
 
+" We must replace the runtimepath to make everything work
+set runtimepath=$VIMHOME,$VIM/vimfiles/,$VIMRUNTIME,$VIM/vimfiles/after
+
+" Add a command for loading .vimrc completely
+command! ReloadVimrc source ~/.vimrc
+
 
 " Enable native filetype handling
 filetype plugin indent on
@@ -41,6 +47,17 @@ endif
 
 " Delete comment character when joining commented lines
 set formatoptions+=j
+
+" Make :Q and :W work like :q and :w
+command! W w
+command! Q q
+
+" Automatically set the title to the full path
+set titlestring=%(\ %{expand(\"%:p\")}\ %a%)
+
+" Prefer unix format for files
+set fileformats=unix,dos
+
 
 
 " True (24-bit) color support (requires supporting terminal emulator)
@@ -82,9 +99,10 @@ if g:term_program ==# 'iTerm.app'
 	augroup END
 endif
 
+" Automatically reload .vimrc on changes
 augroup reload_vimrc
-	au!
-	au BufWritePost .vimrc so $MYVIMRC | if has('gui_running') | so $MYGVIMRC | endif
+	autocmd!
+	autocmd BufWritePost ~/.vimrc source ~/.vimrc
 augroup END
 
 
@@ -109,7 +127,6 @@ function! AppendModeline()
 	let l:modeline = substitute(&commentstring, '%s', l:modeline, '')
 	call append(line('$'), l:modeline)
 endfunction
-nnoremap ml :call AppendModeline()<CR>
 
 " Super-re-indent the file
 function! SuperReIndent()
@@ -124,7 +141,7 @@ function! SuperReIndent()
 	:execute 'normal! gg=G'
 	" Move cursor to original position
 	call winrestview(l:save)
-	" echo "Reindented file"
+	" echo 'Reindented file'
 endfunction
 
 function! StripTrailingWhitespace()
@@ -136,11 +153,14 @@ function! StripTrailingWhitespace()
 	:bufdo %s/\t\+$//e
 	" Move cursor to original position
 	call winrestview(l:save)
-	" echo "Removed trailing whitespace"
+	" echo 'Removed trailing whitespace'
 endfunction
 
 
 " Shortcut key maps
+
+" Ctrl-B to delete to the end of line in insert mode
+inoremap <C-b> <Esc>lDa
 " Ctrl-E to reindent files
 map <C-e> :call SuperReIndent()<CR>
 " Ctrl-H Enable/disable code concealing
@@ -153,6 +173,15 @@ map <C-t> :NERDTreeToggle<CR>
 " Ctrl-W to strip trailing whitespace
 map <C-w> :call StripTrailingWhitespace()<CR>
 
+" Bind F8 to fixing problems with ale
+nmap <F8> <Plug>(ale_fix)
+" Map \ml to append modeline
+nnoremap ml :call AppendModeline()<CR>
+
+" Disable replace mode, which turns on in bad terminals for some reason
+nnoremap R <Nop>
+" Disable Ex mode
+noremap Q <Nop>
 
 
 " Enable code concealing
@@ -243,7 +272,7 @@ let g:ale_lint_delay = 1000
 
 " ale (Asynchronous Lint Engine) shellcheck config
 " Disable 'Can't follow non-constant source' and 'file was not specified as input' errors on sourced scripts
-let g:ale_sh_shellcheck_options = '-e 1090 -e SC1091'
+let g:ale_sh_shellcheck_options = '-s bash -e SC1090 -e SC1091 -e SC2039'
 
 
 " ale (Asynchronous Lint Engine) symbol config

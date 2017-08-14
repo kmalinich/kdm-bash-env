@@ -1,5 +1,5 @@
 # If 16m color is enabled, change TERM to xterm-16mcolor
-if grep -q 'COLOR_16M=1' ${BASH_ENV_FILE_CONFIG}; then
+if grep -q 'COLOR_16M=1' "${BASH_ENV_FILE_CONFIG}"; then
 	export TERM="xterm-16mcolor"
 	export BASH_ENV_COLOR_16M="true"
 else
@@ -10,8 +10,8 @@ fi
 # If dircolors exists, run it
 if hash dircolors; then
 	# If ~/.dircolors exists, use it
-	[[ -s ${BASH_ENV_FILE_DIRCOLORS} ]] && DIRCOLOR_DATA="$(dircolors ${BASH_ENV_FILE_DIRCOLORS})" || DIRCOLOR_DATA="$(dircolors)"
-	[[ ! -z "${DIRCOLOR_DATA}" ]] && eval "${DIRCOLOR_DATA}" &> /dev/null
+	[[   -s "${BASH_ENV_FILE_DIRCOLORS}" ]] && DIRCOLOR_DATA="$(dircolors "${BASH_ENV_FILE_DIRCOLORS}")" || DIRCOLOR_DATA="$(dircolors)"
+	[[ ! -z "${DIRCOLOR_DATA}"           ]] && eval "${DIRCOLOR_DATA}" &> /dev/null
 	unset DIRCOLOR_DATA
 fi
 

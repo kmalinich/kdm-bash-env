@@ -1,5 +1,6 @@
 # bash-env variable set
 export BASH_ENV_DIR_CODE="${HOME}/code"
+export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_NMAP="${HOME}/.nmap"
 export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
 export BASH_ENV_DIR_SSH="${HOME}/.ssh"
@@ -7,6 +8,7 @@ export BASH_ENV_DIR_SSH_CONFIG="${HOME}/.ssh/config.d"
 export BASH_ENV_DIR_VIM="${HOME}/.vim"
 
 export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
+export BASH_ENV_DIR_INCLUDE="${BASH_ENV_DIR_KDM}/include"
 export BASH_ENV_FILE_BASHHISTORY="${BASH_ENV_DIR_KDM}/history"
 
 export BASH_ENV_FILE_BASHLOGOUT="${HOME}/.bash_logout"
@@ -21,6 +23,7 @@ export BASH_ENV_FILE_GITIGNORE="${HOME}/.gitignore"
 export BASH_ENV_FILE_INPUTRC="${HOME}/.inputrc"
 export BASH_ENV_FILE_NLOAD="${HOME}/.nload"
 export BASH_ENV_FILE_PIPRC="${HOME}/.piprc"
+export BASH_ENV_FILE_POWERLINE="${BASH_ENV_DIR_KDM}/powerline"
 export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
