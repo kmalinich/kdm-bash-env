@@ -105,9 +105,10 @@ rgb2hex() {
 	[[ "${INPUT_ERRORS}" != "0" ]] && echo && output usage "${USAGE_STRING}" && return
 
 	# Convert to hex values
-	local HEX_VAL_1="$(dechex ${1} -s)"
-	local HEX_VAL_2="$(dechex ${2} -s)"
-	local HEX_VAL_3="$(dechex ${3} -s)"
+	local HEX_VAL_1 HEX_VAL_2 HEX_VAL_3
+	HEX_VAL_1=$(dechex "${1}" -s)
+	HEX_VAL_2=$(dechex "${2}" -s)
+	HEX_VAL_3=$(dechex "${3}" -s)
 	local HEX_STRING="${HEX_VAL_1}${HEX_VAL_2}${HEX_VAL_3}"
 
 	hex2color "#${HEX_STRING}"
