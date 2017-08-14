@@ -131,29 +131,29 @@ endfunction
 " Super-re-indent the file
 function! SuperReIndent()
 	" Strip whitespace first
-	call StripTrailingWhitespace()
+	silent! call WhitespaceTrim()
 	" Set no expandtab
 	set noexpandtab
 	" Save cursor position
 	let l:save = winsaveview()
 	" Remove all indentation
-	:execute 'normal! %le'
-	:execute 'normal! gg=G'
+	execute 'normal! %le'
+	execute 'normal! gg=G'
 	" Move cursor to original position
 	call winrestview(l:save)
 	" echo 'Reindented file'
 endfunction
 
-function! StripTrailingWhitespace()
-	" Save cursor position
-	let l:save = winsaveview()
-	" Remove trailing whitespace
-	:bufdo %s/\s\+$//e
-	" Remove trailing tabs
-	:bufdo %s/\t\+$//e
-	" Move cursor to original position
-	call winrestview(l:save)
-	" echo 'Removed trailing whitespace'
+" Remove trailing whitespace
+command! WhitespaceSpaces %s/\s\+$//e
+" Remove trailing tabs
+command! WhitespaceTabs %s/\t\+$//e
+
+function! WhitespaceTrim()
+	" Trim whitespace
+	WhitespaceSpaces
+	WhitespaceTabs
+	echo 'Removed trailing whitespace'
 endfunction
 
 
@@ -171,7 +171,7 @@ nmap <silent> <C-k> <Plug>(ale_next_wrap)
 " Ctrl-T to toggle NERDTree
 map <C-t> :NERDTreeToggle<CR>
 " Ctrl-W to strip trailing whitespace
-map <C-w> :call StripTrailingWhitespace()<CR>
+map <C-w> :call WhitespaceTrim()<CR>
 
 " Bind F8 to fixing problems with ale
 nmap <F8> <Plug>(ale_fix)
