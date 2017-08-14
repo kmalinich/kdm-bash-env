@@ -81,7 +81,7 @@ endif
 
 " Restore cursor position properly
 function! ResCur()
-	if line("'\"") <= line("$")
+	if line("'\"") <= line('$')
 		normal! g`"
 		return 1
 	endif
@@ -148,8 +148,11 @@ map <C-w> :call StripTrailingWhitespace()<CR>
 " Default set no expandtab
 set noexpandtab
 
+" Default set fileformat as UNIX
+set fileformat=unix
+
+
 " Interfaces file
-au BufRead /etc/network/interfaces set fileformat=unix
 au BufRead /etc/network/interfaces set filetype=interfaces
 au BufRead /etc/network/interfaces set syntax=interfaces
 
@@ -157,51 +160,37 @@ au BufRead /etc/network/interfaces set syntax=interfaces
 au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
 au Filetype c,cpp set expandtab
-au Filetype c,cpp set fileformat=unix
 au Filetype c,cpp set softtabstop=2
 
 " CSS
 au Filetype css let b:comment_leader = '/* '
-" au Filetype css set autoindent
-au Filetype css set fileformat=unix
 
 " HTML
 au Filetype html let b:comment_leader = '<!-- '
-" au Filetype html set autoindent
-au Filetype html set fileformat=unix
 
 " JS
 au Filetype javascript let b:comment_leader = '// '
-au Filetype javascript set fileformat=unix
 
 " nginx
 au Filetype nginx let b:comment_leader = '# '
-" au Filetype nginx set autoindent
-au Filetype nginx set fileformat=unix
 
 " PHP
 au Filetype php let b:comment_leader = '// '
-" au Filetype php set autoindent
-au Filetype php set fileformat=unix
 
 " Python
 au Filetype python let b:comment_leader = '# '
 au Filetype python set autoindent
 au Filetype python set expandtab
-au Filetype python set fileformat=unix
 au Filetype python set shiftwidth=4
 au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
 
 " sh/bash
 au Filetype sh let b:comment_leader = '# '
-" au Filetype sh set autoindent
-au Filetype sh set fileformat=unix
 
 " sls (salt)
 au BufRead *.sls let b:comment_leader = '# '
-" au BufRead *.sls set autoindent
-au BufRead *.sls set fileformat=unix
+au BufRead *.sls set filetype=sls
 
 " VMWare vmx
 au BufRead *.vmx :set filetype=cfg
@@ -225,6 +214,9 @@ let g:python3_host_prog = '/usr/local/bin/python3.6'
 " ale (Asynchronous Lint Engine) shellcheck config
 " Disable 'Can't follow non-constant source' and 'file was not specified as input' errors on sourced scripts
 let g:ale_sh_shellcheck_options = '-e 1090 -e SC1091'
+
+" ale (Asynchronous Lint Engine) yaml config
+" let g:ale_yaml_yamllint_options = ''
 
 " ale (Asynchronous Lint Engine) message config
 " let g:ale_echo_msg_error_str   = 'E'
