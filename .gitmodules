@@ -38,7 +38,7 @@
 	path = .vim/pack/kdm/nerdtree-git-plugin
 	url = https://github.com/Xuyuanp/nerdtree-git-plugin.git
 [submodule ".vim/pack/kdm/polyglot"]
-	path = .vim/pack/pack/kdm/polyglot
+	path = .vim/pack/kdm/polyglot
 	url = https://github.com/sheerun/vim-polyglot
 [submodule ".vim/pack/kdm/salt"]
 	path = .vim/pack/kdm/salt
