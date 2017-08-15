@@ -28,10 +28,14 @@ export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
 export BASH_ENV_FILE_SUDOCACHE="${BASH_ENV_DIR_KDM}/sudocache"
+export BASH_ENV_FILE_TIDY="${HOME}/.tidy.conf"
 export BASH_ENV_FILE_TOPRC="${HOME}/.toprc"
 export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
 
 # Custom pip config file path
 export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
+
+# Custom tidy-html5 config file path
+export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
