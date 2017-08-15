@@ -7,9 +7,6 @@ let g:color_16m=$BASH_ENV_COLOR_16M
 let g:term_program=$TERM_PROGRAM
 let g:term_type=$TERM
 
-" We must replace the runtimepath to make everything work
-set runtimepath=$VIMHOME,$VIM/vimfiles/,$VIMRUNTIME,$VIM/vimfiles/after
-
 " Add a command for loading .vimrc completely
 command! ReloadVimrc source ~/.vimrc
 
@@ -331,6 +328,7 @@ let g:python_highlight_all=1
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_ngdoc = 1
 
+
 " JavaScript plugin code concealing config
 let g:javascript_conceal_NaN       = 'ℕ'
 let g:javascript_conceal_function  = 'ƒ'
@@ -341,6 +339,11 @@ let g:javascript_conceal_static    = '•'
 let g:javascript_conceal_super     = 'Ω'
 let g:javascript_conceal_this      = '@'
 let g:javascript_conceal_undefined = '¿'
+
+
+" vim-polyglot config
+" Disable javascript
+let g:polyglot_disabled = ['javascript']
 
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
