@@ -265,7 +265,11 @@ let g:python3_host_prog = '/usr/local/bin/python3.6'
 " ale (Asynchronous Lint Engine) base config
 " Increase lint delay to 1 second
 let g:ale_lint_delay = 1000
-let g:ale_linters = { 'html': ['tidy'], 'javascript': ['eslint'] }
+let g:ale_linters = { 'html': ['tidy'], 'javascript': ['eslint'], 'php': ['phpmd'] }
+
+
+" ale (Asynchronous Lint Engine) phpmd config
+let g:ale_php_phpmd_ruleset = 'cleancode,codesize,design,naming,unusedcode'
 
 
 " ale (Asynchronous Lint Engine) shellcheck config
@@ -276,7 +280,6 @@ let g:ale_sh_shellcheck_options = '-s bash -e SC1090 -e SC1091 -e SC2039'
 " ale (Asynchronous Lint Engine) HTML tidy config
 let g:ale_html_tidy_executable = '/usr/local/bin/tidy'
 let g:ale_html_tidy_options    = '-q -e -language en -c ~/.tidy.conf'
-
 
 
 " ale (Asynchronous Lint Engine) symbol config
