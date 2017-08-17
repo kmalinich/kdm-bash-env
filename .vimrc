@@ -148,8 +148,8 @@ command! WhitespaceTabs %s/\t\+$//e
 
 function! WhitespaceTrim()
 	" Trim whitespace
-	WhitespaceSpaces
-	WhitespaceTabs
+	silent! WhitespaceSpaces
+	silent! WhitespaceTabs
 	echo 'Removed trailing whitespace'
 endfunction
 
