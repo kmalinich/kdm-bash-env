@@ -263,8 +263,8 @@ let g:python3_host_prog = '/usr/local/bin/python3.6'
 
 
 " ale (Asynchronous Lint Engine) base config
-" Increase lint delay to 1 second
-let g:ale_lint_delay = 1000
+" Increase lint delay to 2.5 seconds
+let g:ale_lint_delay = 2500
 let g:ale_linters = { 'html': ['tidy'], 'javascript': ['eslint'], 'php': ['phpmd'] }
 
 
