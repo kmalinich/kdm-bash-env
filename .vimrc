@@ -198,27 +198,22 @@ augroup ft_interfaces
 	au BufRead /etc/network/interfaces set syntax=interfaces
 augroup END
 
+
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
 au Filetype c,cpp set expandtab
 au Filetype c,cpp set softtabstop=2
-
 " CSS
 au Filetype css let b:comment_leader = '/* '
-
 " HTML
 au Filetype html let b:comment_leader = '<!-- '
-
 " JS
 au Filetype javascript let b:comment_leader = '// '
-
 " nginx
 au Filetype nginx let b:comment_leader = '# '
-
 " PHP
 au Filetype php let b:comment_leader = '// '
-
 " Python
 au Filetype python let b:comment_leader = '# '
 au Filetype python set autoindent
@@ -226,22 +221,30 @@ au Filetype python set expandtab
 au Filetype python set shiftwidth=4
 au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
-
 " sh/bash
 au Filetype sh let b:comment_leader = '# '
-
-" sls (salt)
+" Salt sls
 augroup ft_sls
 	au!
 	au BufRead *.sls let b:comment_leader = '# '
 	au BufRead *.sls set filetype=sls
 augroup END
-
+" Varnish vcl
+augroup ft_vcl
+	au!
+	au BufRead *.vcl       let b:comment_leader = '# '
+	au BufRead *.vcl       set filetype=vcl
+	au BufRead *.vcl       set noexpandtab
+	au BufRead *.vcl.jinja let b:comment_leader = '# '
+	au BufRead *.vcl.jinja set filetype=vcl
+	au BufRead *.vcl.jinja set noexpandtab
+augroup END
 " VMWare vmx
 augroup ft_vmx
 	au!
 	au BufRead *.vmx :set filetype=cfg
 augroup END
+
 
 " Fix for editing crontabs with 'crontab -e' on macOS
 augroup ft_crontab_macos
@@ -250,10 +253,8 @@ augroup ft_crontab_macos
 augroup END
 
 
-" Mark extra whitespace in red
+" Mark extra whitespace with red background for all file types
 highlight bad_whitespace ctermbg=red guibg=red
-
-" Highlight bad whitespace by file type
 au Filetype * match bad_whitespace /\s\+$/
 
 
