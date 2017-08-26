@@ -48,8 +48,6 @@ alias net-ping-average='_net_ping_average'
 alias net-ping-subnet='_net_ping_subnet'
 alias net-webserver='_net_webserver'
 
-alias prompt-generate='_prompt_generate'
-
 alias show-bin='_show_bin'
 alias showbin='_show_bin'
 alias show-clock='_show_clock'
@@ -1571,9 +1569,31 @@ _md5_compare() {
 
 #### Functions: PS1/bashrc ==start ####
 
-# Create ps1 prompt and do every-5-min timestamp
+# Create PS1 prompt
 _prompt_generate() {
-	export PROMPT_DIRTRIM="2"
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
+
+	# Generate / export PS1 prompt with color specfied by C_ENV
+	# It would also be neat to do a color-responsive system load monitor... but not today
+	export PS1="\[\$(_prompt_right \${?})\]\[\$(_prompt_titlebar)\]\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+}
+
+# Print exit code right-aligned for the PS1 prompt
+_prompt_right() {
+	# Set color based on exit code
+	local CLR;
+	case "${1}" in
+		0) CLR="${C_GRN}"	;;
+		*) CLR="${C_WHT_BRT}${C_ALT}" ;;
+	esac
+
+	# Trim off 2+length of 1st argument
+	local TRIM="${#1}"; ((TRIM++))
+	printf "${C_GRY}%*s${CLR}%s${C_RST}${C_GRY}%s${C_RST}\r" "$((COLUMNS-TRIM))" "[" "${1}" "]"
+}
+
+_prompt_pwd() {
 	# Get the current directory, swap out the home directory with a tilde
 	export PWD_FMT=${PWD/${HOME}/\~}
 
@@ -1586,18 +1606,18 @@ _prompt_generate() {
 	export PWD_CUSTOM=$(printf "${PWD_FMT}" | rev | awk -F '/' '{printf $1"/"$2"/.."}' | rev)
 	[[ "${PWD_FMT_DEPTH}" -lt "3" ]] && export PWD_FINAL="${PWD_FMT}" || export PWD_FINAL="${PWD_CUSTOM}"
 
-	# Generate titlebar text string
-	local TITLEBAR_TEXT="${HOST_SUB}:${PWD_FINAL}"
+	echo ${PWD_FINAL}
+}
+
+_prompt_titlebar() {
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
 
 	# Add '[SSH]' to titlebar if in SSH session
 	[[ "${SSH_CONNECTION}" ]] && local TITLEBAR_SSH="[SSH] "
 
 	# Only apply custom titlebar if we're in xterm and on Bash 3+
-	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && echo -en "\033]0;${TITLEBAR_SSH}${HOST_SUB}\007"
-
-	# Generate / export PS1 prompt with color specfied by C_ENV
-	# It would also be neat to do a color-responsive system load monitor... but not today
-	export PS1="\[${C_ENV}\]${HOST_SUB}\[\e[0m\]:\[\e[34m\]${PWD_FINAL} \[${C_ENV}\]\\$\[\e[0m\] "
+	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\033]0;%s%s\007" "${TITLEBAR_SSH}" "${HOST_SUB}:$(_prompt_pwd)"
 }
 
 # Dynamic MOTD with facter (if present)
