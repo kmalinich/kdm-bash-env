@@ -1575,8 +1575,16 @@ _prompt_generate() {
 	# Return if we're not in a terminal
 	[[ -t 2 ]] || return
 
-	# It would also be neat to do a color-responsive system load monitor... but not today
-	export PS1="\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+	# If PROMPT_NO_HOSTNAME is set to 1 in bash-env.conf, render PS1 without hostname
+	if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}"; then
+		export PS1="\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+		return
+	fi
+
+	# Normal PS1 prompt (with hostname)
+	export PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+
+	# It would be neat to do a color-responsive system load monitor... but not today
 }
 
 # Print colorized exit code information
@@ -1595,6 +1603,7 @@ _prompt_exitcode() {
 
 	local ARRAY_CMD=(${1})
 	case "${ARRAY_CMD[0]}" in
+		grep)    return ;;
 		history) return ;;
 
 		.)      CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;

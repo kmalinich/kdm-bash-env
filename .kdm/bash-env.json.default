@@ -1,0 +1,12 @@
+{
+	"color": {
+		"16m": false
+	},
+	"prompt": {
+		"hostname": true,
+		"powerline": false
+	},
+	"warn": {
+		"facter": false
+	}
+}
