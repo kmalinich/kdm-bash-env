@@ -132,8 +132,9 @@ checkhash
 checkwinsize
 histappend
 no_empty_cmd_completion
-xpg_echo
 )
+# Removed for multicolor PS1
+# xpg_echo
 
 # Array of shell options that only work with bash 4+
 ARRAY_SHELL_OPTIONS_BASH4=(

@@ -1575,14 +1575,20 @@ _prompt_generate() {
 	# Return if we're not in a terminal
 	[[ -t 2 ]] || return
 
+	# If COLOR_16M is set to 0 in bash-env.conf, render PS1 without multicolor
+	if grep -q 'COLOR_16M=0' "${BASH_ENV_FILE_CONFIG}"; then
+		export PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+		return
+	fi
+
 	# If PROMPT_NO_HOSTNAME is set to 1 in bash-env.conf, render PS1 without hostname
 	if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}"; then
-		export PS1="\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+		export PS1="\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
 		return
 	fi
 
 	# Normal PS1 prompt (with hostname)
-	export PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+	export PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
 
 	# It would be neat to do a color-responsive system load monitor... but not today
 }
@@ -1597,14 +1603,16 @@ _prompt_exitcode() {
 
 	# Bounce if exit code 0 or 127 (BASH command not found)
 	case "${2}" in
-		0  ) return ;;
+		0)   return ;;
 		127) return ;;
 	esac
 
 	local ARRAY_CMD=(${1})
 	case "${ARRAY_CMD[0]}" in
-		grep)    return ;;
-		history) return ;;
+		_prompt*) return ;;
+		cd)       return ;;
+		grep)     return ;;
+		history)  return ;;
 
 		.)      CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
 		source) CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
@@ -1652,6 +1660,76 @@ _prompt_pwd() {
 	[[ "${PWD_FMT_DEPTH}" -lt "3" ]] && export PWD_FINAL="${PWD_FMT}" || export PWD_FINAL="${PWD_CUSTOM}"
 
 	echo ${PWD_FINAL}
+}
+
+# Function to fire the below function due to wonky arg parsing
+_prompt_pwd_color() {
+	_prompt_pwd_color_render "$(_prompt_pwd)"
+}
+
+# Render color-separated formatted pwd
+_prompt_pwd_color_render() {
+	local OLDIFS IFS INPUT DIRS SEPARATORS DEPTH COUNT STR
+	local RST CYN BLU YLW GRY PRP
+
+	# Escape color sequences for PS1 compatiblity
+	RST="\[${C_RST}\]"
+	CYN="\[${C_CYN}\]"
+	BLU="\[${C_BLU_BRT_BLD}\]"
+	YLW="\[${C_YLW}\]"
+	GRY="\[${C_GRY}\]"
+	PRP="\[${C_PRP}\]"
+
+	# Color configuration
+	DIRS[0]="${CYN}"
+	DIRS[1]="${BLU}"
+
+	SEPARATORS[0]="${YLW}.."
+	SEPARATORS[1]="${GRY}/"
+	SEPARATORS[2]="${PRP}~"
+
+	# Set separator to forward slash
+	OLDIFS="${IFS}"
+	IFS='/'
+
+	# Render input PATH into array by temporarily disabling glob expansion
+	# ($@) is deliberately unquoted
+	set -f; INPUT=($@); set +f
+
+	# Reset separator
+	IFS="${OLDIFS}"
+
+	# Init loop cariables
+	DEPTH="${#INPUT[@]}"
+	COUNT="0"
+	STR=""
+
+	# Special color coding for certain leading characters
+	case "${INPUT[0]}" in
+		'..') STR+="${SEPARATORS[0]}" ;;
+		'~')  STR+="${SEPARATORS[2]}" ;;
+	esac
+
+	[[ "${DEPTH}" -gt "1" ]] && STR+="${SEPARATORS[1]}"
+	((COUNT++))
+
+	# Add color to path elements
+	INPUT[1]="${DIRS[0]}${INPUT[1]}"
+	INPUT[2]="${DIRS[1]}${INPUT[2]}"
+
+	# Concatenate color-formatted string
+	while [[ "${COUNT}" != "${DEPTH}" ]]; do
+		STR+="${INPUT[$COUNT]}"
+		((COUNT++))
+
+		# Append a trailing slash if proper to do so
+		[[ "${COUNT}" != "${DEPTH}" ]] && STR+="${SEPARATORS[1]}"
+	done
+
+	STR+="${RST}"
+
+	# Print the color-formatted string
+	printf "%s" "${STR}"
 }
 
 _prompt_titlebar() {

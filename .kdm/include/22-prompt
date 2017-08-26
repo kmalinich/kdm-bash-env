@@ -4,7 +4,7 @@
 trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
 
 # Always write lines to history file on each prompt
-export PROMPT_COMMAND='_prompt_exitcode "${CMD_PRVS}" "${?}"; _prompt_titlebar; history -a'
+export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; _prompt_titlebar; history -a"
 
 # Disable powerline if disabled in bash-env.conf
 # Disable powerline if powerline-daemon is not installed
@@ -12,9 +12,10 @@ export PROMPT_COMMAND='_prompt_exitcode "${CMD_PRVS}" "${?}"; _prompt_titlebar; 
 # Only then, use powerline
 if grep -q 'ENABLE_POWERLINE=1' "${BASH_ENV_FILE_CONFIG}" && hash powerline-daemon && test -s "${BASH_ENV_FILE_POWERLINE}"; then
 	export PROMPT_COMMAND="${PROMPT_COMMAND}; _powerline_status_wrapper _powerline_set_prompt"
+	return
 fi
 
 # Generate / export PS1 prompt
-_prompt_generate
+export PROMPT_COMMAND="${PROMPT_COMMAND}; _prompt_generate"
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
