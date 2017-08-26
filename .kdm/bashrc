@@ -3,7 +3,8 @@
 
 
 # Source global bashrc
-[[ -f /etc/bashrc ]] && . /etc/bashrc
+[[ -f /etc/bash.bashrc ]] && . /etc/bash.bashrc
+[[ -f /etc/bashrc      ]] && . /etc/bashrc
 
 
 #### Aliases: Function names ==start ####
@@ -120,7 +121,7 @@ rgb2hex() {
 # Check if a binary is installed/present in ${PATH}, without stdout/stderr
 # This is for bash, not for POSIX
 hash() {
-	builtin hash ${1+"$@"} &> /dev/null
+	builtin hash "${1+"$@"}" &> /dev/null
 	return "${?}"
 }
 
@@ -143,7 +144,7 @@ output() {
 	)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_STRING="output <$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')> <string>"
+	local USAGE_STRING="output <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <string 1> [<string 2, for keyval options>]"
 
 	# Case statement for output color/format
 	case "${1}" in
@@ -312,7 +313,7 @@ _time_elapsed_chrono() {
 	ARRAY_USAGE_OPTIONS=(current end)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
+	local USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	if [[ -z "${1}" || -z "${2}" ]]; then
 		output usage "time-elapsed-chrono <start> <${USAGE_OPTIONS_STRING}>"
@@ -389,7 +390,7 @@ _time_elapsed_text() {
 	local ARRAY_USAGE_OPTIONS=(current end)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
+	local USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	if [[ -z "${1}" || -z "${2}" ]]; then
 		output usage "time-elapsed-text <start> <${USAGE_OPTIONS_STRING}>"
@@ -915,7 +916,7 @@ _g_gca() {
 _g_gpo() {
 	# Create variable of pipe-separated options from array
 	local ARRAY_USAGE_OPTIONS=(c d t m p pp)
-	local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
+	local USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	# Array of branches
 	local ARRAY_BRANCHES=(
@@ -1099,7 +1100,7 @@ _net_webserver() {
 	)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
+	local USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	local USAGE_STRING="net-webserver <${USAGE_OPTIONS_STRING}>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
@@ -1378,7 +1379,7 @@ _fix_bash_pids() {
 	)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
+	local USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	local FIX_BASH_PIDS_PID_LIST=($(ps aux | grep -E '[b]ash' | grep -Ev 'root|s00\.' | sort -r | awk '{print $2}'))
 	local FIX_BASH_PIDS_PID_COUNT="${#FIX_BASH_PIDS_PID_LIST[@]}"
@@ -1569,14 +1570,49 @@ _md5_compare() {
 
 #### Functions: PS1/bashrc ==start ####
 
-# Create PS1 prompt
+# Generate / export PS1 prompt with color specfied by C_ENV
 _prompt_generate() {
 	# Return if we're not in a terminal
 	[[ -t 2 ]] || return
 
-	# Generate / export PS1 prompt with color specfied by C_ENV
 	# It would also be neat to do a color-responsive system load monitor... but not today
-	export PS1="\[\$(_prompt_right \${?})\]\[\$(_prompt_titlebar)\]\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+	export PS1="\[${C_BLU}\]\$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+}
+
+# Print colorized exit code information
+_prompt_exitcode() {
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
+
+	# Bounce if no arguments passed
+	[[ -z "${1}" || -z "${2}" ]] && return
+
+	# Bounce if exit code 0 or 127 (BASH command not found)
+	case "${2}" in
+		0  ) return ;;
+		127) return ;;
+	esac
+
+	local ARRAY_CMD=(${1})
+	case "${ARRAY_CMD[0]}" in
+		history) return ;;
+
+		.)      CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
+		source) CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
+
+		*) CMD="${ARRAY_CMD[0]}" ;;
+	esac
+
+	local STR="%s${C_RST}"
+
+	local ENV="${C_ENV}${STR}"
+	local GRY="${C_GRY}${STR}"
+	local RED="${C_RED_BRT_BLD}${STR}"
+	local WHT="${C_WHT_BRT}${STR}"
+	local YLW="${C_YLW}${STR}"
+
+	local ARRAY_CMD=(${1})
+	printf "${GRY} ${RED} ${WHT} ${GRY}\n" "${CMD}" "failed" ":" "${2}"
 }
 
 # Print exit code right-aligned for the PS1 prompt
@@ -1585,7 +1621,7 @@ _prompt_right() {
 	local CLR;
 	case "${1}" in
 		0) CLR="${C_GRN}"	;;
-		*) CLR="${C_WHT_BRT}${C_ALT}" ;;
+		*) CLR="${C_ALT}" ;;
 	esac
 
 	# Trim off 2+length of 1st argument
@@ -1767,11 +1803,16 @@ _show_motd() {
 
 # Re-source ${HOME}/.kdm/bashrc, then files in the 'source' dir
 _kdm_source() {
-	[[ -e ${BASH_ENV_FILE_BASHRC} ]] && . ${BASH_ENV_FILE_BASHRC} && output keyval-t "Loaded" "${BASH_ENV_FILE_BASHRC}" || output keyval-f "Failed" "${BASH_ENV_FILE_BASHRC}"
+	export SOURCE_VERBOSE="true"
 
-	for ENTRY in $(ncls -A ${BASH_ENV_DIR_EXTRA} | ncgrep -Ev '\.sw|\._|README'); do
-		[[ -e ${BASH_ENV_DIR_EXTRA}/${ENTRY} ]] && . ${BASH_ENV_DIR_EXTRA}/${ENTRY} && output keyval-t "Loaded" "${BASH_ENV_DIR_EXTRA}/${ENTRY}" || output keyval-f "Failed to load" "${BASH_ENV_DIR_EXTRA}/${ENTRY}"
+	local SOURCE_FILE SOURCE_PATH
+	for i in {0..22}; do
+		SOURCE_PATH="$(ls ${BASH_ENV_DIR_INCLUDE}/$(printf '%02d' ${i})-*)"
+		SOURCE_FILE="${SOURCE_PATH/$HOME\/\.kdm\//}"
+		. "${SOURCE_PATH}" && output keyval-t "Loaded" "${SOURCE_FILE}" || output keyval-f "Failed" "${SOURCE_FILE}"
 	done
+
+	unset SOURCE_VERBOSE
 }
 
 # Help with/list bashrc functions
@@ -2094,7 +2135,7 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		)
 
 		# Create variable of pipe-separated options from array
-		local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
+		local USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 		local USAGE_STRING="macos-itunes <${USAGE_OPTIONS_STRING}>"
 		[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
@@ -2139,14 +2180,16 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		max
 		up
 		down
-		[0-100]
+		'[0-100]'
 		)
 
 		# Create variable of pipe-separated options from array
-		local USAGE_OPTIONS_STRING="$(echo ${ARRAY_USAGE_OPTIONS[@]} | sed 's/ /|/g')"
+		local USAGE_OPTIONS_STRING
+		USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
-		local VOLUME_CURRENT="$(osascript -e 'output volume of (get volume settings)')"
-		local VOLUME_MUTE="$(osascript -e 'get output muted of (get volume settings)')"
+		local VOLUME_CURRENT VOLUME_MUTE
+		VOLUME_CURRENT="$(osascript -e 'output volume of (get volume settings)')"
+		VOLUME_MUTE="$(   osascript -e 'get output muted of (get volume settings)')"
 		local VOLUME_SOUND_EFFECT="/System/Library/LoginPlugins/BezelServices.loginPlugin/Contents/Resources/volume.aiff"
 
 		# Make sure it's doesn't have any missing values
@@ -2757,6 +2800,10 @@ if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 fi
 
 #### Aliases: Linux-only ==final ####
+
+
+# Configure PS1 prompt
+_prompt_generate
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

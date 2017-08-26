@@ -82,6 +82,7 @@ ${HOME}/.local/bin
 ${HOME}/perl5/bin
 ${HOME}/.composer/vendor/bin
 ${HOME}/Library/Android/sdk/platform-tools
+/usr/local/opt/curl/bin
 /usr/local/opt/libxml2/bin
 /usr/local/opt/libxslt/bin
 /usr/local/rvm/gems/ruby-2.4.0/bin

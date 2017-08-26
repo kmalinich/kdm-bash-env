@@ -1,11 +1,23 @@
 # Source the files in ARRAY_SOURCE if they exist
 for ENTRY in ${ARRAY_SOURCE[@]}; do
-	[[ -s ${ENTRY} ]] && . ${ENTRY}
+	[[ ! -s ${ENTRY} ]] && continue
+
+	. ${ENTRY}; SOURCE_EXIT="${?}"
+
+	[[ "${SOURCE_VERBOSE}" != "true" ]] && continue
+
+	SOURCE_FILE="${ENTRY/$HOME\/\.kdm\//}"
+	[[ "${SOURCE_EXIT}" == "0" ]] && output keyval-t "Loaded" "${SOURCE_FILE}" || output keyval-f "Failed" "${SOURCE_FILE}"
 done
 
 # Source bash libraries from the 'extra' dir
 for ENTRY in $(ls --color=never -A ${BASH_ENV_DIR_EXTRA} | grep --color=never -Ev '\.sw|\._|README'); do
-	. ${BASH_ENV_DIR_EXTRA}/${ENTRY}
+	. ${BASH_ENV_DIR_EXTRA}/${ENTRY}; SOURCE_EXIT="${?}"
+
+	[[ "${SOURCE_VERBOSE}" != "true" ]] && continue
+
+	SOURCE_FILE="extra/${ENTRY}"
+	[[ "${SOURCE_EXIT}" == "0" ]] && output keyval-t "Loaded" "${SOURCE_FILE}" || output keyval-f "Failed" "${SOURCE_FILE}"
 done
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

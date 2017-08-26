@@ -13,8 +13,6 @@ export C_INV="\e[7m"
 export C_ITA="\e[3m"
 export C_UDL="\e[4m"
 
-export C_ALT="\e[41;5m"
-
 
 # Normal
 export C_BLK="${C_RST}\e[38;2;48;48;48m"
@@ -202,6 +200,9 @@ export C_PRP_BRT_UDL="${C_PRP_BRT}${C_UDL}"
 export C_RED_BRT_UDL="${C_RED_BRT}${C_UDL}"
 export C_WHT_BRT_UDL="${C_WHT_BRT}${C_UDL}"
 export C_YLW_BRT_UDL="${C_YLW_BRT}${C_UDL}"
+
+# Flashing alert - bright red background, bold bright white foreground
+export C_ALT="${C_WHT_BRT_BLD}\e[41;5m"
 
 #### Color variables ==final ####
 

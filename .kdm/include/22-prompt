@@ -1,5 +1,10 @@
+# Output failed exit codes if cmd exits non-zero
+# Update terminal titlebar
+# Trap current and previous commands to access them
+trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
+
 # Always write lines to history file on each prompt
-export PROMPT_COMMAND="history -a"
+export PROMPT_COMMAND='_prompt_exitcode "${CMD_PRVS}" "${?}"; _prompt_titlebar; history -a'
 
 # Disable powerline if disabled in bash-env.conf
 # Disable powerline if powerline-daemon is not installed
