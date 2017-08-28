@@ -1,0 +1,49 @@
+[alias]
+	a  = add
+	af = add -f
+
+	b   = branch
+	ba  = branch -a
+	bd  = branch -d
+	bdd = branch -D
+
+	cl = clone
+
+	co  = checkout
+	cob = checkout -b
+
+	c   = commit
+	ca  = commit -a
+	cam = commit -a -m
+
+	d  = diff
+	ds = describe
+
+	f = fetch --all --prune
+
+	i = init
+
+	l = log
+
+	m = merge
+
+	pl = pull
+
+	ps = push
+
+	prune = fetch --all --prune
+
+	r  = reset
+	rh = reset --hard HEAD
+
+	s = status
+
+	sm   = submodule
+	smp  = submodule update --init --recursive
+	smup = "!f() { git submodule foreach --recursive 'git fetch; git checkout master; git pull'; }; f"
+
+	undo = checkout --
+
+	up = pull --rebase --prune
+
+# vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :

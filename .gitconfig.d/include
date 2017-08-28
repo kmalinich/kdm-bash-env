@@ -1,0 +1,12 @@
+[include]
+	path = ~/.gitconfig.d/alias
+	path = ~/.gitconfig.d/apply
+	path = ~/.gitconfig.d/color
+	path = ~/.gitconfig.d/merge
+	path = ~/.gitconfig.d/pull
+	path = ~/.gitconfig.d/push
+	path = ~/.gitconfig.d/url-github
+	path = ~/.gitconfig.d/url-priv
+	path = ~/.gitconfig.d/user
+
+# vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :

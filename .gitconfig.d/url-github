@@ -1,0 +1,4 @@
+[url "https://github.com/"]
+	insteadOf = "gh:"
+
+# vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :
