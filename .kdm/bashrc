@@ -734,42 +734,46 @@ _ssh_xc() {
 
 # Show Git-related info
 _g_gi() {
-	local GIT_PATH="$(  git rev-parse --show-toplevel)"
-	local GIT_DIR="$(   git rev-parse --git-dir      )"
-	local GIT_CONFIG="${GIT_PATH}/${GIT_DIR}/config"
+	local BRANCH COMMIT CONFIG DIR HASH RELEASE TAG TAGS TOP URL
 
-	local GIT_BRANCH="$(git symbolic-ref --short HEAD)"
-	local GIT_COMMIT="$(git rev-parse HEAD           )"
-	local GIT_URL="$(   git config remote.origin.url )"
+	BRANCH="$(git symbolic-ref --short HEAD 2> /dev/null)"
+	COMMIT="$(git rev-parse HEAD            2> /dev/null)"
+	DIR="$(   git rev-parse --git-dir       2> /dev/null)"
+	TOP="$(   git rev-parse --show-toplevel 2> /dev/null)"
+	URL="$(   git config remote.origin.url  2> /dev/null)"
 
-	[[ -z "${GIT_DIR}"    ]] && output error "No repo detected"   && return
-	[[ -z "${GIT_PATH}"   ]] && output error "No path detected"   && return
-	[[ -z "${GIT_CONFIG}" ]] && output error "No config detected" && return
+	[[ -z "${BRANCH}" ]] && output error "No branch detected" && return
+	[[ -z "${COMMIT}" ]] && output error "No commit detected" && return
+	[[ -z "${DIR}"    ]] && output error "No repo detected"   && return
+	[[ -z "${TOP}"    ]] && output error "No toplvl detected" && return
+	[[ -z "${URL}"    ]] && output error "No URL detected"    && return
 
-	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
-	[[ -z "${GIT_COMMIT}" ]] && output error "No commit detected" && return
-	[[ -z "${GIT_URL}"    ]] && output error "No URL detected"    && return
-
-	# Git tag-related data
-	local GIT_TAGS="$(   git describe --tags 2> /dev/null)"
-	local GIT_HASH=$(    echo ${GIT_TAGS##v} | awk -F '-' '{print $3}')
-	local GIT_TAG=$(     echo ${GIT_TAGS##v} | awk -F '-' '{print $1}')
-	local GIT_RELEASE="$(echo ${GIT_TAGS##v} | awk -F '-' '{print $2}').git${HASH##g}"
+	CONFIG="${TOP}/${DIR}/config"
+	[[ ! -s "${CONFIG}" ]] && output error "No config data detected" && return
 
 	output orange "---------------------= git info =---------------------"
-	output keyval "    URL" "${GIT_URL}"
-	output keyval " Branch" "${GIT_BRANCH}"
-	output keyval "   Path" "${GIT_PATH}"
-	output keyval " Config" "${GIT_CONFIG}"
-	output keyval " Commit" "${GIT_COMMIT}"
+	output keyval "    URL" "${URL}"
+	output keyval " Branch" "${BRANCH}"
+	output keyval "Top lvl" "${TOP/$HOME/\~}"
+	output keyval " Config" "${CONFIG/$HOME/\~}"
+	output keyval " Commit" "${COMMIT}"
 
-	if [[ "${GIT_TAGS}" ]]; then
-		output keyval "   Tags" "${GIT_TAGS}"
-		output keyval "   Hash" "${GIT_HASH}"
-		output keyval "Version" "${GIT_TAG}"
-		output keyval "Release" "${GIT_RELEASE}"
+	# Git tag-related data
+	TAGS="$(git describe --tags 2> /dev/null)"
+
+	if [[ "${TAGS}" ]]; then
+		HASH=$(    echo "${TAGS##v}" | awk -F '-' '{print $3}')
+		TAG=$(     echo "${TAGS##v}" | awk -F '-' '{print $1}')
+		RELEASE="$(echo "${TAGS##v}" | awk -F '-' '{print $2}').git${HASH##g}"
+
+		[[ "${TAGS}" ]] && output keyval "   Tags" "${TAGS}"
+		[[ "${HASH}" ]] && output keyval "   Hash" "${HASH}"
+		[[ "${TAG}"  ]] && output keyval "Version" "${TAG}"
+
+		if [[ "${RELEASE}" && "${RELEASE}" != ".git" ]]; then
+			output keyval "Release" "${RELEASE}"
+		fi
 	fi
-
 	echo
 
 	_g_gs
@@ -920,6 +924,7 @@ _g_gpo() {
 
 	# Array of branches
 	local ARRAY_BRANCHES=(
+	current
 	develop
 	testing
 	master
@@ -928,32 +933,21 @@ _g_gpo() {
 	)
 
 	# Create variable of pipe-separated branches from array
-	local BRANCHES_STRING="$(echo ${ARRAY_BRANCHES[@]} | sed 's/ /|/g')"
+	local BRANCHES_STRING="$(IFS=$'|'; echo "${ARRAY_BRANCHES[*]}")"
 
+	local SELECTED_BRANCH
 	case "${1}" in
 		c)
-			local CURRENT_BRANCH="$(git symbolic-ref --short HEAD)"
-			[[ -z "${CURRENT_BRANCH}" ]] && output error "No branch detected" && return
-			local SELECTED_BRANCH="${CURRENT_BRANCH}"
+			SELECTED_BRANCH="$(git symbolic-ref --short HEAD 2> /dev/null)"
+			[[ -z "${SELECTED_BRANCH}" ]] && output error "No branch detected" && return
 			;;
-		d)
-			local SELECTED_BRANCH="develop"
-			;;
-		t)
-			local SELECTED_BRANCH="testing"
-			;;
-		m)
-			local SELECTED_BRANCH="master"
-			;;
-		p)
-			local SELECTED_BRANCH="production"
-			;;
-		p)
-			local SELECTED_BRANCH="postprod"
-			;;
-		*)
-			output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}> <y>"
-			return
+
+		d) SELECTED_BRANCH="develop" ;;
+		t) SELECTED_BRANCH="testing" ;;
+		m) SELECTED_BRANCH="master" ;;
+		p) SELECTED_BRANCH="production" ;;
+		p) SELECTED_BRANCH="postprod" ;;
+		*) output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}> <y>" && return ;;
 	esac
 
 	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
