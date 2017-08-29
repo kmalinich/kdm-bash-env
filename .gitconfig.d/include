@@ -5,7 +5,7 @@
 	path = ~/.gitconfig.d/merge
 	path = ~/.gitconfig.d/pull
 	path = ~/.gitconfig.d/push
-	path = ~/.gitconfig.d/url-github
+	path = ~/.gitconfig.d/url-pub
 	path = ~/.gitconfig.d/url-priv
 	path = ~/.gitconfig.d/user
 
