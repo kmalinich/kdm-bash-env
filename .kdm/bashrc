@@ -144,7 +144,8 @@ output() {
 	)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_STRING="output <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <string 1> [<string 2, for keyval options>]"
+	local USAGE_STRING
+	USAGE_STRING="output <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <string 1> [<string 2, for keyval options>]"
 
 	# Case statement for output color/format
 	case "${1}" in
@@ -227,7 +228,8 @@ output() {
 		leadup) # Special function for leadup to status message, no newline
 			# Create dot string and output format
 			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
-			local OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
+			local OUTPUT_FORMAT
+			OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
 			;;
 
 		leadup-custom) # Special function for leadup to status message, no newline, with custom command name
@@ -239,7 +241,7 @@ output() {
 
 			# Create dot string and output format
 			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
-			local OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' ${LOADING_DOT_STRING// /.}) ${C_RST}"
+			local OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
 
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
 			return
@@ -296,7 +298,7 @@ kping() {
 	# Unless otherwise specified
 	[[ "${2}" ]] && local PING_INTERVAL="${2}"
 
-	fping -AdDelsu -H 254 -p "${PING_INTERVAL}" -t 1000 ${1}
+	fping -AdDelsu -H 254 -p "${PING_INTERVAL}" -t 1000 "${1}"
 }
 
 #### Functions: Ping ==final ####
@@ -313,7 +315,8 @@ _time_elapsed_chrono() {
 	ARRAY_USAGE_OPTIONS=(current end)
 
 	# Create variable of pipe-separated options from array
-	local USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
+	local USAGE_OPTIONS_STRING
+	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	if [[ -z "${1}" || -z "${2}" ]]; then
 		output usage "time-elapsed-chrono <start> <${USAGE_OPTIONS_STRING}>"
@@ -2622,6 +2625,19 @@ alias rm='rm -i'
 alias cp='cp -iv'
 alias mv='mv -i'
 alias mkdir='mkdir -p'
+
+
+# Diff enable auto color
+alias diff='diff --color=auto'
+
+# Custom diff:
+# Tabsize : 2 columns
+# Ignore tab expansion
+# Ignore trailing space
+# Ignore whitespace changes
+# Ignore blank lines
+alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
+
 
 # File list aliases
 alias l.=' ls -d .*  2> /dev/null'

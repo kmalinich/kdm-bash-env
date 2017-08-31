@@ -275,7 +275,7 @@ let g:ale_php_phpmd_ruleset = 'cleancode,codesize,design,naming,unusedcode'
 
 " ale (Asynchronous Lint Engine) shellcheck config
 " Disable 'Can't follow non-constant source' and 'file was not specified as input' errors on sourced scripts
-let g:ale_sh_shellcheck_options = '-s bash -e SC1090 -e SC1091 -e SC2039'
+let g:ale_sh_shellcheck_options = '-s bash -e SC1090 -e SC1091 -e SC2039 -e SC2059'
 
 
 " ale (Asynchronous Lint Engine) HTML tidy config
