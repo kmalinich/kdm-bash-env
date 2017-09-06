@@ -1909,8 +1909,8 @@ _kdm_source() {
 
 	unset SOURCE_VERBOSE
 
-	unset OLD_PWD
 	cd "${OLD_PWD}"
+	unset OLD_PWD
 }
 
 # Help with/list bashrc functions

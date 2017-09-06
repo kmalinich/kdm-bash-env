@@ -1,3 +1,5 @@
+[[ "$(uname)" != "Linux" ]] && return 0
+
 # pycurl backend library fix on RHEL
 [[ -s /etc/redhat-release ]] && export PYCURL_SSL_LIBRARY="nss"
 

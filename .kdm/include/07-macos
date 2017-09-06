@@ -1,3 +1,5 @@
+[[ "$(uname)" != "Darwin" ]] && return 0
+
 # macOS -> GNU conversion
 # Export variable for later use in detection OS X -> GNU conversion
 [[ -d /usr/local/Cellar/coreutils                  ]] && export MACOS_GNU="1"
