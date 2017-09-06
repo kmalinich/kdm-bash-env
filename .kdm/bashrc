@@ -1895,16 +1895,22 @@ _show_motd() {
 
 # Re-source ${HOME}/.kdm/bashrc, then files in the 'source' dir
 _kdm_source() {
+	local OLD_PWD="${PWD}"
+	cd "${BASH_ENV_DIR_KDM}"
+
 	export SOURCE_VERBOSE="true"
 
 	local SOURCE_FILE SOURCE_PATH
 	for i in {0..22}; do
-		SOURCE_PATH="$(ls ${BASH_ENV_DIR_INCLUDE}/$(printf '%02d' ${i})-*)"
-		SOURCE_FILE="${SOURCE_PATH/$HOME\/\.kdm\//}"
-		. "${SOURCE_PATH}" && output keyval-t "Loaded" "${SOURCE_FILE}" || output keyval-f "Failed" "${SOURCE_FILE}"
+		SOURCE_PATH="$(ls include/$(printf '%02d' ${i})-*)"
+		[[ ! -s "${SOURCE_PATH}" ]] && continue
+		. "${SOURCE_PATH}" && output keyval-t "Loaded" "${SOURCE_PATH}" || output keyval-f "Failed" "${SOURCE_PATH}"
 	done
 
 	unset SOURCE_VERBOSE
+
+	unset OLD_PWD
+	cd "${OLD_PWD}"
 }
 
 # Help with/list bashrc functions
