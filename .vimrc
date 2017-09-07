@@ -262,8 +262,17 @@ augroup ft_json
 	au BufRead *.json set filetype=json
 	au BufRead *.json set noexpandtab
 
+	au BufRead *csslintrc set filetype=json
+	au BufRead *csslintrc set noexpandtab
+
 	au BufRead *eslintrc set filetype=json
 	au BufRead *eslintrc set noexpandtab
+
+	au BufRead *prettierrc set filetype=json
+	au BufRead *prettierrc set noexpandtab
+
+	au BufRead *stylelintrc set filetype=json
+	au BufRead *stylelintrc set noexpandtab
 
 	au BufRead composer.lock set filetype=json
 	au BufRead composer.lock set noexpandtab
