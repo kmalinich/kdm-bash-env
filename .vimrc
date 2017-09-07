@@ -366,9 +366,9 @@ let g:python3_host_prog = '/usr/local/bin/python3.6'
 " Set default lint delay to 250ms
 let g:ale_lint_delay = 250
 " Configure filetype-specific fixers
-let g:ale_fixers = { 'css': [ 'prettier', 'stylelint' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
+let g:ale_fixers = { 'css': [ 'prettier', 'stylelint' ], 'scss': [ 'prettier', 'stylelint' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
 " Configure filetype-specific linters
-let g:ale_linters = { 'html': [ 'htmlhint', 'proselint', 'tidy' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
+let g:ale_linters = { 'scss': [ 'stylelint' ], 'html': [ 'htmlhint', 'proselint', 'tidy' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
 
 
 " ale (Asynchronous Lint Engine) phpmd config
