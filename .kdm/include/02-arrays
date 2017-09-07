@@ -83,26 +83,23 @@ ${HOME}/.local/bin
 ${HOME}/perl5/bin
 ${HOME}/.composer/vendor/bin
 ${HOME}/Library/Android/sdk/platform-tools
-/usr/local/opt/openssl@1.1/bin
-/usr/local/opt/openssl/bin
-/usr/local/opt/curl/bin
-/usr/local/opt/libxml2/bin
-/usr/local/opt/libxslt/bin
 /usr/local/rvm/gems/ruby-2.4.0/bin
 /usr/local/rvm/gems/ruby-2.4.0@global/bin
 /usr/local/rvm/rubies/ruby-2.4.0/bin
 /usr/local/rvm/bin
 /usr/local/opt/coreutils/libexec/gnubin
-/usr/local/sbin
-/usr/local/bin
+/usr/local/opt/curl/bin
+/usr/local/opt/libxml2/bin
+/usr/local/opt/libxslt/bin
+/usr/local/opt/openssl/bin
+/usr/local/opt/openssl@1.1/bin
+/usr/local/opt/ruby/bin
 /opt/local/sbin
 /opt/local/bin
 /opt/puppetlabs/bin
-/usr/lib/nvidia-367/bin
-/usr/lib/nvidia-361/bin
-/usr/lib/nvidia-340/bin
-/usr/lib/nvidia-304-updates/bin
-/usr/lib/nvidia-304/bin
+/usr/local/sbin
+/usr/local/bin
+/usr/lib/nvidia-375/bin
 /usr/pgsql-9.6/bin
 /usr/pgsql-9.5/bin
 /usr/pgsql-9.4/bin
@@ -123,7 +120,6 @@ $(echo ${PATH} | sed 's/:/\n/g')
 ARRAY_RM=(
 ${HOME}/.bash_history
 ${HOME}/.profile
-${BASH_ENV_FILE_TIME_TOTAL}
 )
 
 # Array of shell options to be set

@@ -4,9 +4,9 @@ for ENTRY in ${ARRAY_MKDIR[@]}; do
 done
 
 # Remove files if present
-for ENTRY in ${ARRAY_RM[@]}; do
-	[[ -e ${ENTRY} ]] && rm -rf ${ENTRY}
-done
+# for ENTRY in ${ARRAY_RM[@]}; do
+# 	[[ -e ${ENTRY} ]] && rm -rf ${ENTRY}
+# done
 
 # Touch files
 for ENTRY in ${ARRAY_TOUCH[@]}; do
