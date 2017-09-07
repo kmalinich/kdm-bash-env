@@ -110,11 +110,24 @@ function! ResCur()
 		return 1
 	endif
 endfunction
-
+" Call ResCur() when entering buffer window
 augroup resCur
 	autocmd!
 	autocmd BufWinEnter * call ResCur()
 augroup END
+
+
+" Increase lint delay to 3000ms (for large files)
+function! ALELintSlow()
+	let g:ale_lint_delay = 3000
+	echo 'Set ALE lint delay to 3 seconds'
+endfunction
+
+" Set lint delay to 250ms (for small files)
+function! ALELintFast()
+	let g:ale_lint_delay = 250
+	echo 'Set ALE lint delay to 250ms'
+endfunction
 
 
 " Append modeline after last line in buffer
@@ -175,6 +188,11 @@ nmap <F8> <Plug>(ale_fix)
 " Map \ml to append modeline
 nnoremap ml :call AppendModeline()<CR>
 
+" Map \as to increase lint delay
+nnoremap as :call ALELintSlow()<CR>
+" Map \af to decrease lint delay
+nnoremap af :call ALELintFast()<CR>
+
 " Disable replace mode, which turns on in bad terminals for some reason
 nnoremap R <Nop>
 " Disable Ex mode
@@ -191,29 +209,27 @@ set noexpandtab
 set fileformat=unix
 
 
-" Interfaces file
-augroup ft_interfaces
-	au!
-	au BufRead /etc/network/interfaces set filetype=interfaces
-	au BufRead /etc/network/interfaces set syntax=interfaces
-augroup END
-
-
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
 au Filetype c,cpp set expandtab
 au Filetype c,cpp set softtabstop=2
+
 " CSS
 au Filetype css let b:comment_leader = '/* '
+
 " HTML
 au Filetype html let b:comment_leader = '<!-- '
+
 " JS
 au Filetype javascript let b:comment_leader = '// '
+
 " nginx
 au Filetype nginx let b:comment_leader = '# '
+
 " PHP
 au Filetype php let b:comment_leader = '// '
+
 " Python
 au Filetype python let b:comment_leader = '# '
 au Filetype python set autoindent
@@ -221,28 +237,93 @@ au Filetype python set expandtab
 au Filetype python set shiftwidth=4
 au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
+
 " sh/bash
 au Filetype sh let b:comment_leader = '# '
+
+
+" Interfaces file
+augroup ft_interfaces
+	au!
+	au BufRead /etc/network/interfaces set filetype=interfaces
+	au BufRead /etc/network/interfaces set syntax=interfaces
+augroup END
+
+" Laravel (php) environment config
+augroup ft_env
+	au!
+	au BufRead .env* set filetype=cfg
+	au BufRead .env* set noexpandtab
+augroup END
+
+" JSON family
+augroup ft_json
+	au!
+	au BufRead *.json set filetype=json
+	au BufRead *.json set noexpandtab
+
+	au BufRead *eslintrc set filetype=json
+	au BufRead *eslintrc set noexpandtab
+
+	au BufRead composer.lock set filetype=json
+	au BufRead composer.lock set noexpandtab
+augroup END
+
+" systemd unit files
+augroup ft_systemd
+	au!
+	au BufRead *.mount let b:comment_leader = '# '
+	au BufRead *.mount set filetype=systemd
+
+	au BufRead *.service let b:comment_leader = '# '
+	au BufRead *.service set filetype=systemd
+
+	au BufRead *.socket let b:comment_leader = '# '
+	au BufRead *.socket set filetype=systemd
+
+	au BufRead *.target let b:comment_leader = '# '
+	au BufRead *.target set filetype=systemd
+
+	au BufRead *.timer let b:comment_leader = '# '
+	au BufRead *.timer set filetype=systemd
+augroup END
+
 " Salt sls
 augroup ft_sls
 	au!
 	au BufRead *.sls let b:comment_leader = '# '
 	au BufRead *.sls set filetype=sls
 augroup END
+
 " Varnish vcl
 augroup ft_vcl
 	au!
-	au BufRead *.vcl       let b:comment_leader = '# '
-	au BufRead *.vcl       set filetype=vcl
-	au BufRead *.vcl       set noexpandtab
+	au BufRead *.vcl* let b:comment_leader = '# '
+	au BufRead *.vcl* set filetype=vcl
+	au BufRead *.vcl* set noexpandtab
+
 	au BufRead *.vcl.jinja let b:comment_leader = '# '
 	au BufRead *.vcl.jinja set filetype=vcl
 	au BufRead *.vcl.jinja set noexpandtab
 augroup END
+
 " VMWare vmx
 augroup ft_vmx
 	au!
-	au BufRead *.vmx :set filetype=cfg
+	au BufRead *.vmx set filetype=cfg
+augroup END
+
+" YAML family
+augroup ft_yaml
+	au!
+	au BufRead *.yaml let b:comment_leader = '# '
+	au BufRead *.yaml set filetype=yaml
+
+	au BufRead *.yml let b:comment_leader = '# '
+	au BufRead *.yml set filetype=yaml
+
+	au BufRead *gemrc let b:comment_leader = '# '
+	au BufRead *gemrc set filetype=yaml
 augroup END
 
 
@@ -264,9 +345,10 @@ let g:python3_host_prog = '/usr/local/bin/python3.6'
 
 
 " ale (Asynchronous Lint Engine) base config
-" Increase lint delay to 2.5 seconds
-let g:ale_lint_delay = 2500
-let g:ale_linters = { 'html': ['tidy'], 'javascript': ['eslint'], 'php': ['phpmd'] }
+" Set default lint delay to 250ms
+let g:ale_lint_delay = 250
+" Configure filetype-specific linters
+let g:ale_linters = { 'html': [ 'tidy' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
 
 
 " ale (Asynchronous Lint Engine) phpmd config
@@ -331,7 +413,7 @@ let g:airline#extensions#readonly#symbol   = '⊘'
 
 " Python plugin config
 " Highlight all Python syntax
-let g:python_highlight_all=1
+let g:python_highlight_all = 1
 
 
 " JavaScript plugin config
@@ -354,7 +436,7 @@ let g:javascript_conceal_undefined = '¿'
 
 " vim-polyglot config
 " Disable javascript
-let g:polyglot_disabled = ['javascript']
+let g:polyglot_disabled = [ 'javascript' ]
 
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :

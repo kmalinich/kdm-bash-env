@@ -1,7 +1,6 @@
 # kdm bash-env
 # .gemrc
 
-# Last Modified : Fri 09 Dec 2016 08:31:05 PM EST
 ---
 gem: --no-document
 benchmark: false
@@ -10,8 +9,8 @@ update_sources: true
 backtrace: true
 bulk_threshold: 1000
 sources:
-- http://gems.rubyforge.org/
-- http://rubygems.org/
+  - http://gems.rubyforge.org/
+  - http://rubygems.org/
 
 # HTTP proxy
 # http_proxy: http://proxy-host:8080
