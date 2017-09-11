@@ -11,6 +11,16 @@
 			"custom-properties",
 			"declarations"
 		],
-		"order/properties-alphabetical-order": true
+		"order/properties-alphabetical-order": true,
+		"selector-type-no-unknown": [
+			true,
+			{
+				"ignoreTypes": [
+					"/^ng-/",
+					"/^ui-/",
+					"/^wz-/"
+				]
+			}
+		]
 	}
 }
