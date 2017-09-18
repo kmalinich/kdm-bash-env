@@ -2633,6 +2633,7 @@ alias env-sort='env | sort -h'
 
 # Newline after screen clear
 alias clear='clear; echo'
+alias c='clear'
 
 # Safety first on file operations
 alias rm='rm -i'
