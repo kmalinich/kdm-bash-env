@@ -1583,10 +1583,13 @@ _prompt_generate() {
 		return
 	fi
 
-	# If PROMPT_NO_HOSTNAME is set to 1 in bash-env.conf, render PS1 without hostname
-	if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}"; then
-		export PS1="\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
-		return
+	# If NOT connected via SSH and PROMPT_NO_HOSTNAME is set to 1 (true) in bash-env.conf,
+	# render PS1 without hostname
+	if [[ -z "${SSH_CONNECTION}" ]]; then
+		if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}"; then
+			export PS1="\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
+			return
+		fi
 	fi
 
 	# Normal PS1 prompt (with hostname)
