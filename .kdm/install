@@ -58,7 +58,7 @@ rm -rf .config
 
 
 # Move a few dirs with lots of files in them
-ARRAY_DIRS_MOVE=(.kdm/nloadrc .kdm/toprc .nmap .vim/bundle)
+ARRAY_DIRS_MOVE=(.kdm/nloadrc .kdm/toprc .nmap .vim/pack)
 
 for DIR in ${ARRAY_DIRS_MOVE[@]}; do
 	echo "Moving '${DIR}'"
@@ -97,7 +97,7 @@ unset FILE_HOME
 
 
 # Move scripts in .kdm/ dir
-ARRAY_KDM_SCRIPTS=(bash-env-colors install)
+ARRAY_KDM_SCRIPTS=(install powerline)
 DIR=".kdm"
 echo "Moving '${DIR}/*'"
 for KDM_SCRIPT in ${ARRAY_KDM_SCRIPTS[@]}; do
