@@ -527,8 +527,12 @@ let g:ale_php_phpmd_ruleset = 'cleancode,codesize,design,naming,unusedcode'
 
 
 " ale (Asynchronous Lint Engine) shellcheck config
-" Disable 'Can't follow non-constant source' and 'file was not specified as input' errors on sourced scripts
-let g:ale_sh_shellcheck_options = '-s bash -e SC1090 -e SC1091 -e SC2039 -e SC2059'
+" Disable [SC1090] Can't follow non-constant source
+" Disable [SC1091] file was not specified as input
+" Disable [SC2039] In POSIX sh, something is undefined
+" Disable [SC2059] Don't use variables in the printf format string
+" Disable [SC2068] Double quote array expansions to avoid re-splitting elements
+let g:ale_sh_shellcheck_options = '-s bash -e SC1090 -e SC1091 -e SC2039 -e SC2059 -e SC2068'
 
 
 " ale (Asynchronous Lint Engine) HTML tidy config
