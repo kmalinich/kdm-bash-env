@@ -16,6 +16,8 @@ let g:color_16m = $BASH_ENV_COLOR_16M
 let g:domain      = $DOMAIN
 let g:domain_full = $DOMAIN_FULL
 
+let g:home = $HOME
+
 let g:host_ip     = $HOST_IP
 let g:host_short  = $HOST_SHORT
 let g:host_sub    = $HOST_SUB
@@ -98,10 +100,11 @@ set scrolloff=2
 set sidescrolloff=2
 
 " Automatically change into the directory the current file is in
-set autochdir
+" set autochdir
 
 " Set the terminal title to something like '[VIM] kdm-mbp.z1:~/.vimrc [+]'
-set titlestring=\[VIM\]\ %{host_sub}:%{pwd_final}\/%f\ %m
+let g:file_path_format = substitute(expand('%:p'), g:home, '~', '')
+set titlestring=\[VIM\]\ %{host_sub}:%{file_path_format}\ %m
 set title
 
 " Make scrolling and highlighters fast
@@ -114,7 +117,7 @@ endif
 set wrap!
 
 " Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
-set mouse=a
+set mouse=
 
 " Allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -334,6 +337,14 @@ nnoremap af :call ALELintFast()<CR>
 nnoremap R <Nop>
 " Disable Ex mode
 noremap Q <Nop>
+
+" Tab navigation like Firefox
+nnoremap <C-S-tab> :tabprevious<CR>
+nnoremap <C-tab>   :tabnext<CR>
+nnoremap <C-t>     :tabnew<CR>
+inoremap <C-S-tab> <Esc>:tabprevious<CR>i
+inoremap <C-tab>   <Esc>:tabnext<CR>i
+inoremap <C-t>     <Esc>:tabnew<CR>
 
 " This is for working across multiple xterms and/or gvims
 " Transfer/read and write one block of text between vim sessions (capture whole line):
