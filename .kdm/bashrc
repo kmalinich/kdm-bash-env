@@ -1595,6 +1595,9 @@ _prompt_generate() {
 	# Normal PS1 prompt (with hostname)
 	export PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
 
+	# Kick _prompt_pwd again with no output to export environment variables
+	_prompt_pwd > /dev/null 2>&1
+
 	# It would be neat to do a color-responsive system load monitor... but not today
 }
 

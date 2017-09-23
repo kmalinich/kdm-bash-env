@@ -1,15 +1,51 @@
 " Use UTF8 encoding
-set encoding=utf8
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8
 scriptencoding utf-8
+" set bomb
+" set binary
+
+if !exists('autocommands_loaded')
+	let g:autocommands_loaded = 1
+endif
 
 " Pull in some environment variables
-let g:color_16m=$BASH_ENV_COLOR_16M
-let g:term_program=$TERM_PROGRAM
-let g:term_type=$TERM
+let g:color_16m = $BASH_ENV_COLOR_16M
 
-" Add a command for loading .vimrc completely
-command! ReloadVimrc source ~/.vimrc
+let g:domain      = $DOMAIN
+let g:domain_full = $DOMAIN_FULL
 
+let g:host_ip     = $HOST_IP
+let g:host_short  = $HOST_SHORT
+let g:host_sub    = $HOST_SUB
+
+let g:pwd           = $PWD
+let g:pwd_custom    = $PWD_CUSTOM
+let g:pwd_final     = $PWD_FINAL
+let g:pwd_fmt       = $PWD_FMT
+let g:pwd_fmt_depth = $PWD_FMT_DEPTH
+
+let g:term_program = $TERM_PROGRAM
+let g:term_type    = $TERM
+
+
+" Shell variable
+if exists('$SHELL')
+	set shell=$SHELL
+else
+	set shell=/usr/local/bin/bash
+endif
+
+" Configure proper make binary
+let g:make = 'gmake'
+if exists('make')
+	let g:make = 'make'
+endif
+
+
+" Disable system buffers menu
+let g:no_buffers_menu = 1
 
 " Enable native filetype handling
 filetype plugin indent on
@@ -18,12 +54,66 @@ filetype plugin indent on
 syntax on
 
 " Tabwidth to half size
-set tabstop=2
 set shiftwidth=2
+set softtabstop=0
+set tabstop=2
+" Default set no expandtab
+set noexpandtab
+
+" Enable code concealing
+" set conceallevel=1
+
+" Centralize backup and temporary storage
+set backup
+set backupdir=~/.vim/backup
+set directory=~/.vim/tmp
+
+" Enable hidden buffers
+set hidden
+
+
+" Disable previous search highlight...
+set nohlsearch
+" ... but still highlight during searches
+set incsearch
+
+" Blink search highlight for 5 seconds
+set matchtime=5
+
+" Case-insensitive search...
+set ignorecase
+" ... unless there's a capital letter
+set smartcase
+
+" Search mappings
+" If off-screen, scroll the next find to the center of the screen
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+
+" Show matching brackets
+set showmatch
+
+
+" Keep at least 2 lines above/below
+set scrolloff=2
+" Keep at least 2 lines left/right
+set sidescrolloff=2
+
+
+" Automatically change into the directory the current file is in
+" set autochdir
+
+
+" Set the terminal title to something like '[VIM] kdm-mbp.z1:~/.vimrc [+]'
+set titlestring=\[VIM\]\ %{host_sub}:%{pwd_final}\/%f\ %m
+set title
 
 " Make scrolling and highlighters fast
 " set lazyredraw
-set ttyfast
+if !has('nvim')
+	set ttyfast
+endif
 
 " Disable line wrapping
 set wrap!
@@ -34,8 +124,11 @@ set mouse=
 " Allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
-" Keep 10000 lines of command line history
-set history=10000
+" Keep 1000 lines of command history
+set history=1000
+
+" Keep 1000 lines of undo history
+set undolevels=1000
 
 " Tell vim to remember certain things when we exit (like cursor position)
 if !has('nvim')
@@ -45,16 +138,11 @@ endif
 " Delete comment character when joining commented lines
 set formatoptions+=j
 
-" Make :Q and :W work like :q and :w
-command! W w
-command! Q q
+" Shorten messages and don't show intro
+set shortmess=atI
 
-" Automatically set the title to the full path
-set titlestring=%(\ %{expand(\"%:p\")}\ %a%)
-
-" Prefer unix format for files
-set fileformats=unix,dos
-
+" Preferred file format order
+set fileformats=unix,dos,mac
 
 
 " True (24-bit) color support (requires supporting terminal emulator)
@@ -83,25 +171,39 @@ if has('termguicolors') && g:color_16m ==# 'true'
 endif
 
 
+" Cursor configuration
+set guicursor=
+
+highlight Cursor guibg=white guifg=black
+highlight iCursor guibg=white guifg=steelblue
+
 if g:term_program ==# 'iTerm.app'
 	" Change iTerm2 cursor shape when changing modes
-	let &t_EI = "\<Esc>]50;CursorShape=0\x7"
-	let &t_SI = "\<Esc>]50;CursorShape=2\x7"
-	let &t_SR = "\<Esc>]50;CursorShape=1\x7"
+	if !has('nvim')
+		let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+		let &t_SI = "\<Esc>]50;CursorShape=2\x7"
+		let &t_SR = "\<Esc>]50;CursorShape=1\x7"
+	endif
+
+	set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175
 
 	" Fix to restore cursor style when exiting
 	augroup fix_cursor
-		au!
-		au VimLeave * set guicursor=a:hor30-iCursor-blinkwait250-blinkon250-blinkoff250
+		au VimLeave * set guicursor=a:hor10-blinkon0
 	augroup END
 endif
 
+
+" Add a command for loading .vimrc completely
+command! ReloadVimrc source ~/.vimrc
+
+
 " Automatically reload .vimrc on changes
 augroup reload_vimrc
-	autocmd!
-	autocmd BufWritePost ~/.vimrc source ~/.vimrc
+	" Imperative to clear existing autocmds here, or Mr. Slowly shows up
+	au!
+	au BufWritePost ~/.vimrc source ~/.vimrc
 augroup END
-
 
 " Restore cursor position properly
 function! ResCur()
@@ -112,8 +214,7 @@ function! ResCur()
 endfunction
 " Call ResCur() when entering buffer window
 augroup resCur
-	autocmd!
-	autocmd BufWinEnter * call ResCur()
+	au BufWinEnter * call ResCur()
 augroup END
 
 
@@ -169,6 +270,38 @@ endfunction
 
 " Shortcut key maps
 
+" pbcopy for macOS copy/paste
+if has('macunix')
+	vmap <C-x> :!pbcopy<CR>
+	vmap <C-c> :w !pbcopy<CR><CR>
+
+	" Make it so copy/paste to system works from vim
+	set clipboard=unnamed
+endif
+
+" Oops-Caps-Lock abbreviations
+cnoreabbrev Q q
+cnoreabbrev Q! q!
+cnoreabbrev Qall qall
+cnoreabbrev Qall! qall!
+cnoreabbrev W w
+cnoreabbrev W! w!
+cnoreabbrev WQ wq
+cnoreabbrev Wa wa
+cnoreabbrev Wq wq
+cnoreabbrev wQ wq
+
+" jj to escape in insert mode
+inoremap jj <Esc>
+
+" Create blank newlines and stay in normal mode
+nnoremap <silent> zj o<Esc>
+nnoremap <silent> zk O<Esc>
+
+" Remap semicolon to colon in normal mode (pinky thanks you)
+nore ; :
+" nore , ;
+
 " Ctrl-B to delete to the end of line in insert mode
 inoremap <C-b> <Esc>lDa
 " Ctrl-E to reindent files
@@ -185,6 +318,7 @@ map <C-w> :call WhitespaceTrim()<CR>
 
 " Bind F8 to fixing problems with ale
 nmap <F8> <Plug>(ale_fix)
+
 " Map \ml to append modeline
 nnoremap ml :call AppendModeline()<CR>
 
@@ -198,15 +332,14 @@ nnoremap R <Nop>
 " Disable Ex mode
 noremap Q <Nop>
 
-
-" Enable code concealing
-" set conceallevel=1
-
-" Default set no expandtab
-set noexpandtab
-
-" Default set fileformat as UNIX
-set fileformat=unix
+" This is for working across multiple xterms and/or gvims
+" Transfer/read and write one block of text between vim sessions (capture whole line):
+" Append
+" nmap ;a :. w! >>~/.vimxfer<CR>
+" Read
+" nmap ;r :r ~/.vimxfer<CR>
+" Write
+" nmap ;w :. w! ~/.vimxfer<CR>
 
 
 " C
@@ -244,21 +377,18 @@ au Filetype sh let b:comment_leader = '# '
 
 " Interfaces file
 augroup ft_interfaces
-	au!
 	au BufRead /etc/network/interfaces set filetype=interfaces
 	au BufRead /etc/network/interfaces set syntax=interfaces
 augroup END
 
 " Laravel (php) environment config
 augroup ft_env
-	au!
 	au BufRead .env* set filetype=cfg
 	au BufRead .env* set noexpandtab
 augroup END
 
 " JSON family
 augroup ft_json
-	au!
 	au BufRead *.json set filetype=json
 	au BufRead *.json set noexpandtab
 
@@ -289,7 +419,6 @@ augroup END
 
 " systemd unit files
 augroup ft_systemd
-	au!
 	au BufRead *.mount let b:comment_leader = '# '
 	au BufRead *.mount set filetype=systemd
 
@@ -308,14 +437,12 @@ augroup END
 
 " Salt sls
 augroup ft_sls
-	au!
 	au BufRead *.sls let b:comment_leader = '# '
 	au BufRead *.sls set filetype=sls
 augroup END
 
 " Varnish vcl
 augroup ft_vcl
-	au!
 	au BufRead *.vcl* let b:comment_leader = '# '
 	au BufRead *.vcl* set filetype=vcl
 	au BufRead *.vcl* set noexpandtab
@@ -327,13 +454,11 @@ augroup END
 
 " VMWare vmx
 augroup ft_vmx
-	au!
 	au BufRead *.vmx set filetype=cfg
 augroup END
 
 " YAML family
 augroup ft_yaml
-	au!
 	au BufRead *.yaml let b:comment_leader = '# '
 	au BufRead *.yaml set filetype=yaml
 
@@ -347,7 +472,6 @@ augroup END
 
 " Fix for editing crontabs with 'crontab -e' on macOS
 augroup ft_crontab_macos
-	au!
 	au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 augroup END
 
@@ -398,9 +522,14 @@ let g:ale_html_tidy_executable = '/usr/local/bin/tidy'
 let g:ale_html_tidy_options    = '-q -e -language en -c ~/.tidy.conf'
 
 
+" ale (Asynchronous Lint Engine) gutter config
+" let g:ale_sign_column_always = 1
+
 " ale (Asynchronous Lint Engine) symbol config
-let g:ale_sign_error   = ''
-let g:ale_sign_warning = ''
+let g:ale_sign_error   = '✗'
+let g:ale_sign_warning = '⚠'
+highlight ALEErrorSign   guibg=#2f2f2f guifg=#e74c3c
+highlight ALEWarningSign guibg=#2f2f2f guifg=#f1c40f
 
 
 " airline/powerline base config
@@ -446,7 +575,14 @@ let g:airline#extensions#readonly#symbol   = '⊘'
 
 " Python plugin config
 " Highlight all Python syntax
+let g:polyglot_disabled    = [ 'python' ]
 let g:python_highlight_all = 1
+
+
+" Ruby plugin config
+let g:rubycomplete_buffer_loading    = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails             = 1
 
 
 " JavaScript plugin config
