@@ -71,7 +71,6 @@ set directory=~/.vim/tmp
 " Enable hidden buffers
 set hidden
 
-
 " Disable previous search highlight...
 set nohlsearch
 " ... but still highlight during searches
@@ -90,27 +89,23 @@ set smartcase
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-
 " Show matching brackets
 set showmatch
-
 
 " Keep at least 2 lines above/below
 set scrolloff=2
 " Keep at least 2 lines left/right
 set sidescrolloff=2
 
-
 " Automatically change into the directory the current file is in
-" set autochdir
-
+set autochdir
 
 " Set the terminal title to something like '[VIM] kdm-mbp.z1:~/.vimrc [+]'
 set titlestring=\[VIM\]\ %{host_sub}:%{pwd_final}\/%f\ %m
 set title
 
 " Make scrolling and highlighters fast
-" set lazyredraw
+set lazyredraw
 if !has('nvim')
 	set ttyfast
 endif
@@ -119,7 +114,7 @@ endif
 set wrap!
 
 " Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
-set mouse=
+set mouse=a
 
 " Allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -188,13 +183,14 @@ if g:term_program ==# 'iTerm.app'
 		let &t_SR = "\<Esc>]50;CursorShape=1\x7"
 	endif
 
-	" Mode-specific cursor colors
-	set guicursor+=n-c:hor100-blinkon0-yCursor
+	" Mode-specific cursor blinking/colors/shapes
+	set guicursor+=c:hor100-blinkwait10-blinkoff500-blinkon500-rCursor
+	set guicursor+=n:hor100-blinkon0-yCursor
 	set guicursor+=i:block-blinkwait10-blinkon500-blinkoff500-rCursor
 	set guicursor+=o:hor100-blinkwait10-blinkoff500-blinkon500-bCursor
 	set guicursor+=r-cr:ver100-blinkwait10-blinkoff500-blinkon500-gCursor
 	set guicursor+=v:block-blinkwait10-blinkoff500-blinkon500-pCursor
-	set guicursor+=sm:block-blinkwait10-blinkoff500-blinkon500-pCursor
+	set guicursor+=sm:block-blinkwait10-blinkoff500-blinkon500-yCursor
 
 	" Restore normal cursor style when exiting (in this case, underline)
 	augroup fix_cursor
@@ -223,8 +219,6 @@ augroup END
 
 " Add a command for loading .vimrc completely
 command! ReloadVimrc source ~/.vimrc
-
-
 
 
 " Increase lint delay to 3000ms (for large files)
