@@ -172,10 +172,7 @@ endif
 
 
 " Cursor configuration
-set guicursor=
-
-highlight Cursor guibg=white guifg=black
-highlight iCursor guibg=white guifg=steelblue
+highlight Cursor  guibg=#2ecc71 guifg=#000000
 
 if g:term_program ==# 'iTerm.app'
 	" Change iTerm2 cursor shape when changing modes
@@ -185,7 +182,18 @@ if g:term_program ==# 'iTerm.app'
 		let &t_SR = "\<Esc>]50;CursorShape=1\x7"
 	endif
 
-	set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175
+	set guicursor=
+	set guicursor=n-v-c:block-Cursor
+
+	set guicursor+=i-ci-ve:ver25-iCursor
+	set guicursor+=r-cr:hor20
+	set guicursor+=o:hor50
+	set guicursor+=a:blinkwait700-blinkoff400-blinkon250-Cursor/iCursor
+	set guicursor+=sm:block-blinkwait175-blinkoff150-blinkon175
+
+	set guicursor+=i:ver25-iCursor
+	set guicursor+=n-v-c:blinkon0
+	set guicursor+=i:blinkwait10
 
 	" Fix to restore cursor style when exiting
 	augroup fix_cursor
@@ -193,29 +201,29 @@ if g:term_program ==# 'iTerm.app'
 	augroup END
 endif
 
-
-" Add a command for loading .vimrc completely
-command! ReloadVimrc source ~/.vimrc
-
+" The PC is fast enough, do syntax highlight syncing from start unless 200 lines
+augroup vimrc_sync_fromstart
+	" au!
+	au BufEnter * :syntax sync maxlines=200
+augroup END
 
 " Automatically reload .vimrc on changes
-augroup reload_vimrc
+augroup vimrc_reload
 	" Imperative to clear existing autocmds here, or Mr. Slowly shows up
 	au!
 	au BufWritePost ~/.vimrc source ~/.vimrc
 augroup END
 
-" Restore cursor position properly
-function! ResCur()
-	if line("'\"") <= line('$')
-		normal! g`"
-		return 1
-	endif
-endfunction
-" Call ResCur() when entering buffer window
-augroup resCur
-	au BufWinEnter * call ResCur()
+" Remember cursor position
+augroup vimrc_remember_cursor_position
+	" au!
+	au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
 augroup END
+
+" Add a command for loading .vimrc completely
+command! ReloadVimrc source ~/.vimrc
+
+
 
 
 " Increase lint delay to 3000ms (for large files)
