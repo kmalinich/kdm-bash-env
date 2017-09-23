@@ -171,9 +171,15 @@ if has('termguicolors') && g:color_16m ==# 'true'
 endif
 
 
-" Cursor configuration
-highlight Cursor  guibg=#2ecc71 guifg=#000000
+" Cursor colors
+hi bCursor guibg=#3498db
+hi gCursor guibg=#2ecc71
+hi pCursor guibg=#6c71c4
+hi rCursor guibg=#e74c3c
+hi wCursor guibg=#e0e0e0
+hi yCursor guibg=#f1c40f
 
+" Cursor configuration
 if g:term_program ==# 'iTerm.app'
 	" Change iTerm2 cursor shape when changing modes
 	if !has('nvim')
@@ -182,22 +188,17 @@ if g:term_program ==# 'iTerm.app'
 		let &t_SR = "\<Esc>]50;CursorShape=1\x7"
 	endif
 
-	set guicursor=
-	set guicursor=n-v-c:block-Cursor
+	" Mode-specific cursor colors
+	set guicursor+=n-c:hor100-blinkon0-yCursor
+	set guicursor+=i:block-blinkwait10-blinkon500-blinkoff500-rCursor
+	set guicursor+=o:hor100-blinkwait10-blinkoff500-blinkon500-bCursor
+	set guicursor+=r-cr:ver100-blinkwait10-blinkoff500-blinkon500-gCursor
+	set guicursor+=v:block-blinkwait10-blinkoff500-blinkon500-pCursor
+	set guicursor+=sm:block-blinkwait10-blinkoff500-blinkon500-pCursor
 
-	set guicursor+=i-ci-ve:ver25-iCursor
-	set guicursor+=r-cr:hor20
-	set guicursor+=o:hor50
-	set guicursor+=a:blinkwait700-blinkoff400-blinkon250-Cursor/iCursor
-	set guicursor+=sm:block-blinkwait175-blinkoff150-blinkon175
-
-	set guicursor+=i:ver25-iCursor
-	set guicursor+=n-v-c:blinkon0
-	set guicursor+=i:blinkwait10
-
-	" Fix to restore cursor style when exiting
+	" Restore normal cursor style when exiting (in this case, underline)
 	augroup fix_cursor
-		au VimLeave * set guicursor=a:hor10-blinkon0
+		au VimLeave * set guicursor=a:hor100-blinkwait10-blinkon500-blinkoff500-wCursor
 	augroup END
 endif
 
