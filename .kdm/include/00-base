@@ -6,6 +6,8 @@ export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
 export BASH_ENV_DIR_SSH="${HOME}/.ssh"
 export BASH_ENV_DIR_SSH_CONFIG="${HOME}/.ssh/config.d"
 export BASH_ENV_DIR_VIM="${HOME}/.vim"
+export BASH_ENV_DIR_VIM_BACKUP="${BASH_ENV_DIR_VIM}/backup"
+export BASH_ENV_DIR_VIM_TMP="${BASH_ENV_DIR_VIM}/tmp"
 
 export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
 export BASH_ENV_DIR_INCLUDE="${BASH_ENV_DIR_KDM}/include"
