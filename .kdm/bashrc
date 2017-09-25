@@ -2649,7 +2649,10 @@ alias mkdir='mkdir -p'
 
 
 # Diff enable auto color
-alias diff='diff --color=auto'
+DIFF_VERSION="$(diff -v | grep -Eo '[3-9]\.[0-9]$')"
+if [[ "${DIFF_VERSION/\./}" -ge "34" ]]; then
+	alias diff='diff --color=auto'
+fi
 
 # Custom diff:
 # Tabsize : 2 columns
