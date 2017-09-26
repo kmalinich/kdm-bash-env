@@ -33,18 +33,21 @@
   * fidian/hexmode
   * godlygeek/tabular
   * kmalinich/salt-jinja-vim
-  * marciomazza/vim-brogrammer-theme
+  * kmalinich/vim-brogrammer-theme
+  * MarcWeber/vim-addon-local-vimrc
   * moon-musick/vim-logrotate
+  * othree/javascript-libraries-syntax.vim
   * pangloss/vim-javascript
   * paranoida/vim-airlineish
   * saltstack/salt-vim
   * scrooloose/nerdtree
+  * sheerun/vim-polyglot
   * tpope/vim-fugitive
   * vim-airline/vim-airline
-  * vim-scripts/align
+  * vim-scripts/Align
   * vim-scripts/interfaces
   * w0rp/ale
-  * xuyuanp/nerdtree-git-plugin
+  * Xuyuanp/nerdtree-git-plugin
 * **Other**
   * kmalinich/snmp-mibs
 
@@ -55,7 +58,7 @@
   * Make sure you're using a terminal emulator that supports this
     * Enabling true color without support will make things very weird looking
   * I'm still searching for a way to do true color inside GNU screen sessions
-  * [`output()`](.kdm/bashrc#L136-L282) always uses 24bit color regardless of `TERM` variable or supportedness
+  * [`output()`](.kdm/bashrc#L136-L285) always uses 24bit color regardless of `TERM` variable or supportedness
     * I'll get to it someday
   * To enable, set `COLOR_16M=1` in `~/.kdm/bash-env.conf` and reopen terminal
   * For best results, use vim 8+/neovim 0.2.1+ (w/termguicolors support)

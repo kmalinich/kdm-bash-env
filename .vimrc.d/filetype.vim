@@ -81,6 +81,12 @@ augroup ft_json
 	au BufRead composer.lock set noexpandtab
 augroup END
 
+" Markdow
+augroup ft_markdown
+	au BufRead *.md set filetype=markdown
+	au BufRead *.md call matchdelete(g:w3)
+augroup END
+
 " Ruby
 augroup ft_ruby
 	au BufRead *.rb let b:comment_leader = '# '
@@ -110,6 +116,7 @@ augroup END
 augroup ft_sls
 	au BufRead *.sls let b:comment_leader = '# '
 	au BufRead *.sls set filetype=sls
+	au BufRead *.sls call matchdelete(g:w3)
 augroup END
 
 " Varnish vcl
