@@ -3,4 +3,6 @@
 # pycurl backend library fix on RHEL
 [[ -s /etc/redhat-release ]] && export PYCURL_SSL_LIBRARY="nss"
 
+return 0
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

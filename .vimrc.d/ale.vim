@@ -1,10 +1,12 @@
 scriptencoding utf-8
 
 " ale (Asynchronous Lint Engine) base config
-" Set default lint delay to 500ms
-let g:ale_lint_delay = 500
+" Set default lint delay to 1000ms
+let g:ale_lint_delay = 1000
+
 " Configure filetype-specific fixers
 let g:ale_fixers = { 'css': [ 'prettier', 'stylelint' ], 'scss': [ 'prettier', 'stylelint' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
+
 " Configure filetype-specific linters
 let g:ale_linters = { 'scss': [ 'stylelint' ], 'html': [ 'htmlhint', 'proselint', 'tidy' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
 
@@ -19,7 +21,7 @@ let g:ale_php_phpmd_ruleset = 'cleancode,codesize,design,naming,unusedcode'
 " Disable [SC2039] In POSIX sh, something is undefined
 " Disable [SC2059] Don't use variables in the printf format string
 " Disable [SC2068] Double quote array expansions to avoid re-splitting elements
-let g:ale_sh_shellcheck_options = '-s bash -e SC1090 -e SC1091 -e SC2039 -e SC2059 -e SC2068'
+let g:ale_sh_shellcheck_options = '-e SC2059 -s bash -x'
 
 
 " ale (Asynchronous Lint Engine) HTML tidy config
