@@ -27,12 +27,12 @@ call LoadFile('truecolor')
 call LoadFile('functions')
 call LoadFile('remap')
 call LoadFile('filetype')
-call LoadFile('ale')
 call LoadFile('whitespace')
 call LoadFile('neovim')
 call LoadFile('python')
 call LoadFile('ruby')
 call LoadFile('javascript')
 call LoadFile('polyglot')
+call LoadFile('ale')
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
