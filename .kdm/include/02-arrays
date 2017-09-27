@@ -167,6 +167,7 @@ route
 shutdown
 sntop
 su
+sysctl
 syslog
 umount
 virsh
