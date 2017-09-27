@@ -1,3 +1,5 @@
+scriptencoding utf-8
+
 " JavaScript plugin config
 " Enable syntax highlighting for JSDoc
 let g:javascript_plugin_jsdoc = 1
