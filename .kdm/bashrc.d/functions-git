@@ -168,7 +168,7 @@ _g_gu() {
 # Git commit all w/message
 _g_gca() {
 	# Declare vars as local
-	⚠   local COMMIT_MSG CMD_EXIT GIT_BRANCH TEMP_FILE USAGE_STRING
+	local COMMIT_MSG CMD_EXIT GIT_BRANCH TEMP_FILE USAGE_STRING
 
 	USAGE_STRING="g-gca <commit message>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
