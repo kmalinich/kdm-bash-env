@@ -1,3 +1,3 @@
 " vim-polyglot config
-" Disable javascript
-let g:polyglot_disabled = [ 'javascript' ]
+" Disable javascript+python
+let g:polyglot_disabled = [ 'javascript', 'javascript.jsx', 'python' ]

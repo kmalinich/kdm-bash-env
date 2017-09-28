@@ -11,6 +11,7 @@ function! LoadFile(name)
 	endif
 endfunction
 
+call LoadFile('polyglot')
 call LoadFile('encoding')
 call LoadFile('environment')
 call LoadFile('syntax')
@@ -32,7 +33,6 @@ call LoadFile('neovim')
 call LoadFile('python')
 call LoadFile('ruby')
 call LoadFile('javascript')
-call LoadFile('polyglot')
 call LoadFile('ale')
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
