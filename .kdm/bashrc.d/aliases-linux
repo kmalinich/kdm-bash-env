@@ -1,0 +1,12 @@
+# Aliases: Linux-only
+
+# Bounce if we're not on Linux
+[[ "${UNAME_KERNEL_NAME}" != "Linux" ]] && return 0
+
+# PING_WAIT for use in ping functions
+export PING_WAIT="-W 1"
+
+# Clean up old kernels, I can never remember this one
+alias kernel-cleanup='package-cleanup -y --oldkernels --count=2'
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

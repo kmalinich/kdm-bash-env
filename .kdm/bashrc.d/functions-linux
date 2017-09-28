@@ -1,0 +1,193 @@
+# Functions: Linux-only
+
+# Bounce if we're not on Linux
+[[ "${UNAME_KERNEL_NAME}" != "Linux" ]] && return 0
+
+# Function aliases
+alias kvm-destroy-all=' _kvm_destroy_all'
+alias kvm-running='     _kvm_running'
+alias kvm-shutdown-all='_kvm_shutdown_all'
+alias kvm-start-all='   _kvm_start_all'
+alias kvm-undefine='    _kvm_undefine'
+alias kvm-watch='       _kvm_watch'
+alias sys-restart='     _sys_restart'
+
+# systemctl no-pager
+hash systemctl && alias systemctl='systemctl --no-pager'
+
+# Restart with systemctl
+_sys_restart() {
+	local USAGE_STRING="sys-restart <process name>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	! hash systemctl && output error "systemctl not available" && return
+
+	output yellow "Stopping '${1}'"
+	systemctl stop "${1}"
+
+	output yellow "Sleeping"
+	sleep 1
+
+	output yellow "Starting '${1}'"
+	systemctl start "${1}"
+
+	echo
+	systemctl status "${1}"
+}
+
+# Network config information
+_net_info() {
+	if hash hostname; then
+		output keyval "hostname"    "$(hostname)"
+		output keyval "hostname -s" "$(hostname -s)"
+		output keyval "hostname -d" "$(hostname -d)"
+		output keyval "hostname -f" "$(hostname -f)"
+	fi
+
+	if [[ -s /etc/resolv.conf ]]; then
+		output orange "--= resolv.conf =--"
+		echo
+
+		grep -Ev '^#' /etc/resolv.conf
+	fi
+
+	if hash ip; then
+		output orange "--= ip route show =--"
+		echo
+
+		ip route show
+		echo
+
+		output orange "--= ip addr =--"
+		echo
+
+		ip addr show "${DEFROUTE_NIC}"
+		echo
+	fi
+}
+
+# List running VMs
+_kvm_running() {
+	# Declare vars as local
+	local ARRAY_RUNNING
+
+	ARRAY_RUNNING=($(virsh list | awk '/running/ {print $2}'))
+	[[ -z "${ARRAY_RUNNING[0]}" ]] && output purple "No VMs running" && return 0
+
+	output orange "--= Running VMs =--"
+	echo
+
+	for VM in "${ARRAY_RUNNING[@]}"; do
+		output green "${VM}"
+	done
+}
+
+# Watch until all VMs are shutdown
+_kvm_watch() {
+	local KVM_COUNTER="0"
+
+	while true; do
+		local ARRAY_WATCH=($(virsh list | awk '/running/ {print $2}'))
+		local VM_COUNT="${#ARRAY_WATCH[@]}"
+
+		[[ -z "${ARRAY_WATCH[0]}" ]] && output green "No VMs running" && break
+
+		echo -en "${VM_COUNT} VMs ${C_GRN}running${C_RST}. ${KVM_COUNTER} sec elapsed     \r"
+
+		sleep 1
+		local KVM_COUNTER=$((KVM_COUNTER+1))
+	done
+}
+
+# Undefine VMs based on a search string
+_kvm_undefine() {
+	local USAGE_STRING="kvm-undefine <search string>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	local ARRAY_UNDEFINE=($(virsh list --all | awk '/'"${1}"'/ {print $2}'))
+	[[ -z "${ARRAY_UNDEFINE[0]}" ]] && output yellow "No VMs running matching search string '${1}'" && return 0
+
+	output purple "These VMs will be undefined:"; echo
+	for VM in "${ARRAY_UNDEFINE[@]}"; do
+		output red "${VM}"
+	done
+	echo
+
+	read -r -p "Are you sure? [Y/n] " UNDEFINE_YN
+	echo
+	[[ "${UNDEFINE_YN}" == [Nn] ]] && output purple "No VMs undefined" && return 1
+
+	for VM in "${ARRAY_UNDEFINE[@]}"; do
+		output purple "Undefining '${VM}'"
+		virsh undefine "${VM}"
+	done
+	echo
+}
+
+# Destroy all VMs
+_kvm_destroy_all() {
+	local ARRAY_DESTROY=($(virsh list | awk '/running/ {print $2}'))
+	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
+
+	output purple "These VMs will be destroyed:"; echo
+	for VM in "${ARRAY_DESTROY[@]}"; do
+		output red "${VM}"
+	done
+	echo
+
+	read -r -p "Are you sure? [Y/n] " DESTROY_YN
+	echo
+	[[ "${DESTROY_YN}" == [Nn] ]] && output purple "No VMs destroyed" && return 1
+
+	for VM in "${ARRAY_DESTROY[@]}"; do
+		output red "Destroying '${VM}'"
+		virsh destroy "${VM}"
+	done
+	echo
+}
+
+# Shutdown all VMs
+_kvm_shutdown_all() {
+	local ARRAY_SHUTDOWN=($(virsh list | awk '/running/ {print $2}'))
+	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
+
+	output purple "These VMs will be shutdown:"; echo
+	for VM in "${ARRAY_SHUTDOWN[@]}"; do
+		output red "${VM}"
+	done
+	echo
+
+	read -r -p "Are you sure? [Y/n] " SHUTDOWN_YN
+	echo
+	[[ "${SHUTDOWN_YN}" == [Nn] ]] && output purple "No VMs shutdown" && return 1
+
+	for VM in "${ARRAY_SHUTDOWN[@]}"; do
+		output yellow "Shutting down VM '${VM}'"
+		virsh shutdown "${VM}"
+	done
+	echo
+}
+
+# Start all VMs
+_kvm_start_all() {
+	local ARRAY_START=($(virsh list --all | awk '/shut off/ {print $2}' | sed -e '/Name/d' -e '/^$/d'))
+	[[ -z "${ARRAY_START[0]}" ]] && output purple "No shut off VMs" && return 0
+
+	output purple "These VMs will be started:"; echo
+	for VM in "${ARRAY_START[@]}"; do
+		output green "${VM}"
+	done
+	echo
+
+	read -r -p "Are you sure? [Y/n] " START_YN
+	echo
+	[[ "${START_YN}" == [Nn] ]] && output purple "No VMs started" && return 1
+
+	for VM in "${ARRAY_START[@]}"; do
+		output green "Starting VM '${VM}'"
+		virsh start "${VM}"
+	done
+	echo
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

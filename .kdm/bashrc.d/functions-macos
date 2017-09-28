@@ -1,0 +1,224 @@
+# Functions: macOS-only (regardless of GNU conversion)
+
+# Bounce if we're not on Darwin
+[[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
+
+# Function aliases
+alias macos-hostname='     _macos_hostname'
+alias macos-itunes='       _macos_itunes'
+alias macos-notify='       _macos_notify'
+alias macos-repair-office='_macos_repair_office'
+alias macos-volume='       _macos_volume'
+
+# shellcheck disable=SC2033
+_do_scutil() {
+	sudo scutil --set "${1}" "${2}"
+}
+
+# Hostname change function
+_macos_hostname() {
+	local USAGE_STRING="macos-hostname <new hostname>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	_do_scutil "ComputerName"  "${1}"
+	_do_scutil "HostName"      "${1}"
+	_do_scutil "LocalHostName" "${1%%.*}"
+
+	output green "Hostname set to '${1}' / '${1%%.*}'"
+}
+
+# iTunes control
+_macos_itunes() {
+	# Declare vars as local
+	local ARRAY_USAGE_OPTIONS ITUNES_ALBUM ITUNES_ARTIST ITUNES_NAME USAGE_OPTIONS_STRING USAGE_STRING
+
+	# Array of options
+	ARRAY_USAGE_OPTIONS=(
+	pause
+	next
+	prev
+	)
+
+	# Create variable of pipe-separated options from array
+	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
+
+	USAGE_STRING="macos-itunes <${USAGE_OPTIONS_STRING}>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	case "${1}" in
+		pause)
+			osascript -e 'tell application "iTunes"' -e 'playpause' -e 'end tell'
+			output green "Playback toggled"
+			;;
+		play)
+			osascript -e 'tell application "iTunes"' -e 'playpause' -e 'end tell'
+			output green "Playback toggled"
+			;;
+		next)
+			osascript -e 'tell application "iTunes"' -e 'next track' -e 'end tell'
+			output green "Skipped to next track"
+			;;
+		prev)
+			osascript -e 'tell application "iTunes"' -e 'previous track' -e 'end tell'
+			output green "Skipped to previous track"
+			;;
+	esac
+
+	ITUNES_NAME="$(  osascript -e 'tell application "iTunes"' -e 'get name of current track'   -e 'end tell')"
+	ITUNES_ARTIST="$(osascript -e 'tell application "iTunes"' -e 'get artist of current track' -e 'end tell')"
+	ITUNES_ALBUM="$( osascript -e 'tell application "iTunes"' -e 'get album of current track'  -e 'end tell')"
+	echo
+
+	output orange "--= Currently playing =--"
+	echo
+
+	output purple "  Name : '${ITUNES_NAME}'"
+	output purple "Artist : '${ITUNES_ARTIST}'"
+	output purple " Album : '${ITUNES_ALBUM}'"
+}
+
+# Volume config function
+_macos_volume() {
+	# Declare vars as local
+	local ARRAY_USAGE_OPTIONS USAGE_OPTIONS_STRING VOLUME_CLEAN VOLUME_CURRENT VOLUME_MUTE VOLUME_SOUND_EFFECT
+
+	# Array of options
+	ARRAY_USAGE_OPTIONS=(
+	mute
+	max
+	up
+	down
+	'[0-100]'
+	)
+
+	# Create variable of pipe-separated options from array
+	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
+
+	VOLUME_CURRENT="$(osascript -e 'output volume of (get volume settings)')"
+	VOLUME_MUTE="$(   osascript -e 'get output muted of (get volume settings)')"
+
+	VOLUME_SOUND_EFFECT="/System/Library/LoginPlugins/BezelServices.loginPlugin/Contents/Resources/volume.aiff"
+
+	# Make sure it's doesn't have any missing values
+	if [[ "${VOLUME_CURRENT}" == *"missing"* || "${VOLUME_MUTE}" == *"missing"* ]]; then
+		output error "Unable to detect current volume"
+		return
+	fi
+
+	if [[ -z "${1}" ]]; then
+		output usage "macos-volume <${USAGE_OPTIONS_STRING}>"
+		echo
+		output green "Current volume : ${VOLUME_CURRENT}%"
+		output green "Mute status    : ${VOLUME_MUTE}"
+		return
+	fi
+
+	case "${1}" in
+		mute)
+			if [[ "${VOLUME_MUTE}" == "false" ]]; then
+				osascript -e 'set volume with output muted'
+				output red "Volume muted"
+			else
+				osascript -e 'set volume without output muted'
+				output green "Volume unmuted"
+			fi
+			;;
+
+		max)
+			osascript -e 'set volume output volume 100'
+			output green "Volume set to 100%"
+			;;
+
+		up)
+			if [[ "${VOLUME_CURRENT}" -lt "95" ]]; then
+				osascript -e "set volume output volume $((VOLUME_CURRENT+5))"
+				output green "Volume set to $((VOLUME_CURRENT+5))%"
+			elif [[ "${VOLUME_CURRENT}" -ge "95" && "${VOLUME_CURRENT}" -lt "100" ]]; then
+				osascript -e 'set volume output volume 100'
+				output green "Volume set to 100%"
+			else
+				output red "Volume is already set to ${VOLUME_CURRENT}%"
+			fi
+			;;
+
+		down)
+			if [[ "${VOLUME_CURRENT}" -gt "5" ]]; then
+				osascript -e "set volume output volume $((VOLUME_CURRENT-5))"
+				output green "Volume set to $((VOLUME_CURRENT-5))%"
+			elif [[ "${VOLUME_CURRENT}" -le "5" && "${VOLUME_CURRENT}" -gt "0" ]]; then
+				osascript -e 'set volume output volume 0'
+				output green "Volume set to 0%"
+			else
+				output red "Volume is already set to ${VOLUME_CURRENT}%"
+			fi
+			;;
+
+		*)
+			VOLUME_CLEAN="${1//[^0-9]}"
+			if [[ "${#VOLUME_CLEAN}" == "0" || "${#VOLUME_CLEAN}" -gt "100" ]]; then
+				output red "Invalid volume entered"
+			else
+				osascript -e "set volume output volume ${VOLUME_CLEAN}"
+				output green "Volume set to ${VOLUME_CLEAN}%"
+			fi
+			;;
+	esac
+
+	# Play volume change sound effect
+	{
+		afplay "${VOLUME_SOUND_EFFECT}" & disown
+	} &> /dev/null
+}
+
+# Reset all Office Mac 2011 files
+_macos_repair_office() {
+	# Declare vars as local
+	local ARRAY_RESET_FILES PTH_AS PTH_CHE PTH_LIB PTH_PRF RESET_YN
+
+	# Check if they're sure
+	read -r -p "Are you sure? [Y/n] " RESET_YN
+	echo
+	[[ "${RESET_YN}" == [Nn] ]] && output purple "No changes" && return
+
+	PTH_LIB="${HOME}/Library"
+	PTH_AS="${PTH_LIB}/Application Support"
+	PTH_CHE="${PTH_LIB}/Caches"
+	PTH_PRF="${PTH_LIB}/Preferences"
+
+	ARRAY_RESET_FILES=(
+	${HOME}/Documents/Microsoft\ User\ Data
+	${PTH_AS}/CrashReporter/Microsoft*
+	${PTH_AS}/Microsoft
+	${PTH_AS}/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.microsoft.*
+	${PTH_CHE}/Microsoft
+	${PTH_CHE}/com.apple.helpd/Generated/com.microsoft.*
+	${PTH_CHE}/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/com.microsoft.*
+	${PTH_CHE}/com.microsoft.*
+	${PTH_PRF}/Microsoft
+	${PTH_PRF}/com.microsoft.*
+	)
+
+	output red "Resetting all Microsoft Office data"
+	rm -rf "${ARRAY_RESET_FILES[@]}"
+
+	defaults delete com.microsoft.Outlook &> /dev/null
+	killall cfprefsd                      &> /dev/null
+
+	output green "Complete; you should reboot, preferably"
+}
+
+_macos_notify() {
+	local NOTIFY_TITLE="${1}"
+	local NOTIFY_MESSAGE="${2}"
+	local NOTIFY_SUBTITLE="${3}"
+
+	local USAGE_STRING="macos-notify <title> <message> [<subtitle>]"
+	[[ -z "${NOTIFY_TITLE}" || -z "${NOTIFY_MESSAGE}" ]] && output usage "${USAGE_STRING}" && return
+
+	# Add subtitle to osascript string if present
+	[[ "${NOTIFY_SUBTITLE}" ]] && local NOTIFY_SUBTITLE="subtitle \"${NOTIFY_SUBTITLE}\""
+
+	osascript -e "display notification \"${NOTIFY_MESSAGE}\" with title \"${NOTIFY_TITLE}\" ${NOTIFY_SUBTITLE}"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

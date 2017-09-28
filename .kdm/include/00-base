@@ -1,4 +1,5 @@
 # bash-env variable set
+export BASH_ENV_DIR_BASHRC="${BASH_ENV_DIR_KDM}/bashrc.d"
 export BASH_ENV_DIR_CODE="${HOME}/code"
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_NMAP="${HOME}/.nmap"

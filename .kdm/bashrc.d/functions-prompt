@@ -1,0 +1,193 @@
+# Functions: PS1 prompt
+
+# Generate / export PS1 prompt with color specfied by C_ENV
+_prompt_generate() {
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
+
+	# If COLOR_16M is set to 0 in bash-env.conf, render PS1 without multicolor
+	if grep -q 'COLOR_16M=0' "${BASH_ENV_FILE_CONFIG}"; then
+		PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+		export PS1
+		return
+	fi
+
+	# If NOT connected via SSH and PROMPT_NO_HOSTNAME is set to 1 (true) in bash-env.conf,
+	# render PS1 without hostname
+	if [[ -z "${SSH_CONNECTION}" ]]; then
+		if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}"; then
+			PS1="\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
+			export PS1
+			return
+		fi
+	fi
+
+	# Normal PS1 prompt (with hostname)
+	PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
+	export PS1
+
+	# Kick _prompt_pwd again with no output to export environment variables
+	_prompt_pwd > /dev/null 2>&1
+
+	# It would be neat to do a color-responsive system load monitor... but not today
+}
+
+# Print colorized exit code information
+_prompt_exitcode() {
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
+
+	# Bounce if no arguments passed
+	[[ -z "${1}" || -z "${2}" ]] && return
+
+	# Bounce if exit code 0 or 127 (BASH command not found)
+	case "${2}" in
+		0)   return ;;
+		127) return ;;
+	esac
+
+	local ARRAY_CMD=(${1})
+	case "${ARRAY_CMD[0]}" in
+		_prompt*) return ;;
+		cd)       return ;;
+		grep)     return ;;
+		history)  return ;;
+
+		.)      CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
+		source) CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
+
+		*) CMD="${ARRAY_CMD[0]}" ;;
+	esac
+
+	local STR="%s${C_RST}"
+
+	local ENV="${C_ENV}${STR}"
+	local GRY="${C_GRY}${STR}"
+	local RED="${C_RED_BRT_BLD}${STR}"
+	local WHT="${C_WHT_BRT}${STR}"
+	local YLW="${C_YLW}${STR}"
+
+	local ARRAY_CMD=(${1})
+	printf "${GRY} ${RED} ${WHT} ${GRY}\n" "${CMD}" "failed" ":" "${2}"
+}
+
+# Print exit code right-aligned for the PS1 prompt
+_prompt_right() {
+	# Set color based on exit code
+	local CLR;
+	case "${1}" in
+		0) CLR="${C_GRN}" ;;
+		*) CLR="${C_ALT}" ;;
+	esac
+
+	# Trim off 2+length of 1st argument
+	local TRIM="${#1}"; ((TRIM++))
+	printf "${C_GRY}%*s${CLR}%s${C_RST}${C_GRY}%s${C_RST}\r" "$((COLUMNS-TRIM))" "[" "${1}" "]"
+}
+
+_prompt_pwd() {
+	# Get the current directory, swap out the home directory with a tilde
+	PWD_FMT=${PWD/${HOME}/\~}
+	export PWD_FMT
+
+	# Here we modify the pwd string to shorten the display
+	# Find how many folders deep we are
+	PWD_FMT_DEPTH="$(echo "${PWD_FMT}" | awk -F '/' '{print NF-1}')"
+	export PWD_FMT_DEPTH
+
+	# If we're LESS than 3 folders deep, pwd for titlebar and prompt is normal
+	# If we're MORE than 3 folders deep, show ../previous_dir/current_dir
+	PWD_CUSTOM=$(printf "${PWD_FMT}" | rev | awk -F '/' '{printf $1"/"$2"/.."}' | rev)
+	export PWD_CUSTOM
+
+	[[ "${PWD_FMT_DEPTH}" -lt "3" ]] && PWD_FINAL="${PWD_FMT}" || PWD_FINAL="${PWD_CUSTOM}"
+	export PWD_FINAL
+
+	echo "${PWD_FINAL}"
+}
+
+# Function to fire the below function due to wonky arg parsing
+_prompt_pwd_color() {
+	_prompt_pwd_color_render "$(_prompt_pwd)"
+}
+
+# Render color-separated formatted pwd
+_prompt_pwd_color_render() {
+	local OLDIFS IFS INPUT DIRS SEPARATORS DEPTH COUNT STR
+	local RST CYN BLU YLW GRY PRP
+
+	# Escape color sequences for PS1 compatiblity
+	RST="\[${C_RST}\]"
+	CYN="\[${C_CYN}\]"
+	BLU="\[${C_BLU_BRT_BLD}\]"
+	YLW="\[${C_YLW}\]"
+	GRY="\[${C_GRY}\]"
+	PRP="\[${C_PRP}\]"
+
+	# Color configuration
+	DIRS[0]="${CYN}"
+	DIRS[1]="${BLU}"
+
+	SEPARATORS[0]="${YLW}.."
+	SEPARATORS[1]="${GRY}/"
+	SEPARATORS[2]="${PRP}~"
+
+	# Set separator to forward slash
+	OLDIFS="${IFS}"
+	IFS='/'
+
+	# Render input PATH into array by temporarily disabling glob expansion
+	# ($@) is deliberately unquoted
+	set -f; INPUT=($@); set +f
+
+	# Reset separator
+	IFS="${OLDIFS}"
+
+	# Init loop cariables
+	DEPTH="${#INPUT[@]}"
+	COUNT="0"
+	STR=""
+
+	# Special color coding for certain leading characters
+	case "${INPUT[0]}" in
+		'..') STR+="${SEPARATORS[0]}" ;;
+		'~')  STR+="${SEPARATORS[2]}" ;;
+	esac
+
+	# Add a slash if we're in / directory
+	[[ "${*}"      == "/" ]] && STR+="${SEPARATORS[1]}"
+	# Add a slash if we're somewhere more than 1 dir deep
+	[[ "${DEPTH}" -gt "1" ]] && STR+="${SEPARATORS[1]}"
+	((COUNT++))
+
+	# Add color to path elements
+	INPUT[1]="${DIRS[0]}${INPUT[1]}"
+	INPUT[2]="${DIRS[1]}${INPUT[2]}"
+
+	# Concatenate color-formatted string
+	while [[ "${COUNT}" != "${DEPTH}" ]]; do
+		STR+="${INPUT[$COUNT]}"
+		((COUNT++))
+
+		# Append a trailing slash if proper to do so
+		[[ "${COUNT}" != "${DEPTH}" ]] && STR+="${SEPARATORS[1]}"
+	done
+
+	STR+="${RST}"
+
+	# Print the color-formatted string
+	printf "%s" "${STR}"
+}
+
+_prompt_titlebar() {
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
+
+	# Add '[SSH]' to titlebar if in SSH session
+	[[ "${SSH_CONNECTION}" ]] && local TITLEBAR_SSH="[SSH] "
+
+	# Only apply custom titlebar if we're in xterm and on Bash 3+
+	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\033]0;%s%s\007" "${TITLEBAR_SSH}" "${HOST_SUB}:$(_prompt_pwd)"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
