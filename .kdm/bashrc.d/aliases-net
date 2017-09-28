@@ -1,5 +1,7 @@
 # Aliases: Net
 
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
 alias net-curl='            _net_curl'
 alias net-dns-lookup='      _net_dns_lookup'
 alias net-info='            _net_info'

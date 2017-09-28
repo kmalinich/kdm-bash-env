@@ -1,5 +1,7 @@
 # Aliases: Git
 
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
 alias g-gca='_g_gca'
 alias g-gi=' _g_gi'
 alias g-gpo='_g_gpo'

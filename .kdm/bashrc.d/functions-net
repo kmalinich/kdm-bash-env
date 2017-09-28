@@ -1,5 +1,7 @@
 # Functions: Net
 
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
 # Usage function for _net_curl
 _net_curl_usage() {
 	output usage "net-curl -u <URL> [-x <proxy>]"

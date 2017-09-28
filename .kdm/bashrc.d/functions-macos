@@ -3,6 +3,8 @@
 # Bounce if we're not on Darwin
 [[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
 
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
 # shellcheck disable=SC2033
 _do_scutil() {
 	sudo scutil --set "${1}" "${2}"
@@ -20,15 +22,20 @@ _macos_hostname() {
 	output green "Hostname set to '${1}' / '${1%%.*}'"
 }
 
+_macos_itunes_osascript() {
+	osascript -e 'tell application "iTunes"' -e "${1}" -e 'end tell' 2> /dev/null
+}
+
 # iTunes control
-_macos_itunes() {
+_macos_itunes_control() {
 	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS ITUNES_ALBUM ITUNES_ARTIST ITUNES_NAME USAGE_OPTIONS_STRING USAGE_STRING
+	local ARRAY_USAGE_OPTIONS USAGE_OPTIONS_STRING USAGE_STRING
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
-	pause
 	next
+	pause
+	play
 	prev
 	)
 
@@ -39,37 +46,39 @@ _macos_itunes() {
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	case "${1}" in
-		pause)
-			osascript -e 'tell application "iTunes"' -e 'playpause' -e 'end tell'
-			output green "Playback toggled"
-			;;
-		play)
-			osascript -e 'tell application "iTunes"' -e 'playpause' -e 'end tell'
-			output green "Playback toggled"
-			;;
-		next)
-			osascript -e 'tell application "iTunes"' -e 'next track' -e 'end tell'
-			output green "Skipped to next track"
-			;;
-		prev)
-			osascript -e 'tell application "iTunes"' -e 'previous track' -e 'end tell'
-			output green "Skipped to previous track"
-			;;
-		*)
-			output usage "${USAGE_STRING}" && return
+		pause|play) _macos_itunes_osascript "playpause"  && output green "Playback toggled" ;;
+		next)       _macos_itunes_osascript "next track" && output green "Skipped next"     ;;
+		prev)       _macos_itunes_osascript "back track" && output green "Skipped previous" ;;
+		*) output usage "${USAGE_STRING}" && return
 	esac
 
-	ITUNES_NAME="$(  osascript -e 'tell application "iTunes"' -e 'get name of current track'   -e 'end tell')"
-	ITUNES_ARTIST="$(osascript -e 'tell application "iTunes"' -e 'get artist of current track' -e 'end tell')"
-	ITUNES_ALBUM="$( osascript -e 'tell application "iTunes"' -e 'get album of current track'  -e 'end tell')"
+	_macos_itunes
+}
+
+# iTunes information
+_macos_itunes() {
+	# Declare vars as local
+	local ITUNES_ALBUM ITUNES_ARTIST ITUNES_KIND ITUNES_NAME ITUNES_STATE
+
+	ITUNES_ALBUM="$( _macos_itunes_osascript 'get album of current track' )"
+	ITUNES_ARTIST="$(_macos_itunes_osascript 'get artist of current track')"
+	ITUNES_KIND="$(  _macos_itunes_osascript 'get kind of current track'  )"
+	ITUNES_NAME="$(  _macos_itunes_osascript 'get name of current track'  )"
+	ITUNES_STATE="$( _macos_itunes_osascript 'get album of current track' )"
+
+	[[ -z "${ITUNES_ALBUM}"  ]] && ITUNES_ALBUM="Not available"
+	[[ -z "${ITUNES_ARTIST}" ]] && ITUNES_ARTIST="Not available"
+	[[ -z "${ITUNES_KIND}"   ]] && ITUNES_KIND="Not available"
+	[[ -z "${ITUNES_NAME}"   ]] && ITUNES_NAME="Not available"
+	[[ -z "${ITUNES_STATE}"  ]] && ITUNES_STATE="Not available"
+
+	output purple "--------= Currently ${ITUNES_STATE} =--------"
 	echo
 
-	output orange "--= Currently playing =--"
-	echo
-
-	output purple "  Name : '${ITUNES_NAME}'"
-	output purple "Artist : '${ITUNES_ARTIST}'"
-	output purple " Album : '${ITUNES_ALBUM}'"
+	output keyval "  Name" "${ITUNES_NAME-Nothing}"
+	output keyval "Artist" "${ITUNES_ARTIST-Nothing}"
+	output keyval " Album" "${ITUNES_ALBUM-Nothing}"
+	output keyval "  Kind" "${ITUNES_KIND-Nothing}"
 }
 
 # Volume config function
@@ -101,8 +110,8 @@ _macos_volume() {
 	if [[ -z "${1}" ]]; then
 		output usage "macos-volume <${USAGE_OPTIONS_STRING}>"
 		echo
-		output green "Current volume : ${VOLUME_CURRENT}%"
-		output green "Mute status    : ${VOLUME_MUTE}"
+		output keyval "Current volume" "${VOLUME_CURRENT}%"
+		output keyval "   Mute status" "${VOLUME_MUTE}"
 		return
 	fi
 

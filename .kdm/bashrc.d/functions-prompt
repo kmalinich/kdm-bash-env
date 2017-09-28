@@ -1,5 +1,7 @@
 # Functions: PS1 prompt
 
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
 # Generate / export PS1 prompt with color specfied by C_ENV
 _prompt_generate() {
 	# Return if we're not in a terminal

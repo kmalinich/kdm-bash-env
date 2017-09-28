@@ -1,5 +1,7 @@
 # Functions: Git
 
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
 # Show Git-related info
 _g_gi() {
 	# Declare vars as local
