@@ -3,6 +3,13 @@
 # Bounce if we're not on Darwin
 [[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
 
+# Function aliases
+alias macos-hostname='     _macos_hostname'
+alias macos-itunes='       _macos_itunes'
+alias macos-notify='       _macos_notify'
+alias macos-repair-office='_macos_repair_office'
+alias macos-volume='       _macos_volume'
+
 # PING_WAIT for use in ping functions
 export PING_WAIT="-t 1"
 

@@ -3,13 +3,6 @@
 # Bounce if we're not on Darwin
 [[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
 
-# Function aliases
-alias macos-hostname='     _macos_hostname'
-alias macos-itunes='       _macos_itunes'
-alias macos-notify='       _macos_notify'
-alias macos-repair-office='_macos_repair_office'
-alias macos-volume='       _macos_volume'
-
 # shellcheck disable=SC2033
 _do_scutil() {
 	sudo scutil --set "${1}" "${2}"
@@ -62,6 +55,8 @@ _macos_itunes() {
 			osascript -e 'tell application "iTunes"' -e 'previous track' -e 'end tell'
 			output green "Skipped to previous track"
 			;;
+		*)
+			output usage "${USAGE_STRING}" && return
 	esac
 
 	ITUNES_NAME="$(  osascript -e 'tell application "iTunes"' -e 'get name of current track'   -e 'end tell')"
@@ -80,7 +75,7 @@ _macos_itunes() {
 # Volume config function
 _macos_volume() {
 	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS USAGE_OPTIONS_STRING VOLUME_CLEAN VOLUME_CURRENT VOLUME_MUTE VOLUME_SOUND_EFFECT
+	local ARRAY_USAGE_OPTIONS USAGE_OPTIONS_STRING VOLUME_CLEAN VOLUME_CURRENT VOLUME_MUTE
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
@@ -96,8 +91,6 @@ _macos_volume() {
 
 	VOLUME_CURRENT="$(osascript -e 'output volume of (get volume settings)')"
 	VOLUME_MUTE="$(   osascript -e 'get output muted of (get volume settings)')"
-
-	VOLUME_SOUND_EFFECT="/System/Library/LoginPlugins/BezelServices.loginPlugin/Contents/Resources/volume.aiff"
 
 	# Make sure it's doesn't have any missing values
 	if [[ "${VOLUME_CURRENT}" == *"missing"* || "${VOLUME_MUTE}" == *"missing"* ]]; then
@@ -118,10 +111,11 @@ _macos_volume() {
 			if [[ "${VOLUME_MUTE}" == "false" ]]; then
 				osascript -e 'set volume with output muted'
 				output red "Volume muted"
-			else
-				osascript -e 'set volume without output muted'
-				output green "Volume unmuted"
+				return
 			fi
+
+			osascript -e 'set volume without output muted'
+			output green "Volume unmuted"
 			;;
 
 		max)
@@ -133,41 +127,51 @@ _macos_volume() {
 			if [[ "${VOLUME_CURRENT}" -lt "95" ]]; then
 				osascript -e "set volume output volume $((VOLUME_CURRENT+5))"
 				output green "Volume set to $((VOLUME_CURRENT+5))%"
-			elif [[ "${VOLUME_CURRENT}" -ge "95" && "${VOLUME_CURRENT}" -lt "100" ]]; then
+				return
+			fi
+
+			if [[ "${VOLUME_CURRENT}" -ge "95" && "${VOLUME_CURRENT}" -lt "100" ]]; then
 				osascript -e 'set volume output volume 100'
 				output green "Volume set to 100%"
-			else
-				output red "Volume is already set to ${VOLUME_CURRENT}%"
+				return
 			fi
+
+			output red "Volume is already set to ${VOLUME_CURRENT}%"
 			;;
 
 		down)
 			if [[ "${VOLUME_CURRENT}" -gt "5" ]]; then
 				osascript -e "set volume output volume $((VOLUME_CURRENT-5))"
 				output green "Volume set to $((VOLUME_CURRENT-5))%"
-			elif [[ "${VOLUME_CURRENT}" -le "5" && "${VOLUME_CURRENT}" -gt "0" ]]; then
+				return
+			fi
+
+			if [[ "${VOLUME_CURRENT}" -le "5" && "${VOLUME_CURRENT}" -gt "0" ]]; then
 				osascript -e 'set volume output volume 0'
 				output green "Volume set to 0%"
-			else
-				output red "Volume is already set to ${VOLUME_CURRENT}%"
+				return
 			fi
+
+			output red "Volume is already set to ${VOLUME_CURRENT}%"
 			;;
 
 		*)
 			VOLUME_CLEAN="${1//[^0-9]}"
 			if [[ "${#VOLUME_CLEAN}" == "0" || "${#VOLUME_CLEAN}" -gt "100" ]]; then
 				output red "Invalid volume entered"
-			else
-				osascript -e "set volume output volume ${VOLUME_CLEAN}"
-				output green "Volume set to ${VOLUME_CLEAN}%"
+				return
 			fi
+
+			osascript -e "set volume output volume ${VOLUME_CLEAN}"
+			output green "Volume set to ${VOLUME_CLEAN}%"
 			;;
 	esac
 
 	# Play volume change sound effect
-	{
-		afplay "${VOLUME_SOUND_EFFECT}" & disown
-	} &> /dev/null
+	# VOLUME_SOUND_EFFECT="/System/Library/LoginPlugins/BezelServices.loginPlugin/Contents/Resources/volume.aiff"
+	# {
+	# 	afplay "${VOLUME_SOUND_EFFECT}" & disown
+	# } &> /dev/null
 }
 
 # Reset all Office Mac 2011 files
