@@ -1760,9 +1760,9 @@ DIR_HOME_DL="${HOME}/Downloads"
 DIR_HOME_DT="${HOME}/Desktop"
 
 # Downloads and Desktop folder aliases
-[[ -d "${DIR_HOME_DC}" ]] && export DIR_HOME_DC && alias dt='cd ${DIR_HOME_DC}; ll'
-[[ -d "${DIR_HOME_DL}" ]] && export DIR_HOME_DL && alias dc='cd ${DIR_HOME_DL}; ll'
-[[ -d "${DIR_HOME_DT}" ]] && export DIR_HOME_DT && alias dl='cd ${DIR_HOME_DT}; ll'
+[[ -d "${DIR_HOME_DC}" ]] && export DIR_HOME_DC && alias dc='cd ${DIR_HOME_DC}; ll'
+[[ -d "${DIR_HOME_DL}" ]] && export DIR_HOME_DL && alias dl='cd ${DIR_HOME_DL}; ll'
+[[ -d "${DIR_HOME_DT}" ]] && export DIR_HOME_DT && alias dt='cd ${DIR_HOME_DT}; ll'
 
 # Typo aliases
 alias bim='vim'
