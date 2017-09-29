@@ -4,7 +4,17 @@ set history=1000
 " Keep 1000 lines of undo history
 set undolevels=1000
 
-" Tell vim to remember certain things when we exit (like cursor position)
-if !has('nvim')
-	set viminfo='10,\"100,:20,%,n~/.viminfo
+" If neovim, read/write shada on CursorHold
+if has('nvim')
+	function! SyncShaDA()
+		rshada|wshada
+	endfunction
+
+	augroup cursor_shada
+		autocmd!
+		autocmd CursorHold * :call SyncShaDA()
+	augroup END
+else
+	" Remember certain things when we exit (like cursor position)
+	set viminfo='10,\"100,:20,%,n~/.vim/viminfo
 endif

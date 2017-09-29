@@ -33,6 +33,9 @@ au Filetype sh let b:comment_leader = '# '
 " systemd
 au Filetype systemd let b:comment_leader = '# '
 
+" ViM
+au Filetype vim let b:comment_leader = '" '
+
 
 " Fix for editing crontabs with 'crontab -e' on macOS
 augroup ft_crontab_macos

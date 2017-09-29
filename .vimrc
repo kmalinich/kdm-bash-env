@@ -34,5 +34,7 @@ call LoadFile('python')
 call LoadFile('ruby')
 call LoadFile('javascript')
 call LoadFile('ale')
+call LoadFile('airline')
+call LoadFile('autosave')
 
 " vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :

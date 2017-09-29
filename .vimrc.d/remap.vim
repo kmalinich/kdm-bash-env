@@ -1,13 +1,13 @@
 " Shortcut key maps
 
 " pbcopy for macOS copy/paste
-if has('macunix')
-	vmap <C-x> :!pbcopy<CR>
-	vmap <C-c> :w !pbcopy<CR><CR>
-
-	" Make it so copy/paste to system works from vim
-	set clipboard=unnamed
-endif
+" if has('macunix')
+" 	vmap <C-x> :!pbcopy<CR>
+" 	vmap <C-c> :w !pbcopy<CR><CR>
+"
+" 	" Make it so copy/paste to system works from vim
+" 	set clipboard=unnamed
+" endif
 
 " Oops-Caps-Lock abbreviations
 cnoreabbrev Q q
@@ -21,7 +21,7 @@ cnoreabbrev Wa wa
 cnoreabbrev Wq wq
 cnoreabbrev wQ wq
 
-" jj to escape in insert mode
+" jj : escape in insert mode
 inoremap jj <Esc>
 
 " Create blank newlines and stay in normal mode
@@ -29,36 +29,29 @@ nnoremap <silent> zj o<Esc>
 nnoremap <silent> zk O<Esc>
 
 " Remap semicolon to colon in normal mode (pinky thanks you)
-nore ; :
+nnoremap ; :
 " nore , ;
 
-" Ctrl-B to delete to the end of line in insert mode
-inoremap <C-b> <Esc>lDa
-" Ctrl-E to reindent files
-map <C-e> :call TrimReindent()<CR>
-" Ctrl-H Enable/disable code concealing
-map <C-h> :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
-" Ctrl-J and Ctrl-K to navigate ale errors
-nmap <silent> <C-j> <Plug>(ale_previous_wrap)
-nmap <silent> <C-k> <Plug>(ale_next_wrap)
-" Ctrl-T to toggle NERDTree
-map <C-t> :NERDTreeToggle<CR>
-" Ctrl-W to strip trailing whitespace
-map <C-w> :call RemoveTrailingChars()<CR>
+" Make j go backwards and k go forwards
+nnoremap j k
+nnoremap k j
 
-" Bind F8 to fixing problems with ale
-nmap <F8> <Plug>(ale_fix)
+" Ctrl-d : delete to the end of line
+inoremap <C-d> <Esc>ddi
+nnoremap <C-d> <Esc>dd
+
+" Ctrl-h : Enable/disable code concealing
+map <C-h> :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
+
+" Ctrl-t to toggle NERDTree
+map <C-t> :NERDTreeToggle<CR>
 
 " Map \ml to append modeline
 nnoremap ml :call ModelineAppend()<CR>
 
-" Map \as to increase linting delay
-nnoremap as :call ALELintSlow()<CR>
-" Map \af to decrease linting delay
-nnoremap af :call ALELintFast()<CR>
-
 " Disable replace mode, which turns on in bad terminals for some reason
 nnoremap R <Nop>
+
 " Disable Ex mode
 noremap Q <Nop>
 

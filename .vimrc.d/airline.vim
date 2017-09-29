@@ -39,9 +39,5 @@ let g:airline#extensions#readonly#symbol   = '⊘'
 
 " ALE section configuration
 let g:airline#extensions#ale#enabled        = 1
-let g:airline#extensions#ale#error_symbol   = '✗'
-let g:airline#extensions#ale#warning_symbol = '⚠'
-
-call airline#parts#define_function('ALE', 'ALEGetStatusLine')
-call airline#parts#define_condition('ALE', 'exists("*ALEGetStatusLine")')
-let g:airline_section_error = airline#section#create_right(['ALE'])
+let g:airline#extensions#ale#error_symbol   = '✗ '
+let g:airline#extensions#ale#warning_symbol = '⚠  '
