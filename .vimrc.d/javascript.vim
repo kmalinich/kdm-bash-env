@@ -16,3 +16,5 @@ let g:javascript_conceal_static    = '•'
 let g:javascript_conceal_super     = 'Ω'
 let g:javascript_conceal_this      = '@'
 let g:javascript_conceal_undefined = '¿'
+
+let g:jsx_ext_required = 1
