@@ -2,7 +2,7 @@
 # .bash_profile
 
 # Disable echo output
-stty -echo
+[[ -t 2 ]] && stty -echo
 
 # kdm bash-env variables
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
@@ -16,9 +16,9 @@ for i in {0..22}; do
 done
 
 # Show MOTD
-_show_motd
+[[ -t 2 ]] && _show_motd
 
 # Re-enable echo output
-stty echo
+[[ -t 2 ]] && stty echo
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
