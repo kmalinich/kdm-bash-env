@@ -1,0 +1,84 @@
+# Functions: kdm-bash-env
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Re-source ${HOME}/.kdm/bashrc, then files in the 'source' dir
+# shellcheck disable=SC1090
+_kdm_source() {
+	# Declare vars as local
+	local OLD_PWD SOURCE_FILE SOURCE_PATH
+
+	OLD_PWD="${PWD}"
+	cd "${BASH_ENV_DIR_KDM}" || return
+
+	export SOURCE_VERBOSE="true"
+
+	for i in {0..22}; do
+		SOURCE_FILE="$(printf '%02d' "${i}")"
+		SOURCE_PATH="$(ls "include/${SOURCE_FILE}"-*)"
+		[[ ! -s "${SOURCE_PATH}" ]] && continue
+		if . "${SOURCE_PATH}"; then output keyval-t "Loaded" "${SOURCE_PATH}"; else output keyval-f "Failed" "${SOURCE_PATH}"; fi
+	done
+
+	unset SOURCE_VERBOSE
+
+	cd "${OLD_PWD}" || return
+	unset OLD_PWD
+}
+
+# Get Git hash of bash-env
+_kdm_hash() {
+	# Declare vars as local
+	local OLD_PWD
+
+	OLD_PWD="${PWD}"
+	cd "${HOME}" || return
+
+	git log --pretty=format:'%h' -n 1
+	cd "${OLD_PWD}" || return
+}
+
+# Help with/list bashrc functions
+_kdm_help() {
+	# Declare vars as local
+	local BASHRC_CMDS
+
+	output purple "kdm bash-env functions:"
+	echo
+
+	BASHRC_CMDS=($(grep -o 'alias\ .*.=' "${BASH_ENV_FILE_BASHRC}" | sort -u | awk -F '[ =]' '{print $2}' | sort -u | sed -r '/^.{,3}$/d' | grep -Ev 'pign|tial|namp|mkdir|grep|grpe|ehco|clean|CMD|^config|^log|^html\-|^xml\-|^json\-|lsusb|md5sum'))
+
+	# macOS commands
+	if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
+		for CMD in "${BASHRC_CMDS[@]}"; do
+			echo "${CMD}"
+		done | grep -Ev '^sys\-restart|^kvm\-'
+	fi
+
+	# Linux commands
+	if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		for CMD in "${BASHRC_CMDS[@]}"; do
+			echo "${CMD}"
+		done | grep -Ev '^osx\-|^net\-listening|efi\-mount'
+	fi
+	echo
+}
+
+# Quick-draw pull bash env
+_kdm_pull() {
+	# Declare vars as local
+	local CMD_EXIT OLD_PWD
+
+	# Save current PWD
+	OLD_PWD="${PWD}"
+	cd "${HOME}" || return
+
+	_g_gu
+	CMD_EXIT="${?}"
+
+	cd "${OLD_PWD}" || return
+	return ${CMD_EXIT}
+}
+
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -1,0 +1,51 @@
+# Functions: Color
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Renders a hex color code in 24bit color output, and generates the corresponding ANSI escape sequence
+hex2color() {
+	# Declare vars as local
+	local ANSI_COLOR COLOR_HEX DEC_VAL_1 DEC_VAL_3 USAGE_STRING
+
+	USAGE_STRING="hex2color '#4e0d92'"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	# Remove leading hash mark if present
+	COLOR_HEX="${1//\#/}"
+
+	# Convert to decimal values
+	DEC_VAL_1="$((0x${COLOR_HEX:0:2}))"
+	DEC_VAL_2="$((0x${COLOR_HEX:2:2}))"
+	DEC_VAL_3="$((0x${COLOR_HEX:4:2}))"
+
+	# Render ANSI string
+	ANSI_COLOR="[38;2;${DEC_VAL_1};${DEC_VAL_2};${DEC_VAL_3}m"
+
+	# Output info and sample
+	echo "#${COLOR_HEX} | ${DEC_VAL_1} ${DEC_VAL_2} ${DEC_VAL_3} | \\\e${ANSI_COLOR} | http://www.color-hex.com/color/${COLOR_HEX,,} | \e${ANSI_COLOR}TESTING color${C_RST}"
+}
+
+# Render RGB values into hex string, then feed to hex2color function
+rgb2hex() {
+	# Declare vars as local
+	local HEX_STRING HEX_VAL_1 HEX_VAL_2 HEX_VAL_3 INPUT_ERRORS USAGE_STRING
+
+	# Validate input
+	INPUT_ERRORS="0"
+	[[ -z "${1}" ]] && output error "Missing 1st argument" && ((INPUT_ERRORS++))
+	[[ -z "${2}" ]] && output error "Missing 2nd argument" && ((INPUT_ERRORS++))
+	[[ -z "${3}" ]] && output error "Missing 3rd argument" && ((INPUT_ERRORS++))
+
+	USAGE_STRING="rgb2hex <R value> <G value> <B value>"
+	[[ "${INPUT_ERRORS}" != "0" ]] && echo && output usage "${USAGE_STRING}" && return
+
+	# Convert to hex values
+	HEX_VAL_1=$(dechex "${1}" -s)
+	HEX_VAL_2=$(dechex "${2}" -s)
+	HEX_VAL_3=$(dechex "${3}" -s)
+	HEX_STRING="${HEX_VAL_1}${HEX_VAL_2}${HEX_VAL_3}"
+
+	hex2color "#${HEX_STRING}"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

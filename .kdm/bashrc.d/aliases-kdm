@@ -1,0 +1,9 @@
+# Aliases: kdm-bash-env
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+alias kdm-help='   _kdm_help'
+alias kdm-pull='   _kdm_pull'
+alias kdm-source=' _kdm_source'
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

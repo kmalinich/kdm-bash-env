@@ -15,9 +15,6 @@ alias android-make-md5='_android_make_md5'
 alias array-dedupe='_array_dedupe'
 alias array-width='_array_width'
 
-alias convert-squid-timestamp='_convert_squid_timestamp'
-alias convert-temperature='_convert_temperature'
-
 alias find-dir='_find_dir'
 alias find-file='_find_file'
 alias find-largest='_find_largest'
@@ -26,448 +23,113 @@ alias fix-bash-pids='_fix_bash_pids'
 alias fix-hung-java='_fix_hung_java'
 alias fix-macos-files='_fix_macos_files'
 
-alias kdm-help='_kdm_help'
-alias kdm-pull='_kdm_pull'
-alias kdm-source='_kdm_source'
-
 alias md5-clean='_md5_clean'
 alias md5-compare='_md5_compare'
 
 alias show-bin='_show_bin'
 alias showbin='_show_bin'
 alias show-clock='_show_clock'
-alias show-motd='_show_motd'
 alias show-scp-path='_show_scp_path'
 alias show-top-cmds='_show_top_cmds'
-
-alias ssh-c='_ssh_c'
-alias ssh-ping='_ssh_ping'
-alias ssh-x='_ssh_x'
-alias ssh-xc='_ssh_xc'
-
-alias time-elapsed-chrono='_time_elapsed_chrono'
-alias time-elapsed-text='_time_elapsed_text'
-
-alias update-all='_update_all'
-alias update-cpan='_update_cpan'
 
 #### Aliases: Function names ==final ####
 
 
-#### Functions: Color ==start ####
-
-# Renders a hex color code in 24bit color output, and generates the corresponding ANSI escape sequence
-hex2color() {
-	local USAGE_STRING="hex2color '#4e0d92'"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	# Remove leading hash mark if present
-	COLOR_HEX="${1//\#/}"
-
-		# Convert to decimal values
-	DEC_VAL_1="$((0x${COLOR_HEX:0:2}))"
-	DEC_VAL_2="$((0x${COLOR_HEX:2:2}))"
-	DEC_VAL_3="$((0x${COLOR_HEX:4:2}))"
-
-	# Render ANSI string
-	ANSI_COLOR="[38;2;${DEC_VAL_1};${DEC_VAL_2};${DEC_VAL_3}m"
-
-	# Output info and sample
-	echo "#${COLOR_HEX} | ${DEC_VAL_1} ${DEC_VAL_2} ${DEC_VAL_3} | \\\e${ANSI_COLOR} | http://www.color-hex.com/color/${COLOR_HEX,,} | \e${ANSI_COLOR}TESTING color${C_RST}"
-}
-
-# Render RGB values into hex string, then feed to hex2color function
-rgb2hex() {
-	# Validate input
-	local INPUT_ERRORS="0"
-	[[ -z "${1}" ]] && output error "Missing 1st argument" && ((INPUT_ERRORS++))
-	[[ -z "${2}" ]] && output error "Missing 2nd argument" && ((INPUT_ERRORS++))
-	[[ -z "${3}" ]] && output error "Missing 3rd argument" && ((INPUT_ERRORS++))
-
-	local USAGE_STRING="rgb2hex <R value> <G value> <B value>"
-	[[ "${INPUT_ERRORS}" != "0" ]] && echo && output usage "${USAGE_STRING}" && return
-
-	# Convert to hex values
-	local HEX_VAL_1 HEX_VAL_2 HEX_VAL_3
-	HEX_VAL_1=$(dechex "${1}" -s)
-	HEX_VAL_2=$(dechex "${2}" -s)
-	HEX_VAL_3=$(dechex "${3}" -s)
-	local HEX_STRING="${HEX_VAL_1}${HEX_VAL_2}${HEX_VAL_3}"
-
-	hex2color "#${HEX_STRING}"
-}
-
-#### Functions: Color ==final ####
-
-
-#### Functions: Misc ==start ####
-
-# Check if a binary is installed/present in ${PATH}, without stdout/stderr
-# This is for bash, not for POSIX
-hash() {
-	builtin hash "${1+"$@"}" &> /dev/null
-	return "${?}"
-}
-
-#### Functions: Misc ==final ####
-
-
-#### Functions: Text ==start ####
-
-# Output formatted text
-# I would have used an associative array (and in one version, I did),
-# but it's only in bash 4+ which is ... more rarely seen than I'd like
-output() {
-	# Array of options
-	local ARRAY_USAGE_OPTIONS=(
-	alert    backtick black  blue          cyan
-	error    failure  gray   green         keyval
-	keyval-f keyval-t leadup leadup-custom orange
-	pink     purple   red    stderr        success
-	usage    white    yellow
-	)
-
-	# Create variable of pipe-separated options from array
-	local USAGE_STRING
-	USAGE_STRING="output <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <string 1> [<string 2, for keyval options>]"
-
-	# Case statement for output color/format
-	case "${1}" in
-		# Basic colors
-		alert)  local COLOR_SELECTED="${C_ALT}";;
-		black)  local COLOR_SELECTED="${C_BLK}";;
-		blue)   local COLOR_SELECTED="${C_BLU}";;
-		cyan)   local COLOR_SELECTED="${C_CYN}";;
-		gray)   local COLOR_SELECTED="${C_GRY}";;
-		green)  local COLOR_SELECTED="${C_GRN}";;
-		orange) local COLOR_SELECTED="${C_ORN}";;
-		pink)   local COLOR_SELECTED="${C_PNK}";;
-		purple) local COLOR_SELECTED="${C_PRP}";;
-		red)    local COLOR_SELECTED="${C_RED}";;
-		white)  local COLOR_SELECTED="${C_WHT}";;
-		yellow) local COLOR_SELECTED="${C_YLW}";;
-
-		backtick)
-			# Output the input string with backticks (for Slack, mainly)
-			local OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
-
-			# Copy string to clipboard if not connected via SSH and binary is present
-			[[ -z "${SSH_CONNECTION}" ]] && hash pbcopy && printf "\`%s\`" "${2}" | pbcopy
-			;;
-
-		error)
-			# Special function to output to stderr
-			local OUTPUT_STDERR="1>&2"
-			local OUTPUT_FORMAT="${C_RED_BRT_BLD}Error ${C_WHT_BRT}: ${C_RST}%s\n"
-			;;
-
-		failure)
-			# Special function for failure message, no string input
-			local COLOR_SELECTED="${C_RED_BRT_BLD}"
-			local OUTPUT_STRING="failure"
-			;;
-
-		keyval)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		keyval-f)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		keyval-t)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			local OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		leadup) # Special function for leadup to status message, no newline
-			# Create dot string and output format
-			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
-			local OUTPUT_FORMAT
-			OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
-			;;
-
-		leadup-custom) # Special function for leadup to status message, no newline, with custom command name
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			# Create dot string and output format
-			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
-			local OUTPUT_FORMAT
-			OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
-
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		stderr)
-			# Special function to output to stderr
-			local COLOR_SELECTED="${C_BLU}"
-			local OUTPUT_STDERR="1>&2"
-			;;
-
-		success)
-			# Special function for success message, no string
-			local COLOR_SELECTED="${C_GRN_BRT_BLD}"
-			local OUTPUT_STRING="success"
-			;;
-
-		usage)
-			# Special function to output formatted usage string, with stderr output
-			local OUTPUT_FORMAT="${C_YLW_BRT_BLD}Usage ${C_WHT_BRT}: ${C_RST}%s\n"
-			local OUTPUT_STDERR="1>&2"
-			;;
-
-		*) local COLOR_SELECTED="${C_RST}";; # If nothing matches, reset color
-	esac
-
-	# Check for variables and throw usage message if issue
-	if [[ -z "${OUTPUT_STRING-${2}}" ]]; then
-		output usage "${USAGE_STRING}"
-		return
-	fi
-
-	# Finalize vars
-	local OUTPUT_FORMAT="${OUTPUT_FORMAT-${COLOR_SELECTED}%s${C_RST}\n}"
-	local OUTPUT_STRING="${OUTPUT_STRING-${2}}"
-
-	# Output to stdout or stderr based on switch
-	[[ "${OUTPUT_STDERR}" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 && return
-	printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
-}
-
-#### Functions: Text ==final ####
-
-
-#### Functions: Ping ==start ####
-
-# Custom fping commands
-kping() {
-	local USAGE_STRING="kping <target IP/host> [<optional interval in milliseconds>]"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	# Default interval is 500ms
-	local PING_INTERVAL="500"
-	# Unless otherwise specified
-	[[ "${2}" ]] && local PING_INTERVAL="${2}"
-
-	fping -AdDelsu -H 254 -p "${PING_INTERVAL}" -t 1000 "${1}"
-}
-
-#### Functions: Ping ==final ####
-
-
-#### Functions: Time ==start ####
-
-# Elapsed time function
-# Outputs in chrono format - '01:23:44'
-# Arg1: start time in seconds
-# Arg1: end time in seconds
-_time_elapsed_chrono() {
-	local CLK CLK_UNIT_COUNT CLK_UNIT_OUT OUTPUT_STRING TIME_END TIME_START TOT USAGE_OPTIONS_STRING
-
-	# Array of options
-	ARRAY_USAGE_OPTIONS=(current end)
-
-	# Create variable of pipe-separated options from array
-	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
-
-	if [[ -z "${1}" || -z "${2}" ]]; then
-		output usage "time-elapsed-chrono <start> <${USAGE_OPTIONS_STRING}>"
-		output usage "If using 'current' as end time, start time must be in sec sinch epoch (date +%s)"
-	else
-		# Case statement to setup current time as end time if specified
-		case "${2}" in
-			current)
-				# Get current time (sec since epoch)
-				TIME_END="$(date +%s)"
-				;;
-			*)
-				TIME_END="${2}"
-				;;
-		esac
-
-		# Variable setup
-		# Get start time from argument, then compare the two variables to get elapsed time
-		# Math commands below are scale=0 because we only want integers
-		TIME_START="${1}"
-
-		# Math for TOTAL timer
-		TOT[0]=$((TIME_END-TIME_START))
-		TOT[1]=$(echo "scale=0; ${TOT[0]}/60"       | bc)
-		TOT[2]=$(echo "scale=0; ${TOT[0]}/3600"     | bc)
-		TOT[3]=$(echo "scale=0; ${TOT[0]}/86400"    | bc)
-		TOT[4]=$(echo "scale=0; ${TOT[0]}/604800"   | bc)
-		TOT[5]=$(echo "scale=0; ${TOT[0]}/2419200"  | bc)
-		TOT[6]=$(echo "scale=0; ${TOT[0]}/29030400" | bc)
-
-		# Math for clock timer
-		# This outputs an actual working counter/clock/stopwatch type display i.e 12:34:33
-		# This works because of PEMDAS (order of operations)
-		CLK[0]=$(echo "scale=0; ${TOT[0]}-${TOT[1]}*60" | bc)
-		CLK[1]=$(echo "scale=0; ${TOT[1]}-${TOT[2]}*60" | bc)
-		CLK[2]=$(echo "scale=0; ${TOT[2]}-${TOT[3]}*24" | bc)
-		CLK[3]=$(echo "scale=0; ${TOT[3]}-${TOT[4]}*7"  | bc)
-		CLK[4]=$(echo "scale=0; ${TOT[4]}-${TOT[5]}*4"  | bc)
-		CLK[5]=$(echo "scale=0; ${TOT[5]}-${TOT[6]}*12" | bc)
-		CLK[6]="${TOT[6]}"
-
-		# Find how many units
-		CLK_UNIT_COUNT="6"
-		CLK_UNIT_OUT="6"
-
-		# This basically finds the first non-zero digit in the array,
-		# Starting from the top and working backwards
-		while [[ "${CLK_UNIT_COUNT}" -gt "0" ]]; do
-			[[ "${CLK[$CLK_UNIT_COUNT]}" != "0" ]] && break
-
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-			CLK_UNIT_COUNT=$((CLK_UNIT_COUNT-1))
-		done
-
-		while [[ "${CLK_UNIT_OUT}" -ge "0" ]]; do
-			if [[ "${OUTPUT_STRING}" ]]; then
-				OUTPUT_STRING="${OUTPUT_STRING}:$(printf %02d "${CLK[$CLK_UNIT_OUT]}")"
-			else
-				OUTPUT_STRING="$(printf %02d "${CLK[$CLK_UNIT_OUT]}")"
-			fi
-
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-		done
-
-		# If the total is less than 60 seconds, Append 00: and just output seconds
-		[[ "${TOT[0]}" -lt "60" ]] && OUTPUT_STRING="00:${OUTPUT_STRING}"
-		echo "${OUTPUT_STRING}"
-	fi
-}
-
-# Elapsed time function
-# Outputs in text format - '01 hours, 23 minutes, 44 seconds'
-# Arg1: start time in seconds
-# Arg1: end time in seconds
-_time_elapsed_text() {
-	# Declare vars as local
-	local ARRAY_UNIT ARRAY_USAGE_OPTIONS CLK CLK_UNIT_COUNT CLK_UNIT_OUT OUTPUT_STRING TIME_END TIME_START TIME_UNIT_CURRENT TOT USAGE_OPTIONS_STRING
-
-	# Array of options
-	ARRAY_USAGE_OPTIONS=(current end)
-
-	# Create variable of pipe-separated options from array
-	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
-
-	if [[ -z "${1}" || -z "${2}" ]]; then
-		output usage "time-elapsed-text <start> <${USAGE_OPTIONS_STRING}>"
-		output usage "If using 'current' as end time, start time must be in 'seconds since epoch' (date +%s)"
-	else
-		# Case statement to setup current time as end time if specified
-		case "${2}" in
-			current)
-				# Get current time (sec since epoch)
-				TIME_END="$(date +%s)"
-				;;
-			*)
-				TIME_END="${2}"
-				;;
-		esac
-
-		# Variable setup
-		# Get start time from argument, then compare the two variables to get elapsed time
-		# Math commands below are scale=0 because we only want integers
-		TIME_START="${1}"
-
-		# Math for TOTAL timer
-		TOT[0]=$((TIME_END-TIME_START))
-		TOT[1]=$(echo "scale=0; ${TOT[0]}/60"       | bc)
-		TOT[2]=$(echo "scale=0; ${TOT[0]}/3600"     | bc)
-		TOT[3]=$(echo "scale=0; ${TOT[0]}/86400"    | bc)
-		TOT[4]=$(echo "scale=0; ${TOT[0]}/604800"   | bc)
-		TOT[5]=$(echo "scale=0; ${TOT[0]}/2419200"  | bc)
-		TOT[6]=$(echo "scale=0; ${TOT[0]}/29030400" | bc)
-
-		# Math for clock timer
-		# This outputs an actual working COUNTER/clock/stopwatch type display i.e 12:34:33
-		# This works because of PEMDAS (order of operations)
-		CLK[0]=$(echo "scale=0; ${TOT[0]}-${TOT[1]}*60" | bc)
-		CLK[1]=$(echo "scale=0; ${TOT[1]}-${TOT[2]}*60" | bc)
-		CLK[2]=$(echo "scale=0; ${TOT[2]}-${TOT[3]}*24" | bc)
-		CLK[3]=$(echo "scale=0; ${TOT[3]}-${TOT[4]}*7"  | bc)
-		CLK[4]=$(echo "scale=0; ${TOT[4]}-${TOT[5]}*4"  | bc)
-		CLK[5]=$(echo "scale=0; ${TOT[5]}-${TOT[6]}*12" | bc)
-		CLK[6]="${TOT[6]}"
-
-		# Find how many units
-		CLK_UNIT_COUNT="6"
-		CLK_UNIT_OUT="6"
-		# This basically finds the first non-zero digit in the array,
-
-		# Starting from the top and working backwards
-		while [[ "${CLK_UNIT_COUNT}" -gt "0" ]]; do
-			[[ "${CLK[$CLK_UNIT_COUNT]}" != "0" ]] && break
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-			CLK_UNIT_COUNT=$((CLK_UNIT_COUNT-1))
-		done
-
-		ARRAY_UNIT=(second minute hour day week month year)
-
-		while [[ "${CLK_UNIT_OUT}" -ge "0" ]]; do
-			TIME_UNIT_CURRENT="${ARRAY_UNIT[$CLK_UNIT_OUT]}"
-
-			# Find if unit is plural or singular
-			# i.e. not 1 of whatever time unit
-			# Add the 's' at the end (plural)
-			[[ "${CLK[$CLK_UNIT_OUT]}" != "1" ]] && TIME_UNIT_CURRENT="${TIME_UNIT_CURRENT}s"
-
-			# Append the value and unit to the string
-			if [[ "${OUTPUT_STRING}" ]]; then
-				OUTPUT_STRING="${OUTPUT_STRING}, ${CLK[$CLK_UNIT_OUT]} ${TIME_UNIT_CURRENT}"
-			else
-				OUTPUT_STRING="${CLK[$CLK_UNIT_OUT]} ${TIME_UNIT_CURRENT}"
-			fi
-
-			# Find out if it's the last one in the array
-			# If not, add a comma to the end
-			[[ "${CLK_UNIT_OUT}" != "0" ]] && TIME_UNIT_CURRENT="${TIME_UNIT_CURRENT}, "
-
-			# Decrement counter
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-		done
-		echo "${OUTPUT_STRING}"
-	fi
-}
-
-#### Functions: Time ==final ####
+# Functions: Color
+# shellcheck source=.kdm/bashrc.d/functions-color
+. "${BASH_ENV_DIR_BASHRC}/functions-color"
+
+# Functions: Misc
+# shellcheck source=.kdm/bashrc.d/functions-misc
+. "${BASH_ENV_DIR_BASHRC}/functions-misc"
+
+# Functions: Text
+# shellcheck source=.kdm/bashrc.d/functions-text
+. "${BASH_ENV_DIR_BASHRC}/functions-text"
+
+# Functions: Ping
+# shellcheck source=.kdm/bashrc.d/functions-ping
+. "${BASH_ENV_DIR_BASHRC}/functions-ping"
+
+# Functions: Time
+# shellcheck source=.kdm/bashrc.d/aliases-time
+. "${BASH_ENV_DIR_BASHRC}/aliases-time"
+# shellcheck source=.kdm/bashrc.d/functions-time
+. "${BASH_ENV_DIR_BASHRC}/functions-time"
+
+# Functions: Conversion
+# shellcheck source=.kdm/bashrc.d/aliases-conversion
+. "${BASH_ENV_DIR_BASHRC}/aliases-conversion"
+# shellcheck source=.kdm/bashrc.d/functions-conversion
+. "${BASH_ENV_DIR_BASHRC}/functions-conversion"
+
+# Functions: SSH
+# shellcheck source=.kdm/bashrc.d/aliases-ssh
+. "${BASH_ENV_DIR_BASHRC}/aliases-ssh"
+# shellcheck source=.kdm/bashrc.d/functions-ssh
+. "${BASH_ENV_DIR_BASHRC}/functions-ssh"
+
+# Functions: Git
+# shellcheck source=.kdm/bashrc.d/aliases-git
+. "${BASH_ENV_DIR_BASHRC}/aliases-git"
+# shellcheck source=.kdm/bashrc.d/functions-git
+. "${BASH_ENV_DIR_BASHRC}/functions-git"
+
+# Functions: Net
+# shellcheck source=.kdm/bashrc.d/aliases-net
+. "${BASH_ENV_DIR_BASHRC}/aliases-net"
+# shellcheck source=.kdm/bashrc.d/functions-net
+. "${BASH_ENV_DIR_BASHRC}/functions-net"
+
+# Functions: PS1 prompt
+# shellcheck source=.kdm/bashrc.d/functions-prompt
+. "${BASH_ENV_DIR_BASHRC}/functions-prompt"
+
+# Functions: MOTD
+# shellcheck source=.kdm/bashrc.d/aliases-motd
+. "${BASH_ENV_DIR_BASHRC}/aliases-motd"
+# shellcheck source=.kdm/bashrc.d/functions-motd
+. "${BASH_ENV_DIR_BASHRC}/functions-motd"
+
+# Functions: kdm-bash-env
+# shellcheck source=.kdm/bashrc.d/aliases-kdm
+. "${BASH_ENV_DIR_BASHRC}/aliases-kdm"
+# shellcheck source=.kdm/bashrc.d/functions-kdm
+. "${BASH_ENV_DIR_BASHRC}/functions-kdm"
+
+# Functions: Update
+# shellcheck source=.kdm/bashrc.d/aliases-update
+. "${BASH_ENV_DIR_BASHRC}/aliases-update"
+# shellcheck source=.kdm/bashrc.d/functions-update
+. "${BASH_ENV_DIR_BASHRC}/functions-update"
+
+# Functions: macOS-only (regardless of GNU conversion)
+# shellcheck source=.kdm/bashrc.d/functions-macos
+. "${BASH_ENV_DIR_BASHRC}/functions-macos"
+
+# Functions: Linux-only
+# shellcheck source=.kdm/bashrc.d/functions-linux
+. "${BASH_ENV_DIR_BASHRC}/functions-linux"
+
+# Functions: Auto-sudo
+# shellcheck source=.kdm/bashrc.d/functions-auto-sudo
+. "${BASH_ENV_DIR_BASHRC}/functions-auto-sudo"
+
+# Functions: Alias generation
+# shellcheck source=.kdm/bashrc.d/functions-alias-generation
+. "${BASH_ENV_DIR_BASHRC}/functions-alias-generation"
+
+# Aliases: Global
+# shellcheck source=.kdm/bashrc.d/aliases-global
+. "${BASH_ENV_DIR_BASHRC}/aliases-global"
+
+# Aliases: macOS-only (regardless of GNU conversion)
+# shellcheck source=.kdm/bashrc.d/aliases-macos
+. "${BASH_ENV_DIR_BASHRC}/aliases-macos"
+
+# Aliases: Linux-only
+# shellcheck source=.kdm/bashrc.d/aliases-linux
+. "${BASH_ENV_DIR_BASHRC}/aliases-linux"
 
 
 #### Functions: Array ==start ####
@@ -490,6 +152,9 @@ _array_dedupe() {
 
 # Function to get the length of the longest string in an array
 _array_width() {
+	# Declare vars as local
+	local WIDTH_MAX
+
 	if [[ -z "${1}" ]]; then
 		output usage "array-width array[@]"
 		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
@@ -501,12 +166,12 @@ _array_width() {
 	declare -a ARRAY=("${!1}")
 
 	# Init counter
-	local WIDTH_MAX="0"
+	WIDTH_MAX="0"
 
 	# Loop through array
 	for VALUE in "${ARRAY[@]}"; do
 		[[ "${#VALUE}" -le "${WIDTH_MAX}" ]] && continue
-		local WIDTH_MAX="${#VALUE}"
+		WIDTH_MAX="${#VALUE}"
 	done
 
 	# Output value plaintext if in subshell
@@ -520,114 +185,6 @@ _array_width() {
 }
 
 #### Functions: Array ==final ####
-
-
-#### Functions: Conversion ==start ####
-
-# Convert squid timestamps to human date and time
-_convert_squid_timestamp() {
-	local USAGE_STRING="convert-squid-timestamp <squid log timestamp>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	echo "${1}" | perl -p -e 's/^([0-9]*)/"[".localtime($1)."]"/e'
-}
-
-# Convert temperatures to other formats
-_convert_temperature() {
-	# Declare vars as local
-	local SCALE TEMP_C TEMP_F TEMP_K TEMP_R PF_FMT USAGE_STRING
-
-	USAGE_STRING="temp-conv <temperature[c|f|k|r]>"
-	[[ "${1}" != *[0-9][CcFfKkRr]* ]] && output usage "${USAGE_STRING}" && return
-
-	# Set calculation scale
-	SCALE="2"
-
-	# Detect input format (the ghetto way) and convert to Kelvin
-	if [[ "${1}" == *[Cc]* ]]; then
-		TEMP_C=${1//[!0-9]/}
-		TEMP_K=$(echo "scale=${SCALE}; ${TEMP_C}+273.15" | bc)
-	elif [[ "${1}" == *[Ff]* ]]; then
-		TEMP_F=${1//[!0-9]/}
-		TEMP_K=$(echo "scale=${SCALE}; ((${TEMP_F}-32)*(5/9))+273.15" | bc)
-	elif [[ "${1}" == *[Kk]* ]]; then
-		TEMP_K=${1//[!0-9]/}
-	elif [[ "${1}" == *[Rr]* ]]; then
-		TEMP_R=${1//[!0-9]/}
-		TEMP_K=$(echo "scale=${SCALE}; ${TEMP_R}*(5/9)" | bc)
-	fi
-
-	# Calculate missing values (yes, I shave off a single CPU cycle not computing, only to spend it evaluating)
-	[[ -z "${TEMP_C}" ]] && TEMP_C=$(echo "scale=${SCALE}; ${TEMP_K}-273.15"           | bc)
-	[[ -z "${TEMP_F}" ]] && TEMP_F=$(echo "scale=${SCALE}; ((${TEMP_K}-273)*(9/5))+32" | bc)
-	[[ -z "${TEMP_R}" ]] && TEMP_R=$(echo "scale=${SCALE}; ${TEMP_K}*(9/5)"            | bc)
-
-	# Set margin for printf commands
-	PF_FMT="%-8s${C_PRP}%s${C_RST}\n"
-
-	# Output temperatures in various formats! yay!
-	printf "${PF_FMT}" "${TEMP_C}" "C"
-	printf "${PF_FMT}" "${TEMP_F}" "F"
-	printf "${PF_FMT}" "${TEMP_K}" "K"
-	printf "${PF_FMT}" "${TEMP_R}" "R"
-}
-
-# Convert hexadecimal<->decimal
-dechex() {
-	# Declare vars as local
-	local DEC HEX INPUT OUTPUT PROCESS USAGE_STRING
-
-	USAGE_STRING="dec2hex <decimal number> [-s, script output]"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	# Strip input of anything other than a-f, A-F, x, X, or numbers
-	INPUT="${1//[^a-fA-FxX0-9]/}"
-	# Uppercase input (except x)
-	INPUT=$(echo "${INPUT}" | tr '[:lower:]' '[:upper:]' | sed 's/^0X/0x/g')
-
-	# Detect input type
-	if [[ "${INPUT}" =~ ^0x[A-F0-9]? ]]; then
-		# Input is hexadecimal
-		PROCESS="hex2dec"
-		[[ "${#INPUT}" == "2" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
-		DEC="$((INPUT))" # Render decimal value
-	else
-		# Input is decimal
-		PROCESS="dec2hex"
-		DEC="${INPUT}"
-	fi
-
-	# Render formatted hex value
-	HEX="$(printf '0x%02X' "${INPUT}")"
-
-	# Format decimal value if value is not "0"
-	if [[ "${DEC}" != "0" ]]; then
-		DEC="${DEC##+(0)}"    # Remove leading zeros
-		DEC="${DEC//[^0-9]/}" # Remove non-numbers
-		[[ "${#DEC}" == "0" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
-	fi
-
-	if [[ "${2}" != "-s" ]]; then
-		output purple "Process : ${PROCESS}"
-		output green  "Values  : ${DEC} | ${HEX}"
-	else
-		case "${PROCESS}" in
-			dec2hex)
-				OUTPUT="${HEX/0x/}"
-				;;
-			hex2dec)
-				OUTPUT="${DEC}"
-				;;
-		esac
-
-		echo "${OUTPUT}"
-	fi
-}
-
-# Command aliases for above function
-alias hexdec='dechex'
-
-#### Functions: Conversion ==final ####
 
 
 #### Functions: Android ==start ####
@@ -651,114 +208,6 @@ _android_make_md5() {
 }
 
 #### Functions: Android ==final ####
-
-
-#### Functions: SSH ==start ####
-
-# Ping it, then ssh to it
-# shellcheck disable=SC2029
-_ssh_ping() {
-	local USAGE_STRING="ssh-ping <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ping "${1}"
-	ssh  "${1}" "${2}"
-}
-
-# Show full path for SCPing
-_show_scp_path() {
-	# Declare vars as local
-	local FILE_NAME FILE_TYPE SCP_CMD SCP_PATH SELECTED
-
-	# If no argument, select current directory
-	SELECTED="${PWD}"
-	[[ "${1}" ]] && SELECTED="${1}"
-
-	# Check if file exists
-	[[ ! -e "${SELECTED}" ]] && output error "'./${1}' is not a valid file" && return
-
-	# Get realpath of argument, and then swap out the home directory with a tilde
-	SELECTED="$(realpath "${SELECTED}")"
-	SCP_PATH="${SELECTED/$HOME/\~}"
-
-	# Check if argument is a file or folder, fill variables accordingly
-	if [[ -d "${SELECTED}" ]]; then
-		FILE_NAME="${SCP_PATH}"
-		FILE_TYPE="folder"
-		SCP_CMD="scp -r"
-	else
-		FILE_NAME="$(basename "${SCP_PATH}")"
-		FILE_TYPE="file"
-		SCP_CMD="scp"
-	fi
-
-	echo
-	output purple "Download ${FILE_NAME} from ${HOST_SHORT}:"
-
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
-	echo
-
-	# Output upload instructions if FILE_TYPE is folder
-	[[ ! -d "${SELECTED}" ]] && return
-
-	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"
-
-	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
-	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
-	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
-	echo
-}
-
-# With compression
-# shellcheck disable=SC2029
-_ssh_c() {
-	local USAGE_STRING="ssh-c <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ssh -o Compression=yes "${1}"
-}
-
-# With X forwarding
-# shellcheck disable=SC2029
-_ssh_x() {
-	local USAGE_STRING="ssh-x <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ssh -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
-}
-
-# With compressed X forwarding
-# shellcheck disable=SC2029
-_ssh_xc() {
-	local USAGE_STRING="ssh-xc <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ssh -o Compression=yes -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
-}
-
-#### Functions: SSH ==final ####
-
-
-#### Functions: Git ==start ####
-
-# shellcheck source=.kdm/bashrc.d/aliases-git
-. "${BASH_ENV_DIR_BASHRC}/aliases-git"
-# shellcheck source=.kdm/bashrc.d/functions-git
-. "${BASH_ENV_DIR_BASHRC}/functions-git"
-
-#### Functions: Git ==final ####
-
-
-#### Functions: Net ==start ####
-
-# shellcheck source=.kdm/bashrc.d/aliases-net
-. "${BASH_ENV_DIR_BASHRC}/aliases-net"
-# shellcheck source=.kdm/bashrc.d/functions-net
-. "${BASH_ENV_DIR_BASHRC}/functions-net"
-
-#### Functions: Net ==final ####
 
 
 #### Functions: Fix ==start ####
@@ -832,25 +281,28 @@ _fix_bash_pids() {
 
 # Remove / clean macOS .DS_Store / attribute files
 _fix_macos_files() {
+	# Declare vars as local
+	local ARRAY_RM_FILES OLD_IFS
+
 	output purple "Finding all macOS metadata files under '${PWD}'"
 
 	# Backup current IFS, change IFS to \n\b so as to parse file array
-	local OLD_IFS="${IFS}"
+	OLD_IFS="${IFS}"
 	IFS=$(echo -en "\n\b")
 
 	# File array of macOS-specific junk files
-	local FILES_TO_REMOVE=($(find . -iname '*DS_Store' -o -iname '._*'))
+	ARRAY_RM_FILES=($(find . -iname '*DS_Store' -o -iname '._*'))
 
 	# Restore previous IFS
 	IFS="${OLD_IFS}"
 
-	[[ -z "${FILES_TO_REMOVE[0]}" ]] && output purple "No macOS attribute/Finder files under '${PWD}' to remove" && return
+	[[ -z "${ARRAY_RM_FILES[0]}" ]] && output purple "No macOS attribute/Finder files under '${PWD}' to remove" && return
 
 	output yellow "Removing these macOS attribute/Finder files under '${PWD}':"
 	echo
 
-	for FILE in "${FILES_TO_REMOVE[@]}"; do
-		output yellow "${FILE}"
+	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
+		output yellow "${RM_FILE}"
 	done
 	echo
 
@@ -858,9 +310,9 @@ _fix_macos_files() {
 	echo
 	[[ "${FIX_MACOS_FILES_YN}" == [Nn] ]] && output purple "No macOS attribute/Finder files under '${PWD}' removed" && return
 
-	for FILE in "${FILES_TO_REMOVE[@]}"; do
+	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
 		output yellow "Removing '${FILE}'"
-		rm -f "${FILE}"
+		rm -f "${RM_FILE}"
 	done
 	echo
 
@@ -997,857 +449,11 @@ _md5_compare() {
 #### Functions: md5sum ==final ####
 
 
-#### Functions: PS1 prompt ==start ####
+# Aliases: Linux or macOS (with GNU conversion)
+_alias_linux_macos_setup
 
-# shellcheck source=.kdm/bashrc.d/functions-prompt
-. "${BASH_ENV_DIR_BASHRC}/functions-prompt"
 
-#### Functions: PS1 prompt ==final ####
-
-
-#### Functions: MOTD ==start ####
-
-# Dynamic MOTD with facter (if present)
-_show_motd() {
-	# Declare vars as local
-	local ARRAY_VALUES ARROW_L ARROW_R BAR BASE_KEY CPU DST FACTER_MEMORY FACTER_OS HASH HEAD_FMT HEAD_KEY HEAD_VAL1 HEAD_VAL2 LOAD MOTD_FMT MOTD_KEY MOTD_VAL1 MOTD_VAL2 OLD_PWD RAM RAMC STRING_LENGTH UPT VER
-
-	# Return if we're not in a terminal
-	[[ -t 2 ]] || return
-
-	# Color shortcuts
-	BAR="${C_BLK_BLD}|${C_RST}"
-	ARROW_L="${C_BLK_BLD}<${C_RST}"
-	ARROW_R="${C_BLK_BLD}>${C_RST}"
-
-	BASE_KEY="%s${C_RST}"
-	HEAD_KEY="${C_ENV}${BASE_KEY}"
-
-	# kdm bash-env git hash
-	HASH="#$(_kdm_hash)"
-
-	# Check for jq binary
-	if ! hash jq; then
-		# Output warning message about jq being missing
-		echo -e "jq not available; dynamic MOTD not possible\n"
-
-		# Print just the env hash
-		# Assemble header format string
-		HEAD_VAL1="${C_BLU_BLD}%+s${C_RST}"
-		HEAD_VAL2="${C_BLU_BLD}%-s${C_RST}"
-		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
-		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
-		return 1
-	fi
-
-	# Use facter if possible, if not, too bad..
-	if ! hash facter; then
-		# Check if we already said this
-		if ! grep -q 'WARN_FACTER=1' "${BASH_ENV_FILE_CONFIG}"; then
-			sed -i '/WARN_FACTER/d' "${BASH_ENV_FILE_CONFIG}"
-			echo   'WARN_FACTER=1' >> "${BASH_ENV_FILE_CONFIG}"
-
-			# Output warning message about facter being missing
-			echo -e "facter not available; dynamic MOTD not possible\n"
-		fi
-
-		# Print just the env hash
-		# Assemble header format string
-		HEAD_VAL1="${C_BLU_BLD}%+s${C_RST}"
-		HEAD_VAL2="${C_BLU_BLD}%-s${C_RST}"
-		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
-		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
-		return 1
-	fi
-
-	# Generate the OS info string differently, based on OS
-	FACTER_OS="$(facter -j os)"
-	case "$(echo "${FACTER_OS}" | jq -r .os.family)" in
-		Archlinux)
-			DST="$(echo "${FACTER_OS}" | jq -r .os.name)"
-			VER="$(echo "${FACTER_OS}" | jq -r .os.release.major).$(echo "${FACTER_OS}" | jq -r .os.release.minor)"
-			;;
-		Darwin)
-			DST="macOS"
-			VER="$(echo "${FACTER_OS}" | jq -r .os.macosx.version.major)"
-			;;
-		Debian)
-			DST="$(echo "${FACTER_OS}" | jq -r .distro.id)"
-			VER="$(echo "${FACTER_OS}" | jq -r .release.major)"
-			;;
-		RedHat)
-			DST="$(echo "${FACTER_OS}" | jq -r .name)"
-
-			case "$(echo "${FACTER_OS}" | jq -r .distro.id)" in
-				CentOS|RedHat*) VER="$(echo "${FACTER_OS}" | jq -r .release.major).$(echo "${FACTER_OS}" | jq -r .release.minor)" ;;
-				Fedora)         VER="$(echo "${FACTER_OS}" | jq -r .release.major)"                                               ;;
-				*)              VER="$(echo "${FACTER_OS}" | jq -r .release.full)"                                                ;;
-			esac
-	esac
-
-	# Get CPU, RAM, uptime, sysload, perhaps do some formatting
-	FACTER_MEMORY="$(facter -j memory)"
-	RAM="$( echo "${FACTER_MEMORY}" | jq -r .memory.system.total)"
-	RAMC="$(echo "${FACTER_MEMORY}" | jq -r .memory.system.capacity)"
-
-	CPU="$( facter processors.models.0 | sed -r -e 's/(^\s?)|(\s?CPU)|(\s?@)|(\s?Processor)|(\(.?.?\))|(\s?[0-9]\.[0-9]{1,3}GHz\s?)|(\s[0-9]\s)|(Intel\(..?\)\sCore\(..?\)\s?)|Intel\sCore\s|\(|\)|Intel\(..?\)\s|Atom|Xeon|\sv[1-9]|\s//g' -e 's/(\s)+/\ /g')"
-	UPT="$( facter uptime)"
-	LOAD="$(facter load_averages.5m)"
-
-	# Format a couple things
-	UPT="${UPT:0:8}"
-	UPT="${UPT/\ hou/}"
-	UPT="${UPT/\ ho/}"
-	LOAD="${LOAD:0:4}"
-	RAMC="${RAMC%%.*}%"
-	RAM="${RAM%%.*}G/${RAMC}"
-
-	# Find longest string in array for dynamic width
-	ARRAY_VALUES=(
-	"bash-env"
-	"${HASH}"
-	"${CPU}"
-	"${RAM}"
-	"${DST}"
-	"${VER}"
-	"${UPT}"
-	"${LOAD}"
-	)
-
-	# Find the length of the longest string among the values
-	for STRING in "${ARRAY_VALUES[@]}"; do
-		STRING_LENGTH=${#STRING}
-
-		# If the current string is longer than MAX_LEN, set MAX_LEN to the current string's length
-		[[ "${STRING_LENGTH}" -gt "${MAX_LEN}" ]] && MAX_LEN="${STRING_LENGTH}"
-
-		# Quick dirty check if data exists
-		if [[ -z "${STRING}" ]]; then
-			echo -e "Failed evaluating data; dynamic MOTD not possible\n"
-			return 2
-		fi
-	done
-
-	# Example output:
-	#
-	# kdm > bash-env | #8af151d < v749
-		# cpu >  i7-3770 | 16G      < ram
-	#  os >    macOS | 10.11    < ver
-	#  up >     1:04 | 1.28     < load
-
-	# Set up printf format strings with C_ENV
-	BASE_KEY="%s${C_RST}"
-	BASE_VAL1="%+${MAX_LEN}s${C_RST}"
-	BASE_VAL2="%-${MAX_LEN}s${C_RST}"
-
-	MOTD_KEY="${C_BLU_BLD}${BASE_KEY}"
-	MOTD_VAL1="${C_ENV}${BASE_VAL1}"
-	MOTD_VAL2="${C_ENV}${BASE_VAL2}"
-
-	HEAD_KEY="${C_ENV}${BASE_KEY}"
-	HEAD_VAL1="${C_BLU_BLD}${BASE_VAL1}"
-	HEAD_VAL2="${C_BLU_BLD}${BASE_VAL2}"
-
-	# Assemble format strings
-	HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}${C_RST}\n"
-	MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}${C_RST}\n"
-
-	# Output the header line, then the MOTD
-	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "rev"
-	printf "${MOTD_FMT}" "cpu"   "${CPU}" "${RAM}"  "ram"
-	printf "${MOTD_FMT}" " os"   "${DST}" "${VER}"  "ver"
-	printf "${MOTD_FMT}" " up"   "${UPT}" "${LOAD}" "load"
-	echo
-}
-
-#### Functions: MOTD ==final ####
-
-
-#### Functions: kdm-bash-env ==start ####
-
-# Re-source ${HOME}/.kdm/bashrc, then files in the 'source' dir
-# shellcheck disable=SC1090
-_kdm_source() {
-	# Declare vars as local
-	local OLD_PWD SOURCE_FILE SOURCE_PATH
-
-	OLD_PWD="${PWD}"
-	cd "${BASH_ENV_DIR_KDM}" || return
-
-	export SOURCE_VERBOSE="true"
-
-	for i in {0..22}; do
-		SOURCE_FILE="$(printf '%02d' "${i}")"
-		SOURCE_PATH="$(ls "include/${SOURCE_FILE}"-*)"
-		[[ ! -s "${SOURCE_PATH}" ]] && continue
-		if . "${SOURCE_PATH}"; then output keyval-t "Loaded" "${SOURCE_PATH}"; else output keyval-f "Failed" "${SOURCE_PATH}"; fi
-	done
-
-	unset SOURCE_VERBOSE
-
-	cd "${OLD_PWD}" || return
-	unset OLD_PWD
-}
-
-# Get Git hash of bash-env
-_kdm_hash() {
-	local OLD_PWD="${PWD}"
-	cd "${HOME}" || return
-	git log --pretty=format:'%h' -n 1
-	cd "${OLD_PWD}" || return
-}
-
-# Help with/list bashrc functions
-_kdm_help() {
-	output purple "kdm bash-env functions:"
-	echo
-
-	local BASHRC_CMDS=($(grep -o 'alias\ .*.=' "${BASH_ENV_FILE_BASHRC}" | sort -u | awk -F '[ =]' '{print $2}' | sort -u | sed -r '/^.{,3}$/d' | grep -Ev 'pign|tial|namp|mkdir|grep|grpe|ehco|clean|CMD|^config|^log|^html\-|^xml\-|^json\-|lsusb|md5sum'))
-
-	# macOS commands
-	if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
-		for CMD in "${BASHRC_CMDS[@]}"; do
-			echo "${CMD}"
-		done | grep -Ev '^sys\-restart|^kvm\-'
-	fi
-
-	# Linux commands
-	if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		for CMD in "${BASHRC_CMDS[@]}"; do
-			echo "${CMD}"
-		done | grep -Ev '^osx\-|^net\-listening|efi\-mount'
-	fi
-	echo
-}
-
-# Quick-draw pull bash env
-_kdm_pull() {
-	# Declare vars as local
-	local CMD_EXIT OLD_PWD
-
-	# Save current PWD
-	OLD_PWD="${PWD}"
-	cd "${HOME}" || return
-
-	_g_gu
-	CMD_EXIT="${?}"
-
-	cd "${OLD_PWD}" || return
-	return ${CMD_EXIT}
-}
-
-#### Functions: kdm-bash-env ==final ####
-
-
-#### Functions: Updates ==start ####
-
-# Update all the things (except CPAN)
-_update_all() {
-	# Check 1st argument
-	if [[ "${1}" != "-y" ]]; then
-		# Check if they're sure
-		read -r -p "Are you sure? [Y/n] " UPDATE_YN
-		echo
-		# Exit if they're not
-		[[ "${UPDATE_YN}" == [Nn] ]] && output cyan "No updates performed" && return
-	fi
-
-	# Bounce if we couldn't find a supported package manager
-	if [[ -z "${PACKAGE_MANAGER}" ]]; then
-		output error "Could not detect package manager"
-		return 1
-	fi
-
-	# Assemble array of command strings based on type of package manager
-	unset ARRAY_COMMANDS
-	case "${PACKAGE_MANAGER}" in
-		"apt-get")
-			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} update"
-			local ARRAY_COMMANDS[1]="sudo ${PACKAGE_MANAGER} -y upgrade"
-			local ARRAY_COMMANDS[2]="sudo ${PACKAGE_MANAGER} -y dist-upgrade"
-			;;
-		"brew")
-			local ARRAY_COMMANDS[0]="${PACKAGE_MANAGER} update"
-			local ARRAY_COMMANDS[1]="${PACKAGE_MANAGER} upgrade"
-			local ARRAY_COMMANDS[2]="${PACKAGE_MANAGER} cleanup"
-			# macOS software update
-			local ARRAY_COMMANDS[3]="sudo softwareupdate -i -a"
-			;;
-		"yum")
-			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -y update"
-			local ARRAY_COMMANDS[1]="sudo ${PACKAGE_MANAGER} -y upgrade"
-			;;
-		"pacman")
-			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -Syu --quiet --noconfirm --noprogressbar"
-			;;
-		"zypper")
-			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -n update"
-			;;
-		*)
-			local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -y update"
-			;;
-	esac
-
-	# Perform update commands
-	for COMMAND in "${ARRAY_COMMANDS[@]}"; do
-		output leadup "${COMMAND}"
-		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-	done
-
-	# Cleanup old kernels if possible (only with yum-utils installed)
-	if hash package-cleanup; then
-		local COMMAND="package-cleanup -y --oldkernels --count=2"
-		output leadup "${COMMAND}"
-		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-	fi
-
-	# Raspberry Pi firmware update
-	if hash rpi-update; then
-		local COMMAND="rpi-update"
-		output leadup "${COMMAND}"
-		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-	fi
-
-	# Update kdm-bash-env from Git
-	if hash _kdm_pull; then
-		local COMMAND="kdm-pull"
-		output leadup "${COMMAND}"
-		# Redefine this because it's not really real
-		if _kdm_pull &> /dev/null; then output success; else output failure; fi
-	fi
-
-	# Check for npm, if it exists, update npm packages
-	if hash npm; then
-		# Loop npm update until it's fully updated, up to 5 times
-		local COMMAND="npm -g update"
-
-		local NPM_UPDATE_COUNT="1"
-		while [[ "${NPM_UPDATE_COUNT}" -le "5" ]]; do
-			output leadup "${COMMAND} (loop #${NPM_UPDATE_COUNT})"
-			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-
-			# Increment loop counter
-			((NPM_UPDATE_COUNT++))
-		done
-	fi
-
-	# Check for ncu, if it exists, REALLY update npm packages
-	if hash ncu; then
-		local COMMAND="ncu -g -t"
-		output leadup "${COMMAND}"
-		local ARRAY_NPM_PACKAGES=($(${COMMAND} 2> /dev/null | sed '/^\s*$/d' | awk '$0 !~ /^All/ {print $1}'))
-		output success
-
-		# Perform update commands
-		for NPM_PACKAGE in "${ARRAY_NPM_PACKAGES[@]}"; do
-			local COMMAND="npm -g install ${NPM_PACKAGE}"
-			output leadup "${COMMAND}"
-			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-		done
-	fi
-
-	# Check for python-pip, if it exists, update python-pip packages
-	if hash pip; then
-		# Array of pip packages to update, with pip and setuptools being first
-		local COMMAND="pip list -o"
-		output leadup "${COMMAND}"
-		local ARRAY_PIP_PACKAGES=(pip setuptools $(pip list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
-		output success
-
-		# Perform update commands
-		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
-			local COMMAND="pip install --upgrade ${PIP_PACKAGE}"
-			output leadup "${COMMAND}"
-			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-		done
-	fi
-
-	# Check for python-pip2, if it exists, update python-pip2 packages
-	if hash pip2; then
-		# Array of pip2 packages to update, with pip2 and setuptools being first
-		local COMMAND="pip2 list -o"
-		output leadup "${COMMAND}"
-		local ARRAY_PIP_PACKAGES=(pip setuptools $(pip2 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
-		output success
-
-		# Perform update commands
-		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
-			local COMMAND="pip2 install --upgrade ${PIP_PACKAGE}"
-			output leadup "${COMMAND}"
-			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-		done
-	fi
-
-	# Check for python-pip3, if it exists, update python-pip3 packages
-	if hash pip3; then
-		# Array of pip3 packages to update, with pip3 and setuptools being first
-		local COMMAND="pip3 list -o"
-		output leadup "${COMMAND}"
-		local ARRAY_PIP_PACKAGES=(pip setuptools $(pip3 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
-		output success
-
-		# Perform update commands
-		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
-			local COMMAND="pip3 install --upgrade ${PIP_PACKAGE}"
-			output leadup "${COMMAND}"
-			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-		done
-	fi
-
-	# rubygems update
-	if hash update_rubygems; then
-		# Array of update commands
-		unset ARRAY_COMMANDS
-		local ARRAY_COMMANDS[0]="update_rubygems"
-		local ARRAY_COMMANDS[1]="gem update  --silent --system"
-		local ARRAY_COMMANDS[2]="gem update  --silent"
-		local ARRAY_COMMANDS[3]="gem cleanup --silent"
-
-		# Perform update commands
-		for COMMAND in "${ARRAY_COMMANDS[@]}"; do
-			output leadup "${COMMAND}"
-			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-		done
-	fi
-
-	output green "update-all complete"
-	return 0
-}
-
-# Update just CPAN packages
-_update_cpan() {
-	# Check 1st argument
-	if [[ "${1}" != "-y" ]]; then
-		# Check if they're sure
-		read -r -p "Are you sure? [Y/n] " UPDATE_YN
-		echo
-		[[ "${UPDATE_YN}" == [Nn] ]] && output cyan "update-cpan not performed" && return
-	fi
-
-	# Bounce if we couldn't find a supported package manager
-	if [[ -z "${PACKAGE_MANAGER}" ]]; then
-		output error "Could not detect package manager"
-		return 1
-	fi
-
-	# Install CPAN if missing
-	if ! hash cpan; then
-		local COMMAND="${PACKAGE_MANAGER} -y install perl-CPAN perl-App-cpanminus cpanminus"
-		output leadup "${COMMAND}"
-		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-	fi
-
-	# Update CPAN itself, and YAML
-	unset ARRAY_COMMANDS
-	local ARRAY_COMMANDS[0]="cpan CPAN"
-	local ARRAY_COMMANDS[1]="cpan YAML"
-	for COMMAND in "${ARRAY_COMMANDS[@]}"; do
-		output leadup "${COMMAND}"
-		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-	done
-
-	# Check for cpanm, install if missing
-	if ! hash cpanm; then
-		local ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -y install cpanminus"
-		local ARRAY_COMMANDS[1]="cpan App::cpanminus"
-		for COMMAND in "${ARRAY_COMMANDS[@]}"; do
-			output leadup "${COMMAND}"
-			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-		done
-	fi
-
-	# Check for cpan-outdated, install if missing
-	if ! hash cpan-outdated; then
-		local COMMAND="cpan App::cpanoutdated"
-		output leadup "${COMMAND}"
-		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
-	fi
-
-	# Check for cpanm and cpanm-outdated again
-	if ! hash cpanm && hash cpan-outdated; then
-		output error "cpanminus and cpan-outdated could not be found"
-		return 1
-	fi
-
-	# Update outdated CPAN modules in packages
-	local COMMAND="cpan-outdated -p | cpanm"
-	output leadup "${COMMAND}"
-	# Custom due to command pipe
-	if cpan-outdated -p | cpanm &> /dev/null; then output success; else output failure; fi
-
-	# Update outdated CPAN modules
-	local COMMAND="cpan-outdated | cpanm"
-	output leadup "${COMMAND}"
-	# Custom due to command pipe
-	if cpan-outdated | cpanm &> /dev/null; then output success; else output failure; fi
-
-	output green "update-cpan complete"
-	return 0
-}
-
-#### Functions: Updates ==final ####
-
-
-#### Functions: macOS-only (regardless of GNU conversion) ==start ####
-
-# shellcheck source=.kdm/bashrc.d/functions-macos
-. "${BASH_ENV_DIR_BASHRC}/functions-macos"
-
-#### Functions: macOS-only (regardless of GNU conversion) ==final ####
-
-
-#### Functions: Linux-only ==start ####
-
-# shellcheck source=.kdm/bashrc.d/functions-linux
-. "${BASH_ENV_DIR_BASHRC}/functions-linux"
-
-#### Functions: Linux-only ==final ####
-
-
-#### Functions: Auto-sudo ==start ####
-
-# Generate auto-sudo aliases
-_auto_sudo_generate() {
-	# Clear sudo cache file
-	: > "${BASH_ENV_FILE_SUDOCACHE}"
-
-	# Process auto-sudo-alias generation, output to sudo cache file
-	for CMD in "${ARRAY_SUDO[@]}"; do
-		# If it's installed, add sudo
-		hash "${CMD}" && echo "alias ${CMD}='sudo ${CMD}'" >> "${BASH_ENV_FILE_SUDOCACHE}"
-	done
-}
-
-# Configure auto-sudo aliases
-_auto_sudo_setup() {
-	# First check if we're root. If so, we don't need any of this
-	[[ "${UID}" == "0" ]] && return
-
-	# If we're on macOS, add the macOS commands to the base array
-	# If we're on Linux, add the Linux commands to the base array
-	case "${UNAME_KERNEL_NAME}" in
-		Darwin) ARRAY_SUDO+=(${ARRAY_SUDO_MACOS[@]}) ;;
-		Linux)  ARRAY_SUDO+=(${ARRAY_SUDO_LINUX[@]}) ;;
-	esac
-
-	# Regenerate sudocache file if empty
-	[[ ! -s "${BASH_ENV_FILE_SUDOCACHE}" ]] && _auto_sudo_generate
-
-	# Declare vars as local
-	local SUDOCACHE_AGE SUDOCACHE_TIME
-
-	# Determine age of sudocache file
-	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		SUDOCACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_SUDOCACHE}")
-	else
-		SUDOCACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_SUDOCACHE}")
-	fi
-
-	let SUDOCACHE_AGE=$(($(date +%s)-SUDOCACHE_TIME))
-
-	# Regenerate sudocache file if older than 1 day
-	[[ "${SUDOCACHE_AGE}" -ge "86400" ]] && _auto_sudo_generate
-
-	# Source sudocache file
-	# shellcheck source=.kdm/sudocache
-	. "${BASH_ENV_FILE_SUDOCACHE}"
-}
-
-#### Functions: Auto-sudo ==final ####
-
-
-#### Functions: Alias generation ==start ####
-
-# Generate various application-specific command aliases
-_alias_applications() {
-	PREFIX="${1}"
-
-	# If it has apache2
-	DIR_APACHE2_CONF="${PREFIX}/etc/apache2"
-	DIR_APACHE2_LOG="${PREFIX}/var/log/apache2"
-	[[ -d "${DIR_APACHE2_CONF}" ]] && export DIR_APACHE2_CONF && alias config-apache2='cd ${DIR_APACHE2_CONF}; ll'
-	[[ -d "${DIR_APACHE2_LOG}"  ]] && export DIR_APACHE2_LOG  && alias log-apache2='   cd ${DIR_APACHE2_LOG};  ll'
-
-	# If it has dnsmasq
-	DIR_DNSMASQ_CONF="${PREFIX}/etc/dnsmasq.d"
-	DIR_DNSMASQ_LOG="${PREFIX}/var/log/dnsmasq"
-	[[ -d "${DIR_DNSMASQ_CONF}" ]] && export DIR_DNSMASQ_CONF && alias config-dnsmasq='cd ${DIR_DNSMASQ_CONF}; ll'
-	[[ -d "${DIR_DNSMASQ_LOG}"  ]] && export DIR_DNSMASQ_LOG  && alias log-dnsmasq='   cd ${DIR_DNSMASQ_LOG};  ll'
-
-	# If it has httpd
-	DIR_HTTPD_CONF="${PREFIX}/etc/httpd"
-	DIR_HTTPD_LOG="${PREFIX}/var/log/httpd"
-	[[ -d "${DIR_HTTPD_CONF}" ]] && export DIR_HTTPD_CONF && alias config-httpd='cd ${DIR_HTTPD_CONF}; ll'
-	[[ -d "${DIR_HTTPD_LOG}"  ]] && export DIR_HTTPD_LOG  && alias log-httpd='   cd ${DIR_HTTPD_LOG};  ll'
-
-	# If it has libvirt
-	DIR_LIBVIRT_CONF="${PREFIX}/var/lib/libvirt"
-	DIR_LIBVIRT_LOG="${PREFIX}/var/log/libvirt"
-	[[ -d "${DIR_LIBVIRT_CONF}" ]] && export DIR_LIBVIRT_CONF && alias config-libvirt='cd ${DIR_LIBVIRT_CONF}; ll'
-	[[ -d "${DIR_LIBVIRT_LOG}"  ]] && export DIR_LIBVIRT_LOG  && alias log-libvirt='   cd ${DIR_LIBVIRT_LOG};  ll'
-
-	# If it has nginx
-	DIR_NGINX_CONF="${PREFIX}/etc/nginx"
-	DIR_NGINX_LOG="${PREFIX}/var/log/nginx"
-	[[ -d "${DIR_NGINX_CONF}" ]] && export DIR_NGINX_CONF && alias config-nginx='cd ${DIR_NGINX_CONF}; ll'
-	[[ -d "${DIR_NGINX_LOG}"  ]] && export DIR_NGINX_LOG  && alias log-nginx='   cd ${DIR_NGINX_LOG};  ll'
-
-	# If it has squid
-	DIR_SQUID_CONF="${PREFIX}/etc/squid"
-	DIR_SQUID_LOG="${PREFIX}/var/log/squid"
-	[[ -d "${DIR_SQUID_CONF}" ]] && export DIR_SQUID_CONF && alias config-squid='cd ${DIR_SQUID_CONF}; ll'
-	[[ -d "${DIR_SQUID_LOG}"  ]] && export DIR_SQUID_LOG  && alias log-squid='   cd ${DIR_SQUID_LOG};  ll'
-
-	# If it has yum
-	DIR_YUM_CONF="${PREFIX}/etc/yum"
-	DIR_YUM_REPOS="${PREFIX}/etc/yum.repos.d"
-	FILE_YUM_LOG="${PREFIX}/var/log/yum.log"
-	[[ -d "${DIR_YUM_CONF}"  ]] && export DIR_YUM_CONF  && alias config-yum='     cd ${DIR_YUM_CONF};  ll'
-	[[ -d "${DIR_YUM_REPOS}" ]] && export DIR_YUM_REPOS && alias config-yumrepos='cd ${DIR_YUM_REPOS}; ll'
-	[[ -e "${FILE_YUM_LOG}"  ]] && export FILE_YUM_LOG  && alias log-yum='        cd /var/log;         ll yum.log'
-}
-
-# E-Z nmap commands
-_alias_nmap() {
-	# If it has nmap binary:
-	# only open ports, grepable output, aggressive and verbose aliases
-	hash nmap || return
-
-	# nmap needs sudo if not root
-	# First, add one for not aggressive one (but still verbose)
-	if [[ "${UID}" != "0" ]]; then
-		alias nmap='sudo nmap --open'
-		# nmap-v for very verbose scan
-		alias nmap-v='sudo nmap -vv --open'
-		# nmap-a for aggressive scripting scan
-		alias nmap-a='sudo nmap -vv -A --open'
-		return
-	fi
-
-	# already root, no need for sudo
-	alias nmap='nmap --open'
-	# nmap-v for very verbose scan
-	alias nmap-v='nmap -vv --open'
-	# nmap-a for aggressive scripting scan
-	alias nmap-a='nmap -vv -A --open'
-}
-
-# noping command tweaks
-_alias_noping() {
-	# noping commands, if noping is present
-	hash noping || return;
-
-	# noping needs sudo if not root
-	if [[ "${UID}" != "0" ]]; then
-		alias noping='     sudo noping -i 0.5'
-		alias noping-fast='sudo noping -i 0.1'
-		alias noping-slow='sudo noping -i 1.0'
-		return
-	fi
-
-	alias noping='     noping -i 0.5'
-	alias noping-fast='noping -i 0.1'
-	alias noping-slow='noping -i 1.0'
-}
-
-# noping command tweaks
-_alias_oping() {
-	# oping commands, if oping is present
-	hash oping || return;
-
-	# oping needs sudo if not root
-	if [[ "${UID}" != "0" ]]; then
-		alias oping='     sudo oping -i 0.5'
-		alias oping-fast='sudo oping -i 0.1'
-		alias oping-slow='sudo oping -i 1.0'
-		return
-	fi
-
-	alias oping='     oping -i 0.5'
-	alias oping-fast='oping -i 0.1'
-	alias oping-slow='oping -i 1.0'
-}
-
-# ping command tweaks
-_alias_ping() {
-	# ping-slow : normal (1.0 second interval)
-	#      ping : fast   (0.5 second interval)
-	# ping-fast : faster (0.1 second interval)
-	alias ping='     ping -i 0.5'
-	alias ping-fast='ping -i 0.1'
-	alias ping-slow='ping -i 1.0'
-
-	# Generate noping and oping aliases, too
-	_alias_noping
-	_alias_oping
-}
-
-_alias_pygmentize_html() {
-	hash tidy || return
-	alias html-format='tidy -i -w 200 -ashtml -utf8 2> /dev/null | pygmentize -l html -f terminal256 -O style=monokai'
-	alias format-html='html-format'
-}
-
-_alias_pygmentize_json() {
-	hash json_reformat || return
-	alias json-format='json_reformat | pygmentize -l json -f terminal256 -O style=monokai'
-	alias format-json='json-format'
-}
-
-_alias_pygmentize_xml() {
-	hash xmllint || return
-	alias xml-format='xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal256 -O style=monokai'
-	alias format-xml='xml-format'
-}
-
-# Prettyprint+colorize various formats, if supporting binaries are installed
-_alias_pygmentize() {
-	hash pygmentize || return
-
-	_alias_pygmentize_html
-	_alias_pygmentize_json
-	_alias_pygmentize_xml
-}
-
-#### Functions: Alias generation ==start ####
-
-
-#### Aliases: Global ==start ####
-
-# Pre-sorted environment variables
-alias env-sort='env | sort -h'
-
-# Newline after screen clear
-alias clear='clear; echo'
-alias c='clear'
-
-# Safety first on file operations
-alias rm='rm -i'
-alias cp='cp -iv'
-alias mv='mv -i'
-alias mkdir='mkdir -p'
-
-# Diff enable auto color
-DIFF_VERSION="$(diff -v | grep -Eo '[3-9]\.[0-9]$')"
-if [[ "${DIFF_VERSION/\./}" -ge "34" ]]; then
-	alias diff='diff --color=auto'
-fi
-
-# Custom diff:
-# Tabsize : 2 columns
-# Ignore tab expansion
-# Ignore trailing space
-# Ignore whitespace changes
-# Ignore blank lines
-alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
-
-# File list aliases
-alias l.=' ls -d .*  2> /dev/null'
-alias l1=' ls -Fh1   2> /dev/null'
-alias l='  ls -CF    2> /dev/null'
-alias la=' ls -A     2> /dev/null'
-alias ll.='ls -dl .* 2> /dev/null'
-alias ll=' ls -Fhl   2> /dev/null'
-alias lld='ls -Fhld  2> /dev/null'
-alias lll='ls -Fahl  2> /dev/null'
-
-# Quick up-directory-n-list
-alias ..='cd ..; ll'
-
-# Downloads and Desktop folder variables
-DIR_HOME_DC="${HOME}/Documents"
-DIR_HOME_DL="${HOME}/Downloads"
-DIR_HOME_DT="${HOME}/Desktop"
-
-# Downloads and Desktop folder aliases
-[[ -d "${DIR_HOME_DC}" ]] && export DIR_HOME_DC && alias dc='cd ${DIR_HOME_DC}; ll'
-[[ -d "${DIR_HOME_DL}" ]] && export DIR_HOME_DL && alias dl='cd ${DIR_HOME_DL}; ll'
-[[ -d "${DIR_HOME_DT}" ]] && export DIR_HOME_DT && alias dt='cd ${DIR_HOME_DT}; ll'
-
-# Typo aliases
-alias bim='vim'
-alias cim='vim'
-alias ehco='echo'
-alias grpe='grep'
-alias kk='ll'
-alias namp='nmap'
-alias pign='ping'
-alias tial='tail'
-
-# Application-specific aliases
-_alias_applications
-_alias_applications "/usr/local"
-
-# E-Z nmap commands
-_alias_nmap
-
-# ping/noping command tweaks
-_alias_ping
-
-# Prettyprint+colorize various formats, if supporting binaries are installed
-_alias_pygmentize
-
-#### Aliases: Global ==final ####
-
-
-#### Aliases: Linux or macOS (with GNU conversion) ==start ####
-
-# shellcheck disable=SC2139
-_alias_linux_macos_setup() {
-	# grep/ls config
-	#     in a terminal : always enable/use color
-	# NOT in a terminal : disable color
-	#
-	# -s : suppress error messages
-	GREP_BASE="grep --color=if-tty -s"
-
-	alias grep=" ${GREP_BASE}"
-	alias egrep="${GREP_BASE} -E"
-	alias fgrep="${GREP_BASE} -F"
-	alias igrep="${GREP_BASE} -i"
-	alias rgrep="${GREP_BASE} -r"
-	alias vgrep="${GREP_BASE} -v"
-
-	if hash zgrep; then
-		alias zgrep=" z${GREP_BASE}"
-		alias zegrep="z${GREP_BASE} -E"
-		alias zfgrep="z${GREP_BASE} -F"
-		alias zigrep="z${GREP_BASE} -i"
-		alias zrgrep="z${GREP_BASE} -r"
-		alias zvgrep="z${GREP_BASE} -v"
-	fi
-	if hash xzgrep; then
-		alias xzgrep=" xz${GREP_BASE}"
-		alias xzegrep="xz${GREP_BASE} -E"
-		alias xzfgrep="xz${GREP_BASE} -F"
-		alias xzigrep="xz${GREP_BASE} -i"
-		alias xzrgrep="xz${GREP_BASE} -r"
-		alias xzvgrep="xz${GREP_BASE} -v"
-	fi
-
-	alias cgrep=' grep -s --color=always' # Force enable color
-	alias ncgrep='grep -s --color=never'  # Force disable color
-
-	alias ls="  ls --color=if-tty 2> /dev/null"
-	alias cls=' ls --color=always 2> /dev/null' # Force enable color
-	alias ncls='ls --color=never  2> /dev/null' # Force disable color
-
-	unset CMD_COLOR
-	unset GREP_BASE
-
-	# Sort by IP address octets
-	alias sort-ip='sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n'
-}
-
-if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-	_alias_linux_macos_setup
-fi
-
-#### Aliases: Linux or macOS (with GNU conversion) ==final ####
-
-
-#### Aliases: macOS-only (without GNU conversion) ==start ####
-
+# Aliases: macOS-only (without GNU conversion)
 if [[ "${UNAME_KERNEL_NAME}" == "Darwin" && -z "${MACOS_GNU}" ]]; then
 	# Alias to make md5sum work like Linux
 	alias md5sum='md5 -r'
@@ -1855,23 +461,6 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" && -z "${MACOS_GNU}" ]]; then
 	# Color ls output
 	alias ls='ls -G 2> /dev/null'
 fi
-
-#### Aliases: macOS-only (without GNU conversion) ==final ####
-
-
-#### Aliases: macOS-only (regardless of GNU conversion) ==start ####
-
-# shellcheck source=.kdm/bashrc.d/aliases-macos
-. "${BASH_ENV_DIR_BASHRC}/aliases-macos"
-
-#### Aliases: macOS-only (regardless of GNU conversion) ==final ####
-
-#### Aliases: Linux-only ==start ####
-
-# shellcheck source=.kdm/bashrc.d/aliases-linux
-. "${BASH_ENV_DIR_BASHRC}/aliases-linux"
-
-#### Aliases: Linux-only ==final ####
 
 
 # Configure auto-sudo aliases

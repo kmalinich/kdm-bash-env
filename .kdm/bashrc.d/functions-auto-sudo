@@ -1,0 +1,52 @@
+# Functions: Auto-sudo
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Generate auto-sudo aliases
+_auto_sudo_generate() {
+	# Clear sudo cache file
+	: > "${BASH_ENV_FILE_SUDOCACHE}"
+
+	# Process auto-sudo-alias generation, output to sudo cache file
+	for CMD in "${ARRAY_SUDO[@]}"; do
+		# If it's installed, add sudo
+		hash "${CMD}" && echo "alias ${CMD}='sudo ${CMD}'" >> "${BASH_ENV_FILE_SUDOCACHE}"
+	done
+}
+
+# Configure auto-sudo aliases
+_auto_sudo_setup() {
+	# First check if we're root. If so, we don't need any of this
+	[[ "${UID}" == "0" ]] && return
+
+	# If we're on macOS, add the macOS commands to the base array
+	# If we're on Linux, add the Linux commands to the base array
+	case "${UNAME_KERNEL_NAME}" in
+		Darwin) ARRAY_SUDO+=(${ARRAY_SUDO_MACOS[@]}) ;;
+		Linux)  ARRAY_SUDO+=(${ARRAY_SUDO_LINUX[@]}) ;;
+	esac
+
+	# Regenerate sudocache file if empty
+	[[ ! -s "${BASH_ENV_FILE_SUDOCACHE}" ]] && _auto_sudo_generate
+
+	# Declare vars as local
+	local SUDOCACHE_AGE SUDOCACHE_TIME
+
+	# Determine age of sudocache file
+	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		SUDOCACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_SUDOCACHE}")
+	else
+		SUDOCACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_SUDOCACHE}")
+	fi
+
+	let SUDOCACHE_AGE=$(($(date +%s)-SUDOCACHE_TIME))
+
+	# Regenerate sudocache file if older than 1 day
+	[[ "${SUDOCACHE_AGE}" -ge "86400" ]] && _auto_sudo_generate
+
+	# Source sudocache file
+	# shellcheck source=../sudocache
+	. "${BASH_ENV_FILE_SUDOCACHE}"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

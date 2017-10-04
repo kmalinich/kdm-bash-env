@@ -1,0 +1,160 @@
+# Functions: Text
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Output formatted text
+# I would have used an associative array (and in one version, I did),
+# but it's only in bash 4+ which is ... more rarely seen than I'd like
+output() {
+	# Declare vars as local
+	local ARRAY_USAGE_OPTIONS COLOR_SELECTED OUTPUT_FORMAT OUTPUT_STDERR OUTPUT_STRING USAGE_STRING
+
+	# Array of options
+	ARRAY_USAGE_OPTIONS=(
+	alert    backtick black  blue          cyan
+	error    failure  gray   green         keyval
+	keyval-f keyval-t leadup leadup-custom orange
+	pink     purple   red    stderr        success
+	usage    white    yellow
+	)
+
+	# Create variable of pipe-separated options from array
+	USAGE_STRING="output <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <string 1> [<string 2, for keyval options>]"
+
+	# Case statement for output color/format
+	case "${1}" in
+		# Basic colors
+		alert)  COLOR_SELECTED="${C_ALT}";;
+		black)  COLOR_SELECTED="${C_BLK}";;
+		blue)   COLOR_SELECTED="${C_BLU}";;
+		cyan)   COLOR_SELECTED="${C_CYN}";;
+		gray)   COLOR_SELECTED="${C_GRY}";;
+		green)  COLOR_SELECTED="${C_GRN}";;
+		orange) COLOR_SELECTED="${C_ORN}";;
+		pink)   COLOR_SELECTED="${C_PNK}";;
+		purple) COLOR_SELECTED="${C_PRP}";;
+		red)    COLOR_SELECTED="${C_RED}";;
+		white)  COLOR_SELECTED="${C_WHT}";;
+		yellow) COLOR_SELECTED="${C_YLW}";;
+
+		backtick)
+			# Output the input string with backticks (for Slack, mainly)
+			OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
+
+			# Copy string to clipboard if not connected via SSH and binary is present
+			[[ -z "${SSH_CONNECTION}" ]] && hash pbcopy && printf "\`%s\`" "${2}" | pbcopy
+			echo -e "Copied string to clipboard\n" 1>&2
+			;;
+
+		error)
+			# Special function to output to stderr
+			OUTPUT_STDERR="1>&2"
+			OUTPUT_FORMAT="${C_RED_BRT_BLD}Error ${C_WHT_BRT}: ${C_RST}%s\n"
+			;;
+
+		failure)
+			# Special function for failure message, no string input
+			COLOR_SELECTED="${C_RED_BRT_BLD}"
+			OUTPUT_STRING="failure"
+			;;
+
+		keyval)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		keyval-f)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		keyval-t)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		leadup) # Special function for leadup to status message, no newline
+			# Create dot string and output format
+			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
+			OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
+			;;
+
+		leadup-custom) # Special function for leadup to status message, no newline, with custom command name
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			# Create dot string and output format
+			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
+			OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
+
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		stderr)
+			# Special function to output to stderr
+			COLOR_SELECTED="${C_BLU}"
+			OUTPUT_STDERR="1>&2"
+			;;
+
+		success)
+			# Special function for success message, no string
+			COLOR_SELECTED="${C_GRN_BRT_BLD}"
+			OUTPUT_STRING="success"
+			;;
+
+		usage)
+			# Special function to output formatted usage string, with stderr output
+			OUTPUT_FORMAT="${C_YLW_BRT_BLD}Usage ${C_WHT_BRT}: ${C_RST}%s\n"
+			OUTPUT_STDERR="1>&2"
+			;;
+
+		*) COLOR_SELECTED="${C_RST}";; # If nothing matches, reset color
+	esac
+
+	# Check for variables and throw usage message if issue
+	if [[ -z "${OUTPUT_STRING-${2}}" ]]; then
+		output usage "${USAGE_STRING}"
+		return
+	fi
+
+	# Finalize vars
+	OUTPUT_FORMAT="${OUTPUT_FORMAT-${COLOR_SELECTED}%s${C_RST}\n}"
+	OUTPUT_STRING="${OUTPUT_STRING-${2}}"
+
+	# Output to stdout or stderr based on switch
+	[[ "${OUTPUT_STDERR}" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 && return
+	printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

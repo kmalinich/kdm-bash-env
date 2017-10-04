@@ -1,0 +1,108 @@
+# Functions: Conversion
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Convert squid timestamps to human date and time
+_convert_squid_timestamp() {
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="convert-squid-timestamp <squid log timestamp>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	echo "${1}" | perl -p -e 's/^([0-9]*)/"[".localtime($1)."]"/e'
+}
+
+# Convert temperatures to other formats
+_convert_temperature() {
+	# Declare vars as local
+	local SCALE TEMP_C TEMP_F TEMP_K TEMP_R PF_FMT USAGE_STRING
+
+	USAGE_STRING="temp-conv <temperature[c|f|k|r]>"
+	[[ "${1}" != *[0-9][CcFfKkRr]* ]] && output usage "${USAGE_STRING}" && return
+
+	# Set calculation scale
+	SCALE="2"
+
+	# Detect input format (the ghetto way) and convert to Kelvin
+	if [[ "${1}" == *[Cc]* ]]; then
+		TEMP_C=${1//[!0-9]/}
+		TEMP_K=$(echo "scale=${SCALE}; ${TEMP_C}+273.15" | bc)
+	elif [[ "${1}" == *[Ff]* ]]; then
+		TEMP_F=${1//[!0-9]/}
+		TEMP_K=$(echo "scale=${SCALE}; ((${TEMP_F}-32)*(5/9))+273.15" | bc)
+	elif [[ "${1}" == *[Kk]* ]]; then
+		TEMP_K=${1//[!0-9]/}
+	elif [[ "${1}" == *[Rr]* ]]; then
+		TEMP_R=${1//[!0-9]/}
+		TEMP_K=$(echo "scale=${SCALE}; ${TEMP_R}*(5/9)" | bc)
+	fi
+
+	# Calculate missing values (yes, I shave off a single CPU cycle not computing, only to spend it evaluating)
+	[[ -z "${TEMP_C}" ]] && TEMP_C=$(echo "scale=${SCALE}; ${TEMP_K}-273.15"           | bc)
+	[[ -z "${TEMP_F}" ]] && TEMP_F=$(echo "scale=${SCALE}; ((${TEMP_K}-273)*(9/5))+32" | bc)
+	[[ -z "${TEMP_R}" ]] && TEMP_R=$(echo "scale=${SCALE}; ${TEMP_K}*(9/5)"            | bc)
+
+	# Set margin for printf commands
+	PF_FMT="%-8s${C_PRP}%s${C_RST}\n"
+
+	# Output temperatures in various formats! yay!
+	printf "${PF_FMT}" "${TEMP_C}" "C"
+	printf "${PF_FMT}" "${TEMP_F}" "F"
+	printf "${PF_FMT}" "${TEMP_K}" "K"
+	printf "${PF_FMT}" "${TEMP_R}" "R"
+}
+
+# Convert hexadecimal<->decimal
+dechex() {
+	# Declare vars as local
+	local DEC HEX INPUT OUTPUT PROCESS USAGE_STRING
+
+	USAGE_STRING="dec2hex <decimal number> [-s, script output]"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	# Strip input of anything other than a-f, A-F, x, X, or numbers
+	INPUT="${1//[^a-fA-FxX0-9]/}"
+	# Uppercase input (except x)
+	INPUT=$(echo "${INPUT}" | tr '[:lower:]' '[:upper:]' | sed 's/^0X/0x/g')
+
+	# Detect input type
+	if [[ "${INPUT}" =~ ^0x[A-F0-9]? ]]; then
+		# Input is hexadecimal
+		PROCESS="hex2dec"
+		[[ "${#INPUT}" == "2" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
+		DEC="$((INPUT))" # Render decimal value
+	else
+		# Input is decimal
+		PROCESS="dec2hex"
+		DEC="${INPUT}"
+	fi
+
+	# Render formatted hex value
+	HEX="$(printf '0x%02X' "${INPUT}")"
+
+	# Format decimal value if value is not "0"
+	if [[ "${DEC}" != "0" ]]; then
+		DEC="${DEC##+(0)}"    # Remove leading zeros
+		DEC="${DEC//[^0-9]/}" # Remove non-numbers
+		[[ "${#DEC}" == "0" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
+	fi
+
+	if [[ "${2}" != "-s" ]]; then
+		output purple "Process : ${PROCESS}"
+		output green  "Values  : ${DEC} | ${HEX}"
+	else
+		case "${PROCESS}" in
+			dec2hex)
+				OUTPUT="${HEX/0x/}"
+				;;
+			hex2dec)
+				OUTPUT="${DEC}"
+				;;
+		esac
+
+		echo "${OUTPUT}"
+	fi
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

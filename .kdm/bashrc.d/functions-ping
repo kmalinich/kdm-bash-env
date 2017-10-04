@@ -1,0 +1,20 @@
+# Functions: Ping
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Custom fping commands
+kping() {
+	# Declare vars as local
+	local PING_INTERVAL USAGE_STRING
+
+	USAGE_STRING="kping <target IP/host> [<optional interval in milliseconds>]"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	# Default interval is 500ms unless otherwise specified
+	PING_INTERVAL="500"
+	[[ "${2}" ]] && PING_INTERVAL="${2}"
+
+	fping -AdDelsu -H 254 -p "${PING_INTERVAL}" -t 1000 "${1}"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

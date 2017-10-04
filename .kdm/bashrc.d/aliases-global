@@ -1,0 +1,78 @@
+# Aliases: Global
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Pre-sorted environment variables
+alias env-sort='env | sort -h'
+
+# Newline after screen clear
+alias clear='clear; echo'
+alias c='clear'
+
+# Safety first on file operations
+alias rm='rm -i'
+alias cp='cp -iv'
+alias mv='mv -i'
+alias mkdir='mkdir -p'
+
+# Diff enable auto color
+DIFF_VERSION="$(diff -v | grep -Eo '[3-9]\.[0-9]$')"
+if [[ "${DIFF_VERSION/\./}" -ge "34" ]]; then
+	alias diff='diff --color=auto'
+fi
+
+# Custom diff:
+# Tabsize : 2 columns
+# Ignore tab expansion
+# Ignore trailing space
+# Ignore whitespace changes
+# Ignore blank lines
+alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
+
+# File list aliases
+alias l.=' ls -d .*  2> /dev/null'
+alias l1=' ls -Fh1   2> /dev/null'
+alias l='  ls -CF    2> /dev/null'
+alias la=' ls -A     2> /dev/null'
+alias ll.='ls -dl .* 2> /dev/null'
+alias ll=' ls -Fhl   2> /dev/null'
+alias lld='ls -Fhld  2> /dev/null'
+alias lll='ls -Fahl  2> /dev/null'
+
+# Quick up-directory-n-list
+alias ..='cd ..; ll'
+
+# Downloads and Desktop folder variables
+DIR_HOME_DC="${HOME}/Documents"
+DIR_HOME_DL="${HOME}/Downloads"
+DIR_HOME_DT="${HOME}/Desktop"
+
+# Downloads and Desktop folder aliases
+[[ -d "${DIR_HOME_DC}" ]] && export DIR_HOME_DC && alias dc='cd ${DIR_HOME_DC}; ll'
+[[ -d "${DIR_HOME_DL}" ]] && export DIR_HOME_DL && alias dl='cd ${DIR_HOME_DL}; ll'
+[[ -d "${DIR_HOME_DT}" ]] && export DIR_HOME_DT && alias dt='cd ${DIR_HOME_DT}; ll'
+
+# Typo aliases
+alias bim='vim'
+alias cim='vim'
+alias ehco='echo'
+alias grpe='grep'
+alias kk='ll'
+alias namp='nmap'
+alias pign='ping'
+alias tial='tail'
+
+# Application-specific aliases
+_alias_applications
+_alias_applications "/usr/local"
+
+# E-Z nmap commands
+_alias_nmap
+
+# ping/noping command tweaks
+_alias_ping
+
+# Prettyprint+colorize various formats, if supporting binaries are installed
+_alias_pygmentize
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -1,0 +1,205 @@
+# Functions: Alias generation
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Generate various application-specific command aliases
+_alias_applications() {
+	PREFIX="${1}"
+
+	# If it has apache2
+	DIR_APACHE2_CONF="${PREFIX}/etc/apache2"
+	DIR_APACHE2_LOG="${PREFIX}/var/log/apache2"
+	[[ -d "${DIR_APACHE2_CONF}" ]] && export DIR_APACHE2_CONF && alias config-apache2='cd ${DIR_APACHE2_CONF}; ll'
+	[[ -d "${DIR_APACHE2_LOG}"  ]] && export DIR_APACHE2_LOG  && alias log-apache2='   cd ${DIR_APACHE2_LOG};  ll'
+
+	# If it has dnsmasq
+	DIR_DNSMASQ_CONF="${PREFIX}/etc/dnsmasq.d"
+	DIR_DNSMASQ_LOG="${PREFIX}/var/log/dnsmasq"
+	[[ -d "${DIR_DNSMASQ_CONF}" ]] && export DIR_DNSMASQ_CONF && alias config-dnsmasq='cd ${DIR_DNSMASQ_CONF}; ll'
+	[[ -d "${DIR_DNSMASQ_LOG}"  ]] && export DIR_DNSMASQ_LOG  && alias log-dnsmasq='   cd ${DIR_DNSMASQ_LOG};  ll'
+
+	# If it has httpd
+	DIR_HTTPD_CONF="${PREFIX}/etc/httpd"
+	DIR_HTTPD_LOG="${PREFIX}/var/log/httpd"
+	[[ -d "${DIR_HTTPD_CONF}" ]] && export DIR_HTTPD_CONF && alias config-httpd='cd ${DIR_HTTPD_CONF}; ll'
+	[[ -d "${DIR_HTTPD_LOG}"  ]] && export DIR_HTTPD_LOG  && alias log-httpd='   cd ${DIR_HTTPD_LOG};  ll'
+
+	# If it has libvirt
+	DIR_LIBVIRT_CONF="${PREFIX}/var/lib/libvirt"
+	DIR_LIBVIRT_LOG="${PREFIX}/var/log/libvirt"
+	[[ -d "${DIR_LIBVIRT_CONF}" ]] && export DIR_LIBVIRT_CONF && alias config-libvirt='cd ${DIR_LIBVIRT_CONF}; ll'
+	[[ -d "${DIR_LIBVIRT_LOG}"  ]] && export DIR_LIBVIRT_LOG  && alias log-libvirt='   cd ${DIR_LIBVIRT_LOG};  ll'
+
+	# If it has nginx
+	DIR_NGINX_CONF="${PREFIX}/etc/nginx"
+	DIR_NGINX_LOG="${PREFIX}/var/log/nginx"
+	[[ -d "${DIR_NGINX_CONF}" ]] && export DIR_NGINX_CONF && alias config-nginx='cd ${DIR_NGINX_CONF}; ll'
+	[[ -d "${DIR_NGINX_LOG}"  ]] && export DIR_NGINX_LOG  && alias log-nginx='   cd ${DIR_NGINX_LOG};  ll'
+
+	# If it has squid
+	DIR_SQUID_CONF="${PREFIX}/etc/squid"
+	DIR_SQUID_LOG="${PREFIX}/var/log/squid"
+	[[ -d "${DIR_SQUID_CONF}" ]] && export DIR_SQUID_CONF && alias config-squid='cd ${DIR_SQUID_CONF}; ll'
+	[[ -d "${DIR_SQUID_LOG}"  ]] && export DIR_SQUID_LOG  && alias log-squid='   cd ${DIR_SQUID_LOG};  ll'
+
+	# If it has yum
+	DIR_YUM_CONF="${PREFIX}/etc/yum"
+	DIR_YUM_REPOS="${PREFIX}/etc/yum.repos.d"
+	FILE_YUM_LOG="${PREFIX}/var/log/yum.log"
+	[[ -d "${DIR_YUM_CONF}"  ]] && export DIR_YUM_CONF  && alias config-yum='     cd ${DIR_YUM_CONF};  ll'
+	[[ -d "${DIR_YUM_REPOS}" ]] && export DIR_YUM_REPOS && alias config-yumrepos='cd ${DIR_YUM_REPOS}; ll'
+	[[ -e "${FILE_YUM_LOG}"  ]] && export FILE_YUM_LOG  && alias log-yum='        cd /var/log;         ll yum.log'
+}
+
+# shellcheck disable=SC2139
+_alias_linux_macos_setup() {
+	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
+
+	# Declare vars as local
+	local GREP_BASE
+
+	# grep/ls config
+	#     in a terminal : always enable/use color
+	# NOT in a terminal : disable color
+	#
+	# -s : suppress error messages
+	GREP_BASE="grep --color=if-tty -s"
+
+	alias grep=" ${GREP_BASE}"
+	alias egrep="${GREP_BASE} -E"
+	alias fgrep="${GREP_BASE} -F"
+	alias igrep="${GREP_BASE} -i"
+	alias rgrep="${GREP_BASE} -r"
+	alias vgrep="${GREP_BASE} -v"
+
+	if hash zgrep; then
+		alias zgrep=" z${GREP_BASE}"
+		alias zegrep="z${GREP_BASE} -E"
+		alias zfgrep="z${GREP_BASE} -F"
+		alias zigrep="z${GREP_BASE} -i"
+		alias zrgrep="z${GREP_BASE} -r"
+		alias zvgrep="z${GREP_BASE} -v"
+	fi
+	if hash xzgrep; then
+		alias xzgrep=" xz${GREP_BASE}"
+		alias xzegrep="xz${GREP_BASE} -E"
+		alias xzfgrep="xz${GREP_BASE} -F"
+		alias xzigrep="xz${GREP_BASE} -i"
+		alias xzrgrep="xz${GREP_BASE} -r"
+		alias xzvgrep="xz${GREP_BASE} -v"
+	fi
+
+	alias cgrep=' grep -s --color=always' # Force enable color
+	alias ncgrep='grep -s --color=never'  # Force disable color
+
+	alias ls="  ls --color=if-tty 2> /dev/null"
+	alias cls=' ls --color=always 2> /dev/null' # Force enable color
+	alias ncls='ls --color=never  2> /dev/null' # Force disable color
+
+	# Sort by IP address octets
+	alias sort-ip='sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n'
+}
+
+# E-Z nmap commands
+_alias_nmap() {
+	# If it has nmap binary:
+	# only open ports, grepable output, aggressive and verbose aliases
+	hash nmap || return
+
+	# nmap needs sudo if not root
+	# First, add one for not aggressive one (but still verbose)
+	if [[ "${UID}" != "0" ]]; then
+		alias nmap='sudo nmap --open'
+		# nmap-v for very verbose scan
+		alias nmap-v='sudo nmap -vv --open'
+		# nmap-a for aggressive scripting scan
+		alias nmap-a='sudo nmap -vv -A --open'
+		return
+	fi
+
+	# already root, no need for sudo
+	alias nmap='nmap --open'
+	# nmap-v for very verbose scan
+	alias nmap-v='nmap -vv --open'
+	# nmap-a for aggressive scripting scan
+	alias nmap-a='nmap -vv -A --open'
+}
+
+# noping command tweaks
+_alias_noping() {
+	# noping commands, if noping is present
+	hash noping || return;
+
+	# noping needs sudo if not root
+	if [[ "${UID}" != "0" ]]; then
+		alias noping='     sudo noping -i 0.5'
+		alias noping-fast='sudo noping -i 0.1'
+		alias noping-slow='sudo noping -i 1.0'
+		return
+	fi
+
+	alias noping='     noping -i 0.5'
+	alias noping-fast='noping -i 0.1'
+	alias noping-slow='noping -i 1.0'
+}
+
+# noping command tweaks
+_alias_oping() {
+	# oping commands, if oping is present
+	hash oping || return;
+
+	# oping needs sudo if not root
+	if [[ "${UID}" != "0" ]]; then
+		alias oping='     sudo oping -i 0.5'
+		alias oping-fast='sudo oping -i 0.1'
+		alias oping-slow='sudo oping -i 1.0'
+		return
+	fi
+
+	alias oping='     oping -i 0.5'
+	alias oping-fast='oping -i 0.1'
+	alias oping-slow='oping -i 1.0'
+}
+
+# ping command tweaks
+_alias_ping() {
+	# ping-slow : normal (1.0 second interval)
+	#      ping : fast   (0.5 second interval)
+	# ping-fast : faster (0.1 second interval)
+	alias ping='     ping -i 0.5'
+	alias ping-fast='ping -i 0.1'
+	alias ping-slow='ping -i 1.0'
+
+	# Generate noping and oping aliases, too
+	_alias_noping
+	_alias_oping
+}
+
+_alias_pygmentize_html() {
+	hash tidy || return
+	alias html-format='tidy -i -w 200 -ashtml -utf8 2> /dev/null | pygmentize -l html -f terminal256 -O style=monokai'
+	alias format-html='html-format'
+}
+
+_alias_pygmentize_json() {
+	hash json_reformat || return
+	alias json-format='json_reformat | pygmentize -l json -f terminal256 -O style=monokai'
+	alias format-json='json-format'
+}
+
+_alias_pygmentize_xml() {
+	hash xmllint || return
+	alias xml-format='xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal256 -O style=monokai'
+	alias format-xml='xml-format'
+}
+
+# Prettyprint+colorize various formats, if supporting binaries are installed
+_alias_pygmentize() {
+	hash pygmentize || return
+
+	_alias_pygmentize_html
+	_alias_pygmentize_json
+	_alias_pygmentize_xml
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

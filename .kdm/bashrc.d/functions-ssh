@@ -1,0 +1,88 @@
+# Functions: SSH
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Ping it, then ssh to it
+# shellcheck disable=SC2029
+_ssh_ping() {
+	local USAGE_STRING="ssh-ping <host>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	ping "${1}"
+	ssh  "${1}" "${2}"
+}
+
+# Show full path for SCPing
+_show_scp_path() {
+	# Declare vars as local
+	local FILE_NAME FILE_TYPE SCP_CMD SCP_PATH SELECTED
+
+	# If no argument, select current directory
+	SELECTED="${PWD}"
+	[[ "${1}" ]] && SELECTED="${1}"
+
+	# Check if file exists
+	[[ ! -e "${SELECTED}" ]] && output error "'./${1}' is not a valid file" && return
+
+	# Get realpath of argument, and then swap out the home directory with a tilde
+	SELECTED="$(realpath "${SELECTED}")"
+	SCP_PATH="${SELECTED/$HOME/\~}"
+
+	# Check if argument is a file or folder, fill variables accordingly
+	if [[ -d "${SELECTED}" ]]; then
+		FILE_NAME="${SCP_PATH}"
+		FILE_TYPE="folder"
+		SCP_CMD="scp -r"
+	else
+		FILE_NAME="$(basename "${SCP_PATH}")"
+		FILE_TYPE="file"
+		SCP_CMD="scp"
+	fi
+
+	echo
+	output purple "Download ${FILE_NAME} from ${HOST_SHORT}:"
+
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	echo
+
+	# Output upload instructions if FILE_TYPE is folder
+	[[ ! -d "${SELECTED}" ]] && return
+
+	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"
+
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	echo
+}
+
+# With compression
+# shellcheck disable=SC2029
+_ssh_c() {
+	local USAGE_STRING="ssh-c <host>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	ssh -o Compression=yes "${1}"
+}
+
+# With X forwarding
+# shellcheck disable=SC2029
+_ssh_x() {
+	local USAGE_STRING="ssh-x <host>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	ssh -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
+}
+
+# With compressed X forwarding
+# shellcheck disable=SC2029
+_ssh_xc() {
+	local USAGE_STRING="ssh-xc <host>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	ssh -o Compression=yes -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

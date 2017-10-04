@@ -1,0 +1,159 @@
+# Functions: MOTD
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Dynamic MOTD with facter (if present)
+_show_motd() {
+	# Declare vars as local
+	local ARRAY_VALUES ARROW_L ARROW_R BAR BASE_KEY CPU DST FACTER_MEMORY FACTER_OS HASH HEAD_FMT HEAD_KEY
+	local HEAD_VAL1 HEAD_VAL2 LOAD MOTD_FMT MOTD_KEY MOTD_VAL1 MOTD_VAL2 RAM RAMC STRING_LENGTH UPT VER
+
+	# Return if we're not in a terminal
+	[[ -t 2 ]] || return
+
+	# Color shortcuts
+	BAR="${C_BLK_BLD}|${C_RST}"
+	ARROW_L="${C_BLK_BLD}<${C_RST}"
+	ARROW_R="${C_BLK_BLD}>${C_RST}"
+
+	BASE_KEY="%s${C_RST}"
+	HEAD_KEY="${C_ENV}${BASE_KEY}"
+
+	# kdm bash-env git hash
+	HASH="#$(_kdm_hash)"
+
+	# Check for jq binary
+	if ! hash jq; then
+		# Output warning message about jq being missing
+		echo -e "jq not available; dynamic MOTD not possible\n"
+
+		# Print just the env hash
+		# Assemble header format string
+		HEAD_VAL1="${C_BLU_BLD}%+s${C_RST}"
+		HEAD_VAL2="${C_BLU_BLD}%-s${C_RST}"
+		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
+		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
+		return 1
+	fi
+
+	# Use facter if possible, if not, too bad..
+	if ! hash facter; then
+		# Check if we already said this
+		if ! grep -q 'WARN_FACTER=1' "${BASH_ENV_FILE_CONFIG}"; then
+			sed -i '/WARN_FACTER/d' "${BASH_ENV_FILE_CONFIG}"
+			echo   'WARN_FACTER=1' >> "${BASH_ENV_FILE_CONFIG}"
+
+			# Output warning message about facter being missing
+			echo -e "facter not available; dynamic MOTD not possible\n"
+		fi
+
+		# Print just the env hash
+		# Assemble header format string
+		HEAD_VAL1="${C_BLU_BLD}%+s${C_RST}"
+		HEAD_VAL2="${C_BLU_BLD}%-s${C_RST}"
+		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
+		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
+		return 1
+	fi
+
+	# Generate the OS info string differently, based on OS
+	FACTER_OS="$(facter -j os)"
+	case "$(echo "${FACTER_OS}" | jq -r .os.family)" in
+		Archlinux)
+			DST="$(echo "${FACTER_OS}" | jq -r .os.name)"
+			VER="$(echo "${FACTER_OS}" | jq -r .os.release.major).$(echo "${FACTER_OS}" | jq -r .os.release.minor)"
+			;;
+		Darwin)
+			DST="macOS"
+			VER="$(echo "${FACTER_OS}" | jq -r .os.macosx.version.major)"
+			;;
+		Debian)
+			DST="$(echo "${FACTER_OS}" | jq -r .distro.id)"
+			VER="$(echo "${FACTER_OS}" | jq -r .release.major)"
+			;;
+		RedHat)
+			DST="$(echo "${FACTER_OS}" | jq -r .name)"
+
+			case "$(echo "${FACTER_OS}" | jq -r .distro.id)" in
+				CentOS|RedHat*) VER="$(echo "${FACTER_OS}" | jq -r .release.major).$(echo "${FACTER_OS}" | jq -r .release.minor)" ;;
+				Fedora)         VER="$(echo "${FACTER_OS}" | jq -r .release.major)"                                               ;;
+				*)              VER="$(echo "${FACTER_OS}" | jq -r .release.full)"                                                ;;
+			esac
+	esac
+
+	# Get CPU, RAM, uptime, sysload, perhaps do some formatting
+	FACTER_MEMORY="$(facter -j memory)"
+	RAM="$( echo "${FACTER_MEMORY}" | jq -r .memory.system.total)"
+	RAMC="$(echo "${FACTER_MEMORY}" | jq -r .memory.system.capacity)"
+
+	CPU="$( facter processors.models.0 | sed -r -e 's/(^\s?)|(\s?CPU)|(\s?@)|(\s?Processor)|(\(.?.?\))|(\s?[0-9]\.[0-9]{1,3}GHz\s?)|(\s[0-9]\s)|(Intel\(..?\)\sCore\(..?\)\s?)|Intel\sCore\s|\(|\)|Intel\(..?\)\s|Atom|Xeon|\sv[1-9]|\s//g' -e 's/(\s)+/\ /g')"
+	UPT="$( facter uptime)"
+	LOAD="$(facter load_averages.5m)"
+
+	# Format a couple things
+	UPT="${UPT:0:8}"
+	UPT="${UPT/\ hou/}"
+	UPT="${UPT/\ ho/}"
+	LOAD="${LOAD:0:4}"
+	RAMC="${RAMC%%.*}%"
+	RAM="${RAM%%.*}G/${RAMC}"
+
+	# Find longest string in array for dynamic width
+	ARRAY_VALUES=(
+	"bash-env"
+	"${HASH}"
+	"${CPU}"
+	"${RAM}"
+	"${DST}"
+	"${VER}"
+	"${UPT}"
+	"${LOAD}"
+	)
+
+	# Find the length of the longest string among the values
+	for STRING in "${ARRAY_VALUES[@]}"; do
+		STRING_LENGTH=${#STRING}
+
+		# If the current string is longer than MAX_LEN, set MAX_LEN to the current string's length
+		[[ "${STRING_LENGTH}" -gt "${MAX_LEN}" ]] && MAX_LEN="${STRING_LENGTH}"
+
+		# Quick dirty check if data exists
+		if [[ -z "${STRING}" ]]; then
+			echo -e "Failed evaluating data; dynamic MOTD not possible\n"
+			return 2
+		fi
+	done
+
+	# Example output:
+	#
+	# kdm > bash-env | #8af151d < v749
+	# cpu >  i7-3770 | 16G      < ram
+	#  os >    macOS | 10.11    < ver
+	#  up >     1:04 | 1.28     < load
+
+	# Set up printf format strings with C_ENV
+	BASE_KEY="%s${C_RST}"
+	BASE_VAL1="%+${MAX_LEN}s${C_RST}"
+	BASE_VAL2="%-${MAX_LEN}s${C_RST}"
+
+	MOTD_KEY="${C_BLU_BLD}${BASE_KEY}"
+	MOTD_VAL1="${C_ENV}${BASE_VAL1}"
+	MOTD_VAL2="${C_ENV}${BASE_VAL2}"
+
+	HEAD_KEY="${C_ENV}${BASE_KEY}"
+	HEAD_VAL1="${C_BLU_BLD}${BASE_VAL1}"
+	HEAD_VAL2="${C_BLU_BLD}${BASE_VAL2}"
+
+	# Assemble format strings
+	HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}${C_RST}\n"
+	MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}${C_RST}\n"
+
+	# Output the header line, then the MOTD
+	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "rev"
+	printf "${MOTD_FMT}" "cpu"   "${CPU}" "${RAM}"  "ram"
+	printf "${MOTD_FMT}" " os"   "${DST}" "${VER}"  "ver"
+	printf "${MOTD_FMT}" " up"   "${UPT}" "${LOAD}" "load"
+	echo
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

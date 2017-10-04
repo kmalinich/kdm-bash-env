@@ -1,0 +1,12 @@
+# Functions: Misc
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Check if a binary is installed/present in ${PATH}, without stdout/stderr
+# This is for bash, not for POSIX
+hash() {
+	builtin hash "${1+"$@"}" &> /dev/null
+	return "${?}"
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

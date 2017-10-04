@@ -1,0 +1,255 @@
+# Functions: Update
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+# Update all the things (except CPAN)
+_update_all() {
+	# Declare vars as local
+	local ARRAY_COMMANDS ARRAY_NPM_PACKAGES ARRAY_PIP_PACKAGES COMMAND NPM_UPDATE_COUNT UPDATE_YN
+
+	# Check 1st argument
+	if [[ "${1}" != "-y" ]]; then
+		# Check if they're sure
+		read -r -p "Are you sure? [Y/n] " UPDATE_YN
+		echo
+		# Exit if they're not
+		[[ "${UPDATE_YN}" == [Nn] ]] && output cyan "No updates performed" && return
+	fi
+
+	# Bounce if we couldn't find a supported package manager
+	if [[ -z "${PACKAGE_MANAGER}" ]]; then
+		output error "Could not detect package manager"
+		return 1
+	fi
+
+	# Assemble array of command strings based on type of package manager
+	unset ARRAY_COMMANDS
+	case "${PACKAGE_MANAGER}" in
+		"apt-get")
+			ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} update"
+			ARRAY_COMMANDS[1]="sudo ${PACKAGE_MANAGER} -y upgrade"
+			ARRAY_COMMANDS[2]="sudo ${PACKAGE_MANAGER} -y dist-upgrade"
+			;;
+		"brew")
+			ARRAY_COMMANDS[0]="${PACKAGE_MANAGER} update"
+			ARRAY_COMMANDS[1]="${PACKAGE_MANAGER} upgrade"
+			ARRAY_COMMANDS[2]="${PACKAGE_MANAGER} cleanup"
+			# macOS software update
+			ARRAY_COMMANDS[3]="sudo softwareupdate -i -a"
+			;;
+		"yum")
+			ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -y update"
+			ARRAY_COMMANDS[1]="sudo ${PACKAGE_MANAGER} -y upgrade"
+			;;
+		"pacman")
+			ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -Syu --quiet --noconfirm --noprogressbar"
+			;;
+		"zypper")
+			ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -n update"
+			;;
+		*)
+			ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -y update"
+			;;
+	esac
+
+	# Perform update commands
+	for COMMAND in "${ARRAY_COMMANDS[@]}"; do
+		output leadup "${COMMAND}"
+		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+	done
+
+	# Cleanup old kernels if possible (only with yum-utils installed)
+	if hash package-cleanup; then
+		COMMAND="package-cleanup -y --oldkernels --count=2"
+		output leadup "${COMMAND}"
+		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+	fi
+
+	# Raspberry Pi firmware update
+	if hash rpi-update; then
+		COMMAND="rpi-update"
+		output leadup "${COMMAND}"
+		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+	fi
+
+	# Update kdm-bash-env from Git
+	if hash _kdm_pull; then
+		COMMAND="kdm-pull"
+		output leadup "${COMMAND}"
+		# Redefine this because it's not really real
+		if _kdm_pull &> /dev/null; then output success; else output failure; fi
+	fi
+
+	# Check for npm, if it exists, update npm packages
+	if hash npm; then
+		# Loop npm update until it's fully updated, up to 5 times
+		COMMAND="npm -g update"
+
+		NPM_UPDATE_COUNT="1"
+		while [[ "${NPM_UPDATE_COUNT}" -le "5" ]]; do
+			output leadup "${COMMAND} (loop #${NPM_UPDATE_COUNT})"
+			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+
+			# Increment loop counter
+			((NPM_UPDATE_COUNT++))
+		done
+	fi
+
+	# Check for ncu, if it exists, REALLY update npm packages
+	if hash ncu; then
+		COMMAND="ncu -g -t"
+		output leadup "${COMMAND}"
+		ARRAY_NPM_PACKAGES=($(${COMMAND} 2> /dev/null | sed '/^\s*$/d' | awk '$0 !~ /^All/ {print $1}'))
+		output success
+
+		# Perform update commands
+		for NPM_PACKAGE in "${ARRAY_NPM_PACKAGES[@]}"; do
+			COMMAND="npm -g install ${NPM_PACKAGE}"
+			output leadup "${COMMAND}"
+			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+		done
+	fi
+
+	# Check for python-pip, if it exists, update python-pip packages
+	if hash pip; then
+		# Array of pip packages to update, with pip and setuptools being first
+		COMMAND="pip list -o"
+		output leadup "${COMMAND}"
+		ARRAY_PIP_PACKAGES=(pip setuptools $(pip list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		output success
+
+		# Perform update commands
+		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
+			COMMAND="pip install --upgrade ${PIP_PACKAGE}"
+			output leadup "${COMMAND}"
+			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+		done
+	fi
+
+	# Check for python-pip2, if it exists, update python-pip2 packages
+	if hash pip2; then
+		# Array of pip2 packages to update, with pip2 and setuptools being first
+		COMMAND="pip2 list -o"
+		output leadup "${COMMAND}"
+		ARRAY_PIP_PACKAGES=(pip setuptools $(pip2 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		output success
+
+		# Perform update commands
+		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
+			COMMAND="pip2 install --upgrade ${PIP_PACKAGE}"
+			output leadup "${COMMAND}"
+			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+		done
+	fi
+
+	# Check for python-pip3, if it exists, update python-pip3 packages
+	if hash pip3; then
+		# Array of pip3 packages to update, with pip3 and setuptools being first
+		COMMAND="pip3 list -o"
+		output leadup "${COMMAND}"
+		ARRAY_PIP_PACKAGES=(pip setuptools $(pip3 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		output success
+
+		# Perform update commands
+		for PIP_PACKAGE in "${ARRAY_PIP_PACKAGES[@]}"; do
+			COMMAND="pip3 install --upgrade ${PIP_PACKAGE}"
+			output leadup "${COMMAND}"
+			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+		done
+	fi
+
+	# rubygems update
+	if hash update_rubygems; then
+		# Array of update commands
+		unset ARRAY_COMMANDS
+		ARRAY_COMMANDS[0]="update_rubygems"
+		ARRAY_COMMANDS[1]="gem update  --silent --system"
+		ARRAY_COMMANDS[2]="gem update  --silent"
+		ARRAY_COMMANDS[3]="gem cleanup --silent"
+
+		# Perform update commands
+		for COMMAND in "${ARRAY_COMMANDS[@]}"; do
+			output leadup "${COMMAND}"
+			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+		done
+	fi
+
+	output green "update-all complete"
+	return 0
+}
+
+# Update just CPAN packages
+_update_cpan() {
+	# Declare vars as local
+	local ARRAY_COMMANDS COMMAND UPDATE_YN
+
+	# Check 1st argument
+	if [[ "${1}" != "-y" ]]; then
+		# Check if they're sure
+		read -r -p "Are you sure? [Y/n] " UPDATE_YN
+		echo
+		[[ "${UPDATE_YN}" == [Nn] ]] && output cyan "update-cpan not performed" && return
+	fi
+
+	# Bounce if we couldn't find a supported package manager
+	if [[ -z "${PACKAGE_MANAGER}" ]]; then
+		output error "Could not detect package manager"
+		return 1
+	fi
+
+	# Install CPAN if missing
+	if ! hash cpan; then
+		COMMAND="${PACKAGE_MANAGER} -y install perl-CPAN perl-App-cpanminus cpanminus"
+		output leadup "${COMMAND}"
+		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+	fi
+
+	# Update CPAN itself, and YAML
+	unset ARRAY_COMMANDS
+	ARRAY_COMMANDS[0]="cpan CPAN"
+	ARRAY_COMMANDS[1]="cpan YAML"
+	for COMMAND in "${ARRAY_COMMANDS[@]}"; do
+		output leadup "${COMMAND}"
+		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+	done
+
+	# Check for cpanm, install if missing
+	if ! hash cpanm; then
+		ARRAY_COMMANDS[0]="sudo ${PACKAGE_MANAGER} -y install cpanminus"
+		ARRAY_COMMANDS[1]="cpan App::cpanminus"
+		for COMMAND in "${ARRAY_COMMANDS[@]}"; do
+			output leadup "${COMMAND}"
+			if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+		done
+	fi
+
+	# Check for cpan-outdated, install if missing
+	if ! hash cpan-outdated; then
+		COMMAND="cpan App::cpanoutdated"
+		output leadup "${COMMAND}"
+		if ${COMMAND} &> /dev/null; then output success; else output failure; fi
+	fi
+
+	# Check for cpanm and cpanm-outdated again
+	if ! hash cpanm && hash cpan-outdated; then
+		output error "cpanminus and cpan-outdated could not be found"
+		return 1
+	fi
+
+	# Update outdated CPAN modules in packages
+	COMMAND="cpan-outdated -p | cpanm"
+	output leadup "${COMMAND}"
+	# Custom due to command pipe
+	if cpan-outdated -p | cpanm &> /dev/null; then output success; else output failure; fi
+
+	# Update outdated CPAN modules
+	COMMAND="cpan-outdated | cpanm"
+	output leadup "${COMMAND}"
+	# Custom due to command pipe
+	if cpan-outdated | cpanm &> /dev/null; then output success; else output failure; fi
+
+	output green "update-cpan complete"
+	return 0
+}
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
