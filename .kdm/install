@@ -17,7 +17,7 @@ echo
 ls -lha
 echo
 
-read -p "Install? Enter Y/N: " INSTALL_YN
+read -r -p "Install? Enter Y/N: " INSTALL_YN
 
 if [[ "${INSTALL_YN}" != [Yy] ]]; then
 	echo "Not installing"
@@ -33,8 +33,8 @@ mv
 rm
 )
 
-for CMD in ${ARRAY_UNALIAS[@]}; do
-	unalias ${CMD} > /dev/null 2>&1
+for CMD in "${ARRAY_UNALIAS[@]}"; do
+	unalias "${CMD}" > /dev/null 2>&1
 done
 
 
@@ -51,33 +51,42 @@ md5_compare() {
 
 
 echo -e "\nMoving 'htoprc'"
-mkdir -p ${HOME}/.config/htop
-rm -f {HOME}/.config/htop/htoprc
-mv .config/htop/htoprc ${HOME}/.config/htop/
+mkdir -p "${HOME}/.config/htop"
+rm -f "${HOME}/.config/htop/htoprc"
+mv .config/htop/htoprc "${HOME}/.config/htop/"
 rm -rf .config
 
 
 # Move a few dirs with lots of files in them
-ARRAY_DIRS_MOVE=(.kdm/nloadrc .kdm/toprc .nmap .vim/pack)
+ARRAY_DIRS_MOVE=(
+.kdm/bashrc.d
+.kdm/include
+.kdm/nloadrc
+.kdm/toprc
+.nmap
+.vim/pack
+)
 
-for DIR in ${ARRAY_DIRS_MOVE[@]}; do
+for DIR in "${ARRAY_DIRS_MOVE[@]}"; do
 	echo "Moving '${DIR}'"
-	mkdir -p ${HOME}/${DIR}
+
+	mkdir -p "${HOME}/${DIR}"
+
 	for FILE in $(ls -1A ${DIR}); do
-		rm -rf ${HOME}/${DIR}/${FILE}
-		mv ${DIR}/${FILE} ${HOME}/${DIR}/
+		rm -rf "${HOME}/${DIR}/${FILE}"
+		mv "${DIR}/${FILE}" "${HOME}/${DIR}/"
 	done
 done
 
-rm -rf .kdm/nloadrc .kdm/toprc .nmap .vim
+rm -rf "${ARRAY_DIRS_MOVE[@]}"
 
 # Check/move/update contents of .kdm/extra/
 DIR=".kdm/extra"
 echo "Moving '${DIR}'"
-mkdir -p ${HOME}/${DIR}
+mkdir -p "${HOME}/${DIR}"
 
-rm -f ${HOME}/${DIR}/README
-mv ${DIR}/README ${HOME}/${DIR}/README
+rm -f "${HOME}/${DIR}/README"
+mv "${DIR}/README" "${HOME}/${DIR}/README"
 
 for FILE in $(ls -1A ${DIR}); do
 	FILE_REPO="${DIR}/${FILE}"
@@ -85,9 +94,9 @@ for FILE in $(ls -1A ${DIR}); do
 
 	# Does it already exist in the home directory?
 	if [[ -s ${FILE_HOME} ]]; then
-		if ! md5_compare ${FILE_REPO} ${FILE_HOME}; then
-			rm -rf ${FILE_HOME}
-			mv ${FILE_REPO} ${FILE_HOME}
+		if ! md5_compare "${FILE_REPO}" "${FILE_HOME}"; then
+			rm -rf "${FILE_HOME}"
+			mv "${FILE_REPO}" "${FILE_HOME}"
 		fi
 	fi
 done
@@ -100,24 +109,24 @@ unset FILE_HOME
 ARRAY_KDM_SCRIPTS=(install powerline)
 DIR=".kdm"
 echo "Moving '${DIR}/*'"
-for KDM_SCRIPT in ${ARRAY_KDM_SCRIPTS[@]}; do
-	rm -f ${HOME}/${DIR}/${KDM_SCRIPT}
-	mv ${DIR}/${KDM_SCRIPT} ${HOME}/${DIR}/${KDM_SCRIPT}
+for KDM_SCRIPT in "${ARRAY_KDM_SCRIPTS[@]}"; do
+	rm -f "${HOME}/${DIR}/${KDM_SCRIPT}"
+	mv "${DIR}/${KDM_SCRIPT}" "${HOME}/${DIR}/${KDM_SCRIPT}"
 done
 rm -rf ${DIR}
 
 # Move the rest of the files
 for FILE in $(ls -1A); do
 	echo "Moving '${FILE}'"
-	rm -rf ${HOME}/${FILE}
-	mv ${FILE} ${HOME}/
+	rm -rf "${HOME}/${FILE}"
+	mv "${FILE}" "${HOME}/"
 done
 
-cd ${HOME}
+cd "${HOME}" || return 1
 
 # Git reset hard just in case
 git reset --hard HEAD &> /dev/null
-rm -rf ${REPO_NAME}
+rm -rf "${REPO_NAME}"
 
 echo -e "\nPopulating submodules\n"
 git submodule update --init
