@@ -1,8 +1,112 @@
-# Aliases:
-# Functions:
+# Functions: Fix
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+# Fix hung java processes
+_fix_hung_java() {
+	# Declare vars as local
+	local JAVA_PIDS
 
+	JAVA_PIDS=($(ps -ef | awk '/[j]ava/ {print $2}'))
+	[[ -z "${JAVA_PIDS[0]}" ]] && output yellow "No Java PIDs detected" && return
+
+	for JAVA_PID in "${JAVA_PIDS[@]}"; do
+		if ! kill -9 "${JAVA_PID}" &> /dev/null; then
+			output red "Failed to kill Java JAVA_PID ${JAVA_PID}"
+		else
+			output green "Killed Java JAVA_PID ${JAVA_PID}"
+		fi
+	done
+}
+
+# Stale bash threads fix
+# shellcheck disable=SC2009
+_fix_bash_pids() {
+	# Declare vars as local
+	local ARRAY_USAGE_OPTIONS FIX_BASH_PIDS_PID_COUNT FIX_BASH_PIDS_PID_LIST USAGE_OPTIONS_STRING
+
+	# Array of options
+	ARRAY_USAGE_OPTIONS=(
+	show
+	kill
+	)
+
+	# Create variable of pipe-separated options from array
+	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
+
+	FIX_BASH_PIDS_PID_LIST=($(ps aux | grep -E '[b]ash' | grep -Ev 'root|s00\.' | sort -r | awk '{print $2}'))
+	FIX_BASH_PIDS_PID_COUNT="${#FIX_BASH_PIDS_PID_LIST[@]}"
+
+	output purple "Number of stale bash PIDs: ${FIX_BASH_PIDS_PID_COUNT}"
+
+	if [[ ! "${FIX_BASH_PIDS_PID_COUNT}" == "0" ]]; then
+		case "${1}" in
+			show)
+				output purple "PID list:"
+				for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
+					output yellow "${PID}"
+				done
+				;;
+			kill)
+				read -r -p "Kill stale bash PIDs? [Y/n] " FIX_BASH_PIDS_YN
+				echo
+				[[ "${FIX_BASH_PIDS_YN}" == [Nn] ]] && output purple "No PIDs killed" && return 1
+
+				for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
+					output yellow "Killing PID ${PID}"
+					kill -9 "${PID}"
+				done
+
+				output green "Complete"
+
+				# Check the PIDs again
+				fix-bash-pids show
+				;;
+			*)
+				output usage "fix-bash-pids <${USAGE_OPTIONS_STRING}>"
+				;;
+		esac
+	fi
+}
+
+# Remove / clean macOS .DS_Store / attribute files
+_fix_macos_files() {
+	# Declare vars as local
+	local ARRAY_RM_FILES OLD_IFS
+
+	output purple "Finding all macOS metadata files under '${PWD}'"
+
+	# Backup current IFS, change IFS to \n\b so as to parse file array
+	OLD_IFS="${IFS}"
+	IFS=$(echo -en "\n\b")
+
+	# File array of macOS-specific junk files
+	ARRAY_RM_FILES=($(find . -iname '*DS_Store' -o -iname '._*'))
+
+	# Restore previous IFS
+	IFS="${OLD_IFS}"
+
+	[[ -z "${ARRAY_RM_FILES[0]}" ]] && output purple "No macOS attribute/Finder files under '${PWD}' to remove" && return
+
+	output yellow "Removing these macOS attribute/Finder files under '${PWD}':"
+	echo
+
+	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
+		output yellow "${RM_FILE}"
+	done
+	echo
+
+	read -r -p "Are you sure you want to remove these files? [Y/n] " FIX_MACOS_FILES_YN
+	echo
+	[[ "${FIX_MACOS_FILES_YN}" == [Nn] ]] && output purple "No macOS attribute/Finder files under '${PWD}' removed" && return
+
+	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
+		output yellow "Removing '${FILE}'"
+		rm -f "${RM_FILE}"
+	done
+	echo
+
+	output green "All macOS attribute/Finder files under '${PWD}' removed"
+}
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

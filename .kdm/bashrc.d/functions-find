@@ -1,8 +1,38 @@
-# Aliases:
-# Functions:
+# Functions: Find
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+# Find dir function
+# Case insensitive, double wildcard search of CURRENT dir
+_find_dir() {
+	local USAGE_STRING="find-dir <dirname>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
+	output stderr "Finding directory '${1}' under '${PWD}'"
+	output stderr " "
+
+	find . -type d -iname "*${1}*"
+}
+
+# Find file function
+# Case insensitive, double wildcard search of CURRENT dir
+_find_file() {
+	local USAGE_STRING="find-file <filename>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	output stderr "Finding file '${1}' under '${PWD}'"
+	output stderr " "
+
+	find . -type f -iname "*${1}*"
+}
+
+# Find ${COUNT} largest items in current directory
+_find_largest() {
+	local COUNT="${1-10}"
+	output stderr "Searching for ${COUNT} largest items under '${PWD_FINAL}'"
+	output stderr " "
+
+	du -hs ./* | sort -hr | head -n "${COUNT}"
+}
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

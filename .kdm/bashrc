@@ -8,116 +8,126 @@
 [[ -f /etc/bashrc      ]] && . /etc/bashrc
 
 
-#### Aliases: Function names ==start ####
+# Android
+# shellcheck source=.kdm/bashrc.d/aliases-android
+. "${BASH_ENV_DIR_BASHRC}/aliases-android"
+# shellcheck source=.kdm/bashrc.d/functions-android
+. "${BASH_ENV_DIR_BASHRC}/functions-android"
 
-alias android-make-md5='_android_make_md5'
+# Array tools
+# shellcheck source=.kdm/bashrc.d/aliases-array
+. "${BASH_ENV_DIR_BASHRC}/aliases-array"
+# shellcheck source=.kdm/bashrc.d/functions-array
+. "${BASH_ENV_DIR_BASHRC}/functions-array"
 
-alias array-dedupe='_array_dedupe'
-alias array-width='_array_width'
+# File finders
+# shellcheck source=.kdm/bashrc.d/aliases-find
+. "${BASH_ENV_DIR_BASHRC}/aliases-find"
+# shellcheck source=.kdm/bashrc.d/functions-find
+. "${BASH_ENV_DIR_BASHRC}/functions-find"
 
-alias find-dir='_find_dir'
-alias find-file='_find_file'
-alias find-largest='_find_largest'
+# Fix/repair tools
+# shellcheck source=.kdm/bashrc.d/aliases-fix
+. "${BASH_ENV_DIR_BASHRC}/aliases-fix"
+# shellcheck source=.kdm/bashrc.d/functions-fix
+. "${BASH_ENV_DIR_BASHRC}/functions-fix"
 
-alias fix-bash-pids='_fix_bash_pids'
-alias fix-hung-java='_fix_hung_java'
-alias fix-macos-files='_fix_macos_files'
+# MD5 calculation wrappers
+# shellcheck source=.kdm/bashrc.d/aliases-md5
+. "${BASH_ENV_DIR_BASHRC}/aliases-md5"
+# shellcheck source=.kdm/bashrc.d/functions-md5
+. "${BASH_ENV_DIR_BASHRC}/functions-md5"
 
-alias md5-clean='_md5_clean'
-alias md5-compare='_md5_compare'
+# Show misc data/info
+# shellcheck source=.kdm/bashrc.d/aliases-show
+. "${BASH_ENV_DIR_BASHRC}/aliases-show"
+# shellcheck source=.kdm/bashrc.d/functions-show
+. "${BASH_ENV_DIR_BASHRC}/functions-show"
 
-alias show-bin='_show_bin'
-alias showbin='_show_bin'
-alias show-clock='_show_clock'
-alias show-scp-path='_show_scp_path'
-alias show-top-cmds='_show_top_cmds'
-
-#### Aliases: Function names ==final ####
-
-
-# Functions: Color
+# Color
 # shellcheck source=.kdm/bashrc.d/functions-color
 . "${BASH_ENV_DIR_BASHRC}/functions-color"
 
-# Functions: Misc
+# Misc
 # shellcheck source=.kdm/bashrc.d/functions-misc
 . "${BASH_ENV_DIR_BASHRC}/functions-misc"
 
-# Functions: Text
+# Text
 # shellcheck source=.kdm/bashrc.d/functions-text
 . "${BASH_ENV_DIR_BASHRC}/functions-text"
 
-# Functions: Ping
+# Ping
 # shellcheck source=.kdm/bashrc.d/functions-ping
 . "${BASH_ENV_DIR_BASHRC}/functions-ping"
 
-# Functions: Time
+# Time
 # shellcheck source=.kdm/bashrc.d/aliases-time
 . "${BASH_ENV_DIR_BASHRC}/aliases-time"
 # shellcheck source=.kdm/bashrc.d/functions-time
 . "${BASH_ENV_DIR_BASHRC}/functions-time"
 
-# Functions: Conversion
+# Conversion
 # shellcheck source=.kdm/bashrc.d/aliases-conversion
 . "${BASH_ENV_DIR_BASHRC}/aliases-conversion"
 # shellcheck source=.kdm/bashrc.d/functions-conversion
 . "${BASH_ENV_DIR_BASHRC}/functions-conversion"
 
-# Functions: SSH
+# SSH
 # shellcheck source=.kdm/bashrc.d/aliases-ssh
 . "${BASH_ENV_DIR_BASHRC}/aliases-ssh"
 # shellcheck source=.kdm/bashrc.d/functions-ssh
 . "${BASH_ENV_DIR_BASHRC}/functions-ssh"
 
-# Functions: Git
+# Git
 # shellcheck source=.kdm/bashrc.d/aliases-git
 . "${BASH_ENV_DIR_BASHRC}/aliases-git"
 # shellcheck source=.kdm/bashrc.d/functions-git
 . "${BASH_ENV_DIR_BASHRC}/functions-git"
 
-# Functions: Net
+# Net
 # shellcheck source=.kdm/bashrc.d/aliases-net
 . "${BASH_ENV_DIR_BASHRC}/aliases-net"
 # shellcheck source=.kdm/bashrc.d/functions-net
 . "${BASH_ENV_DIR_BASHRC}/functions-net"
 
-# Functions: PS1 prompt
+# PS1 prompt
 # shellcheck source=.kdm/bashrc.d/functions-prompt
 . "${BASH_ENV_DIR_BASHRC}/functions-prompt"
 
-# Functions: MOTD
+# MOTD
 # shellcheck source=.kdm/bashrc.d/aliases-motd
 . "${BASH_ENV_DIR_BASHRC}/aliases-motd"
 # shellcheck source=.kdm/bashrc.d/functions-motd
 . "${BASH_ENV_DIR_BASHRC}/functions-motd"
 
-# Functions: kdm-bash-env
+# kdm-bash-env
 # shellcheck source=.kdm/bashrc.d/aliases-kdm
 . "${BASH_ENV_DIR_BASHRC}/aliases-kdm"
 # shellcheck source=.kdm/bashrc.d/functions-kdm
 . "${BASH_ENV_DIR_BASHRC}/functions-kdm"
 
-# Functions: Update
+# Update
 # shellcheck source=.kdm/bashrc.d/aliases-update
 . "${BASH_ENV_DIR_BASHRC}/aliases-update"
 # shellcheck source=.kdm/bashrc.d/functions-update
 . "${BASH_ENV_DIR_BASHRC}/functions-update"
 
-# Functions: macOS-only (regardless of GNU conversion)
+# macOS-only (regardless of GNU conversion)
 # shellcheck source=.kdm/bashrc.d/functions-macos
 . "${BASH_ENV_DIR_BASHRC}/functions-macos"
 
-# Functions: Linux-only
+# Linux-only
 # shellcheck source=.kdm/bashrc.d/functions-linux
 . "${BASH_ENV_DIR_BASHRC}/functions-linux"
 
-# Functions: Auto-sudo
+# Auto-sudo
 # shellcheck source=.kdm/bashrc.d/functions-auto-sudo
 . "${BASH_ENV_DIR_BASHRC}/functions-auto-sudo"
 
-# Functions: Alias generation
+# Alias generation
 # shellcheck source=.kdm/bashrc.d/functions-alias-generation
 . "${BASH_ENV_DIR_BASHRC}/functions-alias-generation"
+
 
 # Aliases: Global
 # shellcheck source=.kdm/bashrc.d/aliases-global
@@ -131,327 +141,8 @@ alias show-top-cmds='_show_top_cmds'
 # shellcheck source=.kdm/bashrc.d/aliases-linux
 . "${BASH_ENV_DIR_BASHRC}/aliases-linux"
 
-
-#### Functions: Array ==start ####
-
-# Function to remove duplicates from array
-_array_dedupe() {
-	if [[ -z "${1}" ]]; then
-		output usage "array-dedupe array[@]"
-		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
-		output red   "Don't say I didn't warn you"
-		return
-	fi
-
-	# Magic BASH function array argument workaround
-	declare -a ARRAY=("${!1}")
-
-	# Convert array to string, swap spaces with newlines, unique sort
-	echo "${ARRAY[@]}" | sed 's/\ /\n/g' | sort -u
-}
-
-# Function to get the length of the longest string in an array
-_array_width() {
-	# Declare vars as local
-	local WIDTH_MAX
-
-	if [[ -z "${1}" ]]; then
-		output usage "array-width array[@]"
-		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
-		output red   "Don't say I didn't warn you"
-		return
-	fi
-
-	# Magic BASH function array argument workaround
-	declare -a ARRAY=("${!1}")
-
-	# Init counter
-	WIDTH_MAX="0"
-
-	# Loop through array
-	for VALUE in "${ARRAY[@]}"; do
-		[[ "${#VALUE}" -le "${WIDTH_MAX}" ]] && continue
-		WIDTH_MAX="${#VALUE}"
-	done
-
-	# Output value plaintext if in subshell
-	if [[ "${BASH_SUBSHELL}" != "0" ]]; then
-		echo "${WIDTH_MAX}"
-		return
-	fi
-
-	# Colorized/formatted output if not in subshell
-	output keyval "Array width" "${WIDTH_MAX}"
-}
-
-#### Functions: Array ==final ####
-
-
-#### Functions: Android ==start ####
-
-# Make md5sum file for a Android recovery
-_android_make_md5() {
-	# Declare vars as local
-	local FILE_MD5 FILE_NAME USAGE_STRING
-
-	! hash md5sum && output error "md5sum not available" && return
-	USAGE_STRING="android-make-md5 <filename>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	FILE_NAME="${1}"
-	FILE_MD5="$(md5sum "${FILE_NAME}" | awk '{print $1}')"
-	echo ''"${FILE_MD5}"' *'"${FILE_NAME}"'' > "${FILE_NAME}.md5sum"
-
-	output purple "md5sum created"
-	output yellow "Filename  : ${FILE_NAME}.md5sum"
-	output green  "Signature : ${FILE_MD5}"
-}
-
-#### Functions: Android ==final ####
-
-
-#### Functions: Fix ==start ####
-
-# Fix hung java processes
-_fix_hung_java() {
-	# Declare vars as local
-	local JAVA_PIDS
-
-	JAVA_PIDS=($(ps -ef | awk '/[j]ava/ {print $2}'))
-	[[ -z "${JAVA_PIDS[0]}" ]] && output yellow "No Java PIDs detected" && return
-
-	for JAVA_PID in "${JAVA_PIDS[@]}"; do
-		if ! kill -9 "${JAVA_PID}" &> /dev/null; then
-			output red "Failed to kill Java JAVA_PID ${JAVA_PID}"
-		else
-			output green "Killed Java JAVA_PID ${JAVA_PID}"
-		fi
-	done
-}
-
-# Stale bash threads fix
-# shellcheck disable=SC2009
-_fix_bash_pids() {
-	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS FIX_BASH_PIDS_PID_COUNT FIX_BASH_PIDS_PID_LIST USAGE_OPTIONS_STRING
-
-	# Array of options
-	ARRAY_USAGE_OPTIONS=(
-	show
-	kill
-	)
-
-	# Create variable of pipe-separated options from array
-	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
-
-	FIX_BASH_PIDS_PID_LIST=($(ps aux | grep -E '[b]ash' | grep -Ev 'root|s00\.' | sort -r | awk '{print $2}'))
-	FIX_BASH_PIDS_PID_COUNT="${#FIX_BASH_PIDS_PID_LIST[@]}"
-
-	output purple "Number of stale bash PIDs: ${FIX_BASH_PIDS_PID_COUNT}"
-
-	if [[ ! "${FIX_BASH_PIDS_PID_COUNT}" == "0" ]]; then
-		case "${1}" in
-			show)
-				output purple "PID list:"
-				for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
-					output yellow "${PID}"
-				done
-				;;
-			kill)
-				read -r -p "Kill stale bash PIDs? [Y/n] " FIX_BASH_PIDS_YN
-				echo
-				[[ "${FIX_BASH_PIDS_YN}" == [Nn] ]] && output purple "No PIDs killed" && return 1
-
-				for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
-					output yellow "Killing PID ${PID}"
-					kill -9 "${PID}"
-				done
-
-				output green "Complete"
-
-				# Check the PIDs again
-				fix-bash-pids show
-				;;
-			*)
-				output usage "fix-bash-pids <${USAGE_OPTIONS_STRING}>"
-				;;
-		esac
-	fi
-}
-
-# Remove / clean macOS .DS_Store / attribute files
-_fix_macos_files() {
-	# Declare vars as local
-	local ARRAY_RM_FILES OLD_IFS
-
-	output purple "Finding all macOS metadata files under '${PWD}'"
-
-	# Backup current IFS, change IFS to \n\b so as to parse file array
-	OLD_IFS="${IFS}"
-	IFS=$(echo -en "\n\b")
-
-	# File array of macOS-specific junk files
-	ARRAY_RM_FILES=($(find . -iname '*DS_Store' -o -iname '._*'))
-
-	# Restore previous IFS
-	IFS="${OLD_IFS}"
-
-	[[ -z "${ARRAY_RM_FILES[0]}" ]] && output purple "No macOS attribute/Finder files under '${PWD}' to remove" && return
-
-	output yellow "Removing these macOS attribute/Finder files under '${PWD}':"
-	echo
-
-	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
-		output yellow "${RM_FILE}"
-	done
-	echo
-
-	read -r -p "Are you sure you want to remove these files? [Y/n] " FIX_MACOS_FILES_YN
-	echo
-	[[ "${FIX_MACOS_FILES_YN}" == [Nn] ]] && output purple "No macOS attribute/Finder files under '${PWD}' removed" && return
-
-	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
-		output yellow "Removing '${FILE}'"
-		rm -f "${RM_FILE}"
-	done
-	echo
-
-	output green "All macOS attribute/Finder files under '${PWD}' removed"
-}
-
-#### Functions: Fix ==final ####
-
-
-#### Functions: Find ==start ####
-
-# Find dir function
-# Case insensitive, double wildcard search of CURRENT dir
-_find_dir() {
-	local USAGE_STRING="find-dir <dirname>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	output stderr "Finding directory '${1}' under '${PWD}'"
-	output stderr " "
-
-	find . -type d -iname "*${1}*"
-}
-
-# Find file function
-# Case insensitive, double wildcard search of CURRENT dir
-_find_file() {
-	local USAGE_STRING="find-file <filename>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	output stderr "Finding file '${1}' under '${PWD}'"
-	output stderr " "
-
-	find . -type f -iname "*${1}*"
-}
-
-# Find ${COUNT} largest items in current directory
-_find_largest() {
-	local COUNT="${1-10}"
-	output stderr "Searching for ${COUNT} largest items under '${PWD_FINAL}'"
-	output stderr " "
-
-	du -hs ./* | sort -hr | head -n "${COUNT}"
-}
-
-#### Functions: Find ==final ####
-
-
-#### Functions: Show ==start ####
-
-# Check if an executable exists, if so, show info about it
-_show_bin() {
-	# Declare vars as local
-	local FILE_MIME FILE_PATH FILE_TYPE LS
-
-	if ! hash "${1}"; then
-		output error "Could not find '${1}' in defined PATH"
-		return 1
-	fi
-
-	# Get full file path, type, and MIME encoding/type
-	! FILE_PATH="$(which --skip-alias --skip-functions "${1}" 2> /dev/null)" && FILE_PATH="$(which "${1}" 2> /dev/null)"
-	FILE_TYPE="$(file -bNn                             "${FILE_PATH}")"
-	FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}")"
-
-	# Detect GNU ls or stock macOS ls to enable color output properly
-	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		LS='ls -hl --color=auto'
-	else
-		LS='ls -Ghl'
-	fi
-
-	"${LS}" "${FILE_PATH}" 2> /dev/null
-	echo
-
-	output green "Name : '${1}'"
-	output blue  "Path : '${FILE_PATH}'"
-	output blue  "Type : '${FILE_TYPE}'"
-	output blue  "MIME : '${FILE_MIME}'"
-}
-
-# Show a clock
-_show_clock() {
-	# Declare vars as local
-	local CMD_ECHO CMD_LOOP
-
-	# Show a continuous clock if 1st arg is '-l'
-	if [[ ${1} == "-l" ]]; then
-		CMD_ECHO="echo -en"
-		CMD_LOOP="sleep 0.9"
-	else
-		CMD_ECHO="echo -e"
-		CMD_LOOP="break"
-	fi
-
-	while true; do
-		"${CMD_ECHO}" "$(date '+%a %b %d %Y %r | %F %R:%S | %:z (%Z)')   \r"
-		"${CMD_LOOP}"
-	done
-}
-
-# Show most frequently executed commands
-_show_top_cmds() {
-	# Declare vars as local
-	local BASH_HISTORY_CMDS COUNT
-
-	[[ ! -s "${HISTFILE}" ]] && output error "bash history file missing or empty"
-	BASH_HISTORY_CMDS="$(grep -cv '#' "${HISTFILE}")"
-	COUNT="15"
-
-	output stderr "-- ${BASH_HISTORY_CMDS} commands total -------------------- Top ${COUNT} --"
-	grep -v '#' "${HISTFILE}" | sort | uniq -c | sort -rn | head -n "${COUNT}"
-}
-
-#### Functions: Show ==final ####
-
-
-#### Functions: md5sum ==start ####
-
-# Format the output of md5sum command
-_md5_clean() {
-	! hash md5sum && output error "md5sum not available" && return
-	local USAGE_STRING="md5-clean <filename>, one file only"
-	[[ -z "${1}" || "${2}" ]] && output usage "${USAGE_STRING}" && return
-	md5sum "${1}" | awk '{print $1}'
-}
-
-# Do md5sum on two files and compare them
-_md5_compare() {
-	local USAGE_STRING="md5-compare <filename> <filename>, exit code only"
-	[[ -z "${1}" || -z "${2}" ]] && output usage "${USAGE_STRING}" && return
-	[[ $(_md5_clean "${1}") == $(_md5_clean "${2}") ]] && return 0 || return 1
-}
-
-#### Functions: md5sum ==final ####
-
-
 # Aliases: Linux or macOS (with GNU conversion)
 _alias_linux_macos_setup
-
 
 # Aliases: macOS-only (without GNU conversion)
 if [[ "${UNAME_KERNEL_NAME}" == "Darwin" && -z "${MACOS_GNU}" ]]; then
@@ -461,7 +152,6 @@ if [[ "${UNAME_KERNEL_NAME}" == "Darwin" && -z "${MACOS_GNU}" ]]; then
 	# Color ls output
 	alias ls='ls -G 2> /dev/null'
 fi
-
 
 # Configure auto-sudo aliases
 _auto_sudo_setup

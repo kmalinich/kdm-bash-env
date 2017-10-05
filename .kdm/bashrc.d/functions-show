@@ -1,8 +1,69 @@
-# Aliases:
-# Functions:
+# Functions: Show
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+# Check if an executable exists, if so, show info about it
+_show_bin() {
+	# Declare vars as local
+	local FILE_MIME FILE_PATH FILE_TYPE LS
 
+	if ! hash "${1}"; then
+		output error "Could not find '${1}' in defined PATH"
+		return 1
+	fi
+
+	# Get full file path, type, and MIME encoding/type
+	! FILE_PATH="$(which --skip-alias --skip-functions "${1}" 2> /dev/null)" && FILE_PATH="$(which "${1}" 2> /dev/null)"
+	FILE_TYPE="$(file -bNn                             "${FILE_PATH}")"
+	FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}")"
+
+	# Detect GNU ls or stock macOS ls to enable color output properly
+	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		LS='ls -hl --color=auto'
+	else
+		LS='ls -Ghl'
+	fi
+
+	"${LS}" "${FILE_PATH}" 2> /dev/null
+	echo
+
+	output green "Name : '${1}'"
+	output blue  "Path : '${FILE_PATH}'"
+	output blue  "Type : '${FILE_TYPE}'"
+	output blue  "MIME : '${FILE_MIME}'"
+}
+
+# Show a clock
+_show_clock() {
+	# Declare vars as local
+	local CMD_ECHO CMD_LOOP
+
+	# Show a continuous clock if 1st arg is '-l'
+	if [[ ${1} == "-l" ]]; then
+		CMD_ECHO="echo -en"
+		CMD_LOOP="sleep 0.9"
+	else
+		CMD_ECHO="echo -e"
+		CMD_LOOP="break"
+	fi
+
+	while true; do
+		"${CMD_ECHO}" "$(date '+%a %b %d %Y %r | %F %R:%S | %:z (%Z)')   \r"
+		"${CMD_LOOP}"
+	done
+}
+
+# Show most frequently executed commands
+_show_top_cmds() {
+	# Declare vars as local
+	local BASH_HISTORY_CMDS COUNT
+
+	[[ ! -s "${HISTFILE}" ]] && output error "bash history file missing or empty"
+	BASH_HISTORY_CMDS="$(grep -cv '#' "${HISTFILE}")"
+	COUNT="15"
+
+	output stderr "-- ${BASH_HISTORY_CMDS} commands total -------------------- Top ${COUNT} --"
+	grep -v '#' "${HISTFILE}" | sort | uniq -c | sort -rn | head -n "${COUNT}"
+}
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

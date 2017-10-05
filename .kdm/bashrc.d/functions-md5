@@ -1,8 +1,21 @@
-# Aliases:
-# Functions:
+# Functions: MD5
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+# Format the output of md5sum command
+_md5_clean() {
+	! hash md5sum && output error "md5sum not available" && return
+	local USAGE_STRING="md5-clean <filename>, one file only"
+	[[ -z "${1}" || "${2}" ]] && output usage "${USAGE_STRING}" && return
+	md5sum "${1}" | awk '{print $1}'
+}
+
+# Do md5sum on two files and compare them
+_md5_compare() {
+	local USAGE_STRING="md5-compare <filename> <filename>, exit code only"
+	[[ -z "${1}" || -z "${2}" ]] && output usage "${USAGE_STRING}" && return
+	[[ $(_md5_clean "${1}") == $(_md5_clean "${2}") ]] && return 0 || return 1
+}
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

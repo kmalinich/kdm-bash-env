@@ -1,8 +1,55 @@
-# Aliases:
-# Functions:
+# Functions: Array
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+# Function to remove duplicates from array
+_array_dedupe() {
+	if [[ -z "${1}" ]]; then
+		output usage "array-dedupe array[@]"
+		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
+		output red   "Don't say I didn't warn you"
+		return
+	fi
 
+	# Magic BASH function array argument workaround
+	declare -a ARRAY=("${!1}")
+
+	# Convert array to string, swap spaces with newlines, unique sort
+	echo "${ARRAY[@]}" | sed 's/\ /\n/g' | sort -u
+}
+
+# Function to get the length of the longest string in an array
+_array_width() {
+	# Declare vars as local
+	local WIDTH_MAX
+
+	if [[ -z "${1}" ]]; then
+		output usage "array-width array[@]"
+		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
+		output red   "Don't say I didn't warn you"
+		return
+	fi
+
+	# Magic BASH function array argument workaround
+	declare -a ARRAY=("${!1}")
+
+	# Init counter
+	WIDTH_MAX="0"
+
+	# Loop through array
+	for VALUE in "${ARRAY[@]}"; do
+		[[ "${#VALUE}" -le "${WIDTH_MAX}" ]] && continue
+		WIDTH_MAX="${#VALUE}"
+	done
+
+	# Output value plaintext if in subshell
+	if [[ "${BASH_SUBSHELL}" != "0" ]]; then
+		echo "${WIDTH_MAX}"
+		return
+	fi
+
+	# Colorized/formatted output if not in subshell
+	output keyval "Array width" "${WIDTH_MAX}"
+}
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

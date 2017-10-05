@@ -1,8 +1,11 @@
-# Aliases:
-# Functions:
+# Aliases: Show
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
-
+alias show-bin='     _show_bin'
+alias showbin='      _show_bin'
+alias show-clock='   _show_clock'
+alias show-scp-path='_show_scp_path'
+alias show-top-cmds='_show_top_cmds'
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
