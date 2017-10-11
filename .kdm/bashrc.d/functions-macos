@@ -81,6 +81,38 @@ _macos_itunes() {
 	output keyval "  Kind" "${ITUNES_KIND-Nothing}"
 }
 
+# Fake lsusb function
+_macos_lsusb() {
+	# Declare vars as local
+	local FILE_TEMP
+
+	# Check dependencies
+	if ! hash jq; then
+		output error "Could not detect jq binary, try 'brew install jq'"
+		return
+	fi
+
+	if ! hash plist-to-json; then
+		output error "Could not detect plist-to-json binary, try 'npm -g i plist-to-json'"
+		return
+	fi
+
+	if ! hash system_profiler; then
+		output error "Could not detect system_profiler binary, try running macOS"
+		return
+	fi
+
+	# Create temp file
+	FILE_TEMP="$(mktemp)"
+
+	system_profiler -xml SPUSBDataType > "${FILE_TEMP}"
+
+	plist-to-json "${FILE_TEMP}" | jq '.[][]._items[]._items[]._items[]'
+
+	# Remove temp file
+	rm -f "${FILE_TEMP}" > /dev/null 2>&1
+}
+
 # Volume config function
 _macos_volume() {
 	# Declare vars as local
