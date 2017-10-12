@@ -192,4 +192,7 @@ _prompt_titlebar() {
 	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\033]0;%s%s\007" "${TITLEBAR_SSH}" "${HOST_SUB}:$(_prompt_pwd)"
 }
 
+# Configure PS1 prompt
+_prompt_generate
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

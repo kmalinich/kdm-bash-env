@@ -36,20 +36,23 @@ _show_bin() {
 # Show a clock
 _show_clock() {
 	# Declare vars as local
-	local CMD_ECHO CMD_LOOP
+	local CMD_LOOP DATE_FMT PF_FMT
 
 	# Show a continuous clock if 1st arg is '-l'
 	if [[ ${1} == "-l" ]]; then
-		CMD_ECHO="echo -en"
-		CMD_LOOP="sleep 0.9"
+		CMD_LOOP=(sleep 0.9)
+		PF_FMT="%s   \r"
 	else
-		CMD_ECHO="echo -e"
-		CMD_LOOP="break"
+		CMD_LOOP=(break)
+		PF_FMT="%s\n"
 	fi
 
+	# Date command format
+	DATE_FMT="+%a %b %d %Y %r | %F %R:%S | %:z (%Z)"
+
 	while true; do
-		"${CMD_ECHO}" "$(date '+%a %b %d %Y %r | %F %R:%S | %:z (%Z)')   \r"
-		"${CMD_LOOP}"
+		printf "${PF_FMT}" "$(date "${DATE_FMT}")"
+		${CMD_LOOP[*]}
 	done
 }
 

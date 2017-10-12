@@ -53,6 +53,7 @@ _alias_applications() {
 
 # shellcheck disable=SC2139
 _alias_linux_macos_setup() {
+	# Bounce if not on GNU-converted macOS and not on Linux
 	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
 
 	# Declare vars as local
@@ -126,49 +127,73 @@ _alias_nmap() {
 }
 
 # noping command tweaks
+# shellcheck disable=SC2139
 _alias_noping() {
+	# Declare vars as local
+	local NOPING
+
 	# noping commands, if noping is present
 	hash noping || return;
 
+	# Get full path to binary
+	NOPING=$(which noping)
+
 	# noping needs sudo if not root
 	if [[ "${UID}" != "0" ]]; then
-		alias noping='     sudo noping -i 0.5'
-		alias noping-fast='sudo noping -i 0.1'
-		alias noping-slow='sudo noping -i 1.0'
+		alias noping="     sudo ${NOPING} -i 0.5"
+		alias noping-fast="sudo ${NOPING} -i 0.1"
+		alias noping-slow="sudo ${NOPING} -i 1.0"
 		return
 	fi
 
-	alias noping='     noping -i 0.5'
-	alias noping-fast='noping -i 0.1'
-	alias noping-slow='noping -i 1.0'
+	alias noping="     ${NOPING} -i 0.5"
+	alias noping-fast="${NOPING} -i 0.1"
+	alias noping-slow="${NOPING} -i 1.0"
 }
 
 # noping command tweaks
+# shellcheck disable=SC2139
 _alias_oping() {
+	# Declare vars as local
+	local OPING
+
 	# oping commands, if oping is present
 	hash oping || return;
 
+	# Get full path to binary
+	OPING=$(which oping)
+
 	# oping needs sudo if not root
 	if [[ "${UID}" != "0" ]]; then
-		alias oping='     sudo oping -i 0.5'
-		alias oping-fast='sudo oping -i 0.1'
-		alias oping-slow='sudo oping -i 1.0'
+		alias oping="     sudo ${OPING} -i 0.5"
+		alias oping-fast="sudo ${OPING} -i 0.1"
+		alias oping-slow="sudo ${OPING} -i 1.0"
 		return
 	fi
 
-	alias oping='     oping -i 0.5'
-	alias oping-fast='oping -i 0.1'
-	alias oping-slow='oping -i 1.0'
+	alias oping="     ${OPING} -i 0.5"
+	alias oping-fast="${OPING} -i 0.1"
+	alias oping-slow="${OPING} -i 1.0"
 }
 
 # ping command tweaks
+# shellcheck disable=SC2139
 _alias_ping() {
+	# Declare vars as local
+	local PING
+
+	# ping commands, if ping is present
+	hash ping || return;
+
+	# Get full path to binary
+	PING=$(which ping)
+
 	# ping-slow : normal (1.0 second interval)
 	#      ping : fast   (0.5 second interval)
 	# ping-fast : faster (0.1 second interval)
-	alias ping='     ping -i 0.5'
-	alias ping-fast='ping -i 0.1'
-	alias ping-slow='ping -i 1.0'
+	alias ping="     ${PING} -i 0.5"
+	alias ping-fast="${PING} -i 0.1"
+	alias ping-slow="${PING} -i 1.0"
 
 	# Generate noping and oping aliases, too
 	_alias_noping
@@ -183,7 +208,7 @@ _alias_pygmentize_html() {
 
 _alias_pygmentize_json() {
 	hash json_reformat || return
-	alias json-format='json_reformat | pygmentize -l json -f terminal256 -O style=monokai'
+	alias json-format='json_reformat 2> /dev/null | pygmentize -l json -f terminal256 -O style=monokai'
 	alias format-json='json-format'
 }
 
@@ -201,5 +226,8 @@ _alias_pygmentize() {
 	_alias_pygmentize_json
 	_alias_pygmentize_xml
 }
+
+# Execute alias setup
+_alias_linux_macos_setup
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

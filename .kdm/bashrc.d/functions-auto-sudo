@@ -49,4 +49,7 @@ _auto_sudo_setup() {
 	. "${BASH_ENV_FILE_SUDOCACHE}"
 }
 
+# Execute auto-sudo alias generation
+_auto_sudo_setup
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

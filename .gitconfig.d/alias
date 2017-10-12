@@ -31,6 +31,8 @@
 
 	ps = push
 
+	pr = !bash -c 'stash pull-request $0 $@'
+
 	prune = fetch --all --prune
 
 	r  = reset

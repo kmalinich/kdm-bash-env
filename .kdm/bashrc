@@ -1,163 +1,62 @@
 # kdm bash-env
 # .kdm/bashrc
 
-
-# Source global bashrc
+# shellcheck disable=SC1090
 # shellcheck disable=SC1091
-[[ -f /etc/bash.bashrc ]] && . /etc/bash.bashrc
-[[ -f /etc/bashrc      ]] && . /etc/bashrc
+
+# Array of possible global bashrc files
+ARRAY_SOURCE_GLOBAL=(
+/etc/bash.bashrc
+/etc/bashrc
+)
+
+# Array of function files to source from ~/.kdm/bashrc.d
+ARRAY_SOURCE_FUNCTIONS_BACKUP=(
+android
+array
+find
+fix
+md5
+show
+color
+misc
+text
+ping
+time
+conversion
+ssh
+git
+net
+prompt
+motd
+kdm
+update
+macos
+linux
+auto-sudo
+alias-generation
+)
+
+# Build array of function files to source from ~/.kdm/bashrc.d
+ARRAY_SOURCE_FUNCTIONS=($(ls -Fh1 "${BASH_ENV_DIR_BASHRC}/functions-"* 2> /dev/null))
+
+# Build array of alias files to source from ~/.kdm/bashrc.d
+ARRAY_SOURCE_ALIASES=($(ls -Fh1 "${BASH_ENV_DIR_BASHRC}/aliases-"* 2> /dev/null))
 
 
-# Android
-# shellcheck source=.kdm/bashrc.d/aliases-android
-. "${BASH_ENV_DIR_BASHRC}/aliases-android"
-# shellcheck source=.kdm/bashrc.d/functions-android
-. "${BASH_ENV_DIR_BASHRC}/functions-android"
+# Source possible global bashrc(s)
+for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
+	[[ -f "${GLOBAL}" ]] && . "${FILE}"
+done; unset FILE
 
-# Array tools
-# shellcheck source=.kdm/bashrc.d/aliases-array
-. "${BASH_ENV_DIR_BASHRC}/aliases-array"
-# shellcheck source=.kdm/bashrc.d/functions-array
-. "${BASH_ENV_DIR_BASHRC}/functions-array"
+# Source function files
+for FILE in "${ARRAY_SOURCE_FUNCTIONS[@]}"; do
+	. "${FILE}"
+done; unset FILE
 
-# File finders
-# shellcheck source=.kdm/bashrc.d/aliases-find
-. "${BASH_ENV_DIR_BASHRC}/aliases-find"
-# shellcheck source=.kdm/bashrc.d/functions-find
-. "${BASH_ENV_DIR_BASHRC}/functions-find"
-
-# Fix/repair tools
-# shellcheck source=.kdm/bashrc.d/aliases-fix
-. "${BASH_ENV_DIR_BASHRC}/aliases-fix"
-# shellcheck source=.kdm/bashrc.d/functions-fix
-. "${BASH_ENV_DIR_BASHRC}/functions-fix"
-
-# MD5 calculation wrappers
-# shellcheck source=.kdm/bashrc.d/aliases-md5
-. "${BASH_ENV_DIR_BASHRC}/aliases-md5"
-# shellcheck source=.kdm/bashrc.d/functions-md5
-. "${BASH_ENV_DIR_BASHRC}/functions-md5"
-
-# Show misc data/info
-# shellcheck source=.kdm/bashrc.d/aliases-show
-. "${BASH_ENV_DIR_BASHRC}/aliases-show"
-# shellcheck source=.kdm/bashrc.d/functions-show
-. "${BASH_ENV_DIR_BASHRC}/functions-show"
-
-# Color
-# shellcheck source=.kdm/bashrc.d/functions-color
-. "${BASH_ENV_DIR_BASHRC}/functions-color"
-
-# Misc
-# shellcheck source=.kdm/bashrc.d/functions-misc
-. "${BASH_ENV_DIR_BASHRC}/functions-misc"
-
-# Text
-# shellcheck source=.kdm/bashrc.d/functions-text
-. "${BASH_ENV_DIR_BASHRC}/functions-text"
-
-# Ping
-# shellcheck source=.kdm/bashrc.d/functions-ping
-. "${BASH_ENV_DIR_BASHRC}/functions-ping"
-
-# Time
-# shellcheck source=.kdm/bashrc.d/aliases-time
-. "${BASH_ENV_DIR_BASHRC}/aliases-time"
-# shellcheck source=.kdm/bashrc.d/functions-time
-. "${BASH_ENV_DIR_BASHRC}/functions-time"
-
-# Conversion
-# shellcheck source=.kdm/bashrc.d/aliases-conversion
-. "${BASH_ENV_DIR_BASHRC}/aliases-conversion"
-# shellcheck source=.kdm/bashrc.d/functions-conversion
-. "${BASH_ENV_DIR_BASHRC}/functions-conversion"
-
-# SSH
-# shellcheck source=.kdm/bashrc.d/aliases-ssh
-. "${BASH_ENV_DIR_BASHRC}/aliases-ssh"
-# shellcheck source=.kdm/bashrc.d/functions-ssh
-. "${BASH_ENV_DIR_BASHRC}/functions-ssh"
-
-# Git
-# shellcheck source=.kdm/bashrc.d/aliases-git
-. "${BASH_ENV_DIR_BASHRC}/aliases-git"
-# shellcheck source=.kdm/bashrc.d/functions-git
-. "${BASH_ENV_DIR_BASHRC}/functions-git"
-
-# Net
-# shellcheck source=.kdm/bashrc.d/aliases-net
-. "${BASH_ENV_DIR_BASHRC}/aliases-net"
-# shellcheck source=.kdm/bashrc.d/functions-net
-. "${BASH_ENV_DIR_BASHRC}/functions-net"
-
-# PS1 prompt
-# shellcheck source=.kdm/bashrc.d/functions-prompt
-. "${BASH_ENV_DIR_BASHRC}/functions-prompt"
-
-# MOTD
-# shellcheck source=.kdm/bashrc.d/aliases-motd
-. "${BASH_ENV_DIR_BASHRC}/aliases-motd"
-# shellcheck source=.kdm/bashrc.d/functions-motd
-. "${BASH_ENV_DIR_BASHRC}/functions-motd"
-
-# kdm-bash-env
-# shellcheck source=.kdm/bashrc.d/aliases-kdm
-. "${BASH_ENV_DIR_BASHRC}/aliases-kdm"
-# shellcheck source=.kdm/bashrc.d/functions-kdm
-. "${BASH_ENV_DIR_BASHRC}/functions-kdm"
-
-# Update
-# shellcheck source=.kdm/bashrc.d/aliases-update
-. "${BASH_ENV_DIR_BASHRC}/aliases-update"
-# shellcheck source=.kdm/bashrc.d/functions-update
-. "${BASH_ENV_DIR_BASHRC}/functions-update"
-
-# macOS-only (regardless of GNU conversion)
-# shellcheck source=.kdm/bashrc.d/functions-macos
-. "${BASH_ENV_DIR_BASHRC}/functions-macos"
-
-# Linux-only
-# shellcheck source=.kdm/bashrc.d/functions-linux
-. "${BASH_ENV_DIR_BASHRC}/functions-linux"
-
-# Auto-sudo
-# shellcheck source=.kdm/bashrc.d/functions-auto-sudo
-. "${BASH_ENV_DIR_BASHRC}/functions-auto-sudo"
-
-# Alias generation
-# shellcheck source=.kdm/bashrc.d/functions-alias-generation
-. "${BASH_ENV_DIR_BASHRC}/functions-alias-generation"
-
-
-# Aliases: Global
-# shellcheck source=.kdm/bashrc.d/aliases-global
-. "${BASH_ENV_DIR_BASHRC}/aliases-global"
-
-# Aliases: macOS-only (regardless of GNU conversion)
-# shellcheck source=.kdm/bashrc.d/aliases-macos
-. "${BASH_ENV_DIR_BASHRC}/aliases-macos"
-
-# Aliases: Linux-only
-# shellcheck source=.kdm/bashrc.d/aliases-linux
-. "${BASH_ENV_DIR_BASHRC}/aliases-linux"
-
-# Aliases: Linux or macOS (with GNU conversion)
-_alias_linux_macos_setup
-
-# Aliases: macOS-only (without GNU conversion)
-if [[ "${UNAME_KERNEL_NAME}" == "Darwin" && -z "${MACOS_GNU}" ]]; then
-	# Alias to make md5sum work like Linux
-	alias md5sum='md5 -r'
-
-	# Color ls output
-	alias ls='ls -G 2> /dev/null'
-fi
-
-# Configure auto-sudo aliases
-_auto_sudo_setup
-
-# Configure PS1 prompt
-_prompt_generate
-
+# Source alias files
+for FILE in "${ARRAY_SOURCE_ALIASES[@]}"; do
+	. "${FILE}"
+done; unset FILE
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

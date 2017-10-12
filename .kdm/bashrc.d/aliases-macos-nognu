@@ -1,0 +1,19 @@
+# Aliases: macOS-only (without GNU conversion)
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+_alias_macos_nognu_setup() {
+	# Bounce if on GNU-converted macOS or not on Darwin
+	[[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return
+
+	# Alias to make md5sum work like Linux
+	alias md5sum='md5 -r'
+
+	# Color ls output
+	alias ls='ls -G 2> /dev/null'
+}
+
+# Execute alias setup
+_alias_macos_nognu_setup
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
