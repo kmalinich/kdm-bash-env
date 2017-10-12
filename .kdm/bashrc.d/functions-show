@@ -39,7 +39,7 @@ _show_clock() {
 	local CMD_LOOP DATE_FMT PF_FMT
 
 	# Show a continuous clock if 1st arg is '-l'
-	if [[ ${1} == "-l" ]]; then
+	if [[ "${1}" == "-l" ]]; then
 		CMD_LOOP=(sleep 0.9)
 		PF_FMT="%s   \r"
 	else
@@ -50,10 +50,22 @@ _show_clock() {
 	# Date command format
 	DATE_FMT="+%a %b %d %Y %r | %F %R:%S | %:z (%Z)"
 
+	if hash _iterm2; then
+		if [[ "${1}" == "-l" ]]; then
+			_iterm2 stealth on
+		fi
+	fi
+
 	while true; do
 		printf "${PF_FMT}" "$(date "${DATE_FMT}")"
 		${CMD_LOOP[*]}
 	done
+
+	if hash _iterm2; then
+		if [[ "${1}" == "-l" ]]; then
+			_iterm2 stealth off
+		fi
+	fi
 }
 
 # Show most frequently executed commands
