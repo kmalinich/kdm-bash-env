@@ -23,4 +23,6 @@ _validate_before_source() {
 	[[ -s "${SOURCE}" ]] && . "${SOURCE}" || echo "Error : Failed to source '${SOURCE}'"
 }
 
-validate_before_source
+_validate_before_source
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
