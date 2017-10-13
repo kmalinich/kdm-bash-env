@@ -1,6 +1,8 @@
 # Locale configuration
 # (mostly because macOS can choke on them over SSH for some reason..)
-export LC_ALL="en_US.UTF-8"
-export LANG="en_US.UTF-8"
+NEW_LOC="en_US.UTF-8"
+[[ -z "${LANG}"   ]] && export LANG="${NEW_LOC}"
+[[ -z "${LC_ALL}" ]] && export LC_ALL="${NEW_LOC}"
+unset NEW_LOC
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
