@@ -157,4 +157,24 @@ output() {
 	printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
 }
 
+# bash tab-completion for output function
+_output_completion() {
+	# Declare vars as local
+	local ARRAY_USAGE_OPTIONS CUR_WORD
+
+	# Array of options
+	ARRAY_USAGE_OPTIONS=(
+	alert    backtick black  blue          cyan
+	error    failure  gray   green         keyval
+	keyval-f keyval-t leadup leadup-custom orange
+	pink     purple   red    stderr        success
+	usage    white    yellow
+	)
+
+	CUR_WORD=${COMP_WORDS[COMP_CWORD]}
+	COMPREPLY=($(compgen -W "${ARRAY_USAGE_OPTIONS[*]}" -- "${CUR_WORD}"))
+}
+
+complete -F _output_completion output
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
