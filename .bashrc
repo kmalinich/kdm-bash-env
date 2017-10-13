@@ -19,7 +19,8 @@ _validate_before_source() {
 	[[ "${BASH_ENV_FILE_BASHRC}" ]] && SOURCE="${FILE_RC}" || SOURCE="${FILE_PF}"
 
 	# Go!
-	[[ -s "${SOURCE}" ]] && . ${SOURCE} || echo "Error : Failed to source '${SOURCE}'"
+	# shellcheck disable=SC1090
+	[[ -s "${SOURCE}" ]] && . "${SOURCE}" || echo "Error : Failed to source '${SOURCE}'"
 }
 
-_validate_before_source
+validate_before_source
