@@ -150,8 +150,11 @@ _net_webserver() {
 
 # Search a subnet for pinging IPs
 _net_ping_subnet() {
+	# Declare vars as local
+	local USAGE_STRING
+
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-	local USAGE_STRING="net-ping-subnet <CIDR range>"
+	USAGE_STRING="net-ping-subnet <CIDR range>"
 
 	# Return if fping is missing
 	! hash fping && output error "fping not available" && return

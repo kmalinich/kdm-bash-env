@@ -11,11 +11,11 @@ function! LoadFile(name)
 	endif
 endfunction
 
+call LoadFile('indent')
 call LoadFile('polyglot')
 call LoadFile('encoding')
 call LoadFile('environment')
 call LoadFile('syntax')
-call LoadFile('indent')
 call LoadFile('backup')
 call LoadFile('search')
 call LoadFile('scroll')
@@ -23,7 +23,6 @@ call LoadFile('titlebar')
 call LoadFile('buffers')
 call LoadFile('misc')
 call LoadFile('history')
-call LoadFile('fileformat')
 call LoadFile('truecolor')
 call LoadFile('functions')
 call LoadFile('remap')
@@ -36,5 +35,8 @@ call LoadFile('javascript')
 call LoadFile('ale')
 call LoadFile('airline')
 call LoadFile('autosave')
+call LoadFile('modeline')
+call LoadFile('spell')
+call LoadFile('fileformat')
 
-" vim: set syntax=vim filetype=vim ts=2 sw=2 tw=78 noet :
+" vim: set syntax=vim filetype=vim ts=2 sw=2 tw=0 noet :

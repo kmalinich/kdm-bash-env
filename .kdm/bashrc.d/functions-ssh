@@ -5,7 +5,10 @@
 # Ping it, then ssh to it
 # shellcheck disable=SC2029
 _ssh_ping() {
-	local USAGE_STRING="ssh-ping <host>"
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="ssh-ping <host>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	ping "${1}"
@@ -61,7 +64,10 @@ _show_scp_path() {
 # With compression
 # shellcheck disable=SC2029
 _ssh_c() {
-	local USAGE_STRING="ssh-c <host>"
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="ssh-c <host>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	ssh -o Compression=yes "${1}"
@@ -70,7 +76,10 @@ _ssh_c() {
 # With X forwarding
 # shellcheck disable=SC2029
 _ssh_x() {
-	local USAGE_STRING="ssh-x <host>"
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="ssh-x <host>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	ssh -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
@@ -79,7 +88,10 @@ _ssh_x() {
 # With compressed X forwarding
 # shellcheck disable=SC2029
 _ssh_xc() {
-	local USAGE_STRING="ssh-xc <host>"
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="ssh-xc <host>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	ssh -o Compression=yes -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"

@@ -36,6 +36,9 @@ _prompt_generate() {
 
 # Print colorized exit code information
 _prompt_exitcode() {
+	# Declare vars as local
+	local ARRAY_CMD CMD ENV GRY RED STR WHT YLW
+
 	# Return if we're not in a terminal
 	[[ -t 2 ]] || return
 
@@ -48,7 +51,7 @@ _prompt_exitcode() {
 		127) return ;;
 	esac
 
-	local ARRAY_CMD=(${1})
+	ARRAY_CMD=(${1})
 	case "${ARRAY_CMD[0]}" in
 		_prompt*) return ;;
 		cd)       return ;;
@@ -61,29 +64,31 @@ _prompt_exitcode() {
 		*) CMD="${ARRAY_CMD[0]}" ;;
 	esac
 
-	local STR="%s${C_RST}"
+	STR="%s${C_RST}"
 
-	local ENV="${C_ENV}${STR}"
-	local GRY="${C_GRY}${STR}"
-	local RED="${C_RED_BRT_BLD}${STR}"
-	local WHT="${C_WHT_BRT}${STR}"
-	local YLW="${C_YLW}${STR}"
+	ENV="${C_ENV}${STR}"
+	GRY="${C_GRY}${STR}"
+	RED="${C_RED_BRT_BLD}${STR}"
+	WHT="${C_WHT_BRT}${STR}"
+	YLW="${C_YLW}${STR}"
 
-	local ARRAY_CMD=(${1})
+	ARRAY_CMD=(${1})
 	printf "${GRY} ${RED} ${WHT} ${GRY}\n" "${CMD}" "failed" ":" "${2}"
 }
 
 # Print exit code right-aligned for the PS1 prompt
 _prompt_right() {
+	# Declare vars as local
+	local CLR TRIM
+
 	# Set color based on exit code
-	local CLR;
 	case "${1}" in
 		0) CLR="${C_GRN}" ;;
 		*) CLR="${C_ALT}" ;;
 	esac
 
 	# Trim off 2+length of 1st argument
-	local TRIM="${#1}"; ((TRIM++))
+	TRIM="${#1}"; ((TRIM++))
 	printf "${C_GRY}%*s${CLR}%s${C_RST}${C_GRY}%s${C_RST}\r" "$((COLUMNS-TRIM))" "[" "${1}" "]"
 }
 
@@ -115,8 +120,8 @@ _prompt_pwd_color() {
 
 # Render color-separated formatted pwd
 _prompt_pwd_color_render() {
-	local OLDIFS IFS INPUT DIRS SEPARATORS DEPTH COUNT STR
-	local RST CYN BLU YLW GRY PRP
+	# Declare vars as local
+	local OLDIFS IFS INPUT DIRS SEPARATORS DEPTH COUNT STR RST CYN BLU YLW GRY PRP
 
 	# Escape color sequences for PS1 compatiblity
 	RST="\[${C_RST}\]"
@@ -182,11 +187,14 @@ _prompt_pwd_color_render() {
 }
 
 _prompt_titlebar() {
+	# Declare vars as local
+	local TITLEBAR_SSH
+
 	# Return if we're not in a terminal
 	[[ -t 2 ]] || return
 
 	# Add '[SSH]' to titlebar if in SSH session
-	[[ "${SSH_CONNECTION}" ]] && local TITLEBAR_SSH="[SSH] "
+	[[ "${SSH_CONNECTION}" ]] && TITLEBAR_SSH="[SSH] "
 
 	# Only apply custom titlebar if we're in xterm and on Bash 3+
 	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\033]0;%s%s\007" "${TITLEBAR_SSH}" "${HOST_SUB}:$(_prompt_pwd)"

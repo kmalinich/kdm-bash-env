@@ -261,7 +261,7 @@ _g_gpo() {
 
 	if [[ "${CMD_EXIT}" == "0" ]]; then
 		_g_gs
-		local CMD_EXIT="${?}"
+		CMD_EXIT="${?}"
 	fi
 
 	return ${CMD_EXIT}

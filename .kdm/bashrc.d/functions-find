@@ -5,7 +5,10 @@
 # Find dir function
 # Case insensitive, double wildcard search of CURRENT dir
 _find_dir() {
-	local USAGE_STRING="find-dir <dirname>"
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="find-dir <dirname>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	output stderr "Finding directory '${1}' under '${PWD}'"
@@ -17,7 +20,10 @@ _find_dir() {
 # Find file function
 # Case insensitive, double wildcard search of CURRENT dir
 _find_file() {
-	local USAGE_STRING="find-file <filename>"
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="find-file <filename>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	output stderr "Finding file '${1}' under '${PWD}'"
@@ -28,7 +34,10 @@ _find_file() {
 
 # Find ${COUNT} largest items in current directory
 _find_largest() {
-	local COUNT="${1-10}"
+	# Declare vars as local
+	local COUNT
+
+	COUNT="${1-10}"
 	output stderr "Searching for ${COUNT} largest items under '${PWD_FINAL}'"
 	output stderr " "
 

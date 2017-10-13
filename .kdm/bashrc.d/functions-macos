@@ -12,7 +12,10 @@ _do_scutil() {
 
 # Hostname change function
 _macos_hostname() {
-	local USAGE_STRING="macos-hostname <new hostname>"
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="macos-hostname <new hostname>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	_do_scutil "ComputerName"  "${1}"
@@ -253,15 +256,18 @@ _macos_repair_office() {
 }
 
 _macos_notify() {
-	local NOTIFY_TITLE="${1}"
-	local NOTIFY_MESSAGE="${2}"
-	local NOTIFY_SUBTITLE="${3}"
+	# Declare vars as local
+	local NOTIFY_MESSAGE NOTIFY_SUBTITLE NOTIFY_TITLE USAGE_STRING
 
-	local USAGE_STRING="macos-notify <title> <message> [<subtitle>]"
+	NOTIFY_TITLE="${1}"
+	NOTIFY_MESSAGE="${2}"
+	NOTIFY_SUBTITLE="${3}"
+
+	USAGE_STRING="macos-notify <title> <message> [<subtitle>]"
 	[[ -z "${NOTIFY_TITLE}" || -z "${NOTIFY_MESSAGE}" ]] && output usage "${USAGE_STRING}" && return
 
 	# Add subtitle to osascript string if present
-	[[ "${NOTIFY_SUBTITLE}" ]] && local NOTIFY_SUBTITLE="subtitle \"${NOTIFY_SUBTITLE}\""
+	[[ "${NOTIFY_SUBTITLE}" ]] && NOTIFY_SUBTITLE="subtitle \"${NOTIFY_SUBTITLE}\""
 
 	osascript -e "display notification \"${NOTIFY_MESSAGE}\" with title \"${NOTIFY_TITLE}\" ${NOTIFY_SUBTITLE}"
 }

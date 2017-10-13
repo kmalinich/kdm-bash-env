@@ -19,10 +19,14 @@ hash systemctl && alias systemctl='systemctl --no-pager'
 
 # Restart with systemctl
 _sys_restart() {
-	local USAGE_STRING="sys-restart <process name>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+	# Declare vars as local
+	local USAGE_STRING
 
+	# Check required dependencies
 	! hash systemctl && output error "systemctl not available" && return
+
+	USAGE_STRING="sys-restart <process name>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	output yellow "Stopping '${1}'"
 	systemctl stop "${1}"
@@ -86,27 +90,33 @@ _kvm_running() {
 
 # Watch until all VMs are shutdown
 _kvm_watch() {
-	local KVM_COUNTER="0"
+	# Declare vars as local
+	local ARRAY_WATCH KVM_COUNTER VM_COUNT
+
+	KVM_COUNTER="0"
 
 	while true; do
-		local ARRAY_WATCH=($(virsh list | awk '/running/ {print $2}'))
-		local VM_COUNT="${#ARRAY_WATCH[@]}"
+		ARRAY_WATCH=($(virsh list | awk '/running/ {print $2}'))
+		VM_COUNT="${#ARRAY_WATCH[@]}"
 
 		[[ -z "${ARRAY_WATCH[0]}" ]] && output green "No VMs running" && break
 
 		echo -en "${VM_COUNT} VMs ${C_GRN}running${C_RST}. ${KVM_COUNTER} sec elapsed     \r"
 
 		sleep 1
-		local KVM_COUNTER=$((KVM_COUNTER+1))
+		KVM_COUNTER=$((KVM_COUNTER+1))
 	done
 }
 
 # Undefine VMs based on a search string
 _kvm_undefine() {
-	local USAGE_STRING="kvm-undefine <search string>"
+	# Declare vars as local
+	local ARRAY_UNDEFINE UNDEFINE_YN USAGE_STRING
+
+	USAGE_STRING="kvm-undefine <search string>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	local ARRAY_UNDEFINE=($(virsh list --all | awk '/'"${1}"'/ {print $2}'))
+	ARRAY_UNDEFINE=($(virsh list --all | awk '/'"${1}"'/ {print $2}'))
 	[[ -z "${ARRAY_UNDEFINE[0]}" ]] && output yellow "No VMs running matching search string '${1}'" && return 0
 
 	output purple "These VMs will be undefined:"; echo
@@ -128,7 +138,10 @@ _kvm_undefine() {
 
 # Destroy all VMs
 _kvm_destroy_all() {
-	local ARRAY_DESTROY=($(virsh list | awk '/running/ {print $2}'))
+	# Declare vars as local
+	local ARRAY_DESTROY DESTROY_YN
+
+	ARRAY_DESTROY=($(virsh list | awk '/running/ {print $2}'))
 	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
 
 	output purple "These VMs will be destroyed:"; echo
@@ -150,7 +163,10 @@ _kvm_destroy_all() {
 
 # Shutdown all VMs
 _kvm_shutdown_all() {
-	local ARRAY_SHUTDOWN=($(virsh list | awk '/running/ {print $2}'))
+	# Declare vars as local
+	local ARRAY_SHUTDOWN SHUTDOWN_YN
+
+	ARRAY_SHUTDOWN=($(virsh list | awk '/running/ {print $2}'))
 	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
 
 	output purple "These VMs will be shutdown:"; echo
@@ -172,7 +188,10 @@ _kvm_shutdown_all() {
 
 # Start all VMs
 _kvm_start_all() {
-	local ARRAY_START=($(virsh list --all | awk '/shut off/ {print $2}' | sed -e '/Name/d' -e '/^$/d'))
+	# Declare vars as local
+	local ARRAY_START START_YN
+
+	ARRAY_START=($(virsh list --all | awk '/shut off/ {print $2}' | sed -e '/Name/d' -e '/^$/d'))
 	[[ -z "${ARRAY_START[0]}" ]] && output purple "No shut off VMs" && return 0
 
 	output purple "These VMs will be started:"; echo

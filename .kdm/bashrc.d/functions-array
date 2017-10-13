@@ -4,6 +4,9 @@
 
 # Function to remove duplicates from array
 _array_dedupe() {
+	# Declare vars as local
+	local ARRAY
+
 	if [[ -z "${1}" ]]; then
 		output usage "array-dedupe array[@]"
 		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
@@ -21,7 +24,7 @@ _array_dedupe() {
 # Function to get the length of the longest string in an array
 _array_width() {
 	# Declare vars as local
-	local WIDTH_MAX
+	local ARRAY WIDTH_MAX
 
 	if [[ -z "${1}" ]]; then
 		output usage "array-width array[@]"

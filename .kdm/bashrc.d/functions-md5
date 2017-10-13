@@ -4,16 +4,29 @@
 
 # Format the output of md5sum command
 _md5_clean() {
+	# Declare vars as local
+	local USAGE_STRING
+
+	# Check required dependencies
 	! hash md5sum && output error "md5sum not available" && return
-	local USAGE_STRING="md5-clean <filename>, one file only"
+
+	USAGE_STRING="md5-clean <filename>, one file only"
 	[[ -z "${1}" || "${2}" ]] && output usage "${USAGE_STRING}" && return
+
 	md5sum "${1}" | awk '{print $1}'
 }
 
 # Do md5sum on two files and compare them
 _md5_compare() {
-	local USAGE_STRING="md5-compare <filename> <filename>, exit code only"
+	# Declare vars as local
+	local USAGE_STRING
+
+	# Check required dependencies
+	! hash md5sum && output error "md5sum not available" && return
+
+	USAGE_STRING="md5-compare <filename> <filename>, exit code only"
 	[[ -z "${1}" || -z "${2}" ]] && output usage "${USAGE_STRING}" && return
+
 	[[ $(_md5_clean "${1}") == $(_md5_clean "${2}") ]] && return 0 || return 1
 }
 

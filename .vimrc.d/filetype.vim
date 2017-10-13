@@ -30,14 +30,16 @@ au Filetype python set tabstop=4
 " sh/bash
 au Filetype sh let b:comment_leader = '# '
 
-" systemd
-au Filetype systemd let b:comment_leader = '# '
 
-" ViM
-au Filetype vim let b:comment_leader = '" '
+" Crontab
+au Filetype crontab let b:comment_leader = '# '
+augroup ft_crontab
+	au BufRead *crontab* let b:comment_leader = '# '
+	au BufRead *crontab* set filetype=crontab
+	au BufRead *crontab* call matchdelete(g:w3)
+augroup END
 
-
-" Fix for editing crontabs with 'crontab -e' on macOS
+" Crontab (macOS)
 augroup ft_crontab_macos
 	au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 augroup END
@@ -84,7 +86,7 @@ augroup ft_json
 	au BufRead composer.lock set noexpandtab
 augroup END
 
-" Markdow
+" Markdown
 augroup ft_markdown
 	au BufRead *.md set filetype=markdown
 	au BufRead *.md call matchdelete(g:w3)
@@ -97,7 +99,15 @@ augroup ft_ruby
 	au BufRead *.rb call matchdelete(g:w3)
 augroup END
 
+" Salt sls
+augroup ft_sls
+	au BufRead *.sls let b:comment_leader = '# '
+	au BufRead *.sls set filetype=sls
+	au BufRead *.sls call matchdelete(g:w3)
+augroup END
+
 " systemd unit files
+au Filetype systemd let b:comment_leader = '# '
 augroup ft_systemd
 	au BufRead *.mount let b:comment_leader = '# '
 	au BufRead *.mount set filetype=systemd
@@ -115,13 +125,6 @@ augroup ft_systemd
 	au BufRead *.timer set filetype=systemd
 augroup END
 
-" Salt sls
-augroup ft_sls
-	au BufRead *.sls let b:comment_leader = '# '
-	au BufRead *.sls set filetype=sls
-	au BufRead *.sls call matchdelete(g:w3)
-augroup END
-
 " Varnish vcl
 augroup ft_vcl
 	au BufRead *.vcl* let b:comment_leader = '# '
@@ -131,6 +134,13 @@ augroup ft_vcl
 	au BufRead *.vcl.jinja let b:comment_leader = '# '
 	au BufRead *.vcl.jinja set filetype=vcl
 	au BufRead *.vcl.jinja set noexpandtab
+augroup END
+
+" ViM
+au Filetype vim let b:comment_leader = '" '
+augroup ft_vim
+	au BufRead *vimrc let b:comment_leader = '" '
+	au BufRead *vimrc set textwidth=0
 augroup END
 
 " VMWare vmx

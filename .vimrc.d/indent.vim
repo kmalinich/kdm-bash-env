@@ -2,5 +2,7 @@
 set shiftwidth=2
 set softtabstop=0
 set tabstop=2
+set textwidth=0
+
 " Default set no expandtab
 set noexpandtab
