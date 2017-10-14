@@ -18,13 +18,14 @@ _show_bin() {
 	FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}")"
 
 	# Detect GNU ls or stock macOS ls to enable color output properly
+	LS=('ls' '-Fhl')
 	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		LS='ls -hl --color=auto'
+		LS+=('--color=auto')
 	else
-		LS='ls -Ghl'
+		LS+=('-G')
 	fi
 
-	"${LS}" "${FILE_PATH}" 2> /dev/null
+	"${LS[@]}" "${FILE_PATH}" 2> /dev/null
 	echo
 
 	output green "Name : '${1}'"
