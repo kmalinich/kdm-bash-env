@@ -7,8 +7,9 @@ set backspace=indent,eol,start
 " Enable code concealing
 " set conceallevel=1
 
-" the /g flag on :s substitutions by default
-set gdefault
+" Set /g flag on :s substitutions by default
+" WARNING this does the opposite if you use /g and have it enabled
+" set gdefault
 
 " Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
 set mouse=
