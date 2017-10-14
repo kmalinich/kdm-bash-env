@@ -12,9 +12,9 @@ _fix_hung_java() {
 
 	for JAVA_PID in "${JAVA_PIDS[@]}"; do
 		if ! kill -9 "${JAVA_PID}" &> /dev/null; then
-			output red "Failed to kill Java JAVA_PID ${JAVA_PID}"
+			output red "Failed to kill Java JAVA_PID '${JAVA_PID}'"
 		else
-			output green "Killed Java JAVA_PID ${JAVA_PID}"
+			output green "Killed Java JAVA_PID '${JAVA_PID}'"
 		fi
 	done
 }
@@ -23,7 +23,7 @@ _fix_hung_java() {
 # shellcheck disable=SC2009
 _fix_bash_pids() {
 	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS FIX_BASH_PIDS_PID_COUNT FIX_BASH_PIDS_PID_LIST USAGE_OPTIONS_STRING
+	local ARRAY_USAGE_OPTIONS #FIX_BASH_PIDS_PID_LIST[@] FIX_BASH_PIDS_PID_LIST USAGE_OPTIONS_STRING
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
@@ -35,38 +35,40 @@ _fix_bash_pids() {
 	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	FIX_BASH_PIDS_PID_LIST=($(ps aux | grep -E '[b]ash' | grep -Ev 'root|s00\.' | sort -r | awk '{print $2}'))
-	FIX_BASH_PIDS_PID_COUNT="${#FIX_BASH_PIDS_PID_LIST[@]}"
 
-	output purple "Number of stale bash PIDs: ${FIX_BASH_PIDS_PID_COUNT}"
-
-	if [[ ! "${FIX_BASH_PIDS_PID_COUNT}" == "0" ]]; then
-		case "${1}" in
-			show)
-				output purple "PID list:"
-				for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
-					output yellow "${PID}"
-				done
-				;;
-			kill)
-				read -r -p "Kill stale bash PIDs? [Y/n] " FIX_BASH_PIDS_YN
-				echo
-				[[ "${FIX_BASH_PIDS_YN}" == [Nn] ]] && output purple "No PIDs killed" && return 1
-
-				for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
-					output yellow "Killing PID ${PID}"
-					kill -9 "${PID}"
-				done
-
-				output green "Complete"
-
-				# Check the PIDs again
-				fix-bash-pids show
-				;;
-			*)
-				output usage "fix-bash-pids <${USAGE_OPTIONS_STRING}>"
-				;;
-		esac
+	if [[ "${#FIX_BASH_PIDS_PID_LIST[@]}" -le "0" ]]; then
+		output green "No stale bash PIDs to kill"
+		return 0
 	fi
+
+	output purple "Number of stale bash PIDs: ${#FIX_BASH_PIDS_PID_LIST[@]}"
+
+	case "${1}" in
+		show)
+			output purple "PID list:"
+			for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
+				output yellow "${PID}"
+			done
+			;;
+		kill)
+			read -r -p "Kill stale bash PIDs? [Y/n] " FIX_BASH_PIDS_YN
+			echo
+			[[ "${FIX_BASH_PIDS_YN}" == [Nn] ]] && output purple "No PIDs killed" && return 1
+
+			for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
+				output yellow "Killing PID '${PID}'"
+				kill -9 "${PID}"
+			done
+
+			output green "Complete"
+
+			# Check the PIDs again
+			fix-bash-pids show
+			;;
+		*)
+			output usage "fix-bash-pids <${USAGE_OPTIONS_STRING}>"
+			;;
+	esac
 }
 
 # Remove / clean macOS .DS_Store / attribute files
@@ -81,14 +83,14 @@ _fix_macos_files() {
 	IFS=$(echo -en "\n\b")
 
 	# File array of macOS-specific junk files
-	ARRAY_RM_FILES=($(find . -iname '*DS_Store' -o -iname '._*'))
+	ARRAY_RM_FILES=($(find . -iname '*DS_Store' -o -iname '._*' 2> /dev/null))
 
 	# Restore previous IFS
 	IFS="${OLD_IFS}"
 
-	[[ -z "${ARRAY_RM_FILES[0]}" ]] && output purple "No macOS attribute/Finder files under '${PWD}' to remove" && return
+	[[ -z "${ARRAY_RM_FILES[0]}" ]] && output green "No macOS attribute/Finder files under '${PWD}' to remove" && return
 
-	output yellow "Removing these macOS attribute/Finder files under '${PWD}':"
+	output yellow "Removing these (${#ARRAY_RM_FILES}) macOS attribute/Finder files under '${PWD}':"
 	echo
 
 	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
@@ -98,10 +100,10 @@ _fix_macos_files() {
 
 	read -r -p "Are you sure you want to remove these files? [Y/n] " FIX_MACOS_FILES_YN
 	echo
-	[[ "${FIX_MACOS_FILES_YN}" == [Nn] ]] && output purple "No macOS attribute/Finder files under '${PWD}' removed" && return
+	[[ "${FIX_MACOS_FILES_YN}" == [Nn] ]] && output green "No macOS attribute/Finder files under '${PWD}' removed" && return
 
 	for RM_FILE in "${ARRAY_RM_FILES[@]}"; do
-		output yellow "Removing '${FILE}'"
+		output yellow "Removing '${RM_FILE}'"
 		rm -f "${RM_FILE}"
 	done
 	echo
