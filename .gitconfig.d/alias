@@ -23,7 +23,8 @@
 
 	i = init
 
-	l = log
+	l  = log
+	ll = log --pretty=\"tformat:[%C(yellow)%h%C(reset)][%C(blue)%aI%C(reset)][%cn]: %C(cyan)%s%C(reset)\"
 
 	m = merge
 
