@@ -71,11 +71,11 @@
   * Any missing binaries/libraries it (probably) should warn you about
 
 # Install
+First, back up your existing bash history (probably located at `~/.bash_history`)
 ```
-cd ${HOME}
+cd
 git clone https://github.com/kmalinich/kdm-bash-env.git
 cd kdm-bash-env
 .kdm/install
-cd ${HOME}
 ```
 Then log out and back in, hopefully it doesn't break.
