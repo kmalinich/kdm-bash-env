@@ -9,7 +9,7 @@ _show_motd() {
 	local HEAD_VAL2 LOAD MOTD_FMT MOTD_KEY MOTD_VAL1 MOTD_VAL2 RAM RAMC STRING_LENGTH UPT VER
 
 	# Return if we're not in a terminal
-	[[ -t 2 ]] || return
+	[[ -t 0 ]] || return
 
 	# Color shortcuts
 	BAR="${C_BLK_BLD}|${C_RST}"

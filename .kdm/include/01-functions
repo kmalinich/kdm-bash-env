@@ -3,7 +3,7 @@
 
 # Output loading message with auto-increment
 _bash_env_loading() {
-	[[ -t 2 ]] || return
+	[[ -t 0 ]] || return
 
 	# Clear line function - 29 spaces
 	if [[ "${1}" == "clear" ]]; then
