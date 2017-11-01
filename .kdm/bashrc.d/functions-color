@@ -48,4 +48,16 @@ rgb2hex() {
 	hex2color "#${HEX_STRING}"
 }
 
+# Color man pages
+man() {
+	LESS_TERMCAP_mb=$'\e[38;2;255;153;50m'           \
+		LESS_TERMCAP_md=$'\e[0m\e[1;38;2;255;204;50m'  \
+		LESS_TERMCAP_me=$'\e[0m\e[3;38;2;224;224;224m' \
+		LESS_TERMCAP_se=$''                            \
+		LESS_TERMCAP_so=$'\e[38;2;0;128;255m'          \
+		LESS_TERMCAP_ue=$'\e[0m\e[3;38;2;224;224;224m' \
+		LESS_TERMCAP_us=$'\e[0m\e[1;38;2;47;223;100m'  \
+		command man "$@"
+}
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
