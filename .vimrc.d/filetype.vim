@@ -27,6 +27,11 @@ au Filetype python set shiftwidth=4
 au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
 
+augroup ft_python
+	au BufRead *.py  call matchdelete(g:w3)
+	au BufRead *.pyc call matchdelete(g:w3)
+augroup END
+
 " sh/bash
 au Filetype sh let b:comment_leader = '# '
 

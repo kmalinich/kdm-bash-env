@@ -147,7 +147,7 @@ ARRAY_SOURCE=(
 ${BASH_ENV_FILE_BASHRC}
 )
 
-# Array of automatic sudo-ing commands (Linux and OS X)
+# Array of automatic sudo-ing commands (Linux and macOS)
 ARRAY_SUDO=(
 arp
 arp-scan
@@ -170,17 +170,6 @@ su
 sysctl
 syslog
 umount
-virsh
-virt-admin
-virt-clone
-virt-convert
-virt-host-validate
-virt-install
-virt-manager
-virt-pki-validate
-virt-viewer
-virt-xml
-virt-xml-validate
 visudo
 )
 
@@ -202,6 +191,17 @@ rpi-update
 rpm
 service
 systemctl
+virsh
+virt-admin
+virt-clone
+virt-convert
+virt-host-validate
+virt-install
+virt-manager
+virt-pki-validate
+virt-viewer
+virt-xml
+virt-xml-validate
 yum
 zypper
 )
