@@ -10,7 +10,7 @@ export BASH_ENV_DIR_INCLUDE="${BASH_ENV_DIR_KDM}/include"
 
 # Source data from include dir
 [[ -t 0 ]] && echo -en "\nLoading...\r"
-for i in {0..22}; do
+for i in {0..23}; do
 	# shellcheck disable=SC1090
 	. "${BASH_ENV_DIR_INCLUDE}/$(printf '%02d' ${i})"-*
 done

@@ -1,37 +1,40 @@
-. ${BASH_ENV_DIR_INCLUDE}/02-arrays
+# . "${BASH_ENV_DIR_INCLUDE}/02-arrays"
 
 # Configure MANPATH from array if entry is present
 unset MANPATH
-for ENTRY in ${ARRAY_MANPATH[@]}; do
+for ENTRY in "${ARRAY_MANPATH[@]}"; do
 	[[ -d ${ENTRY} ]] && MANPATH="${MANPATH}${MANPATH+:}${ENTRY}"
 done
 
 # Configure MIBDIRS from array if entry is present
 unset MIBDIRS
-for ENTRY in ${ARRAY_MIBDIRS[@]}; do
+for ENTRY in "${ARRAY_MIBDIRS[@]}"; do
 	[[ -d ${ENTRY} ]] && MIBDIRS="${MIBDIRS}${MIBDIRS+:}${ENTRY}"
 done
 export MIBS="ALL"
 
 # Configure NODE_PATH from array if entry is present
 unset NODE_PATH
-for ENTRY in ${ARRAY_NODE_PATH[@]}; do
+for ENTRY in "${ARRAY_NODE_PATH[@]}"; do
 	[[ -d ${ENTRY} ]] && NODE_PATH="${NODE_PATH}${NODE_PATH+:}${ENTRY}"
 done
 
 # Configure PATH from ARRAY_PATH
 unset PATH
-for ENTRY in ${ARRAY_PATH[@]}; do
+for ENTRY in "${ARRAY_PATH[@]}"; do
 	# Add entry from array if it is present and a directory
 	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
 done
 
 
-# Remove any duplicates from PATHs and export them
-export MANPATH=$(  echo ${MANPATH}   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
-export MIBDIRS=$(  echo ${MIBDIRS}   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
-export NODE_PATH=$(echo ${NODE_PATH} | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
-export PATH=$(     echo ${PATH}      | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
+# Remove any duplicates from PATHs
+MANPATH=$(  echo "${MANPATH}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
+MIBDIRS=$(  echo "${MIBDIRS}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
+NODE_PATH=$(echo "${NODE_PATH}" | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
+PATH=$(     echo "${PATH}"      | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
+
+# Export PATHs
+export MANPATH MIBDIRS NODE_PATH PATH
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

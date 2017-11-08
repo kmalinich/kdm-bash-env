@@ -1,12 +1,12 @@
 # Configure various shell options
-for OPTION in ${ARRAY_SHELL_OPTIONS[@]}; do
-	shopt -s ${OPTION}
+for OPTION in "${ARRAY_SHELL_OPTIONS[@]}"; do
+	shopt -s "${OPTION}"
 done
 
 # Configure bash 4+ shell options, if we're running it
 if [[ "${BASH_VERSION%%.*}" -ge 4 ]]; then
-	for OPTION in ${ARRAY_SHELL_OPTIONS_BASH4[@]}; do
-		shopt -s ${OPTION} &> /dev/null
+	for OPTION in "${ARRAY_SHELL_OPTIONS_BASH4[@]}"; do
+		shopt -s "${OPTION}" &> /dev/null
 	done
 fi
 

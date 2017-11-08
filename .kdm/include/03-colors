@@ -201,6 +201,18 @@ export C_RED_BRT_UDL="${C_RED_BRT}${C_UDL}"
 export C_WHT_BRT_UDL="${C_WHT_BRT}${C_UDL}"
 export C_YLW_BRT_UDL="${C_YLW_BRT}${C_UDL}"
 
+# Bold+Bright+Flashing
+export C_BLK_BLD_BRT_FLS="${C_BLK_BRT_BLD}${C_FLS}"
+export C_BLU_BLD_BRT_FLS="${C_BLU_BRT_BLD}${C_FLS}"
+export C_CYN_BLD_BRT_FLS="${C_CYN_BRT_BLD}${C_FLS}"
+export C_GRN_BLD_BRT_FLS="${C_GRN_BRT_BLD}${C_FLS}"
+export C_GRY_BLD_BRT_FLS="${C_GRY_BRT_BLD}${C_FLS}"
+export C_ORN_BLD_BRT_FLS="${C_ORN_BRT_BLD}${C_FLS}"
+export C_PRP_BLD_BRT_FLS="${C_PRP_BRT_BLD}${C_FLS}"
+export C_RED_BLD_BRT_FLS="${C_RED_BRT_BLD}${C_FLS}"
+export C_WHT_BLD_BRT_FLS="${C_WHT_BRT_BLD}${C_FLS}"
+export C_YLW_BLD_BRT_FLS="${C_YLW_BRT_BLD}${C_FLS}"
+
 # Flashing alert - bright red background, bold bright white foreground
 export C_ALT="${C_WHT_BRT_BLD}\e[41;5m"
 
@@ -214,9 +226,10 @@ _show_colors_16m() {
 	[[ "${COLUMNS}" -lt 95 ]] && output error "Terminal needs to be at least 95 columns to do show-colors-16m, cannot continue" && return
 
 	# Refresh color palette
-	source ${BASH_ENV_FILE_COLORS}
+	# shellcheck source=./03-colors
+	source "${BASH_ENV_FILE_COLORS}"
 
-	_show_colors_16m_work
+	_show_colors_16m_work "${@}"
 }
 
 _show_colors_256() {
@@ -224,7 +237,8 @@ _show_colors_256() {
 	[[ "${COLUMNS}" -lt 196 ]] && output error "Terminal needs to be at least 196 columns to show-colors-256, cannot continue" && return
 
 	# Refresh color palette
-	source ${BASH_ENV_FILE_COLORS}
+	# shellcheck source=./03-colors
+	source "${BASH_ENV_FILE_COLORS}"
 
 	_show_colors_256_work
 }

@@ -1,3 +1,5 @@
+# shellcheck disable=SC2034
+
 # kdm bash-env bash_profile arrays
 
 ARRAY_CONF_INIT=(
@@ -37,7 +39,7 @@ pwd
 umount
 )
 # Generate HISTIGNORE from array
-HISTIGNORE="$(for IGNORE in ${ARRAY_HISTIGNORE[@]}; do echo -n "${IGNORE}:"; done | sed 's/:$//g'; echo)"
+HISTIGNORE="$(for IGNORE in "${ARRAY_HISTIGNORE[@]}"; do echo -n "${IGNORE}:"; done | sed 's/:$//g'; echo)"
 
 ARRAY_MANPATH=(
 ${HOME}/perl5/man
@@ -115,7 +117,7 @@ ${HOME}/Library/Android/sdk/platform-tools
 /usr/games
 /usr/lib/mit/bin
 /usr/lib/mit/sbin
-$(echo ${PATH} | sed 's/:/\n/g')
+$(echo -e "${PATH//\:/\\n}")
 )
 
 ARRAY_RM=(
@@ -263,6 +265,7 @@ ${BASH_ENV_DIR_SSH_CONFIG}/00-base
 )
 
 
+# Export above array variables
 export ARRAY_SUDO
 export ARRAY_SUDO_LINUX
 export ARRAY_SUDO_MACOS

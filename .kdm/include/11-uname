@@ -1,6 +1,8 @@
 # Machine uname variables
-export UNAME_KERNEL_NAME="$(uname -s)"
-export UNAME_KERNEL_RELEASE="$(uname -r)"
+UNAME_KERNEL_NAME="$(uname -s)"
+UNAME_KERNEL_RELEASE="$(uname -r)"
+export UNAME_KERNEL_NAME UNAME_KERNEL_RELEASE
+
 # Commented these out as they are unused (for now)
 #export UNAME="$(uname)"
 #export UNAME_ALL="$(uname -a)"

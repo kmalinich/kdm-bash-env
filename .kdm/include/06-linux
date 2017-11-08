@@ -1,8 +1,11 @@
-[[ "$(uname)" != "Linux" ]] && return 0
+# Skip this script if this is not a Linux OS
+if [[ "$(uname)" != "Linux" ]]; then
+	[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return 0 || exit 0
+fi
 
 # pycurl backend library fix on RHEL
 [[ -s /etc/redhat-release ]] && export PYCURL_SSL_LIBRARY="nss"
 
-return 0
+[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return 0 || exit 0
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

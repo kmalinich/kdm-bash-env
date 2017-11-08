@@ -6,16 +6,24 @@ if hash jenv; then
 
 	# Load jenv automatically
 	eval "$(jenv init - --no-rehash)"
-else
-	# If no jenv, setup JAVA_HOME variable.
-	# Check if the java_home binary is present
-	if [[ -s /usr/libexec/java_home ]]; then
-		# Send all to stdout and grep for filepath
-		JAVA_HOME="$(/usr/libexec/java_home 2>&1 | grep '\/')"
 
-		# If the return is a path (aka not empty) - export it; otherwise, unset it
-		[[ "${JAVA_HOME}" ]] && export JAVA_HOME || unset JAVA_HOME
+	[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return 0 || exit 0
+fi
+
+# If no jenv, setup JAVA_HOME variable.
+# Check if the java_home binary is present
+if [[ -s /usr/libexec/java_home ]]; then
+	# Send all to stdout and grep for filepath
+	JAVA_HOME="$(/usr/libexec/java_home 2>&1 | grep '\/')"
+
+	# If the return is a path (aka not empty) - export it; otherwise, unset it
+	if [[ "${JAVA_HOME}" ]]; then
+		export JAVA_HOME
+	else
+		unset JAVA_HOME
 	fi
+
+	[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return 0 || exit 0
 fi
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -11,11 +11,19 @@ output() {
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
-	alert    backtick black  blue          cyan
-	error    failure  gray   green         keyval
-	keyval-f keyval-t leadup leadup-custom orange
-	pink     purple   red    stderr        success
-	usage    white    yellow
+	alert backtick stderr
+
+	failure success
+
+	error usage
+
+	black blue   cyan   gray
+	green orange pink   purple
+	red   white  yellow
+
+	keyval keyval-f keyval-o keyval-p keyval-t
+
+	leadup leadup-custom
 	)
 
 	# Create variable of pipe-separated options from array
@@ -80,6 +88,34 @@ output() {
 			fi
 
 			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		keyval-o)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_ORN}%s${C_GRY}'${C_RST}\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		keyval-p)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_PRP}%s${C_GRY}'${C_RST}\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"

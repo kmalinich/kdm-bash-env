@@ -1,3 +1,5 @@
+# shellcheck disable=SC2139
+
 # Editor config
 if hash nvim; then
 	EDITOR_NAME="nvim"

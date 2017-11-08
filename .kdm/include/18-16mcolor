@@ -1,5 +1,5 @@
 # If 16m color is enabled, change TERM to xterm-16mcolor
-if grep -q 'COLOR_16M=1' "${BASH_ENV_FILE_CONFIG}"; then
+if grep -q 'COLOR_16M=1' "${BASH_ENV_FILE_CONFIG}" 2> /dev/null; then
 	export TERM="xterm-16mcolor"
 	export BASH_ENV_COLOR_16M="true"
 else

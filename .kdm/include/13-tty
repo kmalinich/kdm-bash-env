@@ -1,3 +1,4 @@
-export CURRENT_TTY="$(ps ax | awk '/'"${$}"'/ {printf $2; exit}')"
+CURRENT_TTY="$(ps ax | awk '/'"${$}"'/ {printf $2; exit}')"
+export CURRENT_TTY
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -18,7 +18,7 @@ _ssh_ping() {
 # Show full path for SCPing
 _show_scp_path() {
 	# Declare vars as local
-	local FILE_NAME FILE_TYPE SCP_CMD SCP_PATH SELECTED
+	local FILE_NAME SCP_CMD SCP_PATH SELECTED
 
 	# If no argument, select current directory
 	SELECTED="${PWD}"
@@ -34,11 +34,9 @@ _show_scp_path() {
 	# Check if argument is a file or folder, fill variables accordingly
 	if [[ -d "${SELECTED}" ]]; then
 		FILE_NAME="${SCP_PATH}"
-		FILE_TYPE="folder"
 		SCP_CMD="scp -r"
 	else
 		FILE_NAME="$(basename "${SCP_PATH}")"
-		FILE_TYPE="file"
 		SCP_CMD="scp"
 	fi
 
@@ -50,7 +48,7 @@ _show_scp_path() {
 	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
 	echo
 
-	# Output upload instructions if FILE_TYPE is folder
+	# Output upload instructions if file is a directory
 	[[ ! -d "${SELECTED}" ]] && return
 
 	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"

@@ -9,7 +9,8 @@ export HISTTIMEFORMAT="[%F %T] "
 export HISTFILE=${BASH_ENV_FILE_BASHHISTORY}
 
 # Get number of lines in history
-[[ -s "${HISTFILE}" ]] && export HISTLENGTH="$(wc -l < ${HISTFILE})"
+[[ -s "${HISTFILE}" ]] && HISTLENGTH="$(wc -l < "${HISTFILE}")"
+export HISTLENGTH
 
 # History control setup
 # http://unix.stackexchange.com/questions/18212/bash-history-ignoredups-and-erasedups-setting-conflict-with-common-history

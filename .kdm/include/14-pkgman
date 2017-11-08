@@ -1,6 +1,7 @@
 # Detect package manager
 for PACKAGE_MANAGER in "${ARRAY_PACKAGE_MANAGERS[@]}"; do
-	hash ${PACKAGE_MANAGER} && break || unset PACKAGE_MANAGER
+	hash "${PACKAGE_MANAGER}" && break
+	unset PACKAGE_MANAGER
 done
 [[ "${PACKAGE_MANAGER}" ]] && export PACKAGE_MANAGER
 
