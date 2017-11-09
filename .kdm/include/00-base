@@ -31,7 +31,7 @@ export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
 export BASH_ENV_FILE_SUDOCACHE="${BASH_ENV_DIR_KDM}/sudocache"
-export BASH_ENV_FILE_TIDY="${HOME}/.tidy.conf"
+export BASH_ENV_FILE_TIDY="${HOME}/.tidyrc"
 export BASH_ENV_FILE_TOPRC="${HOME}/.toprc"
 export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
 
