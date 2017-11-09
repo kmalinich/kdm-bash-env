@@ -21,7 +21,7 @@ doctype: html5
 accessibility-check: 0 (Tidy Classic)
 force-output: yes
 show-meta-change: no
-warn-proprietary-attributes: yes
+warn-proprietary-attributes: no
 
 // Encoding options
 char-encoding: utf8

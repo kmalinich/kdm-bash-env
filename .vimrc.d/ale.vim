@@ -48,7 +48,7 @@ let g:ale_sh_shellcheck_options = '-e SC2059 -s bash -x'
 
 " ale (Asynchronous Lint Engine) HTML tidy config
 let g:ale_html_tidy_executable = '/usr/local/bin/tidy'
-let g:ale_html_tidy_options    = '-q -e -language en -c ~/.tidy.conf'
+let g:ale_html_tidy_options    = '-q -e -language en'
 
 " ale (Asynchronous Lint Engine) gutter config
 " let g:ale_sign_column_always = 1
