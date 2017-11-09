@@ -66,6 +66,9 @@ augroup ft_json
 	au BufRead *.json set filetype=json
 	au BufRead *.json set noexpandtab
 
+	au BufRead *babelrc set filetype=json
+	au BufRead *babelrc set noexpandtab
+
 	au BufRead *csslintrc set filetype=json
 	au BufRead *csslintrc set noexpandtab
 
@@ -74,6 +77,9 @@ augroup ft_json
 
 	au BufRead *htmlhintrc set filetype=json
 	au BufRead *htmlhintrc set noexpandtab
+
+	au BufRead *jsbeautifyrc set filetype=json
+	au BufRead *jsbeautifyrc set noexpandtab
 
 	au BufRead *jshintrc set filetype=json
 	au BufRead *jshintrc set noexpandtab

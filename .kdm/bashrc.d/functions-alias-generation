@@ -200,26 +200,30 @@ _alias_ping() {
 	_alias_oping
 }
 
+# Pretty print HTML with tidy, indent: 2 spaces, sorted alphabetically, then colorize with pygmentize
 _alias_pygmentize_html() {
 	hash tidy || return
-	alias html-format='tidy -i -w 200 -ashtml -utf8 2> /dev/null | pygmentize -l html -f terminal256 -O style=monokai'
+	alias html-format="dos2unix | sed -e '/^$/d' -e 's/^[ \t]*//' -e 's/\t/\ /g' | tr '\n' ' ' | sed -E 's/>(\ {1,})</></g' | tidy 2> /dev/null | html-beautify -t false -E -T -U | pygmentize -l html -f terminal256 -O style=monokai"
 	alias format-html='html-format'
 }
 
+# Pretty print JSON with jq, indent: 2 spaces (default), sorted alphabetically, then colorize with pygmentize
 _alias_pygmentize_json() {
-	hash json_reformat || return
-	alias json-format='json_reformat 2> /dev/null | pygmentize -l json -f terminal256 -O style=monokai'
+	hash jq || return
+	alias json-format='dos2unix | jq -MS . 2> /dev/null | pygmentize -l json -f terminal256 -O style=monokai'
 	alias format-json='json-format'
 }
 
+# Pretty print XML with xmllint, indent: 2 spaces (default), then colorize with pygmentize
 _alias_pygmentize_xml() {
 	hash xmllint || return
-	alias xml-format='xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal256 -O style=monokai'
+	alias xml-format='dos2unix | xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal256 -O style=monokai'
 	alias format-xml='xml-format'
 }
 
 # Prettyprint+colorize various formats, if supporting binaries are installed
 _alias_pygmentize() {
+	hash dos2unix   || return
 	hash pygmentize || return
 
 	_alias_pygmentize_html
