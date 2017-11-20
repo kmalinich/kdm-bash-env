@@ -36,12 +36,13 @@ map <C-e> :call TrimReindent()<CR>
 
 " Whitespace highlighting
 highlight whitespace_bad  guibg=#f1c40f guifg=#2f2f2f
+highlight whitespace_odd  guibg=#3498db guifg=#2f2f2f
 highlight whitespace_ugly guibg=#e74c3c guifg=#2f2f2f
 
-" Tabs that are not at the start of a line
-let g:w0 = matchadd('whitespace_bad', '[^\t][^\/\/ ][^# ]\zs\t\+')
 " Spaces before a tab
-let g:w1 = matchadd('whitespace_bad', ' \+\ze\t')
+let g:w0 = matchadd('whitespace_odd', ' \+\ze\t')
+" Tabs that are not at the start of a line
+let g:w1 = matchadd('whitespace_bad', '[^\t][^\/\/ ][^# ]\zs\t\+')
 " Trailing whitespace
 let g:w2 = matchadd('whitespace_ugly', '\s\+$')
 " Spaces used for indenting

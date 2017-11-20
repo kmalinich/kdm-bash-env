@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+for x in $(ls *-*); do
+	TIMEFORMAT='%3R'
+	echo -n "${x},"
+	time bash ${x}
+done

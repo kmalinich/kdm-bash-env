@@ -69,6 +69,50 @@ _show_clock() {
 	fi
 }
 
+# Show full path for SCPing
+_show_scp_path() {
+	# Declare vars as local
+	local FILE_NAME SCP_CMD SCP_PATH SELECTED
+
+	# If no argument, select current directory
+	SELECTED="${PWD}"
+	[[ "${1}" ]] && SELECTED="${1}"
+
+	# Check if file exists
+	[[ ! -e "${SELECTED}" ]] && output error "'./${1}' is not a valid file" && return
+
+	# Get realpath of argument, and then swap out the home directory with a tilde
+	SELECTED="$(realpath "${SELECTED}")"
+	SCP_PATH="${SELECTED/$HOME/\~}"
+
+	# Check if argument is a file or folder, fill variables accordingly
+	if [[ -d "${SELECTED}" ]]; then
+		FILE_NAME="${SCP_PATH}"
+		SCP_CMD="scp -r"
+	else
+		FILE_NAME="$(basename "${SCP_PATH}")"
+		SCP_CMD="scp"
+	fi
+
+	echo
+	output purple "Download ${FILE_NAME} from ${HOST_SHORT}:"
+
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	echo
+
+	# Output upload instructions if file is a directory
+	[[ ! -d "${SELECTED}" ]] && return
+
+	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"
+
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\n"
+	echo
+}
+
 # Show most frequently executed commands
 _show_top_cmds() {
 	# Declare vars as local

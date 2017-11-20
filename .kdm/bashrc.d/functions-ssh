@@ -2,6 +2,16 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+# Setup SSH aliases from SSH config file
+_ssh_alias_gen() {
+	eval "$(awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*)"
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -t 0 ]] && output keyval-t "Generated" "SSH bash aliases"
+	fi
+}
+
 # Ping it, then ssh to it
 # shellcheck disable=SC2029
 _ssh_ping() {
@@ -94,5 +104,7 @@ _ssh_xc() {
 
 	ssh -o Compression=yes -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
 }
+
+_ssh_alias_gen
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
