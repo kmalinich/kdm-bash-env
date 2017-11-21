@@ -53,10 +53,13 @@ _prompt_exitcode() {
 
 	ARRAY_CMD=(${1})
 	case "${ARRAY_CMD[0]}" in
-		_prompt*) return ;;
-		cd)       return ;;
-		grep)     return ;;
-		history)  return ;;
+		_g_*)      return ;;
+		_prompt_*) return ;;
+
+		cd)   return ;;
+		grep) return ;;
+
+		history) return ;;
 
 		.)      CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
 		source) CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;

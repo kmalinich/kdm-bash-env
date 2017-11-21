@@ -174,6 +174,11 @@ _g_gca() {
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 	COMMIT_MSG="${1}"
 
+	if git diff-index --quiet HEAD --; then
+		output blue "No changes to commit"
+		return 1
+	fi
+
 	output keyval "Committing changes, with message" "${COMMIT_MSG}"
 	echo
 
@@ -234,6 +239,11 @@ _g_gpo() {
 		p) SELECTED_BRANCH="postprod" ;;
 		*) output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}> <y>" && return ;;
 	esac
+
+	if [[ "$(git log '@{u}..' --oneline | wc -l)" == "0" ]]; then
+		output blue "No changes to push"
+		return 1
+	fi
 
 	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
 	echo
