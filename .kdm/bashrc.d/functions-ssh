@@ -8,7 +8,7 @@ _ssh_alias_gen() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -t 0 ]] && output keyval-t "Generated" "SSH bash aliases"
+		[[ -t 0 && "${SOURCE_VERBOSE}" != "true" ]] && output keyval-t "Generated" "SSH bash aliases"
 	fi
 }
 

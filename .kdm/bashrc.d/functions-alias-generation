@@ -3,52 +3,53 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 # Generate various application-specific command aliases
+# shellcheck disable=SC2139
 _alias_applications() {
 	PREFIX="${1}"
 
 	# If it has apache2
 	DIR_APACHE2_CONF="${PREFIX}/etc/apache2"
 	DIR_APACHE2_LOG="${PREFIX}/var/log/apache2"
-	[[ -d "${DIR_APACHE2_CONF}" ]] && export DIR_APACHE2_CONF && alias config-apache2='cd ${DIR_APACHE2_CONF}; ll'
-	[[ -d "${DIR_APACHE2_LOG}"  ]] && export DIR_APACHE2_LOG  && alias log-apache2='   cd ${DIR_APACHE2_LOG};  ll'
+	[[ -d "${DIR_APACHE2_CONF}" ]] && export DIR_APACHE2_CONF && alias config-apache2="cd ${DIR_APACHE2_CONF}; ll"
+	[[ -d "${DIR_APACHE2_LOG}"  ]] && export DIR_APACHE2_LOG  && alias log-apache2="   cd ${DIR_APACHE2_LOG};  ll"
 
 	# If it has dnsmasq
 	DIR_DNSMASQ_CONF="${PREFIX}/etc/dnsmasq.d"
 	DIR_DNSMASQ_LOG="${PREFIX}/var/log/dnsmasq"
-	[[ -d "${DIR_DNSMASQ_CONF}" ]] && export DIR_DNSMASQ_CONF && alias config-dnsmasq='cd ${DIR_DNSMASQ_CONF}; ll'
-	[[ -d "${DIR_DNSMASQ_LOG}"  ]] && export DIR_DNSMASQ_LOG  && alias log-dnsmasq='   cd ${DIR_DNSMASQ_LOG};  ll'
+	[[ -d "${DIR_DNSMASQ_CONF}" ]] && export DIR_DNSMASQ_CONF && alias config-dnsmasq="cd ${DIR_DNSMASQ_CONF}; ll"
+	[[ -d "${DIR_DNSMASQ_LOG}"  ]] && export DIR_DNSMASQ_LOG  && alias log-dnsmasq="   cd ${DIR_DNSMASQ_LOG};  ll"
 
 	# If it has httpd
 	DIR_HTTPD_CONF="${PREFIX}/etc/httpd"
 	DIR_HTTPD_LOG="${PREFIX}/var/log/httpd"
-	[[ -d "${DIR_HTTPD_CONF}" ]] && export DIR_HTTPD_CONF && alias config-httpd='cd ${DIR_HTTPD_CONF}; ll'
-	[[ -d "${DIR_HTTPD_LOG}"  ]] && export DIR_HTTPD_LOG  && alias log-httpd='   cd ${DIR_HTTPD_LOG};  ll'
+	[[ -d "${DIR_HTTPD_CONF}" ]] && export DIR_HTTPD_CONF && alias config-httpd="cd ${DIR_HTTPD_CONF}; ll"
+	[[ -d "${DIR_HTTPD_LOG}"  ]] && export DIR_HTTPD_LOG  && alias log-httpd="   cd ${DIR_HTTPD_LOG};  ll"
 
 	# If it has libvirt
 	DIR_LIBVIRT_CONF="${PREFIX}/var/lib/libvirt"
 	DIR_LIBVIRT_LOG="${PREFIX}/var/log/libvirt"
-	[[ -d "${DIR_LIBVIRT_CONF}" ]] && export DIR_LIBVIRT_CONF && alias config-libvirt='cd ${DIR_LIBVIRT_CONF}; ll'
-	[[ -d "${DIR_LIBVIRT_LOG}"  ]] && export DIR_LIBVIRT_LOG  && alias log-libvirt='   cd ${DIR_LIBVIRT_LOG};  ll'
+	[[ -d "${DIR_LIBVIRT_CONF}" ]] && export DIR_LIBVIRT_CONF && alias config-libvirt="cd ${DIR_LIBVIRT_CONF}; ll"
+	[[ -d "${DIR_LIBVIRT_LOG}"  ]] && export DIR_LIBVIRT_LOG  && alias log-libvirt="   cd ${DIR_LIBVIRT_LOG};  ll"
 
 	# If it has nginx
 	DIR_NGINX_CONF="${PREFIX}/etc/nginx"
 	DIR_NGINX_LOG="${PREFIX}/var/log/nginx"
-	[[ -d "${DIR_NGINX_CONF}" ]] && export DIR_NGINX_CONF && alias config-nginx='cd ${DIR_NGINX_CONF}; ll'
-	[[ -d "${DIR_NGINX_LOG}"  ]] && export DIR_NGINX_LOG  && alias log-nginx='   cd ${DIR_NGINX_LOG};  ll'
+	[[ -d "${DIR_NGINX_CONF}" ]] && export DIR_NGINX_CONF && alias config-nginx="cd ${DIR_NGINX_CONF}; ll"
+	[[ -d "${DIR_NGINX_LOG}"  ]] && export DIR_NGINX_LOG  && alias log-nginx="   cd ${DIR_NGINX_LOG};  ll"
 
 	# If it has squid
 	DIR_SQUID_CONF="${PREFIX}/etc/squid"
 	DIR_SQUID_LOG="${PREFIX}/var/log/squid"
-	[[ -d "${DIR_SQUID_CONF}" ]] && export DIR_SQUID_CONF && alias config-squid='cd ${DIR_SQUID_CONF}; ll'
-	[[ -d "${DIR_SQUID_LOG}"  ]] && export DIR_SQUID_LOG  && alias log-squid='   cd ${DIR_SQUID_LOG};  ll'
+	[[ -d "${DIR_SQUID_CONF}" ]] && export DIR_SQUID_CONF && alias config-squid="cd ${DIR_SQUID_CONF}; ll"
+	[[ -d "${DIR_SQUID_LOG}"  ]] && export DIR_SQUID_LOG  && alias log-squid="   cd ${DIR_SQUID_LOG};  ll"
 
 	# If it has yum
 	DIR_YUM_CONF="${PREFIX}/etc/yum"
 	DIR_YUM_REPOS="${PREFIX}/etc/yum.repos.d"
 	FILE_YUM_LOG="${PREFIX}/var/log/yum.log"
-	[[ -d "${DIR_YUM_CONF}"  ]] && export DIR_YUM_CONF  && alias config-yum='     cd ${DIR_YUM_CONF};  ll'
-	[[ -d "${DIR_YUM_REPOS}" ]] && export DIR_YUM_REPOS && alias config-yumrepos='cd ${DIR_YUM_REPOS}; ll'
-	[[ -e "${FILE_YUM_LOG}"  ]] && export FILE_YUM_LOG  && alias log-yum='        cd /var/log;         ll yum.log'
+	[[ -d "${DIR_YUM_CONF}"  ]] && export DIR_YUM_CONF  && alias config-yum="     cd ${DIR_YUM_CONF};  ll"
+	[[ -d "${DIR_YUM_REPOS}" ]] && export DIR_YUM_REPOS && alias config-yumrepos="cd ${DIR_YUM_REPOS}; ll"
+	[[ -e "${FILE_YUM_LOG}"  ]] && export FILE_YUM_LOG  && alias log-yum="        cd /var/log;         ll yum.log"
 }
 
 # shellcheck disable=SC2139
