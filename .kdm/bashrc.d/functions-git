@@ -207,11 +207,7 @@ _g_gca() {
 # Git push origin
 _g_gpo() {
 	# Declare vars as local
-	local ARRAY_BRANCHES ARRAY_USAGE_OPTIONS BRANCHES_STRING CMD_EXIT SELECTED_BRANCH TEMP_FILE USAGE_OPTIONS_STRING
-
-	# Create variable of pipe-separated options from array
-	ARRAY_USAGE_OPTIONS=(c d t m p pp)
-	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
+	local ARRAY_BRANCHES ARRAY_USAGE_OPTIONS CMD_EXIT LOG SELECTED_BRANCH TEMP_FILE USAGE_STRING
 
 	# Array of branches
 	ARRAY_BRANCHES=(
@@ -223,26 +219,36 @@ _g_gpo() {
 	postprod
 	)
 
-	# Create variable of pipe-separated branches from array
-	BRANCHES_STRING="$(IFS=$'|'; echo "${ARRAY_BRANCHES[*]}")"
+	# Array of branch acronyms
+	ARRAY_USAGE_OPTIONS=(c d t m p pp)
 
 	case "${1}" in
 		c)
 			SELECTED_BRANCH="$(git symbolic-ref --short HEAD 2> /dev/null)"
-			[[ -z "${SELECTED_BRANCH}" ]] && output error "No branch detected" && return
+			if [[ -z "${SELECTED_BRANCH}" ]]; then
+				output error "No current branch detected"
+				return 1
+			fi
 			;;
 
-		d) SELECTED_BRANCH="develop" ;;
-		t) SELECTED_BRANCH="testing" ;;
-		m) SELECTED_BRANCH="master" ;;
-		p) SELECTED_BRANCH="production" ;;
-		p) SELECTED_BRANCH="postprod" ;;
-		*) output usage "g-gpo <${USAGE_OPTIONS_STRING}> <${BRANCHES_STRING}> <y>" && return ;;
+		d)  SELECTED_BRANCH="develop"    ;;
+		t)  SELECTED_BRANCH="testing"    ;;
+		m)  SELECTED_BRANCH="master"     ;;
+		p)  SELECTED_BRANCH="production" ;;
+		pp) SELECTED_BRANCH="postprod"   ;;
+
+		*)
+			USAGE_STRING="g-gpo <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <$(IFS=$'|'; echo "${ARRAY_BRANCHES[*]}")> <y>"
+			output usage "${USAGE_STRING}"
+			return 254
+			;;
 	esac
 
-	if [[ "$(git log '@{u}..' --oneline | wc -l)" == "0" ]]; then
+	LOG="$(git log '@{u}..' --oneline 2>&1)"
+
+	if [[ "$(echo "${LOG}" | wc -l)" == "0" ]]; then
 		output blue "No changes to push"
-		return 1
+		return 2
 	fi
 
 	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
@@ -252,7 +258,10 @@ _g_gpo() {
 		read -r -p "Continue? [Y/n] " GIT_PUSH_YN
 		echo
 
-		[[ "${GIT_PUSH_YN}" == [Nn] ]] && output red "Push cancelled" && return 254
+		if [[ "${GIT_PUSH_YN}" == [Nn] ]]; then
+			output red "Push cancelled"
+			return 253
+		fi
 	fi
 
 	# Generate temp file for output (until I learn how to do it without that)
@@ -274,7 +283,7 @@ _g_gpo() {
 		CMD_EXIT="${?}"
 	fi
 
-	return ${CMD_EXIT}
+	return "${CMD_EXIT}"
 }
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

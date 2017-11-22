@@ -45,12 +45,23 @@ _prompt_exitcode() {
 	# Bounce if no arguments passed
 	[[ -z "${1}" || -z "${2}" ]] && return
 
-	# Bounce if exit code 0 or 127 (BASH command not found)
+	# Bounce if exit code is one of:
+	#   0 : command OK
+	# 127 : BASH command not found
+	# 253 : kdm-bash-env command noop
+	# 254 : kdm-bash-env command noop
 	case "${2}" in
 		0)   return ;;
 		127) return ;;
+		253) return ;;
+		254) return ;;
 	esac
 
+	# Bounce if command name is one of:
+	#      _g_* : kdm-bash-env git wrapper command
+	# _prompt_* : kdm-bash-env prompt command
+	#
+	# cd, grep, history, or sourcing a file
 	ARRAY_CMD=(${1})
 	case "${ARRAY_CMD[0]}" in
 		_g_*)      return ;;
