@@ -244,9 +244,13 @@ _g_gpo() {
 			;;
 	esac
 
-	LOG="$(git log '@{u}..' --oneline 2>&1)"
-
-	if [[ "$(echo "${LOG}" | wc -l)" == "0" ]]; then
+	# Bounce if:
+	# git log exit code is 0
+	# AND
+	# There are no apparant pushable changes
+	LOG="$(git log "origin/${SELECTED_BRANCH}.." --oneline 2> /dev/null)"
+	# shellcheck disable=SC2181
+	if [[ "${?}" == "0" && "$(echo "${LOG}" | wc -l)" == "0" ]]; then
 		output blue "No changes to push"
 		return 2
 	fi
