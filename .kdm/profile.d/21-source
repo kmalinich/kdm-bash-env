@@ -20,7 +20,7 @@ for ENTRY in "${ARRAY_SOURCE[@]}"; do
 done
 
 # Source bash libraries from the 'extra' dir
-for ENTRY in ${BASH_ENV_DIR_EXTRA}/*; do
+for ENTRY in $(find "${BASH_ENV_DIR_EXTRA}" -maxdepth 1 -type f -executable | sort); do
 	# Skip README
 	[[ "${ENTRY}" == "README" ]] && continue
 

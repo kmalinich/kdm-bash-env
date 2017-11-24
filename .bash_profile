@@ -1,24 +1,11 @@
 # kdm bash-env
-# .bash_profile
+# .bash_profile (wrapper)
 
-# Disable echo output
-[[ -t 0 ]] && stty -echo
+# File paths
+DIR_KDM="${HOME}/.kdm"
+FILE_PF="${DIR_KDM}/profile"
 
-# kdm bash-env variables
-export BASH_ENV_DIR_KDM="${HOME}/.kdm"
-export BASH_ENV_DIR_INCLUDE="${BASH_ENV_DIR_KDM}/include"
-
-# Source data from include dir
-[[ -t 0 ]] && echo -en "\nLoading...\r"
-for i in {0..23}; do
-	# shellcheck disable=SC1090
-	. "${BASH_ENV_DIR_INCLUDE}/$(printf '%02d' ${i})"-*
-done
-
-# Show MOTD
-[[ -t 0 ]] && _show_motd
-
-# Re-enable echo output
-[[ -t 0 ]] && stty echo
+# shellcheck disable=SC1090
+[[ -s "${FILE_PF}" ]] && . "${FILE_PF}" || echo "Error : Failed to source '${FILE_PF}'"
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

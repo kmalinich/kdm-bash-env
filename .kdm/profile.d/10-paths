@@ -1,4 +1,4 @@
-# . "${BASH_ENV_DIR_INCLUDE}/02-arrays"
+# . "${BASH_ENV_DIR_PROFILE_D}/02-arrays"
 
 # Configure MANPATH from array if entry is present
 unset MANPATH

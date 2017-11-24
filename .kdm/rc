@@ -1,0 +1,35 @@
+# kdm bash-env
+# .kdm/rc
+
+# shellcheck disable=SC1090
+# shellcheck disable=SC1091
+
+# Array of possible global bashrc files
+ARRAY_SOURCE_GLOBAL=(
+/etc/bash.bashrc
+/etc/bashrc
+)
+
+# Build array of function files to source from ~/.kdm/rc.d
+ARRAY_SOURCE_FUNCTIONS=($(ls -Fh1 "${BASH_ENV_DIR_RC_D}/functions-"* 2> /dev/null))
+
+# Build array of alias files to source from ~/.kdm/rc.d
+ARRAY_SOURCE_ALIASES=($(ls -Fh1 "${BASH_ENV_DIR_RC_D}/aliases-"* 2> /dev/null))
+
+
+# Source possible global bashrc(s)
+for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
+	[[ -f "${FILE}" ]] && . "${FILE}"
+done; unset FILE
+
+# Source function files
+for FILE in "${ARRAY_SOURCE_FUNCTIONS[@]}"; do
+	. "${FILE}"
+done; unset FILE
+
+# Source alias files
+for FILE in "${ARRAY_SOURCE_ALIASES[@]}"; do
+	. "${FILE}"
+done; unset FILE
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

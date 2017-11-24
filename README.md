@@ -58,7 +58,7 @@
   * Make sure you're using a terminal emulator that supports this
     * Enabling true color without support will make things very weird looking
   * I'm still searching for a way to do true color inside GNU screen sessions
-  * [`output()`](.kdm/bashrc.d/functions-text#L5-L158) always uses 24bit color regardless of `TERM` variable or supportedness
+  * [`output()`](.kdm/rc.d/functions-text#L5-L158) always uses 24bit color regardless of `TERM` variable or supportedness
     * I'll get to it someday
   * To enable, set `COLOR_16M=1` in `~/.kdm/bash-env.conf` and reopen terminal
   * For best results, use vim 8+/neovim 0.2.1+ (w/termguicolors support)

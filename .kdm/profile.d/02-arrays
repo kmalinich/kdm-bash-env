@@ -4,7 +4,6 @@
 
 ARRAY_CONF_INIT=(
 COLOR_16M
-ENABLE_POWERLINE
 PROMPT_NO_HOSTNAME
 WARN_FACTER
 )
@@ -146,7 +145,7 @@ dirspell
 ARRAY_SOURCE=(
 /etc/profile.d/bash_completion.sh
 /usr/local/etc/profile.d/bash_completion.sh
-${BASH_ENV_FILE_BASHRC}
+${BASH_ENV_FILE_RC}
 )
 
 # Array of automatic sudo-ing commands (Linux and macOS)
@@ -256,7 +255,7 @@ xcodebuild
 )
 
 ARRAY_TOUCH=(
-${BASH_ENV_FILE_BASHHISTORY}
+${BASH_ENV_FILE_HISTORY}
 ${BASH_ENV_FILE_CONFIG}
 ${BASH_ENV_FILE_SSH_AUTHKEYS}
 ${BASH_ENV_FILE_SSH_CONFIG}
