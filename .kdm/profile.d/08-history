@@ -6,7 +6,7 @@ export HISTSIZE=
 export HISTTIMEFORMAT="[%F %T] "
 
 # Set bash history file location, certain bash sessions truncate ~/.bash_history on close
-export HISTFILE=${BASH_ENV_FILE_BASHHISTORY}
+export HISTFILE=${BASH_ENV_FILE_HISTORY}
 
 # Get number of lines in history
 [[ -s "${HISTFILE}" ]] && HISTLENGTH="$(wc -l < "${HISTFILE}")"
