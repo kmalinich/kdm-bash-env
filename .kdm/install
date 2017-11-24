@@ -59,11 +59,10 @@ rm -rf .config
 
 # Move a few dirs with lots of files in them
 ARRAY_DIRS_MOVE=(
-.kdm/bashrc.d
-.kdm/include
+.kdm/rc.d
+.kdm/profile.d
 .kdm/nloadrc
 .kdm/toprc
-.nmap
 .vim/pack
 )
 
@@ -72,8 +71,8 @@ for DIR in "${ARRAY_DIRS_MOVE[@]}"; do
 
 	mkdir -p "${HOME}/${DIR}"
 
-	for FILE in $(ls -1A ${DIR}); do
-		rm -rf "${HOME}/${DIR}/${FILE}"
+	for FILE in $(ls -1A "${DIR}"); do
+		rm -rf "${HOME}/${DIR}/${FILE:?}"
 		mv "${DIR}/${FILE}" "${HOME}/${DIR}/"
 	done
 done
@@ -106,7 +105,7 @@ unset FILE_HOME
 
 
 # Move scripts in .kdm/ dir
-ARRAY_KDM_SCRIPTS=(install powerline)
+ARRAY_KDM_SCRIPTS=(install)
 DIR=".kdm"
 echo "Moving '${DIR}/*'"
 for KDM_SCRIPT in "${ARRAY_KDM_SCRIPTS[@]}"; do
@@ -118,7 +117,7 @@ rm -rf ${DIR}
 # Move the rest of the files
 for FILE in $(ls -1A); do
 	echo "Moving '${FILE}'"
-	rm -rf "${HOME}/${FILE}"
+	rm -rf "${HOME}/${FILE:?}"
 	mv "${FILE}" "${HOME}/"
 done
 

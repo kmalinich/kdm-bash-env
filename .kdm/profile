@@ -1,0 +1,24 @@
+# kdm bash-env
+# .bash_profile
+
+# Disable echo output
+[[ -t 0 ]] && stty -echo
+
+# kdm bash-env variables
+export BASH_ENV_DIR_KDM="${HOME}/.kdm"
+export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
+
+# Source data from ~/.kdm/profile.d
+[[ -t 0 ]] && echo -en "\nLoading...\r"
+for i in {0..23}; do
+	# shellcheck disable=SC1090
+	. "${BASH_ENV_DIR_PROFILE_D}/$(printf '%02d' ${i})"-*
+done
+
+# Show MOTD
+[[ -t 0 ]] && _show_motd
+
+# Re-enable echo output
+[[ -t 0 ]] && stty echo
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

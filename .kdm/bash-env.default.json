@@ -1,10 +1,9 @@
 {
 	"color": {
-		"16m": true
+		"16m": false
 	},
 	"prompt": {
-		"hostname": false,
-		"powerline": false
+		"hostname": true
 	},
 	"warn": {
 		"facter": false

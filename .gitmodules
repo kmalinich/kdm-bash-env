@@ -1,66 +1,69 @@
+[submodule ".nmap"]
+	path = .nmap
+	url  = https://github.com/kmalinich/nmap-scripts.git
 [submodule ".snmp/mibs"]
 	path = .snmp/mibs
-	url = https://github.com/kmalinich/snmp-mibs.git
+	url  = https://github.com/kmalinich/snmp-mibs.git
 [submodule ".vim/pack/kdm/airline"]
 	path = .vim/pack/kdm/airline
-	url = https://github.com/vim-airline/vim-airline.git
+	url  = https://github.com/vim-airline/vim-airline.git
 [submodule ".vim/pack/kdm/airlineish"]
 	path = .vim/pack/kdm/airlineish
-	url = https://github.com/paranoida/vim-airlineish.git
+	url  = https://github.com/paranoida/vim-airlineish.git
 [submodule ".vim/pack/kdm/ale"]
 	path = .vim/pack/kdm/ale
-	url = https://github.com/w0rp/ale
+	url  = https://github.com/w0rp/ale
 [submodule ".vim/pack/kdm/align"]
 	path = .vim/pack/kdm/align
-	url = https://github.com/vim-scripts/Align.git
+	url  = https://github.com/vim-scripts/Align.git
 [submodule ".vim/pack/kdm/auto-save"]
 	path = .vim/pack/kdm/auto-save
-	url = https://github.com/907th/vim-auto-save
+	url  = https://github.com/907th/vim-auto-save
 [submodule ".vim/pack/kdm/brogrammer-theme"]
 	path = .vim/pack/kdm/brogrammer-theme
-	url = https://github.com/kmalinich/vim-brogrammer-theme.git
+	url  = https://github.com/kmalinich/vim-brogrammer-theme.git
 [submodule ".vim/pack/kdm/css-color"]
 	path = .vim/pack/kdm/css-color
-	url = https://github.com/ap/vim-css-color.git
+	url  = https://github.com/ap/vim-css-color.git
 [submodule ".vim/pack/kdm/fugitive"]
 	path = .vim/pack/kdm/fugitive
-	url = https://github.com/tpope/vim-fugitive.git
+	url  = https://github.com/tpope/vim-fugitive.git
 [submodule ".vim/pack/kdm/hexmode"]
 	path = .vim/pack/kdm/hexmode
-	url = https://github.com/fidian/hexmode.git
+	url  = https://github.com/fidian/hexmode.git
 [submodule ".vim/pack/kdm/interfaces"]
 	path = .vim/pack/kdm/interfaces
-	url = https://github.com/vim-scripts/interfaces.git
+	url  = https://github.com/vim-scripts/interfaces.git
 [submodule ".vim/pack/kdm/javascript"]
 	path = .vim/pack/kdm/javascript
-	url = https://github.com/pangloss/vim-javascript.git
+	url  = https://github.com/pangloss/vim-javascript.git
 [submodule ".vim/pack/kdm/javascript-libraries-syntax"]
 	path = .vim/pack/kdm/javascript-libraries-syntax
-	url = https://github.com/othree/javascript-libraries-syntax.vim.git
+	url  = https://github.com/othree/javascript-libraries-syntax.vim.git
 [submodule ".vim/pack/kdm/local-vimrc"]
 	path = .vim/pack/kdm/local-vimrc
-	url = https://github.com/MarcWeber/vim-addon-local-vimrc.git
+	url  = https://github.com/MarcWeber/vim-addon-local-vimrc.git
 [submodule ".vim/pack/kdm/logrotate"]
 	path = .vim/pack/kdm/logrotate
-	url = https://github.com/moon-musick/vim-logrotate.git
+	url  = https://github.com/moon-musick/vim-logrotate.git
 [submodule ".vim/pack/kdm/nerdtree"]
 	path = .vim/pack/kdm/nerdtree
-	url = https://github.com/scrooloose/nerdtree.git
+	url  = https://github.com/scrooloose/nerdtree.git
 [submodule ".vim/pack/kdm/nerdtree-git-plugin"]
 	path = .vim/pack/kdm/nerdtree-git-plugin
-	url = https://github.com/Xuyuanp/nerdtree-git-plugin.git
+	url  = https://github.com/Xuyuanp/nerdtree-git-plugin.git
 [submodule ".vim/pack/kdm/polyglot"]
 	path = .vim/pack/kdm/polyglot
-	url = https://github.com/sheerun/vim-polyglot
+	url  = https://github.com/sheerun/vim-polyglot
 [submodule ".vim/pack/kdm/salt"]
 	path = .vim/pack/kdm/salt
-	url = https://github.com/saltstack/salt-vim.git
+	url  = https://github.com/saltstack/salt-vim.git
 [submodule ".vim/pack/kdm/salt-jinja"]
 	path = .vim/pack/kdm/salt-jinja
-	url = https://github.com/kmalinich/salt-jinja-vim.git
+	url  = https://github.com/kmalinich/salt-jinja-vim.git
 [submodule ".vim/pack/kdm/supertab"]
 	path = .vim/pack/kdm/supertab
-	url = https://github.com/ervandew/supertab.git
+	url  = https://github.com/ervandew/supertab.git
 [submodule ".vim/pack/kdm/tabular"]
 	path = .vim/pack/kdm/tabular
-	url = https://github.com/godlygeek/tabular.git
+	url  = https://github.com/godlygeek/tabular.git

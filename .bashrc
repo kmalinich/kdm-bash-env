@@ -2,8 +2,9 @@
 # .bashrc (wrapper)
 
 # File paths
-FILE_RC="${HOME}/.kdm/bashrc"
-FILE_PF="${HOME}/.bash_profile"
+DIR_KDM="${HOME}/.kdm"
+FILE_RC="${DIR_KDM}/rc"
+FILE_PF="${DIR_KDM}/profile"
 
 # Workaround for non-login shells that do not source .bash_profile
 _validate_before_source() {
@@ -12,9 +13,9 @@ _validate_before_source() {
 
 	# Determine which file to source
 	# if ${BASH_ENV_FILE_BASHRC} is already populated,
-	#   ~/.bash_profile must have been sourced, so source ~/.kdm/bashrc
+	#   ~/.bash_profile must have been sourced, so source ~/.kdm/rc
 	# else
-	#   ~/.bash_profile must NOT have been sourced, so source ~/.bash_profile
+	#   ~/.bash_profile must NOT have been sourced, so source ~/.kdm/profile
 	# fi
 	[[ "${BASH_ENV_FILE_BASHRC}" ]] && SOURCE="${FILE_RC}" || SOURCE="${FILE_PF}"
 

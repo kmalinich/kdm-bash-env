@@ -2,7 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
-# Re-source ${HOME}/.kdm/bashrc, then files in the 'source' dir
+# Re-source ${HOME}/.kdm/rc, then files in the 'source' dir
 # shellcheck disable=SC1090
 _kdm_source() {
 	# Declare vars as local
@@ -15,7 +15,7 @@ _kdm_source() {
 
 	for i in {0..22}; do
 		SOURCE_FILE="$(printf '%02d' "${i}")"
-		SOURCE_PATH="$(ls "include/${SOURCE_FILE}"-*)"
+		SOURCE_PATH="$(ls "profile.d/${SOURCE_FILE}"-*)"
 		[[ ! -s "${SOURCE_PATH}" ]] && continue
 		if . "${SOURCE_PATH}"; then output keyval-t "Loaded" "${SOURCE_PATH}"; else output keyval-f "Failed" "${SOURCE_PATH}"; fi
 	done
