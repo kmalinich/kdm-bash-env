@@ -1,5 +1,5 @@
 # kdm bash-env
-# .kdm/bashrc
+# .kdm/rc
 
 # shellcheck disable=SC1090
 # shellcheck disable=SC1091
@@ -19,7 +19,7 @@ ARRAY_SOURCE_ALIASES=($(ls -Fh1 "${BASH_ENV_DIR_RC_D}/aliases-"* 2> /dev/null))
 
 # Source possible global bashrc(s)
 for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
-	[[ -f "${GLOBAL}" ]] && . "${FILE}"
+	[[ -f "${FILE}" ]] && . "${FILE}"
 done; unset FILE
 
 # Source function files
