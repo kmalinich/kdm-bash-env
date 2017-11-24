@@ -10,33 +10,6 @@ ARRAY_SOURCE_GLOBAL=(
 /etc/bashrc
 )
 
-# Array of function files to source from ~/.kdm/rc.d
-ARRAY_SOURCE_FUNCTIONS_BACKUP=(
-android
-array
-find
-fix
-md5
-show
-color
-misc
-text
-ping
-time
-conversion
-ssh
-git
-net
-prompt
-motd
-kdm
-update
-macos
-linux
-auto-sudo
-alias-generation
-)
-
 # Build array of function files to source from ~/.kdm/rc.d
 ARRAY_SOURCE_FUNCTIONS=($(ls -Fh1 "${BASH_ENV_DIR_RC_D}/functions-"* 2> /dev/null))
 
