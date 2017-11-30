@@ -80,5 +80,26 @@ _kdm_pull() {
 	return ${CMD_EXIT}
 }
 
+# Get timestamp of last bash-env commit from Git
+_kdm_time() {
+	# Declare vars as local
+	local DATE_CMD GIT_SEC OLD_PWD
+
+	OLD_PWD="${PWD}"
+	cd "${HOME}" || return
+
+	# Last commit UNIX seconds-since-epoch timestamp
+	GIT_SEC="$(git log -1 --date=short --pretty=format:%ct)"
+
+	# macOS date command is different when translating from seconds-since-epoch to date if the GNU utils aren't installed
+	DATE_CMD=(date)
+	[[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]] && DATE_CMD+=("--date=@${GIT_SEC}") || DATE_CMD+=(-j -r "${GIT_SEC}")
+	DATE_CMD+=('+%a %b %0d %r')
+
+	"${DATE_CMD[@]}"
+
+	cd "${OLD_PWD}" || return
+}
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

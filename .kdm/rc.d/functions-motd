@@ -5,8 +5,32 @@
 # Dynamic MOTD with facter (if present)
 _show_motd() {
 	# Declare vars as local
-	local ARRAY_VALUES ARROW_L ARROW_R BAR BASE_KEY CPU DST FACTER_JSON HASH HEAD_FMT HEAD_KEY HEAD_VAL1
-	local HEAD_VAL2 LOAD MOTD_FMT MOTD_KEY MOTD_VAL1 MOTD_VAL2 RAM RAMC STRING_LENGTH UPT VER
+	local ARRAY_VALUES
+	local ARROW_L
+	local ARROW_R
+	local BAR
+	local BASE_KEY
+	local BASE_VAL1
+	local BASE_VAL2
+	local CPU
+	local DST
+	local FACTER_JSON
+	local HASH
+	local HEAD_FMT
+	local HEAD_KEY
+	local HEAD_VAL1
+	local HEAD_VAL2
+	local LEN_MAX
+	local LOAD
+	local MOTD_FMT
+	local MOTD_KEY
+	local MOTD_VAL1
+	local MOTD_VAL2
+	local RAM
+	local RAMC
+	local STR
+	local UPT
+	local VER
 
 	# Return if we're not in a terminal
 	[[ -t 0 ]] || return
@@ -65,14 +89,17 @@ _show_motd() {
 			DST="$(echo "${FACTER_JSON}" | jq -Mcr .os.name)"
 			VER="$(echo "${FACTER_JSON}" | jq -Mcr .os.release.major).$(echo "${FACTER_JSON}" | jq -Mcr .os.release.minor)"
 			;;
+
 		Darwin)
 			DST="macOS"
-			VER="$(echo "${FACTER_JSON}" | jq -Mcr .os.macosx.version.major)"
+			VER="$(echo "${FACTER_JSON}" | jq -Mcr .os.macosx.version.full)"
 			;;
+
 		Debian)
 			DST="$(echo "${FACTER_JSON}" | jq -Mcr .os.distro.id)"
 			VER="$(echo "${FACTER_JSON}" | jq -Mcr .os.release.major)"
 			;;
+
 		RedHat)
 			DST="$(echo "${FACTER_JSON}" | jq -Mcr .os.name)"
 
@@ -97,7 +124,7 @@ _show_motd() {
 	UPT="${UPT/\ ho/}"
 	LOAD="${LOAD:0:4}"
 	RAMC="${RAMC%%.*}%"
-	RAM="${RAM%%.*}G/${RAMC}"
+	RAM="${RAM%%.*}G|${RAMC}"
 
 	# Find longest string in array for dynamic width
 	ARRAY_VALUES=(
@@ -112,30 +139,28 @@ _show_motd() {
 	)
 
 	# Find the length of the longest string among the values
-	for STRING in "${ARRAY_VALUES[@]}"; do
-		STRING_LENGTH=${#STRING}
-
-		# If the current string is longer than MAX_LEN, set MAX_LEN to the current string's length
-		[[ "${STRING_LENGTH}" -gt "${MAX_LEN}" ]] && MAX_LEN="${STRING_LENGTH}"
-
+	for STR in "${ARRAY_VALUES[@]}"; do
 		# Quick dirty check if data exists
-		if [[ -z "${STRING}" ]]; then
+		if [[ -z "${STR}" ]]; then
 			echo -e "Failed evaluating data; dynamic MOTD not possible\n"
 			return 2
 		fi
+
+		# If the current string is longer than LEN_MAX, set LEN_MAX to the current string's length
+		[[ "${#STR}" -gt "${LEN_MAX}" ]] && LEN_MAX="${#STR}"
 	done
 
 	# Example output:
 	#
-	# kdm > bash-env | #8af151d < v749
-	# cpu >  i7-3770 | 16G      < ram
-	#  os >    macOS | 10.11    < ver
-	#  up >     1:04 | 1.28     < load
+	# kdm >  bash-env | #39cccec  < rev
+	# cpu > i7-4770HQ | 16G|80%   < ram
+	#  os >     macOS | 10.13.1   < ver
+	#  up >    4 days | 1.86      < load
 
 	# Set up printf format strings with C_ENV
 	BASE_KEY="%s${C_RST}"
-	BASE_VAL1="%+${MAX_LEN}s${C_RST}"
-	BASE_VAL2="%-${MAX_LEN}s${C_RST}"
+	BASE_VAL1="%+${LEN_MAX}s${C_RST}"
+	BASE_VAL2="%-${LEN_MAX}s${C_RST}"
 
 	MOTD_KEY="${C_BLU_BLD}${BASE_KEY}"
 	MOTD_VAL1="${C_ENV}${BASE_VAL1}"
