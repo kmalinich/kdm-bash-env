@@ -2,30 +2,6 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
-# Re-source ${HOME}/.kdm/rc, then files in the 'source' dir
-# shellcheck disable=SC1090
-_kdm_source() {
-	# Declare vars as local
-	local OLD_PWD SOURCE_FILE SOURCE_PATH
-
-	OLD_PWD="${PWD}"
-	cd "${BASH_ENV_DIR_KDM}" || return
-
-	export SOURCE_VERBOSE="true"
-
-	for i in {0..22}; do
-		SOURCE_FILE="$(printf '%02d' "${i}")"
-		SOURCE_PATH="$(ls "profile.d/${SOURCE_FILE}"-*)"
-		[[ ! -s "${SOURCE_PATH}" ]] && continue
-		if . "${SOURCE_PATH}"; then output keyval-t "Loaded" "${SOURCE_PATH}"; else output keyval-f "Failed" "${SOURCE_PATH}"; fi
-	done
-
-	unset SOURCE_VERBOSE
-
-	cd "${OLD_PWD}" || return
-	unset OLD_PWD
-}
-
 # Get Git hash of bash-env
 _kdm_hash() {
 	# Declare vars as local
@@ -78,6 +54,30 @@ _kdm_pull() {
 
 	cd "${OLD_PWD}" || return
 	return ${CMD_EXIT}
+}
+
+# Re-source ${HOME}/.kdm/rc, then files in the 'source' dir
+# shellcheck disable=SC1090
+_kdm_source() {
+	# Declare vars as local
+	local OLD_PWD SOURCE_FILE SOURCE_PATH
+
+	OLD_PWD="${PWD}"
+	cd "${BASH_ENV_DIR_KDM}" || return
+
+	export SOURCE_VERBOSE="true"
+
+	for i in {0..22}; do
+		SOURCE_FILE="$(printf '%02d' "${i}")"
+		SOURCE_PATH="$(ls "profile.d/${SOURCE_FILE}"-*)"
+		[[ ! -s "${SOURCE_PATH}" ]] && continue
+		if . "${SOURCE_PATH}"; then output keyval-t "Loaded" "${SOURCE_PATH}"; else output keyval-f "Failed" "${SOURCE_PATH}"; fi
+	done
+
+	unset SOURCE_VERBOSE
+
+	cd "${OLD_PWD}" || return
+	unset OLD_PWD
 }
 
 # Get timestamp of last bash-env commit from Git

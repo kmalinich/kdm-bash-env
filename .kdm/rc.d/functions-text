@@ -11,62 +11,58 @@ output() {
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
-	alert backtick stderr
-
-	failure success
-
 	error usage
 
-	black blue   cyan   gray
-	green orange pink   purple
-	red   white  yellow
+	alert black blue orange cyan gray pink purple red green white yellow
+
+	leadup leadup-custom failure success
 
 	keyval keyval-f keyval-o keyval-p keyval-t
 
-	leadup leadup-custom
+	backtick stderr
 	)
 
 	# Create variable of pipe-separated options from array
 	USAGE_STRING="output <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <string 1> [<string 2, for keyval options>]"
 
 	# Case statement for output color/format
-	case "${1}" in
+	case "${1,,}" in
 		# Basic colors
-		alert)  COLOR_SELECTED="${C_ALT}";;
-		black)  COLOR_SELECTED="${C_BLK}";;
-		blue)   COLOR_SELECTED="${C_BLU}";;
-		cyan)   COLOR_SELECTED="${C_CYN}";;
-		gray)   COLOR_SELECTED="${C_GRY}";;
-		green)  COLOR_SELECTED="${C_GRN}";;
-		orange) COLOR_SELECTED="${C_ORN}";;
-		pink)   COLOR_SELECTED="${C_PNK}";;
-		purple) COLOR_SELECTED="${C_PRP}";;
-		red)    COLOR_SELECTED="${C_RED}";;
-		white)  COLOR_SELECTED="${C_WHT}";;
-		yellow) COLOR_SELECTED="${C_YLW}";;
+		a|alert)       COLOR_SELECTED="${C_ALT}";;
+		blk|black)     COLOR_SELECTED="${C_BLK}";;
+		blu|blue)      COLOR_SELECTED="${C_BLU}";;
+		c|cyn|cyan)    COLOR_SELECTED="${C_CYN}";;
+		gry|gray)      COLOR_SELECTED="${C_GRY}";;
+		grn|green)     COLOR_SELECTED="${C_GRN}";;
+		o|orn|orange)  COLOR_SELECTED="${C_ORN}";;
+		pk|pnk|pink)   COLOR_SELECTED="${C_PNK}";;
+		pr|prp|purple) COLOR_SELECTED="${C_PRP}";;
+		r|red)         COLOR_SELECTED="${C_RED}";;
+		w|wht|white)   COLOR_SELECTED="${C_WHT}";;
+		y|ylw|yellow)  COLOR_SELECTED="${C_YLW}";;
 
-		backtick)
+		b|backtick)
 			# Output the input string with backticks (for Slack, mainly)
 			OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
 
 			# Copy string to clipboard if not connected via SSH and binary is present
 			[[ -z "${SSH_CONNECTION}" ]] && hash pbcopy && printf "\`%s\`" "${2}" | pbcopy
-			echo -e "Copied string to clipboard\n" 1>&2
+			output stderr "Copied string to clipboard"
 			;;
 
-		error)
-			# Special function to output to stderr
+		e|error)
+			# Special function to output formatted usage string, with stderr output
+			OUTPUT_FORMAT="${C_RED_BRT_BLD}${C_ITA}Error${C_RST} ${C_WHT_BRT}:${C_RST} ${C_RED}%s${C_RST}\n"
 			OUTPUT_STDERR="1>&2"
-			OUTPUT_FORMAT="${C_RED_BRT_BLD}Error ${C_WHT_BRT}: ${C_RST}%s\n"
 			;;
 
-		failure)
+		f|failure)
 			# Special function for failure message, no string input
 			COLOR_SELECTED="${C_RED_BRT_BLD}"
 			OUTPUT_STRING="failure"
 			;;
 
-		keyval)
+		k|kv|keyval)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -80,7 +76,7 @@ output() {
 			return
 			;;
 
-		keyval-f)
+		kf|kvf|keyval-f)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -94,7 +90,7 @@ output() {
 			return
 			;;
 
-		keyval-o)
+		ko|kvo|keyval-o)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -108,7 +104,7 @@ output() {
 			return
 			;;
 
-		keyval-p)
+		kp|kvp|keyval-p)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -122,7 +118,7 @@ output() {
 			return
 			;;
 
-		keyval-t)
+		kt|kvt|keyval-t)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -136,14 +132,15 @@ output() {
 			return
 			;;
 
-		leadup) # Special function for leadup to status message, no newline
+		l|lu|leadup) # Special function for leadup to status message, no newline
 			# Create dot string and output format
 			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
 			OUTPUT_FORMAT="${C_RST}Performing ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
 			;;
 
-		leadup-custom) # Special function for leadup to status message, no newline, with custom command name
+		lc|luc|leadup-custom) # Special function for leadup to status message, no newline, with custom command name
 			# Check for 2nd and 3rd args
+			[[ -z "${2}" || -z "${3}" ]] && output usage "${USAGE_STRING}" && return
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
 				return
@@ -157,21 +154,21 @@ output() {
 			return
 			;;
 
-		stderr)
+		2|se|stderr)
 			# Special function to output to stderr
 			COLOR_SELECTED="${C_BLU}"
 			OUTPUT_STDERR="1>&2"
 			;;
 
-		success)
+		s|success)
 			# Special function for success message, no string
-			COLOR_SELECTED="${C_GRN_BRT_BLD}"
+			COLOR_SELECTED="${C_GRN_BLD}"
 			OUTPUT_STRING="success"
 			;;
 
-		usage)
+		u|usg|usage)
 			# Special function to output formatted usage string, with stderr output
-			OUTPUT_FORMAT="${C_YLW_BLD}${C_ITA}Usage${C_RST} ${C_WHT_BRT}: ${C_RST}%s\n"
+			OUTPUT_FORMAT="${C_YLW_BLD}${C_ITA}Usage${C_RST} ${C_WHT_BRT}:${C_RST} %s\n"
 			OUTPUT_STDERR="1>&2"
 			;;
 
@@ -200,11 +197,15 @@ _output_completion() {
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
-	alert    backtick black  blue          cyan
-	error    failure  gray   green         keyval
-	keyval-f keyval-t leadup leadup-custom orange
-	pink     purple   red    stderr        success
-	usage    white    yellow
+	error usage
+
+	alert black blue orange cyan gray pink purple red green white yellow
+
+	leadup leadup-custom failure success
+
+	keyval keyval-f keyval-o keyval-p keyval-t
+
+	backtick stderr
 	)
 
 	CUR_WORD=${COMP_WORDS[COMP_CWORD]}

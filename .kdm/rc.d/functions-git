@@ -70,7 +70,7 @@ _g_wrapper() {
 		echo
 	fi
 
-	rm -rf "${TEMP_FILE}" &> /dev/null
+	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
 	return ${CMD_EXIT}
 }
 
@@ -114,7 +114,7 @@ _g_gsu() {
 		echo
 	fi
 
-	rm -rf "${TEMP_FILE}" &> /dev/null
+	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
 	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
 
 	_g_gs
@@ -127,7 +127,7 @@ _g_gu() {
 	# Declare vars as local
 	local CMD_EXIT GIT_BRANCH TEMP_FILE
 
-	GIT_BRANCH="$(git symbolic-ref --short HEAD)"
+	GIT_BRANCH="$(git symbolic-ref --short HEAD 2> /dev/null)"
 	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
 
 	_g_wrapper fetch
@@ -157,7 +157,7 @@ _g_gu() {
 		echo
 	fi
 
-	rm -rf "${TEMP_FILE}" &> /dev/null
+	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
 	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
 
 	_g_gs
@@ -194,7 +194,7 @@ _g_gca() {
 		echo
 	fi
 
-	rm -rf "${TEMP_FILE}" &> /dev/null
+	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
 
 	if [[ "${CMD_EXIT}" == "0" ]]; then
 		_g_gs
@@ -280,7 +280,7 @@ _g_gpo() {
 		echo
 	fi
 
-	rm -rf "${TEMP_FILE}" &> /dev/null
+	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
 
 	if [[ "${CMD_EXIT}" == "0" ]]; then
 		_g_gs
