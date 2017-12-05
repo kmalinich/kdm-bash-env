@@ -1,7 +1,0 @@
-# Aliases: MOTD
-
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
-
-alias show-motd='_show_motd'
-
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -2,14 +2,44 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
-# Setup SSH aliases from SSH config file
-_ssh_alias_gen() {
-	eval "$(awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*)"
+
+# Generate ssh host aliases
+_ssh_alias_generate() {
+	# Clear sshcache file
+	: > "${BASH_ENV_FILE_SSH_CACHE}"
+
+	# Process ssh-host alias generation, output to sshcache file
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/* >> "${BASH_ENV_FILE_SSH_CACHE}"
 
 	# Output message if output function available and in a TTY
 	if hash output; then
 		[[ -t 0 && "${SOURCE_VERBOSE}" != "true" ]] && output keyval-t "Generated" "SSH bash aliases"
 	fi
+}
+
+# Configure ssh host aliases
+_ssh_alias_setup() {
+	# Regenerate sshcache file if empty
+	[[ ! -s "${BASH_ENV_FILE_SSH_CACHE}" ]] && _ssh_alias_generate
+
+	# Declare vars as local
+	local SSH_CACHE_AGE SSH_CACHE_TIME
+
+	# Determine age of sshcache file
+	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		SSH_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_SSH_CACHE}")
+	else
+		SSH_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_SSH_CACHE}")
+	fi
+
+	let SSH_CACHE_AGE=$(($(date +%s)-SSH_CACHE_TIME))
+
+	# Regenerate sshcache file if older than 1 day
+	[[ "${SSH_CACHE_AGE}" -ge "86400" ]] && _ssh_alias_generate
+
+	# Source sshcache file
+	# shellcheck source=../sshcache
+	. "${BASH_ENV_FILE_SSH_CACHE}"
 }
 
 # Ping it, then ssh to it
@@ -105,6 +135,19 @@ _ssh_xc() {
 	ssh -o Compression=yes -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
 }
 
-_ssh_alias_gen
+
+# Execute ssh-host alias setup
+_ssh_alias_setup
+
+
+# Function aliases
+alias ssh-alias-generate='_ssh_alias_generate'
+alias ssh-alias-setup='   _ssh_alias_setup'
+
+alias ssh-ping='_ssh_ping'
+
+alias ssh-c=' _ssh_c'
+alias ssh-x=' _ssh_x'
+alias ssh-xc='_ssh_xc'
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

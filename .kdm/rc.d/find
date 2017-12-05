@@ -44,4 +44,10 @@ _find_largest() {
 	du -hs ./* | sort -hr | head -n "${COUNT}"
 }
 
+
+# Function aliases
+alias find-dir='    _find_dir'
+alias find-file='   _find_file'
+alias find-largest='_find_largest'
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

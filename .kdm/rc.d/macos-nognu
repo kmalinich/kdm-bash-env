@@ -1,11 +1,12 @@
 # Aliases: macOS-only (without GNU conversion)
 
+# Bounce if on GNU-converted macOS or not on Darwin
+[[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
+
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
-_alias_macos_nognu_setup() {
-	# Bounce if on GNU-converted macOS or not on Darwin
-	[[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return
 
+_alias_macos_nognu_setup() {
 	# Alias to make md5sum work like Linux
 	alias md5sum='md5 -r'
 

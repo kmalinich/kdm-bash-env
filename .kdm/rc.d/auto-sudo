@@ -4,10 +4,10 @@
 
 # Generate auto-sudo aliases
 _auto_sudo_generate() {
-	# Clear sudo cache file
+	# Clear sudocache file
 	: > "${BASH_ENV_FILE_SUDOCACHE}"
 
-	# Process auto-sudo-alias generation, output to sudo cache file
+	# Process auto-sudo-alias generation, output to sudocache file
 	for CMD in "${ARRAY_SUDO[@]}"; do
 		# If it's installed, add sudo
 		hash "${CMD}" && echo "alias ${CMD}='sudo ${CMD}'" >> "${BASH_ENV_FILE_SUDOCACHE}"
@@ -16,7 +16,7 @@ _auto_sudo_generate() {
 
 # Configure auto-sudo aliases
 _auto_sudo_setup() {
-	# First check if we're root. If so, we don't need any of this
+	# First check if we're root; if so, we don't need any of this
 	[[ "${UID}" == "0" ]] && return
 
 	# If we're on macOS, add the macOS commands to the base array
@@ -49,7 +49,13 @@ _auto_sudo_setup() {
 	. "${BASH_ENV_FILE_SUDOCACHE}"
 }
 
-# Execute auto-sudo alias generation
+
+# Execute auto-sudo alias setup
 _auto_sudo_setup
+
+
+# Function aliases
+alias auto-sudo-generate='_auto_sudo_generate'
+alias auto-sudo-setup='   _auto_sudo_setup'
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

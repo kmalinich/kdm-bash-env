@@ -1,9 +1,0 @@
-# Aliases: Fix
-
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
-
-alias fix-bash-pids='  _fix_bash_pids'
-alias fix-hung-java='  _fix_hung_java'
-alias fix-macos-files='_fix_macos_files'
-
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

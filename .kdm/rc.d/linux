@@ -5,17 +5,9 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
-# Function aliases
-alias kvm-destroy-all=' _kvm_destroy_all'
-alias kvm-running='     _kvm_running'
-alias kvm-shutdown-all='_kvm_shutdown_all'
-alias kvm-start-all='   _kvm_start_all'
-alias kvm-undefine='    _kvm_undefine'
-alias kvm-watch='       _kvm_watch'
-alias sys-restart='     _sys_restart'
+# PING_WAIT for use in ping functions
+export PING_WAIT="-W 1"
 
-# systemctl no-pager
-hash systemctl && alias systemctl='systemctl --no-pager'
 
 # Restart with systemctl
 _sys_restart() {
@@ -77,6 +69,9 @@ _kvm_running() {
 	# Declare vars as local
 	local ARRAY_RUNNING
 
+	# Check required dependencies
+	! hash virsh && output error "virsh not available" && return
+
 	ARRAY_RUNNING=($(virsh list | awk '/running/ {print $2}'))
 	[[ -z "${ARRAY_RUNNING[0]}" ]] && output purple "No VMs running" && return 0
 
@@ -92,6 +87,9 @@ _kvm_running() {
 _kvm_watch() {
 	# Declare vars as local
 	local ARRAY_WATCH KVM_COUNTER VM_COUNT
+
+	# Check required dependencies
+	! hash virsh && output error "virsh not available" && return
 
 	KVM_COUNTER="0"
 
@@ -112,6 +110,9 @@ _kvm_watch() {
 _kvm_undefine() {
 	# Declare vars as local
 	local ARRAY_UNDEFINE UNDEFINE_YN USAGE_STRING
+
+	# Check required dependencies
+	! hash virsh && output error "virsh not available" && return
 
 	USAGE_STRING="kvm-undefine <search string>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
@@ -141,6 +142,9 @@ _kvm_destroy_all() {
 	# Declare vars as local
 	local ARRAY_DESTROY DESTROY_YN
 
+	# Check required dependencies
+	! hash virsh && output error "virsh not available" && return
+
 	ARRAY_DESTROY=($(virsh list | awk '/running/ {print $2}'))
 	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
 
@@ -165,6 +169,9 @@ _kvm_destroy_all() {
 _kvm_shutdown_all() {
 	# Declare vars as local
 	local ARRAY_SHUTDOWN SHUTDOWN_YN
+
+	# Check required dependencies
+	! hash virsh && output error "virsh not available" && return
 
 	ARRAY_SHUTDOWN=($(virsh list | awk '/running/ {print $2}'))
 	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
@@ -191,6 +198,9 @@ _kvm_start_all() {
 	# Declare vars as local
 	local ARRAY_START START_YN
 
+	# Check required dependencies
+	! hash virsh && output error "virsh not available" && return
+
 	ARRAY_START=($(virsh list --all | awk '/shut off/ {print $2}' | sed -e '/Name/d' -e '/^$/d'))
 	[[ -z "${ARRAY_START[0]}" ]] && output purple "No shut off VMs" && return 0
 
@@ -210,5 +220,30 @@ _kvm_start_all() {
 	done
 	echo
 }
+
+# Clean up old kernels
+_kernel_cleanup() {
+	# Check required dependencies
+	! hash package-cleanup && output error "package-cleanup not available" && return
+
+	package-cleanup -y --oldkernels --count=2
+}
+
+
+# Function aliases
+alias kernel-cleanup='_kernel_cleanup'
+
+alias kvm-destroy-all=' _kvm_destroy_all'
+alias kvm-running='     _kvm_running'
+alias kvm-shutdown-all='_kvm_shutdown_all'
+alias kvm-start-all='   _kvm_start_all'
+alias kvm-undefine='    _kvm_undefine'
+alias kvm-watch='       _kvm_watch'
+
+alias sys-restart='_sys_restart'
+
+# systemctl no-pager
+hash systemctl && alias systemctl='systemctl --no-pager'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

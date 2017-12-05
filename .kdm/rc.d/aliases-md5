@@ -1,8 +1,0 @@
-# Aliases: MD5
-
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
-
-alias md5-clean='  _md5_clean'
-alias md5-compare='_md5_compare'
-
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

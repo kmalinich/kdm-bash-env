@@ -387,4 +387,16 @@ _net_dns_lookup() {
 	printf "${PF_FMT}" "Forward" "${LOOKUP_IP}"
 }
 
+
+# Function aliases
+alias net-curl='            _net_curl'
+alias net-dns-lookup='      _net_dns_lookup'
+alias net-info='            _net_info'
+alias net-mac-lookup='      _net_mac_lookup'
+alias net-mac='             _net_mac'
+alias net-ping-average-csv='_net_ping_average_csv'
+alias net-ping-average='    _net_ping_average'
+alias net-ping-subnet='     _net_ping_subnet'
+alias net-webserver='       _net_webserver'
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -290,4 +290,13 @@ _g_gpo() {
 	return "${CMD_EXIT}"
 }
 
+
+# Function aliases
+alias g-gca='_g_gca'
+alias g-gi=' _g_gi'
+alias g-gpo='_g_gpo'
+alias g-gs=' _g_gs'
+alias g-gsu='_g_gsu'
+alias g-gu=' _g_gu'
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -1,4 +1,4 @@
-# Functions:
+# Functions: Time
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
@@ -173,5 +173,10 @@ _time_elapsed_text() {
 		echo "${OUTPUT_STRING}"
 	fi
 }
+
+
+# Function aliases
+alias time-elapsed-chrono='_time_elapsed_chrono'
+alias time-elapsed-text='  _time_elapsed_text'
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
