@@ -1,11 +1,11 @@
-# Functions: Misc
+# Functions: Base (must be loaded first)
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 # Check if a binary is installed/present in ${PATH}, without stdout/stderr
 # This is for bash, not for POSIX
 hash() {
-	builtin hash "${1+"$@"}" &> /dev/null
+	builtin hash "${1+"$@"}" > /dev/null 2>&1
 	return "${?}"
 }
 
