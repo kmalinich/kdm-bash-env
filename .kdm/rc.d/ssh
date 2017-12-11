@@ -15,6 +15,10 @@ _ssh_alias_generate() {
 	if hash output; then
 		[[ -t 0 && "${SOURCE_VERBOSE}" != "true" ]] && output keyval-t "Generated" "SSH bash aliases"
 	fi
+
+	# Source sshcache file
+	# shellcheck source=../sshcache
+	. "${BASH_ENV_FILE_SSH_CACHE}"
 }
 
 # Configure ssh host aliases
@@ -32,10 +36,13 @@ _ssh_alias_setup() {
 		SSH_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_SSH_CACHE}")
 	fi
 
-	let SSH_CACHE_AGE=$(($(date +%s)-SSH_CACHE_TIME))
+	SSH_CACHE_AGE=$(($(date +%s)-SSH_CACHE_TIME))
 
 	# Regenerate sshcache file if older than 1 day
-	[[ "${SSH_CACHE_AGE}" -ge "86400" ]] && _ssh_alias_generate
+	if [[ "${SSH_CACHE_AGE}" -ge "86400" ]]; then
+		_ssh_alias_generate
+		return 0
+	fi
 
 	# Source sshcache file
 	# shellcheck source=../sshcache
@@ -83,9 +90,9 @@ _show_scp_path() {
 	echo
 	output purple "Download ${FILE_NAME} from ${HOST_SHORT}:"
 
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\\n"
+	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\\n"
 	echo
 
 	# Output upload instructions if file is a directory
