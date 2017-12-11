@@ -119,17 +119,22 @@ set visible-stats on
 "\e[25~": "\"\"\C-b"
 
 
-# F16 : Single-quote the current or previous word
-"\e[29~": "\eb\'\ef\'"
+# F16 : Insert open and close single-quotes and move to just after the open single-quote
+# (Like when you're about to type JSON)
+"\e[29~": "\'\'\C-b"
 
-# F17 : Double-quote the current or previous word
-"\e[31~": "\eb\"\ef\""
+# F17 : Insert open and close double-quotes and move to just after the open double-quote
+"\e[31~": "\"\"\C-b"
 
-# F18 : Insert open and close single-quotes and move to just after the open single-quote
-"\e[32~": "\'\'\C-b"
+# F18 : Double-quote the current or previous word
+"\e[32~": "\eb\"\ef\""
 
-# F19 : Insert open and close double-quotes and move to just after the open double-quote
-"\e[33~": "\"\"\C-b"
+# F19 : Escaped-double-quote the current or previous word
+"\e[33~": "\eb\\\"\ef\\\""
+
+
+# F__ : Single-quote the current or previous word
+# "\e[~": "\eb\'\ef\'"
 
 
 # Option + c : Capitalize current word
@@ -143,7 +148,7 @@ set visible-stats on
 
 
 # Option + p : Edit PATH variable
-"\ep": "export PATH=${PATH}\e\C-e\C-a\ef\ef\C-f:\C-b"
+"\ep": "export PATH=${PATH}\e\C-e\"\C-a\ef\ef\C-f:\C-b\""
 
 
 # Option + x : Change dir to last word of last command and run 'lll'
