@@ -232,16 +232,16 @@ _macos_repair_office() {
 	PTH_PRF="${PTH_LIB}/Preferences"
 
 	ARRAY_RESET_FILES=(
-	${HOME}/Documents/Microsoft\ User\ Data
-	${PTH_AS}/CrashReporter/Microsoft*
-	${PTH_AS}/Microsoft
-	${PTH_AS}/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.microsoft.*
-	${PTH_CHE}/Microsoft
-	${PTH_CHE}/com.apple.helpd/Generated/com.microsoft.*
-	${PTH_CHE}/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/com.microsoft.*
-	${PTH_CHE}/com.microsoft.*
-	${PTH_PRF}/Microsoft
-	${PTH_PRF}/com.microsoft.*
+	"${HOME}/Documents/Microsoft User Data"
+	"${PTH_AS}/CrashReporter/Microsoft"*
+	"${PTH_AS}/Microsoft"
+	"${PTH_AS}/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.microsoft."*
+	"${PTH_CHE}/Microsoft"
+	"${PTH_CHE}/com.apple.helpd/Generated/com.microsoft."*
+	"${PTH_CHE}/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/com.microsoft."*
+	"${PTH_CHE}/com.microsoft."*
+	"${PTH_PRF}/Microsoft"
+	"${PTH_PRF}/com.microsoft."*
 	)
 
 	output red "Resetting all Microsoft Office data"

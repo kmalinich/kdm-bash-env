@@ -72,7 +72,7 @@ _kvm_running() {
 	# Check required dependencies
 	! hash virsh && output error "virsh not available" && return
 
-	ARRAY_RUNNING=($(virsh list | awk '/running/ {print $2}'))
+	mapfile -t ARRAY_RUNNING < <(virsh list | awk '/running/ {print $2}')
 	[[ -z "${ARRAY_RUNNING[0]}" ]] && output purple "No VMs running" && return 0
 
 	output orange "--= Running VMs =--"
@@ -94,12 +94,12 @@ _kvm_watch() {
 	KVM_COUNTER="0"
 
 	while true; do
-		ARRAY_WATCH=($(virsh list | awk '/running/ {print $2}'))
+		mapfile -t ARRAY_WATCH < <(virsh list | awk '/running/ {print $2}')
 		VM_COUNT="${#ARRAY_WATCH[@]}"
 
 		[[ -z "${ARRAY_WATCH[0]}" ]] && output green "No VMs running" && break
 
-		echo -en "${VM_COUNT} VMs ${C_GRN}running${C_RST}. ${KVM_COUNTER} sec elapsed     \r"
+		echo -en "${VM_COUNT} VMs ${C_GRN}running${C_RST}. ${KVM_COUNTER} sec elapsed     \\r"
 
 		sleep 1
 		KVM_COUNTER=$((KVM_COUNTER+1))
@@ -117,7 +117,7 @@ _kvm_undefine() {
 	USAGE_STRING="kvm-undefine <search string>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	ARRAY_UNDEFINE=($(virsh list --all | awk '/'"${1}"'/ {print $2}'))
+	mapfile -t ARRAY_UNDEFINE < <(virsh list --all | awk '/'"${1}"'/ {print $2}')
 	[[ -z "${ARRAY_UNDEFINE[0]}" ]] && output yellow "No VMs running matching search string '${1}'" && return 0
 
 	output purple "These VMs will be undefined:"; echo
@@ -145,7 +145,7 @@ _kvm_destroy_all() {
 	# Check required dependencies
 	! hash virsh && output error "virsh not available" && return
 
-	ARRAY_DESTROY=($(virsh list | awk '/running/ {print $2}'))
+	mapfile -t ARRAY_DESTROY < <(virsh list | awk '/running/ {print $2}')
 	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
 
 	output purple "These VMs will be destroyed:"; echo
@@ -173,7 +173,7 @@ _kvm_shutdown_all() {
 	# Check required dependencies
 	! hash virsh && output error "virsh not available" && return
 
-	ARRAY_SHUTDOWN=($(virsh list | awk '/running/ {print $2}'))
+	mapfile -t ARRAY_SHUTDOWN < <(virsh list | awk '/running/ {print $2}')
 	[[ -z "${ARRAY_DESTROY[0]}" ]] && output purple "No VMs running" && return 0
 
 	output purple "These VMs will be shutdown:"; echo
@@ -201,7 +201,7 @@ _kvm_start_all() {
 	# Check required dependencies
 	! hash virsh && output error "virsh not available" && return
 
-	ARRAY_START=($(virsh list --all | awk '/shut off/ {print $2}' | sed -e '/Name/d' -e '/^$/d'))
+	mapfile -t ARRAY_START < <(virsh list --all | awk '/shut off/ {print $2}' | sed -e '/Name/d' -e '/^$/d')
 	[[ -z "${ARRAY_START[0]}" ]] && output purple "No shut off VMs" && return 0
 
 	output purple "These VMs will be started:"; echo

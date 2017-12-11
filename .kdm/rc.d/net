@@ -176,7 +176,7 @@ _net_ping_average() {
 	PF_FMT="%-7s %s"
 
 	# Print header
-	printf "${C_PRP}${PF_FMT}${C_RST}\n" "Count" "Average (ms)"
+	printf "${C_PRP}${PF_FMT}${C_RST}\\n" "Count" "Average (ms)"
 
 	# Use the 2nd argument (ping total) if present, if not present, default of 100
 	PING_COUNT_FINAL="${2-100}"
@@ -188,7 +188,7 @@ _net_ping_average() {
 	PING_COLOR="${C_GRN}"
 
 	# Print inital line so you have something to stare at before the first ping returns
-	printf "${PING_COLOR}${PF_FMT}${C_RST}\r" "${PING_COUNT}" "${PING_AVERAGE}"
+	printf "${PING_COLOR}${PF_FMT}${C_RST}\\r" "${PING_COUNT}" "${PING_AVERAGE}"
 
 	# Loop until PING_COUNT reaches limit (PING_COUNT_FINAL)
 	while [[ "${PING_COUNT}" -lt "${PING_COUNT_FINAL}" ]]; do
@@ -215,7 +215,7 @@ _net_ping_average() {
 		PING_AVERAGE=$(echo "scale=5; ${PING_TOTAL}/${PING_COUNT}"   | bc)
 
 		# Output string
-		printf "${PING_COLOR}${PF_FMT}${C_RST}\r" "${PING_COUNT}" "${PING_AVERAGE}"
+		printf "${PING_COLOR}${PF_FMT}${C_RST}\\r" "${PING_COUNT}" "${PING_AVERAGE}"
 	done
 	echo
 }
@@ -232,7 +232,7 @@ _net_ping_average_csv() {
 	PF_FMT="%-7s %s"
 
 	# Print header
-	printf "${C_PRP}${PF_FMT}${C_RST}\n" "Count" "Average (ms)" 1>&2
+	printf "${C_PRP}${PF_FMT}${C_RST}\\n" "Count" "Average (ms)" 1>&2
 
 	# Use the 2nd argument (ping total) if present, if not present, default of 100
 	PING_COUNT_FINAL="${2-100}"
@@ -266,9 +266,9 @@ _net_ping_average_csv() {
 		PING_AVERAGE=$(echo "scale=5; ${PING_TOTAL}/${PING_COUNT}"   | bc)
 
 		# Output data string to stderr
-		printf "${PING_COLOR}${PF_FMT}${C_RST}\r" "${PING_COUNT}" "${PING_AVERAGE}" 1>&2
+		printf "${PING_COLOR}${PF_FMT}${C_RST}\\r" "${PING_COUNT}" "${PING_AVERAGE}" 1>&2
 	done
-	echo -e "\n"             1>&2
+	echo -e "\\n"            1>&2
 	output purple "Results:" 1>&2
 
 	# Output CSV string for passing to log
@@ -304,7 +304,7 @@ _net_mac() {
 	SPACES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
 
 	# Set margin for printf commands
-	PF_FMT="${C_PRP}%-10s${C_RST}%-20s%s\n"
+	PF_FMT="${C_PRP}%-10s${C_RST}%-20s%s\\n"
 
 	# Output MAC address in various formats
 	output purple "------------------------------ Formatted MAC --"
@@ -334,7 +334,7 @@ _net_mac_lookup() {
 	IEEE_ADDRESS="$(echo "${IEEE_STRING}" | awk -F ',' '{print $2 ", " $3}')"
 	IEEE_COUNTRY="$(echo "${IEEE_STRING}" | awk -F ',' '{print $4}')"
 
-	PF_FMT="${C_PRP}%-10s${C_RST}%s\n"
+	PF_FMT="${C_PRP}%-10s${C_RST}%s\\n"
 
 	output purple "-------------------------------- IEEE lookup --"
 	printf "${PF_FMT}" "Company" "${IEEE_COMPANY}"
@@ -364,14 +364,14 @@ _net_dns_lookup() {
 
 	output purple "--------------------------------- DNS lookup --"
 	HOST_CMD_IP="host ${LOOKUP_IP} ${LOOKUP_SERVER}"
-	LOOKUP_REVERSE=($(${HOST_CMD_IP} | awk -F 'domain name pointer ' '/domain name pointer / {print $2}' | sed 's/\.$//g'))
+	mapfile -t LOOKUP_REVERSE < <(${HOST_CMD_IP} | awk -F 'domain name pointer ' '/domain name pointer / {print $2}' | sed 's/\.$//g')
 
 	# Set margin for printf commands
-	PF_FMT="${C_PRP}%-10s${C_RST}%s\n"
+	PF_FMT="${C_PRP}%-10s${C_RST}%s\\n"
 
 	# Set color output to red if failed
 	PF_FMT_REV="${PF_FMT}"
-	[[ -z "${LOOKUP_REVERSE[0]}" ]] && LOOKUP_REVERSE[0]="Failed" && PF_FMT_REV="${C_PRP}%-10s${C_RED}%s${C_RST}\n"
+	[[ -z "${LOOKUP_REVERSE[0]}" ]] && LOOKUP_REVERSE[0]="Failed" && PF_FMT_REV="${C_PRP}%-10s${C_RED}%s${C_RST}\\n"
 
 	# Output returned data
 	printf "${PF_FMT}" "Input" "${LOOKUP_INPUT}"

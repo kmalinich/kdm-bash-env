@@ -9,7 +9,7 @@ _prompt_generate() {
 
 	# If COLOR_16M is set to 0 in bash-env.conf, render PS1 without multicolor
 	if grep -q 'COLOR_16M=0' "${BASH_ENV_FILE_CONFIG}"; then
-		PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]$(_prompt_pwd) \[${C_ENV}\]\\$\[${C_RST}\] "
+		PS1="\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]$(_prompt_pwd) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 		export PS1
 		return
 	fi
@@ -18,14 +18,14 @@ _prompt_generate() {
 	# render PS1 without hostname
 	if [[ -z "${SSH_CONNECTION}" ]]; then
 		if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}"; then
-			PS1="\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
+			PS1="\\[${C_BLU}\\]$(_prompt_pwd_color) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 			export PS1
 			return
 		fi
 	fi
 
 	# Normal PS1 prompt (with hostname)
-	PS1="\[${C_ENV}\]\${HOST_SHORT}\[${C_RST}\]:\[${C_BLU}\]$(_prompt_pwd_color) \[${C_ENV}\]\\$\[${C_RST}\] "
+	PS1="\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]$(_prompt_pwd_color) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 	export PS1
 
 	# Kick _prompt_pwd again with no output to export environment variables
@@ -62,7 +62,7 @@ _prompt_exitcode() {
 	# _prompt_* : kdm-bash-env prompt command
 	#
 	# cd, grep, history, or sourcing a file
-	ARRAY_CMD=(${1})
+	ARRAY_CMD=("${1}")
 	case "${ARRAY_CMD[0]}" in
 		_g_*)      return ;;
 		_prompt_*) return ;;
@@ -86,8 +86,8 @@ _prompt_exitcode() {
 	WHT="${C_WHT_BRT}${STR}"
 	YLW="${C_YLW}${STR}"
 
-	ARRAY_CMD=(${1})
-	printf "${GRY} ${RED} ${WHT} ${GRY}\n" "${CMD}" "failed" ":" "${2}"
+	ARRAY_CMD=("${1}")
+	printf "${GRY} ${RED} ${WHT} ${GRY}\\n" "${CMD}" "failed" ":" "${2}"
 }
 
 # Print exit code right-aligned for the PS1 prompt
@@ -103,7 +103,7 @@ _prompt_right() {
 
 	# Trim off 2+length of 1st argument
 	TRIM="${#1}"; ((TRIM++))
-	printf "${C_GRY}%*s${CLR}%s${C_RST}${C_GRY}%s${C_RST}\r" "$((COLUMNS-TRIM))" "[" "${1}" "]"
+	printf "${C_GRY}%*s${CLR}%s${C_RST}${C_GRY}%s${C_RST}\\r" "$((COLUMNS-TRIM))" "[" "${1}" "]"
 }
 
 _prompt_pwd() {
@@ -133,17 +133,18 @@ _prompt_pwd_color() {
 }
 
 # Render color-separated formatted pwd
+# shellcheck disable=SC2206
 _prompt_pwd_color_render() {
 	# Declare vars as local
 	local OLDIFS IFS INPUT DIRS SEPARATORS DEPTH COUNT STR RST CYN BLU YLW GRY PRP
 
 	# Escape color sequences for PS1 compatiblity
-	RST="\[${C_RST}\]"
-	CYN="\[${C_CYN}\]"
-	BLU="\[${C_BLU_BRT_BLD}\]"
-	YLW="\[${C_YLW}\]"
-	GRY="\[${C_GRY}\]"
-	PRP="\[${C_PRP}\]"
+	RST="\\[${C_RST}\\]"
+	CYN="\\[${C_CYN}\\]"
+	BLU="\\[${C_BLU_BRT_BLD}\\]"
+	YLW="\\[${C_YLW}\\]"
+	GRY="\\[${C_GRY}\\]"
+	PRP="\\[${C_PRP}\\]"
 
 	# Color configuration
 	DIRS[0]="${CYN}"
@@ -211,7 +212,7 @@ _prompt_titlebar() {
 	[[ "${SSH_CONNECTION}" ]] && TITLEBAR_SSH="[SSH] "
 
 	# Only apply custom titlebar if we're in xterm and on Bash 3+
-	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\033]0;%s%s\007" "${TITLEBAR_SSH}" "${HOST_SUB}:$(_prompt_pwd)"
+	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\\033]0;%s%s\\007" "${TITLEBAR_SSH}" "${HOST_SUB}:$(_prompt_pwd)"
 }
 
 # Configure PS1 prompt

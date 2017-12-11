@@ -7,7 +7,7 @@ _fix_hung_java() {
 	# Declare vars as local
 	local JAVA_PIDS
 
-	JAVA_PIDS=($(ps -ef | awk '/[j]ava/ {print $2}'))
+	mapfile -t JAVA_PIDS < <(ps -ef | awk '/[j]ava/ {print $2}')
 	[[ -z "${JAVA_PIDS[0]}" ]] && output yellow "No Java PIDs detected" && return
 
 	for JAVA_PID in "${JAVA_PIDS[@]}"; do
@@ -34,7 +34,7 @@ _fix_bash_pids() {
 	# Create variable of pipe-separated options from array
 	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
-	FIX_BASH_PIDS_PID_LIST=($(ps aux | grep -E '[b]ash' | grep -Ev 'root|s00\.' | sort -r | awk '{print $2}'))
+	mapfile -t FIX_BASH_PIDS_PID_LIST < <(ps aux | grep -E '[b]ash' | grep -Ev 'root|s00\.' | sort -r | awk '{print $2}')
 
 	if [[ "${#FIX_BASH_PIDS_PID_LIST[@]}" -le "0" ]]; then
 		output green "No stale bash PIDs to kill"
@@ -80,10 +80,10 @@ _fix_macos_files() {
 
 	# Backup current IFS, change IFS to \n\b so as to parse file array
 	OLD_IFS="${IFS}"
-	IFS=$(echo -en "\n\b")
+	IFS=$(echo -en "\\n\\b")
 
 	# File array of macOS-specific junk files
-	ARRAY_RM_FILES=($(find . -iname '*DS_Store' -o -iname '._*' 2> /dev/null))
+	mapfile -t ARRAY_RM_FILES < <(find . -iname '*DS_Store' -o -iname '._*' 2> /dev/null)
 
 	# Restore previous IFS
 	IFS="${OLD_IFS}"

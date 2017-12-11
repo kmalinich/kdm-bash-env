@@ -30,7 +30,7 @@ _bash_env_loading() {
 
 	# Output message (if on Bash 4+)
 	if [[ "${BASH_VERSINFO[0]}" -ge "4" ]]; then
-		echo -en "${C_YLW_BLD}init ${LOADING_STRING}${C_RST}\r"
+		echo -en "${C_YLW_BLD}init ${LOADING_STRING}${C_RST}\\r"
 	fi
 
 	# Increment counter if until 24, then decrement

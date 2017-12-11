@@ -43,7 +43,7 @@ output() {
 
 		b|backtick)
 			# Output the input string with backticks (for Slack, mainly)
-			OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\n"
+			OUTPUT_FORMAT="${C_CODE}${C_BLD}\`%s\`${C_RST}\\n"
 
 			# Copy string to clipboard if not connected via SSH and binary is present
 			[[ -z "${SSH_CONNECTION}" ]] && hash pbcopy && printf "\`%s\`" "${2}" | pbcopy
@@ -52,7 +52,7 @@ output() {
 
 		e|error)
 			# Special function to output formatted usage string, with stderr output
-			OUTPUT_FORMAT="${C_RED_BRT_BLD}${C_ITA}Error${C_RST} ${C_WHT_BRT}:${C_RST} ${C_RED}%s${C_RST}\n"
+			OUTPUT_FORMAT="${C_RED_BRT_BLD}${C_ITA}Error${C_RST} ${C_WHT_BRT}:${C_RST} ${C_RED}%s${C_RST}\\n"
 			OUTPUT_STDERR="1>&2"
 			;;
 
@@ -69,7 +69,7 @@ output() {
 				return
 			fi
 
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\n"
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
@@ -83,7 +83,7 @@ output() {
 				return
 			fi
 
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\n"
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
@@ -97,7 +97,7 @@ output() {
 				return
 			fi
 
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_ORN}%s${C_GRY}'${C_RST}\n"
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_ORN}%s${C_GRY}'${C_RST}\\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
@@ -111,7 +111,7 @@ output() {
 				return
 			fi
 
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_PRP}%s${C_GRY}'${C_RST}\n"
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_PRP}%s${C_GRY}'${C_RST}\\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
@@ -125,7 +125,7 @@ output() {
 				return
 			fi
 
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\n"
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
@@ -168,7 +168,7 @@ output() {
 
 		u|usg|usage)
 			# Special function to output formatted usage string, with stderr output
-			OUTPUT_FORMAT="${C_YLW_BLD}${C_ITA}Usage${C_RST} ${C_WHT_BRT}:${C_RST} %s\n"
+			OUTPUT_FORMAT="${C_YLW_BLD}${C_ITA}Usage${C_RST} ${C_WHT_BRT}:${C_RST} %s\\n"
 			OUTPUT_STDERR="1>&2"
 			;;
 
@@ -209,7 +209,7 @@ _output_completion() {
 	)
 
 	CUR_WORD=${COMP_WORDS[COMP_CWORD]}
-	COMPREPLY=($(compgen -W "${ARRAY_USAGE_OPTIONS[*]}" -- "${CUR_WORD}"))
+	mapfile -t COMPREPLY < <(compgen -W "${ARRAY_USAGE_OPTIONS[*]}" -- "${CUR_WORD}")
 }
 
 complete -F _output_completion output

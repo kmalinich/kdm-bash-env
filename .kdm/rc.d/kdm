@@ -22,7 +22,7 @@ _kdm_help() {
 	output purple "kdm bash-env functions:"
 	echo
 
-	BASHRC_CMDS=($(grep -o 'alias\ .*.=' "${BASH_ENV_FILE_RC}" | sort -u | awk -F '[ =]' '{print $2}' | sort -u | sed -r '/^.{,3}$/d' | grep -Ev 'pign|tial|namp|mkdir|grep|grpe|ehco|clean|CMD|^config|^log|^html\-|^xml\-|^json\-|lsusb|md5sum'))
+	BASHRC_CMDS=("$(grep -o 'alias\ .*.=' "${BASH_ENV_FILE_RC}" | sort -u | awk -F '[ =]' '{print $2}' | sort -u | sed -r '/^.{,3}$/d' | grep -Ev 'pign|tial|namp|mkdir|grep|grpe|ehco|clean|CMD|^config|^log|^html\-|^xml\-|^json\-|lsusb|md5sum')")
 
 	# macOS commands
 	if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then

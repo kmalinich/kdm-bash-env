@@ -22,8 +22,8 @@ _auto_sudo_setup() {
 	# If we're on macOS, add the macOS commands to the base array
 	# If we're on Linux, add the Linux commands to the base array
 	case "${UNAME_KERNEL_NAME}" in
-		Darwin) ARRAY_SUDO+=(${ARRAY_SUDO_MACOS[@]}) ;;
-		Linux)  ARRAY_SUDO+=(${ARRAY_SUDO_LINUX[@]}) ;;
+		Darwin) ARRAY_SUDO+=("${ARRAY_SUDO_MACOS[@]}") ;;
+		Linux)  ARRAY_SUDO+=("${ARRAY_SUDO_LINUX[@]}") ;;
 	esac
 
 	# Regenerate sudocache file if empty
@@ -39,7 +39,7 @@ _auto_sudo_setup() {
 		SUDOCACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_SUDOCACHE}")
 	fi
 
-	let SUDOCACHE_AGE=$(($(date +%s)-SUDOCACHE_TIME))
+	SUDOCACHE_AGE=$(($(date +%s)-SUDOCACHE_TIME))
 
 	# Regenerate sudocache file if older than 1 day
 	[[ "${SUDOCACHE_AGE}" -ge "86400" ]] && _auto_sudo_generate

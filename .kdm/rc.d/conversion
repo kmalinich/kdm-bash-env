@@ -44,7 +44,7 @@ _convert_temperature() {
 	[[ -z "${TEMP_R}" ]] && TEMP_R=$(echo "scale=${SCALE}; ${TEMP_K}*(9/5)"            | bc)
 
 	# Set margin for printf commands
-	PF_FMT="%-8s${C_PRP}%s${C_RST}\n"
+	PF_FMT="%-8s${C_PRP}%s${C_RST}\\n"
 
 	# Output temperatures in various formats! yay!
 	printf "${PF_FMT}" "${TEMP_C}" "C"

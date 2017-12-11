@@ -50,7 +50,7 @@ md5_compare() {
 }
 
 
-echo -e "\nMoving 'htoprc'"
+echo -e "\\nMoving 'htoprc'"
 mkdir -p "${HOME}/.config/htop"
 rm -f "${HOME}/.config/htop/htoprc"
 mv .config/htop/htoprc "${HOME}/.config/htop/"
@@ -71,7 +71,7 @@ for DIR in "${ARRAY_DIRS_MOVE[@]}"; do
 
 	mkdir -p "${HOME}/${DIR}"
 
-	for FILE in $(ls -1A "${DIR}"); do
+	for FILE in ls -1A "${DIR}"; do
 		rm -rf "${HOME}/${DIR}/${FILE:?}"
 		mv "${DIR}/${FILE}" "${HOME}/${DIR}/"
 	done
@@ -87,7 +87,7 @@ mkdir -p "${HOME}/${DIR}"
 rm -f "${HOME}/${DIR}/README"
 mv "${DIR}/README" "${HOME}/${DIR}/README"
 
-for FILE in $(ls -1A ${DIR}); do
+for FILE in ls -1A "${DIR}"; do
 	FILE_REPO="${DIR}/${FILE}"
 	FILE_HOME="${HOME}/${FILE_REPO}"
 
@@ -115,7 +115,7 @@ done
 rm -rf ${DIR}
 
 # Move the rest of the files
-for FILE in $(ls -1A); do
+for FILE in ls -1A; do
 	echo "Moving '${FILE}'"
 	rm -rf "${HOME}/${FILE:?}"
 	mv "${FILE}" "${HOME}/"
@@ -127,9 +127,9 @@ cd "${HOME}" || return 1
 git reset --hard HEAD &> /dev/null
 rm -rf "${REPO_NAME}"
 
-echo -e "\nPopulating submodules\n"
+echo -e "\\nPopulating submodules\\n"
 git submodule update --init
 
-echo -e "\nInstall complete"
+echo -e "\\nInstall complete"
 
 exit 0

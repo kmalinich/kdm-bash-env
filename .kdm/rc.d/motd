@@ -49,15 +49,15 @@ _show_motd() {
 	# Check for jq binary
 	if ! hash jq; then
 		# Output warning message about jq being missing
-		echo -e "jq not available; dynamic MOTD not possible\n"
+		echo -e "jq not available; dynamic MOTD not possible\\n"
 
 		# Print just the env hash
 		# Assemble header format string
 		HEAD_VAL1="${C_BLU_BLD}%+s${C_RST}"
 		HEAD_VAL2="${C_BLU_BLD}%-s${C_RST}"
-		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
+		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\\n"
 
-		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
+		printf "${HEAD_FMT}\\n" "kdm" "bash-env" "${HASH}" "rev"
 		return 1
 	fi
 
@@ -69,15 +69,15 @@ _show_motd() {
 			echo   'WARN_FACTER=1' >> "${BASH_ENV_FILE_CONFIG}"
 
 			# Output warning message about facter being missing
-			echo -e "facter not available; dynamic MOTD not possible\n"
+			echo -e "facter not available; dynamic MOTD not possible\\n"
 		fi
 
 		# Print just the env hash
 		# Assemble header format string
 		HEAD_VAL1="${C_BLU_BLD}%+s${C_RST}"
 		HEAD_VAL2="${C_BLU_BLD}%-s${C_RST}"
-		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\n"
-		printf "${HEAD_FMT}\n" "kdm" "bash-env" "${HASH}" "rev"
+		HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}\\n"
+		printf "${HEAD_FMT}\\n" "kdm" "bash-env" "${HASH}" "rev"
 		return 1
 	fi
 
@@ -142,7 +142,7 @@ _show_motd() {
 	for STR in "${ARRAY_VALUES[@]}"; do
 		# Quick dirty check if data exists
 		if [[ -z "${STR}" ]]; then
-			echo -e "Failed evaluating data; dynamic MOTD not possible\n"
+			echo -e "Failed evaluating data; dynamic MOTD not possible\\n"
 			return 2
 		fi
 
@@ -171,8 +171,8 @@ _show_motd() {
 	HEAD_VAL2="${C_BLU_BLD}${BASE_VAL2}"
 
 	# Assemble format strings
-	HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}${C_RST}\n"
-	MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}${C_RST}\n"
+	HEAD_FMT="${HEAD_KEY} ${ARROW_R} ${HEAD_VAL1} ${BAR} ${HEAD_VAL2} ${ARROW_L} ${HEAD_KEY}${C_RST}\\n"
+	MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}${C_RST}\\n"
 
 	# Output the header line, then the MOTD
 	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "rev"

@@ -41,7 +41,7 @@ umount
 HISTIGNORE="$(for IGNORE in "${ARRAY_HISTIGNORE[@]}"; do echo -n "${IGNORE}:"; done | sed 's/:$//g'; echo)"
 
 ARRAY_MANPATH=(
-${HOME}/perl5/man
+"${HOME}/perl5/man"
 /usr/local/share/man
 /usr/pgsql-9.5/share/man
 /usr/share/man/overrides
@@ -52,15 +52,15 @@ ${HOME}/perl5/man
 )
 
 ARRAY_MIBDIRS=(
-${BASH_ENV_DIR_SNMP}/mibs
+"${BASH_ENV_DIR_SNMP}/mibs"
 /usr/share/snmp/mibs
 )
 
 ARRAY_MKDIR=(
-${BASH_ENV_DIR_KDM}
-${BASH_ENV_DIR_SSH_CONFIG}
-${BASH_ENV_DIR_VIM_BACKUP}
-${BASH_ENV_DIR_VIM_TMP}
+"${BASH_ENV_DIR_KDM}"
+"${BASH_ENV_DIR_SSH_CONFIG}"
+"${BASH_ENV_DIR_VIM_BACKUP}"
+"${BASH_ENV_DIR_VIM_TMP}"
 )
 
 ARRAY_NODE_PATH=(
@@ -79,12 +79,13 @@ yum
 zypper
 )
 
+mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
 ARRAY_PATH=(
-${HOME}/bin
-${HOME}/.local/bin
-${HOME}/perl5/bin
-${HOME}/.composer/vendor/bin
-${HOME}/Library/Android/sdk/platform-tools
+"${HOME}/bin"
+"${HOME}/.local/bin"
+"${HOME}/perl5/bin"
+"${HOME}/.composer/vendor/bin"
+"${HOME}/Library/Android/sdk/platform-tools"
 /usr/local/rvm/gems/ruby-2.4.0/bin
 /usr/local/rvm/gems/ruby-2.4.0@global/bin
 /usr/local/rvm/rubies/ruby-2.4.0/bin
@@ -116,12 +117,12 @@ ${HOME}/Library/Android/sdk/platform-tools
 /usr/games
 /usr/lib/mit/bin
 /usr/lib/mit/sbin
-$(echo -e "${PATH//\:/\\n}")
+"${ARRAY_PATH[@]}"
 )
 
 ARRAY_RM=(
-${HOME}/.bash_history
-${HOME}/.profile
+"${HOME}/.bash_history"
+"${HOME}/.profile"
 )
 
 # Array of shell options to be set
@@ -145,7 +146,7 @@ dirspell
 ARRAY_SOURCE=(
 /etc/profile.d/bash_completion.sh
 /usr/local/etc/profile.d/bash_completion.sh
-${BASH_ENV_FILE_RC}
+"${BASH_ENV_FILE_RC}"
 )
 
 # Array of automatic sudo-ing commands (Linux and macOS)
@@ -255,13 +256,13 @@ xcodebuild
 )
 
 ARRAY_TOUCH=(
-${BASH_ENV_FILE_HISTORY}
-${BASH_ENV_FILE_CONFIG}
-${BASH_ENV_FILE_SSH_AUTHKEYS}
-${BASH_ENV_FILE_SSH_CACHE}
-${BASH_ENV_FILE_SSH_CONFIG}
-${BASH_ENV_FILE_SUDOCACHE}
-${BASH_ENV_DIR_SSH_CONFIG}/00-base
+"${BASH_ENV_FILE_HISTORY}"
+"${BASH_ENV_FILE_CONFIG}"
+"${BASH_ENV_FILE_SSH_AUTHKEYS}"
+"${BASH_ENV_FILE_SSH_CACHE}"
+"${BASH_ENV_FILE_SSH_CONFIG}"
+"${BASH_ENV_FILE_SUDOCACHE}"
+"${BASH_ENV_DIR_SSH_CONFIG}/00-base"
 )
 
 

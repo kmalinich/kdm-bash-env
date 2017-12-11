@@ -99,7 +99,7 @@ _update_all() {
 	if hash ncu; then
 		COMMAND="ncu -g -t"
 		output leadup "${COMMAND}"
-		ARRAY_NPM_PACKAGES=($(${COMMAND} 2> /dev/null | sed '/^\s*$/d' | awk '$0 !~ /^All/ {print $1}'))
+		mapfile -t ARRAY_NPM_PACKAGES < <(${COMMAND} 2> /dev/null | sed '/^\s*$/d' | awk '$0 !~ /^All/ {print $1}')
 		output success
 
 		# Perform update commands
@@ -115,7 +115,8 @@ _update_all() {
 		# Array of pip packages to update, with pip and setuptools being first
 		COMMAND="pip list -o"
 		output leadup "${COMMAND}"
-		ARRAY_PIP_PACKAGES=(pip setuptools $(pip list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		mapfile -t ARRAY_PIP_PACKAGES < <(pip list -o | awk '$0 !~ /pip|setuptools/ {print $1}')
+		ARRAY_PIP_PACKAGES=(pip setuptools "${ARRAY_PIP_PACKAGES[@]}")
 		output success
 
 		# Perform update commands
@@ -128,10 +129,11 @@ _update_all() {
 
 	# Check for python-pip2, if it exists, update python-pip2 packages
 	if hash pip2; then
-		# Array of pip2 packages to update, with pip2 and setuptools being first
+		# Array of pip2 packages to update, with pip and setuptools being first
 		COMMAND="pip2 list -o"
 		output leadup "${COMMAND}"
-		ARRAY_PIP_PACKAGES=(pip setuptools $(pip2 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		mapfile -t ARRAY_PIP_PACKAGES < <(pip2 list -o | awk '$0 !~ /pip|setuptools/ {print $1}')
+		ARRAY_PIP_PACKAGES=(pip setuptools "${ARRAY_PIP_PACKAGES[@]}")
 		output success
 
 		# Perform update commands
@@ -144,10 +146,11 @@ _update_all() {
 
 	# Check for python-pip3, if it exists, update python-pip3 packages
 	if hash pip3; then
-		# Array of pip3 packages to update, with pip3 and setuptools being first
+		# Array of pip3 packages to update, with pip and setuptools being first
 		COMMAND="pip3 list -o"
 		output leadup "${COMMAND}"
-		ARRAY_PIP_PACKAGES=(pip setuptools $(pip3 list -o | awk '$0 !~ /pip|setuptools/ {print $1}'))
+		mapfile -t ARRAY_PIP_PACKAGES < <(pip3 list -o | awk '$0 !~ /pip|setuptools/ {print $1}')
+		ARRAY_PIP_PACKAGES=(pip setuptools "${ARRAY_PIP_PACKAGES[@]}")
 		output success
 
 		# Perform update commands

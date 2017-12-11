@@ -5,43 +5,43 @@
 #### Color variables ==start ####
 
 # Output styles
-export C_RST="\e[0m"
-export C_BLD="\e[1m"
-export C_DRK="\e[2m"
-export C_FLS="\e[5m"
-export C_INV="\e[7m"
-export C_ITA="\e[3m"
-export C_UDL="\e[4m"
+export C_RST="\\e[0m"
+export C_BLD="\\e[1m"
+export C_DRK="\\e[2m"
+export C_FLS="\\e[5m"
+export C_INV="\\e[7m"
+export C_ITA="\\e[3m"
+export C_UDL="\\e[4m"
 
 
 # Normal
-export C_BLK="${C_RST}\e[38;2;48;48;48m"
-export C_BLU="${C_RST}\e[38;2;51;152;219m"
-export C_CYN="${C_RST}\e[38;2;0;200;200m"
-export C_GRN="${C_RST}\e[38;2;47;223;100m"
-export C_GRY="${C_RST}\e[38;2;144;144;144m"
-export C_ORN="${C_RST}\e[38;2;255;153;50m"
-export C_PNK="${C_RST}\e[38;2;178;0;140m"
-export C_PRP="${C_RST}\e[38;2;114;83;178m"
-export C_RED="${C_RST}\e[38;2;231;76;60m"
-export C_WHT="${C_RST}\e[38;2;224;224;224m"
-export C_YLW="${C_RST}\e[38;2;255;204;50m"
+export C_BLK="${C_RST}\\e[38;2;48;48;48m"
+export C_BLU="${C_RST}\\e[38;2;51;152;219m"
+export C_CYN="${C_RST}\\e[38;2;0;200;200m"
+export C_GRN="${C_RST}\\e[38;2;47;223;100m"
+export C_GRY="${C_RST}\\e[38;2;144;144;144m"
+export C_ORN="${C_RST}\\e[38;2;255;153;50m"
+export C_PNK="${C_RST}\\e[38;2;178;0;140m"
+export C_PRP="${C_RST}\\e[38;2;114;83;178m"
+export C_RED="${C_RST}\\e[38;2;231;76;60m"
+export C_WHT="${C_RST}\\e[38;2;224;224;224m"
+export C_YLW="${C_RST}\\e[38;2;255;204;50m"
 
 # Bright
-export C_BLK_BRT="${C_RST}\e[38;2;24;24;24m"
-export C_BLU_BRT="${C_RST}\e[38;2;0;128;255m"
-export C_CYN_BRT="${C_RST}\e[38;2;0;255;255m"
-export C_GRN_BRT="${C_RST}\e[38;2;0;255;0m"
-export C_GRY_BRT="${C_RST}\e[38;2;192;192;192m"
-export C_ORN_BRT="${C_RST}\e[38;2;255;128;0m"
-export C_PNK_BRT="${C_RST}\e[38;2;255;0;224m"
-export C_PRP_BRT="${C_RST}\e[38;2;123;70;232m"
-export C_RED_BRT="${C_RST}\e[38;2;255;0;0m"
-export C_WHT_BRT="${C_RST}\e[38;2;255;255;255m"
-export C_YLW_BRT="${C_RST}\e[38;2;255;255;0m"
+export C_BLK_BRT="${C_RST}\\e[38;2;24;24;24m"
+export C_BLU_BRT="${C_RST}\\e[38;2;0;128;255m"
+export C_CYN_BRT="${C_RST}\\e[38;2;0;255;255m"
+export C_GRN_BRT="${C_RST}\\e[38;2;0;255;0m"
+export C_GRY_BRT="${C_RST}\\e[38;2;192;192;192m"
+export C_ORN_BRT="${C_RST}\\e[38;2;255;128;0m"
+export C_PNK_BRT="${C_RST}\\e[38;2;255;0;224m"
+export C_PRP_BRT="${C_RST}\\e[38;2;123;70;232m"
+export C_RED_BRT="${C_RST}\\e[38;2;255;0;0m"
+export C_WHT_BRT="${C_RST}\\e[38;2;255;255;255m"
+export C_YLW_BRT="${C_RST}\\e[38;2;255;255;0m"
 
 # Code (backtick) colors
-export C_CODE="${C_RST}\e[48;2;247;247;249;38;2;205;38;89m"
+export C_CODE="${C_RST}\\e[48;2;247;247;249;38;2;205;38;89m"
 
 
 # Normal+Bold
@@ -214,7 +214,7 @@ export C_WHT_BLD_BRT_FLS="${C_WHT_BRT_BLD}${C_FLS}"
 export C_YLW_BLD_BRT_FLS="${C_YLW_BRT_BLD}${C_FLS}"
 
 # Flashing alert - bright red background, bold bright white foreground
-export C_ALT="${C_WHT_BRT_BLD}\e[41;5m"
+export C_ALT="${C_WHT_BRT_BLD}\\e[41;5m"
 
 #### Color variables ==final ####
 
@@ -366,8 +366,8 @@ _show_colors_256_work() {
 		local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
 
 		printf " %-6s" "${SEQUENCE:-(default)}"
-		printf " ${SEQUENCE}text\e[m"
-		printf " \e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\e[m"
+		printf " ${SEQUENCE}text\\e[m"
+		printf " \\e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\\e[m"
 
 		# Flashing
 		local COLOR_VALS="${COLORS_FOREGROUND:+$COLORS_FOREGROUND;}5"
@@ -375,8 +375,8 @@ _show_colors_256_work() {
 		local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
 
 		printf " %-6s" "${SEQUENCE:-(default)}"
-		printf " ${SEQUENCE}text\e[m"
-		printf " \e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\e[m"
+		printf " ${SEQUENCE}text\\e[m"
+		printf " \\e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\\e[m"
 
 		# Background colors
 		for COLORS_BACKGROUND in {40..47}; do
@@ -389,8 +389,8 @@ _show_colors_256_work() {
 			local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
 
 			printf " %-9s" "${SEQUENCE:-(default)}"
-			printf " ${SEQUENCE}text\e[m"
-			printf " \e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\e[m"
+			printf " ${SEQUENCE}text\\e[m"
+			printf " \\e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\\e[m"
 		done
 		echo
 	done

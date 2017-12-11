@@ -204,7 +204,7 @@ _alias_ping() {
 # Pretty print HTML with tidy, indent: 2 spaces, sorted alphabetically, then colorize with pygmentize
 _alias_pygmentize_html() {
 	hash tidy || return
-	alias html-format="dos2unix | sed -e '/^$/d' -e 's/^[ \t]*//' -e 's/\t/\ /g' | tr '\n' ' ' | sed -E 's/>(\ {1,})</></g' | tidy 2> /dev/null | html-beautify -t false -E -T -U | pygmentize -l html -f terminal256 -O style=monokai"
+	alias html-format="dos2unix | sed -e '/^$/d' -e 's/^[ \\t]*//' -e 's/\\t/\\ /g' | tr '\\n' ' ' | sed -E 's/>(\\ {1,})</></g' | tidy 2> /dev/null | html-beautify -t false -E -T -U | pygmentize -l html -f terminal256 -O style=monokai"
 	alias format-html='html-format'
 }
 
