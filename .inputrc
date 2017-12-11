@@ -18,12 +18,22 @@ set bell-style none
 # Enable tab-completion regardless of filename case
 set completion-ignore-case on
 
+# Common prefixes longer than 10 are replaced with an ellipsis when displaying possible completions
+set completion-prefix-display-length 10
+
 # Enable returning up to 500 tab-completions without having to be asked
 set completion-query-items 500
 
 # Don't expand the home dir tilde (~)
 set expand-tilde off
 
+# Scroll text horizontally on a single line when longer than the width of the screen, instead of wrapping onto a new line
+set horizontal-scroll-mode on
+
+# Attempt to place the cursor position at the same location on each history line retrieved with previous-history or next-history
+set history-preserve-point on
+
+# Tab-completed directory names have a slash appended
 set mark-directories on
 
 # Immediately add a trailing slash when tab-completing symlinks to directories
@@ -35,9 +45,16 @@ set match-hidden-files off
 # Turn off the use of the internal pager when returning long tab-completion lists
 set page-completions off
 
+# Display completions with matches sorted horizontally in alphabetical order, rather than down the screen
+set print-completions-horizontally off
+
 # Only require single tab key press for tab-completion
-# (Default is double tab key press
+# (Default is double tab key press)
 set show-all-if-ambiguous on
+
+# Words which have more than one possible completion without any possible partial completion (the possible completions don't share a common prefix)
+# cause the matches to be listed immediately instead of ringing the bell
+set show-all-if-unmodified on
 
 # Be more intelligent when tab-completing, by also looking at the text after the cursor
 #
@@ -52,42 +69,67 @@ set skip-completed-text on
 set visible-stats on
 
 
-# List all matches in case multiple possible tab-completions are possible
-set completion-prefix-display-length 10
-set print-completions-horizontally off
-set show-all-if-unmodified on
+# The below keys are configured with this setup in mind:
+# - macOS
+# - iTerm2 with Option key(s) set to 'Esc+'
+# - Aluminum USB Apple Keyboard with keypad (model A1243)
 
-# set horizontal-scroll-mode off
-# set history-preserve-point on
+# Aluminum USB Apple Keyboard key codes:
+# Delete forward : \e[3~
+#        Page up : \e[5~
+#      Page down : \e[6~
+#             F1 : \e[11~
+#             F2 : \e[12~
+#             F3 : \e[13~
+#             F4 : \e[14~
+#             F5 : \e[15~
+#             F6 : \e[17~
+#             F7 : \e[18~
+#             F8 : \e[19~
+#             F9 : \e[20~
+#            F10 : \e[21~
+#            F11 : \e[23~
+#            F12 : \e[24~
+#            F13 : \e[25~
+#            F14 : ??
+#            F15 : ??
+#            F16 : \e[29~
+#            F17 : \e[31~
+#            F18 : \e[32~
+#            F19 : \e[33~
 
-
-# Reload ~/.inputrc
-"\C-xr": re-read-init-file
-
-# Escape code handlers for shells missing them
+# Delete-forward : Delete following character
 "\e[3~": delete-char
+
+# Page up : Move backwards through completion history
 "\e[5~": history-search-backward
+
+# Page down : Move forwards through completion history
 "\e[6~": history-search-forward
 
-# Use Alt/Meta + Delete to delete the preceding word
-"\e[3;3~": kill-word
 
-# Macros that are convenient for shell interaction
-$if Bash
-	# Edit PATH variable
-	"\C-xp": "PATH=${PATH}\e\C-e\C-a\ef\C-f"
+# F5 : Reload ~/.inputrc
+"\e[15~": re-read-init-file
 
-	# Prepare to type a quoted word --
-	# insert open and close double quotes
-	# and move to just after the open quote
-	"\C-x\"": "\"\"\C-b"
 
-	# Quote the current or previous word
-	"\C-xq": "\eb\"\ef\""
+# F16 : Single-quote the current or previous word
+"\e[29~": "\eb\'\ef\'"
 
-	# Edit variable on current line
-	"\M-\C-v": "\C-a\C-k$\C-y\M-\C-e\C-a\C-y="
+# F17 : Double-quote the current or previous word
+"\e[31~": "\eb\"\ef\""
 
-	# Undo a directory change with Alt/Meta + z
-	"Ω": 'cd -\015'
-$endif
+# F18 : Insert open and close single-quotes and move to just after the open single-quote
+"\e[32~": "\'\'\C-b"
+
+# F19 : Insert open and close double-quotes and move to just after the open double-quote
+"\e[33~": "\"\"\C-b"
+
+
+# Option + p : Edit PATH variable
+"\ep": "export PATH=${PATH}\e\C-e\C-a\ef\ef\C-f:\C-b"
+
+# Option + x : Change dir to last word of last command and run 'lll'
+"\ex": 'cd !$ \015lll\015'
+
+# Option + z : Undo a dir change
+"\ez": 'cd -\015'
