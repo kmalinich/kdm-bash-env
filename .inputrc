@@ -111,6 +111,9 @@ set visible-stats on
 # F5 : Reload ~/.inputrc
 "\e[15~": re-read-init-file
 
+# F6 :
+# "\e[17~":
+
 
 # F16 : Single-quote the current or previous word
 "\e[29~": "\eb\'\ef\'"
@@ -125,8 +128,19 @@ set visible-stats on
 "\e[33~": "\"\"\C-b"
 
 
+# Option + c : Capitalize current word
+"\ec": capitalize-word
+
+# Option + l : lowercase current word
+"\el": downcase-word
+
+# Option + u : UPPERCASE current word
+"\eu": upcase-word
+
+
 # Option + p : Edit PATH variable
 "\ep": "export PATH=${PATH}\e\C-e\C-a\ef\ef\C-f:\C-b"
+
 
 # Option + x : Change dir to last word of last command and run 'lll'
 "\ex": 'cd !$ \015lll\015'
