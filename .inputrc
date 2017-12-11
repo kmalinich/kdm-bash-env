@@ -115,6 +115,10 @@ set visible-stats on
 # "\e[17~":
 
 
+# F13 : Insert open and close double-quotes and move to just after the open double-quote
+"\e[25~": "\"\"\C-b"
+
+
 # F16 : Single-quote the current or previous word
 "\e[29~": "\eb\'\ef\'"
 
