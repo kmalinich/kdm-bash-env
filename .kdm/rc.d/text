@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Output formatted text
 # I would have used an associative array (and in one version, I did),
 # but it's only in bash 4+ which is ... more rarely seen than I'd like
@@ -213,5 +214,10 @@ _output_completion() {
 }
 
 complete -F _output_completion output
+
+
+# Function aliases
+alias o='output'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

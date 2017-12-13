@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Usage function for _net_curl
 _net_curl_usage() {
 	output usage "net-curl -u <URL> [-x <proxy>]"
@@ -398,5 +399,6 @@ alias net-ping-average-csv='_net_ping_average_csv'
 alias net-ping-average='    _net_ping_average'
 alias net-ping-subnet='     _net_ping_subnet'
 alias net-webserver='       _net_webserver'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

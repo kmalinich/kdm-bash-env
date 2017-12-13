@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Function to remove duplicates from array
 _array_dedupe() {
 	# Declare vars as local
@@ -59,5 +60,6 @@ _array_width() {
 # Function aliases
 alias array-dedupe='_array_dedupe'
 alias array-width=' _array_width'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

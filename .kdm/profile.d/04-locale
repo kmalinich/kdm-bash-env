@@ -5,4 +5,5 @@ NEW_LOC="en_US.UTF-8"
 [[ -z "${LC_ALL}" ]] && export LC_ALL="${NEW_LOC}"
 unset NEW_LOC
 
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

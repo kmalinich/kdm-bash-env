@@ -5,8 +5,10 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # PING_WAIT for use in ping functions
 export PING_WAIT="-t 1"
+
 
 # Hostname change function
 _macos_hostname() {
@@ -330,5 +332,6 @@ alias macos-repair-office=' _macos_repair_office'
 alias macos-volume='        _macos_volume'
 
 alias scutil-set='_scutil_set'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

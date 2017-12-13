@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Make md5sum file for a Android recovery
 _android_make_md5() {
 	# Declare vars as local
@@ -23,5 +24,6 @@ _android_make_md5() {
 
 # Function aliases
 alias android-make-md5='_android_make_md5'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Renders a hex color code in 24bit color output, and generates the corresponding ANSI escape sequence
 hex2color() {
 	# Declare vars as local
@@ -22,7 +23,7 @@ hex2color() {
 	ANSI_COLOR="[38;2;${DEC_VAL_1};${DEC_VAL_2};${DEC_VAL_3}m"
 
 	# Output info and sample
-	echo "#${COLOR_HEX} | ${DEC_VAL_1} ${DEC_VAL_2} ${DEC_VAL_3} | \\\\e${ANSI_COLOR} | http://www.color-hex.com/color/${COLOR_HEX,,} | \\e${ANSI_COLOR}TESTING color${C_RST}"
+	echo -e "#${COLOR_HEX} | ${DEC_VAL_1} ${DEC_VAL_2} ${DEC_VAL_3} | \\\\e${ANSI_COLOR} | http://www.color-hex.com/color/${COLOR_HEX,,} | \\e${ANSI_COLOR}TESTING color${C_RST}"
 }
 
 # Render RGB values into hex string, then feed to hex2color function
@@ -59,5 +60,6 @@ man() {
 		LESS_TERMCAP_us=$'\e[0m\e[1;38;2;47;223;100m'  \
 		command man "$@"
 }
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

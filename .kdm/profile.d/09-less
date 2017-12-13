@@ -1,0 +1,7 @@
+# less environment variables to enable color escape sequences and use ${HOME}/.lessfilter
+LESS="-R"
+LESSOPEN="|${BASH_ENV_FILE_LESSFILTER} %s"
+export LESS LESSOPEN
+
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

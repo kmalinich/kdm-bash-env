@@ -14,6 +14,7 @@ export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
 export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
 export BASH_ENV_FILE_HISTORY="${BASH_ENV_DIR_KDM}/history"
 
+export BASH_ENV_FILE_LESSFILTER="${HOME}/.lessfilter"
 export BASH_ENV_FILE_LOGOUT="${HOME}/.bash_logout"
 export BASH_ENV_FILE_PROFILE="${BASH_ENV_DIR_KDM}/profile"
 export BASH_ENV_FILE_RC="${BASH_ENV_DIR_KDM}/rc"
@@ -40,5 +41,6 @@ export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
 
 # Custom tidy-html5 config file path
 export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

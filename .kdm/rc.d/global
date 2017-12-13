@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Pre-sorted environment variables
 alias env-sort='env | sort -h'
 
@@ -74,5 +75,6 @@ _alias_ping
 
 # Prettyprint+colorize various formats, if supporting binaries are installed
 _alias_pygmentize
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

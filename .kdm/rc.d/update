@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Update all the things (except CPAN)
 _update_all() {
 	# Declare vars as local
@@ -259,5 +260,6 @@ _update_cpan() {
 # Function aliases
 alias update-all=' _update_all'
 alias update-cpan='_update_cpan'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

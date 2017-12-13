@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Custom fping commands
 kping() {
 	# Declare vars as local
@@ -16,5 +17,6 @@ kping() {
 
 	fping -AdDelsu -H 254 -p "${PING_INTERVAL}" -t 1000 "${1}"
 }
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

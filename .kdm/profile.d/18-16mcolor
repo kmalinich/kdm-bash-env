@@ -18,4 +18,5 @@ fi
 # Change TERM from xterm-16mcolor to xterm-256color
 [[ "${TERM}" == "xterm-16mcolor" ]] && export TERM="xterm-256color"
 
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

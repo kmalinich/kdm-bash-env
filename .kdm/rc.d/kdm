@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Get Git hash of bash-env
 _kdm_hash() {
 	# Declare vars as local
@@ -108,5 +109,6 @@ alias kdm-help='  _kdm_help'
 alias kdm-pull='  _kdm_pull'
 alias kdm-source='_kdm_source'
 alias kdm-time='  _kdm_time'
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

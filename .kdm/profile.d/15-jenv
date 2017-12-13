@@ -26,4 +26,5 @@ if [[ -s /usr/libexec/java_home ]]; then
 	[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return 0 || exit 0
 fi
 
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -5,4 +5,5 @@ for PACKAGE_MANAGER in "${ARRAY_PACKAGE_MANAGERS[@]}"; do
 done
 [[ "${PACKAGE_MANAGER}" ]] && export PACKAGE_MANAGER
 
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

@@ -40,6 +40,14 @@ umount
 # Generate HISTIGNORE from array
 HISTIGNORE="$(for IGNORE in "${ARRAY_HISTIGNORE[@]}"; do echo -n "${IGNORE}:"; done | sed 's/:$//g'; echo)"
 
+
+# Array of editor aliases
+ARRAY_EDITOR_ALIASES=(v vi vim nvim)
+
+# Array of editor binaries
+ARRAY_EDITOR_NAMES=(nvim vim vi)
+
+
 ARRAY_MANPATH=(
 "${HOME}/perl5/man"
 /usr/local/share/man

@@ -17,4 +17,5 @@ export HISTLENGTH
 # Ignore/erase duplicates and space-prefixed commands ' ls'
 export HISTCONTROL="ignoredups:ignorespace"
 
+
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

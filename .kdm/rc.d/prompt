@@ -2,6 +2,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # Generate / export PS1 prompt with color specfied by C_ENV
 _prompt_generate() {
 	# Return if we're not in a terminal
@@ -215,7 +216,9 @@ _prompt_titlebar() {
 	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\\033]0;%s%s\\007" "${TITLEBAR_SSH}" "${HOST_SUB}:$(_prompt_pwd)"
 }
 
+
 # Configure PS1 prompt
 _prompt_generate
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

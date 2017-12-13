@@ -5,6 +5,7 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+
 # PING_WAIT for use in ping functions
 export PING_WAIT="-W 1"
 

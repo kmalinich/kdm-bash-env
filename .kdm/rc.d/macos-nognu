@@ -14,7 +14,9 @@ _alias_macos_nognu_setup() {
 	alias ls='ls -G 2> /dev/null'
 }
 
+
 # Execute alias setup
 _alias_macos_nognu_setup
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
