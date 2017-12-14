@@ -95,6 +95,9 @@ augroup ft_json
 
 	au BufRead composer.lock set filetype=json
 	au BufRead composer.lock set noexpandtab
+
+	au BufRead tiddlywiki.info set filetype=json
+	au BufRead tiddlywiki.info set noexpandtab
 augroup END
 
 " Markdown
