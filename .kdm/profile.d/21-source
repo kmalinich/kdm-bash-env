@@ -44,5 +44,13 @@ done
 unset SOURCE_EXIT
 unset SOURCE_FILE
 
+# Load prompt settings into environment variables
+if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}" 2> /dev/null; then
+	BASH_ENV_PROMPT_NO_HOSTNAME="true"
+else
+	BASH_ENV_PROMPT_NO_HOSTNAME="false"
+fi
+export BASH_ENV_PROMPT_NO_HOSTNAME
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

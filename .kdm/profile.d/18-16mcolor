@@ -1,10 +1,11 @@
 # If 16m color is enabled, change TERM to xterm-16mcolor
 if grep -q 'COLOR_16M=1' "${BASH_ENV_FILE_CONFIG}" 2> /dev/null; then
-	export TERM="xterm-16mcolor"
-	export BASH_ENV_COLOR_16M="true"
+	TERM="xterm-16mcolor"
+	BASH_ENV_COLOR_16M="true"
 else
-	export BASH_ENV_COLOR_16M="false"
+	BASH_ENV_COLOR_16M="false"
 fi
+export BASH_ENV_COLOR_16M TERM
 
 
 # If dircolors exists, run it

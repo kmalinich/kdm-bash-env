@@ -8,8 +8,8 @@ _prompt_generate() {
 	# Return if we're not in a terminal
 	[[ -t 0 ]] || return
 
-	# If COLOR_16M is set to 0 in bash-env.conf, render PS1 without multicolor
-	if grep -q 'COLOR_16M=0' "${BASH_ENV_FILE_CONFIG}"; then
+	# If $BASH_ENV_COLOR_16M is not true, render PS1 without multicolor
+	if [[ "${BASH_ENV_COLOR_16M}" != "true" ]]; then
 		PS1="\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]$(_prompt_pwd) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 		export PS1
 		return
@@ -17,12 +17,10 @@ _prompt_generate() {
 
 	# If NOT connected via SSH and PROMPT_NO_HOSTNAME is set to 1 (true) in bash-env.conf,
 	# render PS1 without hostname
-	if [[ -z "${SSH_CONNECTION}" ]]; then
-		if grep -q 'PROMPT_NO_HOSTNAME=1' "${BASH_ENV_FILE_CONFIG}"; then
-			PS1="\\[${C_BLU}\\]$(_prompt_pwd_color) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
-			export PS1
-			return
-		fi
+	if [[ -z "${SSH_CONNECTION}"  && "${BASH_ENV_PROMPT_NO_HOSTNAME}" == "true" ]]; then
+		PS1="\\[${C_BLU}\\]$(_prompt_pwd_color) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
+		export PS1
+		return
 	fi
 
 	# Normal PS1 prompt (with hostname)
