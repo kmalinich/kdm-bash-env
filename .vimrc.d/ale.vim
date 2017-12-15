@@ -41,10 +41,8 @@ let g:ale_php_phpmd_ruleset = 'cleancode,codesize,design,naming,unusedcode'
 " ale (Asynchronous Lint Engine) shellcheck config
 " Disable [SC1090] Can't follow non-constant source
 " Disable [SC1091] file was not specified as input
-" Disable [SC2039] In POSIX sh, something is undefined
 " Disable [SC2059] Don't use variables in the printf format string
-" Disable [SC2068] Double quote array expansions to avoid re-splitting elements
-let g:ale_sh_shellcheck_options = '-e SC2059 -s bash -x'
+let g:ale_sh_shellcheck_options = '-e SC1090 -e SC2059 -s bash -x'
 
 " ale (Asynchronous Lint Engine) HTML tidy config
 let g:ale_html_tidy_executable = '/usr/local/bin/tidy'
