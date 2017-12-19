@@ -28,7 +28,7 @@ set completion-query-items 500
 set expand-tilde off
 
 # Scroll text horizontally on a single line when longer than the width of the screen, instead of wrapping onto a new line
-set horizontal-scroll-mode on
+# set horizontal-scroll-mode on
 
 # Attempt to place the cursor position at the same location on each history line retrieved with previous-history or next-history
 set history-preserve-point on
