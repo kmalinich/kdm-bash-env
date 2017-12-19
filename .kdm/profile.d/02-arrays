@@ -111,6 +111,7 @@ ARRAY_PATH=(
 /usr/local/sbin
 /usr/local/bin
 /usr/lib/nvidia-375/bin
+/usr/pgsql-10/bin
 /usr/pgsql-9.6/bin
 /usr/pgsql-9.5/bin
 /usr/pgsql-9.4/bin
