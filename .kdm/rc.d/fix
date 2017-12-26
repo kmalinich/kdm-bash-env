@@ -13,9 +13,9 @@ _fix_hung_java() {
 
 	for JAVA_PID in "${JAVA_PIDS[@]}"; do
 		if ! kill -9 "${JAVA_PID}" &> /dev/null; then
-			output red "Failed to kill Java JAVA_PID '${JAVA_PID}'"
+			output red "Failed to kill Java PID '${JAVA_PID}'"
 		else
-			output green "Killed Java JAVA_PID '${JAVA_PID}'"
+			output green "Killed Java PID '${JAVA_PID}'"
 		fi
 	done
 }
@@ -27,10 +27,7 @@ _fix_bash_pids() {
 	local ARRAY_USAGE_OPTIONS #FIX_BASH_PIDS_PID_LIST[@] FIX_BASH_PIDS_PID_LIST USAGE_OPTIONS_STRING
 
 	# Array of options
-	ARRAY_USAGE_OPTIONS=(
-	show
-	kill
-	)
+	ARRAY_USAGE_OPTIONS=(show kill)
 
 	# Create variable of pipe-separated options from array
 	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
