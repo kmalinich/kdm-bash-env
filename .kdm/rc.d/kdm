@@ -23,22 +23,21 @@ _kdm_help() {
 	output purple "kdm bash-env functions:"
 	echo
 
-	BASHRC_CMDS=("$(grep -o 'alias\ .*.=' "${BASH_ENV_FILE_RC}" | sort -u | awk -F '[ =]' '{print $2}' | sort -u | sed -r '/^.{,3}$/d' | grep -Ev 'pign|tial|namp|mkdir|grep|grpe|ehco|clean|CMD|^config|^log|^html\-|^xml\-|^json\-|lsusb|md5sum')")
+	mapfile -t BASHRC_CMDS < <(grep -hor 'alias\ .*.=' "${BASH_ENV_DIR_RC_D}" | sort -u | awk -F '[ =]' '{print $2}' | sort -u | sed -r '/^.{,3}$/d' | grep -Ev 'pign|tial|namp|mkdir|grep|grpe|ehco|clean|CMD|^config|^log|^html\-|^xml\-|^json\-|lsusb|md5sum|\-\-skip\-function')
 
 	# macOS commands
 	if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
 		for CMD in "${BASHRC_CMDS[@]}"; do
 			echo "${CMD}"
 		done | grep -Ev '^sys\-restart|^kvm\-'
+
+		return
 	fi
 
 	# Linux commands
-	if [[ "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		for CMD in "${BASHRC_CMDS[@]}"; do
-			echo "${CMD}"
-		done | grep -Ev '^osx\-|^net\-listening|efi\-mount'
-	fi
-	echo
+	for CMD in "${BASHRC_CMDS[@]}"; do
+		echo "${CMD}"
+	done | grep -Ev '^osx\-|^net\-listening|efi\-mount'
 }
 
 # Quick-draw pull bash env
@@ -48,12 +47,12 @@ _kdm_pull() {
 
 	# Save current PWD
 	OLD_PWD="${PWD}"
-	cd "${HOME}" || return
+	cd "${HOME}" || return 1
 
 	_g_gu
 	CMD_EXIT="${?}"
 
-	cd "${OLD_PWD}" || return
+	cd "${OLD_PWD}" || return 1
 	return ${CMD_EXIT}
 }
 
