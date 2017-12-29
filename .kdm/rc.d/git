@@ -8,11 +8,11 @@ _g_gi() {
 	# Declare vars as local
 	local BRANCH COMMIT CONFIG DIR HASH RELEASE TAG TAGS TOP URL
 
-	BRANCH="$(git symbolic-ref --short HEAD 2> /dev/null)"
-	COMMIT="$(git rev-parse HEAD            2> /dev/null)"
-	DIR="$(   git rev-parse --git-dir       2> /dev/null)"
-	TOP="$(   git rev-parse --show-toplevel 2> /dev/null)"
-	URL="$(   git config remote.origin.url  2> /dev/null)"
+	BRANCH="$(git get-branch 2> /dev/null)"
+	COMMIT="$(git get-commit 2> /dev/null)"
+	DIR="$(   git get-dir    2> /dev/null)"
+	TOP="$(   git get-top    2> /dev/null)"
+	URL="$(   git get-url    2> /dev/null)"
 
 	[[ -z "${BRANCH}" ]] && output error "No branch detected" && return
 	[[ -z "${COMMIT}" ]] && output error "No commit detected" && return
@@ -31,7 +31,7 @@ _g_gi() {
 	output keyval " Commit" "${COMMIT}"
 
 	# Git tag-related data
-	TAGS="$(git describe --tags 2> /dev/null)"
+	TAGS="$(git get-tags 2> /dev/null)"
 
 	if [[ "${TAGS}" ]]; then
 		HASH=$(    echo "${TAGS##v}" | awk -F '-' '{print $3}')
@@ -59,68 +59,43 @@ _g_wrapper() {
 	[[ -z "${1}" ]] && output error "No command provided to _g_wrapper" && return 254
 	GIT_CMD="${1}"
 
-	# Generate temp file for output (until I learn how to do it without that)
-	TEMP_FILE="$(mktemp)"
-
-	git -c "color.${GIT_CMD}=always" "${GIT_CMD}" > "${TEMP_FILE}" 2>&1
+	output orange "------------------= git ${GIT_CMD} =----------------------"
+	git "${GIT_CMD}"
 	CMD_EXIT="${?}"
-
-	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] ----------------= git ${GIT_CMD} =--------------------"
-		cat "${TEMP_FILE}"
-		echo
-	fi
+	echo
 
 	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
-	return ${CMD_EXIT}
+	return "${CMD_EXIT}"
 }
 
 # Git status
 _g_gs() {
-	_g_wrapper status
+	_g_wrapper s
 }
 
 # Git fetch, git pull, git update-all-the-submodules-to-latest
 _g_gsu() {
 	# Declare vars as local
-	local CMD_EXIT GIT_BRANCH TEMP_FILE
-
-	GIT_BRANCH="$(git symbolic-ref --short HEAD)"
-	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
-
-	_g_wrapper fetch
-	CMD_EXIT="${?}"
-	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
-
-	# Check if there is an update
-	if [[ "$(git log "HEAD..origin/${GIT_BRANCH}" --oneline 2>&1)" ]]; then
-		# Perform git pull
-		_g_wrapper pull
-		CMD_EXIT="${?}"
-		[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
-	else
-		output blue "No git update available"
-		echo
-	fi
+	local CMD_EXIT TEMP_FILE
 
 	# Generate temp file for output (until I learn how to do it without that)
 	TEMP_FILE="$(mktemp)"
 
-	git -c color.submodule=always submodule foreach --recursive 'git checkout master; git fetch; git pull' > "${TEMP_FILE}" 2>&1
+	git smup > "${TEMP_FILE}" 2>&1
 	CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] ----------= git submodule update =-------------"
+		output orange "[${CMD_EXIT}] --------------------= git smup =-----------------------"
 		cat "${TEMP_FILE}"
 		echo
 	fi
 
 	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
-	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
 
 	_g_gs
 	CMD_EXIT="${?}"
-	return ${CMD_EXIT}
+	return "${CMD_EXIT}"
 }
 
 # Git fetch, git pull
@@ -128,19 +103,19 @@ _g_gu() {
 	# Declare vars as local
 	local CMD_EXIT GIT_BRANCH TEMP_FILE
 
-	GIT_BRANCH="$(git symbolic-ref --short HEAD 2> /dev/null)"
+	GIT_BRANCH="$(git get-branch 2> /dev/null)"
 	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
 
-	_g_wrapper fetch
+	_g_wrapper f
 	CMD_EXIT="${?}"
-	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
 
 	# Check if there is an update
 	if [[ "$(git log "HEAD..origin/${GIT_BRANCH}" --oneline 2>&1)" ]]; then
 		# Perform git pull
 		_g_wrapper pull
 		CMD_EXIT="${?}"
-		[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+		[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
 	else
 		output blue "No git update available"
 		echo
@@ -149,21 +124,21 @@ _g_gu() {
 	# Generate temp file for output (until I learn how to do it without that)
 	TEMP_FILE="$(mktemp)"
 
-	git -c color.submodule=always submodule update --init > "${TEMP_FILE}" 2>&1
+	git smp > "${TEMP_FILE}" 2>&1
 	CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] ----------= git submodule update --init =-------------"
+		output orange "[${CMD_EXIT}] --------------------= git smp =-----------------------"
 		cat "${TEMP_FILE}"
 		echo
 	fi
 
 	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
-	[[ "${CMD_EXIT}" != "0" ]] && return ${CMD_EXIT}
+	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
 
 	_g_gs
 	CMD_EXIT="${?}"
-	return ${CMD_EXIT}
+	return "${CMD_EXIT}"
 }
 
 # Git commit all w/message
@@ -186,11 +161,11 @@ _g_gca() {
 	# Generate temp file for output (until I learn how to do it without that)
 	TEMP_FILE="$(mktemp)"
 
-	git -c color.commit=always commit -a -m "${COMMIT_MSG}" > "${TEMP_FILE}" 2>&1
+	git cam "${COMMIT_MSG}" > "${TEMP_FILE}" 2>&1
 	CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] -------= git commit -a -m '${COMMIT_MSG}' =-----------"
+		output orange "[${CMD_EXIT}] ------------= git cam '${COMMIT_MSG}' =----------------"
 		cat "${TEMP_FILE}"
 		echo
 	fi
@@ -202,7 +177,7 @@ _g_gca() {
 		CMD_EXIT="${?}"
 	fi
 
-	return ${CMD_EXIT}
+	return "${CMD_EXIT}"
 }
 
 # Git push origin
@@ -225,7 +200,7 @@ _g_gpo() {
 
 	case "${1}" in
 		c)
-			SELECTED_BRANCH="$(git symbolic-ref --short HEAD 2> /dev/null)"
+			SELECTED_BRANCH="$(git get-branch 2> /dev/null)"
 			if [[ -z "${SELECTED_BRANCH}" ]]; then
 				output error "No current branch detected"
 				return 1
@@ -272,11 +247,11 @@ _g_gpo() {
 	# Generate temp file for output (until I learn how to do it without that)
 	TEMP_FILE="$(mktemp)"
 
-	git push --verbose origin "${SELECTED_BRANCH}" > "${TEMP_FILE}" 2>&1
+	git psvo "${SELECTED_BRANCH}" > "${TEMP_FILE}" 2>&1
 	CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] ------= git push origin ${SELECTED_BRANCH} =----------"
+		output orange "[${CMD_EXIT}] ------= git psvo ${SELECTED_BRANCH} =----------"
 		cat "${TEMP_FILE}"
 		echo
 	fi

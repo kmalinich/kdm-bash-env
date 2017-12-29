@@ -6,31 +6,51 @@
 	ba  = branch -a
 	bd  = branch -d
 	bdd = branch -D
+	bm  = branch --merged
+	bnm = branch --no-merged
 
 	cl = clone
 
 	co  = checkout
 	cob = checkout -b
+	com = checkout master
 
 	c   = commit
 	ca  = commit -a
 	cam = commit -a -m
 
+	cp = "!cp() { git cam 'Update'; }; cp"
+
 	d  = diff
 	ds = describe
 
+	# Delete any branches that have been merged into master
+	# See also: https://gist.github.com/robmiller/5133264
+	dm = "!dm() { git up && git branch --merged --no-color | grep -v '\\*' | xargs -n 1 git bd; }; dm"
+
 	f = fetch --all --prune
+
+	get-branch = symbolic-ref --short HEAD
+	get-commit = rev-parse HEAD
+	get-dir    = rev-parse --git-dir
+	get-tags   = describe --tags
+	get-top    = rev-parse --show-toplevel
+	get-url    = config remote.origin.url
 
 	i = init
 
 	l  = log
-	ll = log --pretty=\"tformat:[%C(yellow)%h%C(reset)][%C(blue)%aI%C(reset)][%cn]: %C(cyan)%s%C(reset)\"
+	ll = log --pretty='tformat:[%C(yellow)%h%C(reset)] [%C(blue)%aI%C(reset)] [%C(red)%cn%C(reset)] %C(cyan)::%C(reset) %s'
 
 	m = merge
 
-	pl = pull
+	pl  = pull
+	plm = "!plm() { git f; git com; git plp; git s; }; plm"
+	plp = pull --prune
+	plu = "!plu() { git f; git com; git up; }; plu"
 
-	ps = push
+	ps   = push
+	psvo = push --verbose origin
 
 	pr = !bash -c 'stash pull-request $0 $@'
 
@@ -42,8 +62,9 @@
 	s = status
 
 	sm   = submodule
-	smp  = submodule update --init --recursive
-	smup = "!f() { git submodule foreach --recursive 'git fetch; git checkout master; git pull'; }; f"
+	smf  = submodule foreach --recursive
+	smp  = submodule update  --recursive --init
+	smup = "!smup() { git f; git up; git smf 'BAR=\"=---------------------------------------------=\"; echo \"${BAR}\"; git plu; echo \"${BAR}\\n\\n\"'; }; smup"
 
 	undo = checkout --
 

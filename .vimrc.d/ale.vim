@@ -30,19 +30,20 @@ nmap <silent> <C-k> <Plug>(ale_next_wrap)
 let g:ale_lint_delay = 1000
 
 " Configure filetype-specific fixers
-let g:ale_fixers = { 'css': [ 'prettier', 'stylelint' ], 'scss': [ 'prettier', 'stylelint' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
+let g:ale_fixers = { 'css': [ 'prettier', 'stylelint' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ], 'python': [ 'isort', 'yapf' ], 'scss': [ 'prettier', 'stylelint' ] }
 
 " Configure filetype-specific linters
-let g:ale_linters = { 'scss': [ 'stylelint' ], 'html': [ 'htmlhint', 'proselint', 'tidy' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ] }
+let g:ale_linters = { 'html': [ 'htmlhint', 'proselint', 'tidy' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ], 'scss': [ 'stylelint' ] }
 
 " ale (Asynchronous Lint Engine) phpmd config
 let g:ale_php_phpmd_ruleset = 'cleancode,codesize,design,naming,unusedcode'
 
 " ale (Asynchronous Lint Engine) shellcheck config
 " Disable [SC1090] Can't follow non-constant source
-" Disable [SC1091] file was not specified as input
 " Disable [SC2059] Don't use variables in the printf format string
 let g:ale_sh_shellcheck_options = '-e SC1090 -e SC2059 -s bash -x'
+
+let g:ale_python_pylint_options = '-d line-too-long'
 
 " ale (Asynchronous Lint Engine) HTML tidy config
 let g:ale_html_tidy_executable = '/usr/local/bin/tidy'

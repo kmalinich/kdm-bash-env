@@ -5,8 +5,9 @@
 	path = ~/.gitconfig.d/merge
 	path = ~/.gitconfig.d/pull
 	path = ~/.gitconfig.d/push
-	path = ~/.gitconfig.d/url-pub
+	path = ~/.gitconfig.d/submodule
 	path = ~/.gitconfig.d/url-priv
+	path = ~/.gitconfig.d/url-pub
 	path = ~/.gitconfig.d/user
 
 # vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :
