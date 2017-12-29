@@ -22,7 +22,7 @@
 [color "status"]
 	branch    = "#ffffff italic"
 	changed   = "#e74c3c italic"
-	header    = "#6f6f6f"
+	header    = "#858585"
 	nobranch  = "#f22222 #ffffff blink"
 	unmerged  = "#f22222"
 	untracked = "#6c71c4 italic"
