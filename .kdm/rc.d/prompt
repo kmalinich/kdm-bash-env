@@ -63,8 +63,9 @@ _prompt_exitcode() {
 	# cd, grep, history, or sourcing a file
 	ARRAY_CMD=("${1}")
 	case "${ARRAY_CMD[0]}" in
-		_g_*)      return ;;
-		_prompt_*) return ;;
+		_g_*)         return ;;
+		_prompt_*)    return ;;
+		_show_clock*) return ;;
 
 		cd)   return ;;
 		grep) return ;;

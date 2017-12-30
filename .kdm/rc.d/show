@@ -38,36 +38,32 @@ _show_bin() {
 # Show a clock
 _show_clock() {
 	# Declare vars as local
-	local CMD_LOOP DATE_FMT PF_FMT
-
-	# Show a continuous clock if 1st arg is '-l'
-	if [[ "${1}" == "-l" ]]; then
-		CMD_LOOP=(sleep 0.9)
-		PF_FMT="%s   \\r"
-	else
-		CMD_LOOP=(break)
-		PF_FMT="%s\\n"
-	fi
+	local DATE_FMT PF_FMT
 
 	# Date command format
 	DATE_FMT="+%a %b %d %Y %r | %F %R:%S | %:z (%Z)"
 
-	if hash _iterm2; then
-		if [[ "${1}" == "-l" ]]; then
-			_iterm2 stealth on
-		fi
+	# Show a continuous clock if 1st arg is '-l'
+	if [[ "${1}" != "-l" ]]; then
+		printf "%s\\n" "$(date "${DATE_FMT}")"
+		return
 	fi
+
+	PF_FMT="%s   \\r"
+
+	# Auto activate/deactivate iTerm2 stealth if kdm helper script available
+	if hash _iterm2 && [[ "${1}" == "-l" ]]; then
+		_iterm2 stealth on
+		trap "_iterm2 stealth off" SIGINT
+	fi
+
+	# Reset SECONDS var
+	SECONDS="0"
 
 	while true; do
-		printf "${PF_FMT}" "$(date "${DATE_FMT}")"
-		${CMD_LOOP[*]}
+		printf "${PF_FMT}" "[${SECONDS}] $(date "${DATE_FMT}")"
+		sleep 0.9
 	done
-
-	if hash _iterm2; then
-		if [[ "${1}" == "-l" ]]; then
-			_iterm2 stealth off
-		fi
-	fi
 }
 
 # Show full path for SCPing
