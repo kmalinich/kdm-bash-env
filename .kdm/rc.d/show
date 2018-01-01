@@ -6,17 +6,21 @@
 # Check if an executable exists, if so, show info about it
 _show_bin() {
 	# Declare vars as local
-	local FILE_MIME FILE_PATH FILE_TYPE LS
+	local FILE_ALIAS FILE_MIME FILE_PATH FILE_TYPE LS
 
 	if ! hash "${1}"; then
 		output error "Could not find '${1}' in defined PATH"
 		return 1
 	fi
 
+	# Get any potential aliases
+	FILE_ALIAS="$(alias "${1}" 2> /dev/null | awk -F "'" '{printf $2}')"
+
 	# Get full file path, type, and MIME encoding/type
-	! FILE_PATH="$(which --skip-alias --skip-functions "${1}" 2> /dev/null)" && FILE_PATH="$(which "${1}" 2> /dev/null)"
-	FILE_TYPE="$(file -bNn                             "${FILE_PATH}")"
-	FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}")"
+	! FILE_PATH="$("${WHICHPATH}" --skip-alias --skip-functions "${1}" 2> /dev/null)" && FILE_PATH="$("${WHICHPATH}" "${1}" 2> /dev/null)"
+
+	FILE_TYPE="$(file -bNn                             "${FILE_PATH}" 2> /dev/null | head -n 1)"
+	FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}" 2> /dev/null | head -n 1)"
 
 	# Detect GNU ls or stock macOS ls to enable color output properly
 	LS=('ls' '-Fhl')
@@ -29,10 +33,13 @@ _show_bin() {
 	"${LS[@]}" "${FILE_PATH}" 2> /dev/null
 	echo
 
-	output green "Name : '${1}'"
-	output blue  "Path : '${FILE_PATH}'"
-	output blue  "Type : '${FILE_TYPE}'"
-	output blue  "MIME : '${FILE_MIME}'"
+	output kvt " Name" "${1}"
+	[[ "${FILE_ALIAS}" ]] && output kvo "Alias" "${FILE_ALIAS}"
+	[[ "${FILE_PATH}"  ]] && output kv  " Path" "${FILE_PATH}"
+	[[ "${FILE_TYPE}"  ]] && output kvc " Type" "${FILE_TYPE}"
+	[[ "${FILE_MIME}"  ]] && output kvc " MIME" "${FILE_MIME}"
+
+	return 0
 }
 
 # Show a clock

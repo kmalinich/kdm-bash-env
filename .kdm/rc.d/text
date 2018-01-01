@@ -77,7 +77,35 @@ output() {
 			return
 			;;
 
-		kf|kvf|keyval-f)
+		kb|kvb|keyval-b)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_BLU}%s${C_GRY}'${C_RST}\\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		kc|kvc|keyval-c)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_CYN}%s${C_GRY}'${C_RST}\\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		kf|kvf|keyval-f|kr|kvr|keyval-r)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -204,7 +232,7 @@ _output_completion() {
 
 	leadup leadup-custom failure success
 
-	keyval keyval-f keyval-o keyval-p keyval-t
+	keyval keyval-c keyval-f keyval-o keyval-p keyval-r keyval-t
 
 	backtick stderr
 	)

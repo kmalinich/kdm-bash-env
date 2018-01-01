@@ -26,7 +26,6 @@ for ENTRY in "${ARRAY_PATH[@]}"; do
 	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
 done
 
-
 # Remove any duplicates from PATHs
 MANPATH=$(  echo "${MANPATH}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
 MIBDIRS=$(  echo "${MIBDIRS}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
@@ -35,6 +34,10 @@ PATH=$(     echo "${PATH}"      | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1)
 
 # Export PATHs
 export MANPATH MIBDIRS NODE_PATH PATH
+
+# Get full path to which binary
+WHICHPATH="$(which which)"
+export WHICHPATH
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

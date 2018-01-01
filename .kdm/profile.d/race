@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
-for x in $(ls *-*); do
-	TIMEFORMAT='%3R'
-	echo -n "${x},"
-	time bash ${x}
+TIMEFORMAT_OLD="${TIMEFORMAT}"
+
+export TIMEFORMAT_RACE="true"
+
+for FILE_NAME in ./*-*; do
+	echo -n "${FILE_NAME//\.\//},"
+
+	export TIMEFORMAT='%3R'
+	time . "${FILE_NAME}"
 done
+
+export TIMEFORMAT="${TIMEFORMAT_OLD}"
+
+unset TIMEFORMAT_RACE
