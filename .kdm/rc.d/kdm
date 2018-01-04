@@ -65,16 +65,22 @@ _kdm_source() {
 	OLD_PWD="${PWD}"
 	cd "${BASH_ENV_DIR_KDM}" || return
 
-	export SOURCE_VERBOSE="true"
+	# Quiet output
+	[[ "${1}" != "-q" ]] && export SOURCE_VERBOSE="true"
 
 	for i in {0..22}; do
 		SOURCE_FILE="$(printf '%02d' "${i}")"
 		SOURCE_PATH="$(ls "profile.d/${SOURCE_FILE}"-*)"
 		[[ ! -s "${SOURCE_PATH}" ]] && continue
+
+		# Quiet output
+		[[ "${1}" == "-q" ]] && . "${SOURCE_PATH}" && continue
+
 		if . "${SOURCE_PATH}"; then output keyval-t "Loaded" "${SOURCE_PATH}"; else output keyval-f "Failed" "${SOURCE_PATH}"; fi
 	done
 
-	unset SOURCE_VERBOSE
+	# Quiet output
+	[[ "${1}" != "-q" ]] && unset SOURCE_VERBOSE
 
 	cd "${OLD_PWD}" || return
 	unset OLD_PWD

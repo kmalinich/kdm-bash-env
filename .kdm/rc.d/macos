@@ -3,6 +3,7 @@
 # Bounce if we're not on Darwin
 [[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
 
+
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
@@ -86,9 +87,6 @@ _macos_itunes() {
 
 # Fake lsusb function
 _macos_lsusb() {
-	# Declare vars as local
-	local FILE_TEMP
-
 	# Check dependencies
 	if ! hash jq; then
 		output error "Could not detect jq binary, try 'brew install jq'"
@@ -105,15 +103,7 @@ _macos_lsusb() {
 		return
 	fi
 
-	# Create temp file
-	FILE_TEMP="$(mktemp)"
-
-	system_profiler -xml SPUSBDataType > "${FILE_TEMP}"
-
-	plist-to-json "${FILE_TEMP}" | jq -S '.[][]._items[]._items[]'
-
-	# Remove temp file
-	rm -f "${FILE_TEMP}" > /dev/null 2>&1
+	plist-to-json <(sudo system_profiler -xml SPUSBDataType) | jq -S '.[][]._items[]._items[]'
 }
 
 # Volume config function
@@ -143,7 +133,7 @@ _macos_volume() {
 	fi
 
 	if [[ -z "${1}" ]]; then
-		output usage "macos-volume <${USAGE_OPTIONS_STRING}>"
+		output usage "macos-volume [${FUNCNAME[*]}] <${USAGE_OPTIONS_STRING}>"
 		echo
 		output keyval "Current volume" "${VOLUME_CURRENT}%"
 		output keyval "   Mute status" "${VOLUME_MUTE}"
@@ -219,7 +209,7 @@ _macos_volume() {
 }
 
 # Reset all Office Mac 2011 files
-_macos_repair_office() {
+_macos_repair_office_2011() {
 	# Declare vars as local
 	local ARRAY_RESET_FILES PTH_AS PTH_CHE PTH_LIB PTH_PRF RESET_YN
 
@@ -272,9 +262,43 @@ _macos_notify() {
 	osascript -e "display notification \"${NOTIFY_MESSAGE}\" with title \"${NOTIFY_TITLE}\" ${NOTIFY_SUBTITLE}"
 }
 
-# shellcheck disable=SC2033
-_scutil_set() {
+_macos_scutil_set() {
 	sudo scutil --set "${1}" "${2}"
+}
+
+# JSON version of system_profiler
+_macos_system_profiler() {
+	# Declare vars as local
+	local USAGE_STRING
+
+	# Check dependencies
+	if ! hash jq; then
+		output error "Could not detect jq binary, try 'brew install jq'"
+		return
+	fi
+
+	if ! hash plist-to-json; then
+		output error "Could not detect plist-to-json binary, try 'npm -g i plist-to-json'"
+		return
+	fi
+
+	if ! hash system_profiler; then
+		output error "Could not detect system_profiler binary, try running macOS"
+		return
+	fi
+
+	# Check argument
+	USAGE_STRING="system-profiler <data type (name only, no SP prefix or DataType suffix)>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	plist-to-json <(sudo system_profiler -xml "SP${1}DataType") | jq -S '.[][]._items[]'
+}
+
+# List formatted system_profiler data types
+_macos_system_profiler_list() {
+	>&2 output blue "Available data types:"
+	>&2 echo
+	sudo system_profiler -listDataTypes | grep -Ev 'Available\ Datatypes:' | sed -e 's/^SP//g' -e 's/DataType$//g' | sort -df
 }
 
 
@@ -324,14 +348,26 @@ fi
 
 
 # Function aliases
-alias macos-hostname='      _macos_hostname'
-alias macos-itunes='        _macos_itunes'
-alias macos-itunes-control='_macos_itunes_control'
-alias macos-notify='        _macos_notify'
-alias macos-repair-office=' _macos_repair_office'
-alias macos-volume='        _macos_volume'
+alias hostname-macos='_macos_hostname'
 
-alias scutil-set='_scutil_set'
+alias itunes-control='      _macos_itunes_control'
+alias itunes-control-macos='_macos_itunes_control'
+
+alias itunes='      _macos_itunes'
+alias itunes-macos='_macos_itunes'
+
+alias notify='      _macos_notify'
+alias notify-macos='_macos_notify'
+
+alias repair-office-2011='_macos_repair_office_2011'
+
+alias scutil-set='_macos_scutil_set'
+
+alias system-profiler='     _macos_system_profiler'
+alias system-profiler-list='_macos_system_profiler_list'
+
+alias volume-macos='_macos_volume'
+alias volume='      _macos_volume'
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
