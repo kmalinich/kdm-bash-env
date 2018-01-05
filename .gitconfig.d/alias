@@ -26,7 +26,7 @@
 
 	# Delete any branches that have been merged into master
 	# See also: https://gist.github.com/robmiller/5133264
-	dm = "!dm() { git up && git branch --merged --no-color | grep -v '\\*' | xargs -n 1 git bd; }; dm"
+	dm = "!dm() { git up && git branch --merged | grep -v '\\*' | xargs -n 1 git bd; }; dm"
 
 	f = fetch --all --prune
 
