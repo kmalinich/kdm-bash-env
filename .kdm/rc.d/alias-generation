@@ -59,7 +59,7 @@ _alias_linux_macos_setup() {
 	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
 
 	# Declare vars as local
-	local GREP_BASE
+	local GREP_BASE LS_TIME_STYLE
 
 	# grep/ls config
 	#     in a terminal : always enable/use color
@@ -83,6 +83,7 @@ _alias_linux_macos_setup() {
 		alias zrgrep="z${GREP_BASE} -r"
 		alias zvgrep="z${GREP_BASE} -v"
 	fi
+
 	if hash xzgrep; then
 		alias xzgrep=" xz${GREP_BASE}"
 		alias xzegrep="xz${GREP_BASE} -E"
@@ -95,9 +96,10 @@ _alias_linux_macos_setup() {
 	alias cgrep=' grep -s --color=always' # Force enable color
 	alias ncgrep='grep -s --color=never'  # Force disable color
 
-	alias ls="  ls --color=if-tty 2> /dev/null"
-	alias cls=' ls --color=always 2> /dev/null' # Force enable color
-	alias ncls='ls --color=never  2> /dev/null' # Force disable color
+	LS_TIME_STYLE="+%Y-%m-%d %r"
+	alias ls="  ls --color=if-tty --time-style='${LS_TIME_STYLE}' 2> /dev/null"
+	alias cls=" ls --color=always --time-style='${LS_TIME_STYLE}' 2> /dev/null" # Force enable color
+	alias ncls="ls --color=never  --time-style='${LS_TIME_STYLE}' 2> /dev/null" # Force disable color
 
 	# Sort by IP address octets
 	alias sort-ip='sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n'

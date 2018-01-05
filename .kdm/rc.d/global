@@ -31,14 +31,15 @@ fi
 alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
 
 # File list aliases
-alias l.=' ls -d .*  2> /dev/null'
-alias l1=' ls -Fh1   2> /dev/null'
-alias l='  ls -CF    2> /dev/null'
-alias la=' ls -A     2> /dev/null'
-alias ll.='ls -dl .* 2> /dev/null'
-alias ll=' ls -Fhl   2> /dev/null'
-alias lld='ls -Fhld  2> /dev/null'
-alias lll='ls -Fahl  2> /dev/null'
+alias l.=' ls -d .*'
+alias ll.='ls -dl .*'
+
+alias l1=' ls -Fh1'
+alias l='  ls -CF'
+alias la=' ls -A'
+alias ll=' ls -Fhl'
+alias lld='ls -Fhld'
+alias lll='ls -Fahl'
 
 # Quick up-directory-n-list
 alias ..='cd ..; ll'
