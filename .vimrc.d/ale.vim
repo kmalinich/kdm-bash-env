@@ -42,7 +42,7 @@ augroup ale_lintdelay_set
 augroup END
 
 " Configure filetype-specific fixers
-let g:ale_fixers = { 'css': [ 'prettier', 'stylelint' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ], 'python': [ 'isort', 'yapf' ], 'scss': [ 'prettier', 'stylelint' ] }
+let g:ale_fixers = { 'css': [ 'prettier', 'stylelint' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ], 'python': [ 'isort', 'yapf' ], 'scss': [ 'prettier', 'stylelint' ], 'sh': [ 'shfmt' ] }
 
 " Configure filetype-specific linters
 let g:ale_linters = { 'html': [ 'htmlhint', 'proselint', 'tidy' ], 'javascript': [ 'eslint' ], 'php': [ 'phpmd' ], 'scss': [ 'stylelint' ] }
