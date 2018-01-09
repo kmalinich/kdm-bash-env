@@ -291,7 +291,7 @@ _macos_system_profiler() {
 	USAGE_STRING="system-profiler <data type (name only, no SP prefix or DataType suffix)>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	plist-to-json <(sudo system_profiler -xml "SP${1}DataType") | jq -S '.[][]._items[]'
+	plist-to-json <(sudo system_profiler -xml "SP${1}DataType") | sed -e 's/"attrib_Yes"/true/g' -e 's/"attrib_No"/false/g' -e 's/"attrib_On"/true/g' -e 's/"attrib_Off"/false/g' | jq -S '.[][]._items[]'
 }
 
 # List formatted system_profiler data types
