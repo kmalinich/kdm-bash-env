@@ -3,8 +3,8 @@
 if hash facter && hash jq; then
 	FACTER_NET_JSON="$(facter -j 2> /dev/null)"
 
-	DEFROUTE_NIC="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.primary")"
-	HOST_IP="$(     echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.interfaces.${DEFROUTE_NIC}.ip")"
+	DEFROUTE_NIC="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.primary" 2> /dev/null)"
+	[[ "${DEFROUTE_NIC}" ]] && HOST_IP="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.interfaces.${DEFROUTE_NIC}.ip" 2> /dev/null)"
 
 	unset FACTER_NET_JSON
 fi
