@@ -82,7 +82,7 @@ _show_motd() {
 		return 1
 	fi
 
-	FACTER_JSON="$(facter -j)"
+	FACTER_JSON="$(facter -j 2> /dev/null)"
 
 	# Generate the OS info string differently, based on OS
 	case "$(echo "${FACTER_JSON}" | jq -Mcr .os.family)" in
