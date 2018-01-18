@@ -1,26 +1,26 @@
 {
-  "extends": "stylelint-config-standard",
-  "plugins": [
-    "stylelint-order",
-    "stylelint-scss"
-  ],
-  "rules": {
-    "indentation": "tab",
-    "max-empty-lines": 2,
-    "order/order": [
-      "custom-properties",
-      "declarations"
-    ],
-    "order/properties-alphabetical-order": true,
-    "selector-type-no-unknown": [
-      true,
-      {
-        "ignoreTypes": [
-          "/^ng-/",
-          "/^ui-/",
-          "/^wz-/"
-        ]
-      }
-    ]
-  }
+	"extends": "stylelint-config-standard",
+	"plugins": [
+		"stylelint-order",
+		"stylelint-scss"
+	],
+	"rules": {
+		"indentation": "tab",
+		"max-empty-lines": 2,
+		"order/order": [
+			"custom-properties",
+			"declarations"
+		],
+		"order/properties-alphabetical-order": true,
+		"selector-type-no-unknown": [
+			true,
+			{
+				"ignoreTypes": [
+					"/^ng-/",
+					"/^ui-/",
+					"/^wz-/"
+				]
+			}
+		]
+	}
 }
