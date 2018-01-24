@@ -2,6 +2,7 @@
 	path = ~/.gitconfig.d/alias
 	path = ~/.gitconfig.d/apply
 	path = ~/.gitconfig.d/color
+	path = ~/.gitconfig.d/core
 	path = ~/.gitconfig.d/merge
 	path = ~/.gitconfig.d/pull
 	path = ~/.gitconfig.d/push
