@@ -7,8 +7,10 @@
 alias env-sort='env | sort -h'
 
 # Newline after screen clear
-alias clear='clear; echo'
 alias c='clear'
+alias ccd='cd; clear'
+alias cdc='cd; clear'
+alias clear='clear; echo'
 
 # Safety first on file operations
 alias rm='rm -i'
