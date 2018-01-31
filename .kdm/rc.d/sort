@@ -1,0 +1,23 @@
+# Functions: sort
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+
+# shellcheck disable=SC2001
+_sort_array() {
+	mapfile -t ARR < <(echo "${1}" | sed 's/\ /\n/g' | sort -u)
+	echo "${ARR[@]}" | sed 's/\ /\n/g'
+}
+
+_sort_line() {
+	mapfile -t ARR < <(echo "${1}" | sed 's/\ /\n/g' | sort -u)
+	echo "${ARR[@]}"
+}
+
+
+# Function aliases: sort
+
+alias sort-array='_sort_array'
+alias sort-line=' _sort_line'
+
+# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
