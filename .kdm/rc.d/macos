@@ -16,12 +16,12 @@ _macos_hostname() {
 	# Declare vars as local
 	local USAGE_STRING
 
-	USAGE_STRING="macos-hostname <new hostname>"
+	USAGE_STRING="hostname-macos <new hostname>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	_scutil_set "ComputerName"  "${1}"
-	_scutil_set "HostName"      "${1}"
-	_scutil_set "LocalHostName" "${1%%.*}"
+	_macos_scutil_set "ComputerName"  "${1}"
+	_macos_scutil_set "HostName"      "${1}"
+	_macos_scutil_set "LocalHostName" "${1%%.*}"
 
 	output green "Hostname set to '${1}' / '${1%%.*}'"
 }
@@ -46,7 +46,7 @@ _macos_itunes_control() {
 	# Create variable of pipe-separated options from array
 	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
-	USAGE_STRING="macos-itunes <${USAGE_OPTIONS_STRING}>"
+	USAGE_STRING="itunes <${USAGE_OPTIONS_STRING}>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	case "${1}" in
@@ -117,7 +117,7 @@ _macos_volume() {
 	fi
 
 	if [[ -z "${1}" ]]; then
-		output usage "macos-volume [${FUNCNAME[*]}] <${USAGE_OPTIONS_STRING}>"
+		output usage "volume [${FUNCNAME[*]}] <${USAGE_OPTIONS_STRING}>"
 		echo
 		output keyval "Current volume" "${VOLUME_CURRENT}%"
 		output keyval "   Mute status" "${VOLUME_MUTE}"
@@ -193,7 +193,7 @@ _macos_volume() {
 }
 
 # Reset all Office Mac 2011 files
-_macos_repair_office_2011() {
+_macos_fix_office_2011() {
 	# Declare vars as local
 	local ARRAY_RESET_FILES PTH_AS PTH_CHE PTH_LIB PTH_PRF RESET_YN
 
@@ -302,32 +302,32 @@ if hash dspci && ! hash lspci; then alias lspci='dspci'; fi
 alias lsusb='_macos_lsusb'
 
 # Clear font cache
-alias macos-repair-fontcache='sudo atsutil databases -remove'
+alias fix-fontcache='sudo atsutil databases -remove'
 
 # Lock screen and screensaver shortcuts
-alias macos-screen-off='  pmset displaysleepnow'
-alias macos-screen-lock=' /System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
-alias macos-screen-saver='open -a ScreenSaverEngine'
+alias screen-off='  pmset displaysleepnow'
+alias screen-lock=' /System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+alias screen-saver='open -a ScreenSaverEngine'
 
-alias macos-sleep="osascript -e 'tell app \"System Events\" to sleep'"
+alias sleep-system="osascript -e 'tell app \"System Events\" to sleep'"
 
 # El Capitan and up
 if [[ "${UNAME_KERNEL_RELEASE%%.*}" -ge "15" ]]; then
 	# Enable and disable indexing
-	alias macos-indexing-enable=' sudo mdutil -a -i on'
-	alias macos-indexing-disable='sudo mdutil -a -i off'
+	alias indexing-enable=' sudo mdutil -a -i on'
+	alias indexing-disable='sudo mdutil -a -i off'
 
 	# Flush DNS cache
-	alias macos-repair-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+	alias fix-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 else # Pre-El Capitan
-	alias macos-repair-dns='sudo killall -HUP mDNSResponder'
-	alias macos-repair-diskperms="sudo diskutil repairPermissions /; sudo chown -R \${USER} /usr/local"
+	alias fix-dns='sudo killall -HUP mDNSResponder'
+	alias fix-diskperms="sudo diskutil repairPermissions /; sudo chown -R \${USER} /usr/local"
 fi
 
 # Yosemite/El Capitan
 if [[ "${UNAME_KERNEL_RELEASE%%.*}" == "14" || "${UNAME_KERNEL_RELEASE%%.*}" == "15" ]]; then
-	# Repair disk permissions
-	alias macos-repair-diskperms="sudo repair_packages --repair --standard-pkgs /; sudo chown -R \${USER} /usr/local"
+	# Fix disk permissions
+	alias fix-diskperms="sudo repair_packages --repair --standard-pkgs /; sudo chown -R \${USER} /usr/local"
 fi
 
 
@@ -343,7 +343,7 @@ alias itunes-macos='_macos_itunes'
 alias notify='      _macos_notify'
 alias notify-macos='_macos_notify'
 
-alias repair-office-2011='_macos_repair_office_2011'
+alias fix-office-2011='_macos_fix_office_2011'
 
 alias scutil-set='_macos_scutil_set'
 
