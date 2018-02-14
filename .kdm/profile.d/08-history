@@ -9,7 +9,7 @@ export HISTTIMEFORMAT="[%F %T] "
 export HISTFILE=${BASH_ENV_FILE_HISTORY}
 
 # Get number of lines in history
-[[ -s "${HISTFILE}" ]] && HISTLENGTH="$(wc -l < "${HISTFILE}")"
+[[ -s "${HISTFILE}" ]] && HISTLENGTH="$(wc -l < "${HISTFILE}" | sed 's/\ //g')"
 export HISTLENGTH
 
 # History control setup
