@@ -62,6 +62,7 @@ FILE   38;2;240;240;240
 # Scripts (darker green, italic)
 # These should already have exec permission and be set to brighter green,
 # So this darker green helps weed them out
+.EXE  38;2;63;183;58;3
 .bash 38;2;63;183;58;3
 .bat  38;2;63;183;58;3
 .btm  38;2;63;183;58;3
@@ -205,6 +206,7 @@ FILE   38;2;240;240;240
 # Data blobs (orange)
 .A2L   38;2;252;106;8
 .XDF   38;2;252;106;8
+.PID   38;2;252;106;8
 .a2l   38;2;252;106;8
 .cert  38;2;252;106;8
 .crt   38;2;252;106;8
@@ -216,11 +218,13 @@ FILE   38;2;240;240;240
 .mxml  38;2;252;106;8
 .p12   38;2;252;106;8
 .pem   38;2;252;106;8
+.pid   38;2;252;106;8
 .plist 38;2;252;106;8
 .sls   38;2;252;106;8
 .sql   38;2;252;106;8
 .xdf   38;2;252;106;8
 .xml   38;2;252;106;8
+.xsd   38;2;252;106;8
 .xsl   38;2;252;106;8
 .xsls  38;2;252;106;8
 .xslt  38;2;252;106;8
@@ -291,6 +295,7 @@ FILE   38;2;240;240;240
 
 # Text documents (yellow)
 .ENG      38;2;255;255;0
+.LOG      38;2;255;255;0
 .ac       38;2;255;255;0
 .cmake    38;2;255;255;0
 .css      38;2;255;255;0
