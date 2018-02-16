@@ -49,4 +49,8 @@ let g:w2 = matchadd('whitespace_ugly', '\s\+$')
 let g:w3 = matchadd('whitespace_ugly', '^\t*\zs \+')
 
 " Custom whitespace list characters
-set listchars=tab:\|,trail:,nbsp:+
+" set listchars=tab:\|,trail:,nbsp:+
+
+" Set to two bars instead of UTF-8 arrow until iTerm2 GPU accelerated Metal
+" renderer on macOS renders it properly
+set listchars=tab:\|\|,trail:,nbsp:+
