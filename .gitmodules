@@ -28,6 +28,9 @@
 [submodule ".vim/pack/kdm/fugitive"]
 	path = .vim/pack/kdm/fugitive
 	url  = https://github.com/tpope/vim-fugitive.git
+[submodule ".vim/pack/kdm/haproxy"]
+	path = .vim/pack/kdm/haproxy
+	url  = https://github.com/zimbatm/haproxy.vim.git
 [submodule ".vim/pack/kdm/hexmode"]
 	path = .vim/pack/kdm/hexmode
 	url  = https://github.com/fidian/hexmode.git
