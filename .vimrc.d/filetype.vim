@@ -166,10 +166,41 @@ augroup END
 augroup ft_yaml
 	au BufRead *.yaml let b:comment_leader = '# '
 	au BufRead *.yaml set filetype=yaml
+	au BufRead *.yaml call matchdelete(g:w3)
 
 	au BufRead *.yml let b:comment_leader = '# '
 	au BufRead *.yml set filetype=yaml
+	au BufRead *.yml call matchdelete(g:w3)
 
 	au BufRead *gemrc let b:comment_leader = '# '
 	au BufRead *gemrc set filetype=yaml
+	au BufRead *gemrc call matchdelete(g:w3)
+
+	au BufRead */salt*/master.d/*.conf let b:comment_leader = '# '
+	au BufRead */salt*/master.d/*.conf set filetype=yaml
+	au BufRead */salt*/master.d/*.conf call matchdelete(g:w3)
+
+	au BufRead */salt*/cloud let b:comment_leader = '# '
+	au BufRead */salt*/cloud set filetype=yaml
+	au BufRead */salt*/cloud call matchdelete(g:w3)
+
+	au BufRead */salt*/grains let b:comment_leader = '# '
+	au BufRead */salt*/grains set filetype=yaml
+	au BufRead */salt*/grains call matchdelete(g:w3)
+
+	au BufRead */salt*/master let b:comment_leader = '# '
+	au BufRead */salt*/master set filetype=yaml
+	au BufRead */salt*/master call matchdelete(g:w3)
+
+	au BufRead */salt*/minion let b:comment_leader = '# '
+	au BufRead */salt*/minion set filetype=yaml
+	au BufRead */salt*/minion call matchdelete(g:w3)
+
+	au BufRead */salt*/proxy let b:comment_leader = '# '
+	au BufRead */salt*/proxy set filetype=yaml
+	au BufRead */salt*/proxy call matchdelete(g:w3)
+
+	au BufRead */salt*/roster let b:comment_leader = '# '
+	au BufRead */salt*/roster set filetype=yaml
+	au BufRead */salt*/roster call matchdelete(g:w3)
 augroup END
