@@ -8,23 +8,7 @@
 # but it's only in bash 4+ which is ... more rarely seen than I'd like
 output() {
 	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS COLOR_SELECTED OUTPUT_FORMAT OUTPUT_STDERR OUTPUT_STRING USAGE_STRING
-
-	# Array of options
-	ARRAY_USAGE_OPTIONS=(
-	error usage
-
-	alert black blue orange cyan gray pink purple red green white yellow
-
-	leadup leadup-custom failure success
-
-	keyval keyval-f keyval-o keyval-p keyval-t
-
-	backtick stderr
-	)
-
-	# Create variable of pipe-separated options from array
-	USAGE_STRING="output <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <string 1> [<string 2, for keyval options>]"
+	local COLOR_SELECTED OUTPUT_FORMAT OUTPUT_STDERR OUTPUT_STRING
 
 	# Case statement for output color/format
 	case "${1,,}" in
@@ -206,7 +190,7 @@ output() {
 
 	# Check for variables and throw usage message if issue
 	if [[ -z "${OUTPUT_STRING-${2}}" ]]; then
-		output usage "${USAGE_STRING}"
+		_output_usage
 		return
 	fi
 
@@ -240,6 +224,28 @@ _output_completion() {
 	CUR_WORD=${COMP_WORDS[COMP_CWORD]}
 	mapfile -t COMPREPLY < <(compgen -W "${ARRAY_USAGE_OPTIONS[*]}" -- "${CUR_WORD}")
 }
+
+_output_usage() {
+	# Declare vars as local
+	local ARRAY_USAGE
+
+	# Array of arrays options
+	declare -A ARRAY_USAGE='(
+	[0]="alert error usage"
+	[1]="black blue orange cyan gray pink purple red green white yellow"
+	[2]="leadup leadup-custom failure success"
+	[3]="keyval keyval-f keyval-o keyval-p keyval-t"
+	[4]="backtick stderr"
+	)'
+
+	output usage "output <format> <string 1> [<string 2, for keyval options>]"; echo
+	output text  "Format : < ${ARRAY_USAGE[0]} >"
+	output text  "         < ${ARRAY_USAGE[1]} >"
+	output text  "         < ${ARRAY_USAGE[2]} >"
+	output text  "         < ${ARRAY_USAGE[3]} >"
+	output text  "         < ${ARRAY_USAGE[4]} >"
+}
+
 
 complete -F _output_completion output
 
