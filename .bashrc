@@ -9,7 +9,7 @@ FILE_PF="${DIR_KDM}/profile"
 # Workaround for non-login shells that do not source .bash_profile
 _validate_before_source() {
 	# Return if we're not in a terminal
-	[[ -t 2 ]] || return
+	[[ -t 0 ]] || return
 
 	# Determine which file to source
 	# if ${BASH_ENV_FILE_RC} is already populated,
