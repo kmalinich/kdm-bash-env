@@ -10,6 +10,9 @@ _prompt_generate() {
 
 	# If $BASH_ENV_COLOR_16M is not true, render PS1 without multicolor
 	if [[ "${BASH_ENV_COLOR_16M}" != "true" ]]; then
+		# Kick _prompt_pwd again with no output to export environment variables
+		_prompt_pwd > /dev/null 2>&1
+
 		PS1="\\[\\e[G\\]\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]$(_prompt_pwd) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 		export PS1
 		return
@@ -17,18 +20,22 @@ _prompt_generate() {
 
 	# If NOT connected via SSH and PROMPT_NO_HOSTNAME is set to 1 (true) in bash-env.conf,
 	# render PS1 without hostname
-	if [[ -z "${SSH_CONNECTION}"  && "${BASH_ENV_PROMPT_NO_HOSTNAME}" == "true" ]]; then
+	if [[ -z "${SSH_CONNECTION}" && "${BASH_ENV_PROMPT_NO_HOSTNAME}" == "true" ]]; then
+		# Kick _prompt_pwd again with no output to export environment variables
+		_prompt_pwd > /dev/null 2>&1
+
 		PS1="\\[\\e[G\\]\\[${C_BLU}\\]$(_prompt_pwd_color) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 		export PS1
+
 		return
 	fi
+
+	# Kick _prompt_pwd again with no output to export environment variables
+	_prompt_pwd > /dev/null 2>&1
 
 	# Normal PS1 prompt (with hostname)
 	PS1="\\[\\e[G\\]\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]$(_prompt_pwd_color) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 	export PS1
-
-	# Kick _prompt_pwd again with no output to export environment variables
-	_prompt_pwd > /dev/null 2>&1
 
 	# It would be neat to do a color-responsive system load monitor... but not today
 }
@@ -119,7 +126,6 @@ _prompt_pwd() {
 	# If we're LESS than 3 folders deep, pwd for titlebar and prompt is normal
 	# If we're MORE than 3 folders deep, show ../previous_dir/current_dir
 	PWD_CUSTOM=$(printf "${PWD_FMT}" | rev | awk -F '/' '{printf $1"/"$2"/.."}' | rev)
-	export PWD_CUSTOM
 
 	[[ "${PWD_FMT_DEPTH}" -lt "3" ]] && PWD_FINAL="${PWD_FMT}" || PWD_FINAL="${PWD_CUSTOM}"
 	export PWD_FINAL
