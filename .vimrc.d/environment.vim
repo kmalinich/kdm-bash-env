@@ -11,7 +11,6 @@ let g:host_short  = $HOST_SHORT
 let g:host_sub    = $HOST_SUB
 
 let g:pwd           = $PWD
-let g:pwd_custom    = $PWD_CUSTOM
 let g:pwd_final     = $PWD_FINAL
 let g:pwd_fmt       = $PWD_FMT
 let g:pwd_fmt_depth = $PWD_FMT_DEPTH
