@@ -37,7 +37,7 @@ if has('termguicolors') && g:color_16m ==# 'true'
 		hi pCursor guibg=#6c71c4
 		hi rCursor guibg=#e74c3c
 		hi wCursor guibg=#e0e0e0
-		hi yCursor guibg=#f1c40f
+		hi yCursor guibg=#ffe100
 
 		" Bright cursor colors
 		hi bbCursor guibg=#144Cff
@@ -45,7 +45,7 @@ if has('termguicolors') && g:color_16m ==# 'true'
 
 		" Mode-specific cursor blinking/colors/shapes
 		set guicursor+=c:hor100-blinkwait10-blinkoff500-blinkon500-rCursor
-		set guicursor+=n:hor100-blinkon0-bbCursor
+		set guicursor+=n:hor100-blinkon0-yCursor
 		set guicursor+=i:ver200-blinkwait10-blinkoff500-blinkon500-brCursor
 		set guicursor+=o:hor100-blinkwait10-blinkoff500-blinkon500-bCursor
 		set guicursor+=r-cr:block-blinkwait10-blinkon500-blinkoff500-yCursor
