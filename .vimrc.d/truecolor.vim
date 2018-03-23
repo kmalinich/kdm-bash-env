@@ -57,7 +57,4 @@ if has('termguicolors') && g:color_16m ==# 'true'
 			au VimLeave * set guicursor=a:hor100-blinkwait10-blinkon500-blinkoff500-wCursor
 		augroup END
 	endif
-else
-	" Disable spell check on non-16mcolor terminals
-	set nospell
 endif
