@@ -1,7 +1,12 @@
 # If 16m color is enabled, change TERM to xterm-16mcolor
 if grep -q 'COLOR_16M=1' "${BASH_ENV_FILE_CONFIG}" 2> /dev/null; then
-	TERM="xterm-16mcolor"
-	BASH_ENV_COLOR_16M="true"
+	# Skip this if on physical console on Linux
+	if tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
+		BASH_ENV_COLOR_16M="false"
+	else
+		TERM="xterm-16mcolor"
+		BASH_ENV_COLOR_16M="true"
+	fi
 else
 	BASH_ENV_COLOR_16M="false"
 fi
