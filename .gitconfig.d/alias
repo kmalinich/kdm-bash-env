@@ -9,7 +9,8 @@
 	bm  = branch --merged
 	bnm = branch --no-merged
 
-	cl = clone
+	cl    = clone --depth 1 --recursive --shallow-submodules
+	clone = clone --depth 1 --recursive --shallow-submodules
 
 	co  = checkout
 	cob = checkout -b
@@ -30,6 +31,11 @@
 
 	f = fetch --all --prune
 
+	# Fix upstream
+	fu = "!fu() { BRANCH=\"$(git get-b 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git b \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; fu"
+
+	get-b      = symbolic-ref --short HEAD
+	get-br     = symbolic-ref --short HEAD
 	get-branch = symbolic-ref --short HEAD
 	get-commit = rev-parse HEAD
 	get-dir    = rev-parse --git-dir
@@ -69,5 +75,6 @@
 	undo = checkout --
 
 	up = pull --rebase --prune
+
 
 # vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :

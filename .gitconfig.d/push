@@ -1,4 +1,5 @@
 [push]
 	default = current
 
+
 # vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :
