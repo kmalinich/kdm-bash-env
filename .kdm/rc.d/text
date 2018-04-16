@@ -43,7 +43,7 @@ output() {
 
 		ef|error_fail)
 			# Special function to output formatted usage string, with stderr output
-			OUTPUT_FORMAT="${C_RED_BRT_BLD}${C_ITA}Error${C_RST} ${C_WHT_BRT}:${C_RST} ${C_RED}%s, cannot continue${C_RST}\\n"
+			OUTPUT_FORMAT="${C_RED_BRT_BLD}${C_ITA}Error${C_RST} ${C_WHT_BRT}:${C_RST} ${C_RED}Failed %s, cannot continue${C_RST}\\n"
 			OUTPUT_STDERR="1>&2"
 			;;
 
