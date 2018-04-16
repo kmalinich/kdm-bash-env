@@ -41,6 +41,12 @@ output() {
 			OUTPUT_STDERR="1>&2"
 			;;
 
+		ef|error_fail)
+			# Special function to output formatted usage string, with stderr output
+			OUTPUT_FORMAT="${C_RED_BRT_BLD}${C_ITA}Error${C_RST} ${C_WHT_BRT}:${C_RST} ${C_RED}%s, cannot continue${C_RST}\\n"
+			OUTPUT_STDERR="1>&2"
+			;;
+
 		f|failure)
 			# Special function for failure message, no string input
 			COLOR_SELECTED="${C_RED_BRT_BLD}"
@@ -203,26 +209,9 @@ output() {
 	printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
 }
 
-# bash tab-completion for output function
-_output_completion() {
-	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS CUR_WORD
-
-	# Array of options
-	ARRAY_USAGE_OPTIONS=(
-	error usage
-
-	alert black blue orange cyan gray pink purple red green white yellow
-
-	leadup leadup-custom failure success
-
-	keyval keyval-c keyval-f keyval-o keyval-p keyval-r keyval-t
-
-	backtick stderr
-	)
-
-	CUR_WORD=${COMP_WORDS[COMP_CWORD]}
-	mapfile -t COMPREPLY < <(compgen -W "${ARRAY_USAGE_OPTIONS[*]}" -- "${CUR_WORD}")
+# Function "alias" for use in scripts
+function o() {
+	output "${@}"
 }
 
 _output_usage() {
@@ -231,11 +220,12 @@ _output_usage() {
 
 	# Array of arrays options
 	declare -A ARRAY_USAGE='(
-	[0]="alert error usage"
-	[1]="black blue orange cyan gray pink purple red green white yellow"
-	[2]="leadup leadup-custom failure success"
-	[3]="keyval keyval-f keyval-o keyval-p keyval-t"
-	[4]="backtick stderr"
+	[0]="alert error error_fail usage"
+	[1]="black blue orange cyan gray green orange pink purple red white yellow"
+	[2]="leadup leadup-custom"
+	[3]="failure success"
+	[4]="keyval keyval-b keyval-c keyval-f keyval-o keyval-p keyval-r keyval-t"
+	[5]="backtick stderr"
 	)'
 
 	output usage "output <format> <string 1> [<string 2, for keyval options>]"; echo
@@ -244,14 +234,63 @@ _output_usage() {
 	output text  "         < ${ARRAY_USAGE[2]} >"
 	output text  "         < ${ARRAY_USAGE[3]} >"
 	output text  "         < ${ARRAY_USAGE[4]} >"
+	output text  "         < ${ARRAY_USAGE[5]} >"
 }
 
 
+# bash tab-completion for output function
+_output_completion() {
+	# Declare vars as local
+	local ARRAY_USAGE_OPTIONS CUR_WORD
+
+	# Array of options
+	ARRAY_USAGE_OPTIONS=(
+	alert error error_fail usage
+
+	black blue cyan gray green orange pink purple red white yellow
+
+	leadup leadup-custom
+
+	failure success
+
+	keyval keyval-b keyval-c keyval-f keyval-o keyval-p keyval-r keyval-t
+
+	backtick stderr
+	)
+
+	CUR_WORD=${COMP_WORDS[COMP_CWORD]}
+	mapfile -t COMPREPLY < <(compgen -W "${ARRAY_USAGE_OPTIONS[*]}" -- "${CUR_WORD}")
+}
+
+# bash tab-completion for shortened o function
+_o_completion() {
+	# Declare vars as local
+	local ARRAY_USAGE_OPTIONS CUR_WORD
+
+	# Array of options
+	ARRAY_USAGE_OPTIONS=(
+	a e ef u
+
+	blk blu c gry grn o pk pr r w y
+
+	l lc
+
+	f s
+
+	k kb kc kf ko kp kr kt
+
+	b 2
+	)
+
+	CUR_WORD=${COMP_WORDS[COMP_CWORD]}
+	mapfile -t COMPREPLY < <(compgen -W "${ARRAY_USAGE_OPTIONS[*]}" -- "${CUR_WORD}")
+}
+
+
+# Configure/enable completion
 complete -F _output_completion output
+complete -F _o_completion      o
 
-
-# Function aliases
-alias o='output'
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
