@@ -1,6 +1,6 @@
 # Functions: Conversion
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && o k "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # Convert squid timestamps to human date and time
@@ -9,7 +9,7 @@ _convert_squid_timestamp() {
 	local USAGE_STRING
 
 	USAGE_STRING="convert-squid-timestamp <squid log timestamp>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+	[[ -z "${1}" ]] && o u "${USAGE_STRING}" && return
 
 	echo "${1}" | perl -p -e 's/^([0-9]*)/"[".localtime($1)."]"/e'
 }
@@ -20,7 +20,7 @@ _convert_temperature() {
 	local SCALE TEMP_C TEMP_F TEMP_K TEMP_R PF_FMT USAGE_STRING
 
 	USAGE_STRING="temp-conv <temperature[c|f|k|r]>"
-	[[ "${1}" != *[0-9][CcFfKkRr]* ]] && output usage "${USAGE_STRING}" && return
+	[[ "${1}" != *[0-9][CcFfKkRr]* ]] && o u "${USAGE_STRING}" && return
 
 	# Set calculation scale
 	SCALE="2"
@@ -59,23 +59,44 @@ dechex() {
 	# Declare vars as local
 	local DEC HEX INPUT OUTPUT PROCESS USAGE_STRING
 
-	USAGE_STRING="dec2hex <decimal number> [-s, script output]"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+	USAGE_STRING="dechex[hexdec] <(hexi)decimal number> [-s, script output]"
+	[[ -z "${1}" ]] && o u "${USAGE_STRING}" && return
 
-	# Strip input of anything other than a-f, A-F, x, X, or numbers
-	INPUT="${1//[^a-fA-FxX0-9]/}"
-	# Uppercase input (except x)
-	INPUT=$(echo "${INPUT}" | tr '[:lower:]' '[:upper:]' | sed 's/^0X/0x/g')
+	# Uppercase input
+	INPUT="${1^^}"
+
+	# Bounce if first letter is anything other than A-F0-9
+	case "${INPUT:0:1}" in
+		[^A-F0-9])
+			o e "Invalid input"
+			return 1
+			;;
+	esac
+
+	# Strip input of anything other than A-F, X, or numbers
+	INPUT="${INPUT//[^A-FX0-9]/}"
 
 	# Detect input type
-	if [[ "${INPUT}" =~ ^0x[A-F0-9]? ]]; then
+	if [[ "${INPUT}" =~ ^0X[A-F0-9]? || "${INPUT}" =~ [A-F] ]]; then
 		# Input is hexadecimal
-		PROCESS="hex2dec"
-		[[ "${#INPUT}" == "2" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
-		DEC="$((INPUT))" # Render decimal value
+		PROCESS="h2d"
+
+		# Remove possible '0X'
+		INPUT="${INPUT//0X/}"
+		# Re-add '0x'
+		INPUT="0x${INPUT}"
+
+		# Bounce if invalid input
+		if [[ "${#INPUT}" == "2" ]]; then
+			o e "Invalid input"
+			return 2
+		fi
+
+		# Render decimal value
+		DEC="$((INPUT))"
 	else
 		# Input is decimal
-		PROCESS="dec2hex"
+		PROCESS="d2h"
 		DEC="${INPUT}"
 	fi
 
@@ -86,30 +107,32 @@ dechex() {
 	if [[ "${DEC}" != "0" ]]; then
 		DEC="${DEC##+(0)}"    # Remove leading zeros
 		DEC="${DEC//[^0-9]/}" # Remove non-numbers
-		[[ "${#DEC}" == "0" ]] && output error "Invalid input" && return 1 # Bounce if invalid input
+
+		# Bounce if invalid input
+		if [[ "${#DEC}" == "0" ]]; then
+			o e "Invalid input"
+			return 3
+		fi
 	fi
 
 	if [[ "${2}" != "-s" ]]; then
-		output purple "Process : ${PROCESS}"
-		output green  "Values  : ${DEC} | ${HEX}"
-	else
-		case "${PROCESS}" in
-			dec2hex)
-				OUTPUT="${HEX/0x/}"
-				;;
-			hex2dec)
-				OUTPUT="${DEC}"
-				;;
-		esac
-
-		echo "${OUTPUT}"
+		o grn "[${PROCESS}] | ${DEC} | ${HEX}"
+		return
 	fi
+
+	case "${PROCESS}" in
+		d2h) OUTPUT="${HEX/0x/}" ;;
+		h2d) OUTPUT="${DEC}"     ;;
+	esac
+
+	echo "${OUTPUT}"
 }
 
 
 # Function aliases
 alias convert-squid-timestamp='_convert_squid_timestamp'
 alias convert-temperature='    _convert_temperature'
+
 alias hexdec='dechex'
 
 
