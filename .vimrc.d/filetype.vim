@@ -162,6 +162,11 @@ augroup ft_vmx
 	au BufRead *.vmx set filetype=cfg
 augroup END
 
+" TunerPro xdf
+augroup ft_xdf
+	au BufRead *.xdf set filetype=xml
+augroup END
+
 " YAML family
 augroup ft_yaml
 	au BufRead *.yaml let b:comment_leader = '# '
