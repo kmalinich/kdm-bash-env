@@ -3,45 +3,72 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
+_array_usage() {
+	1>&2 output usage "array-${1} array[@]"
+	1>&2 echo
+	1>&2 output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
+	1>&2 output red   "Don't say I didn't warn you"
+}
+
 # Function to remove duplicates from array
 _array_dedupe() {
 	# Declare vars as local
-	local ARRAY
+	local ARRAY_INPUT
 
 	if [[ -z "${1}" ]]; then
-		output usage "array-dedupe array[@]"
-		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
-		output red   "Don't say I didn't warn you"
-		return
+		_array_usage "dedupe"
+		return 254
 	fi
 
 	# Magic BASH function array argument workaround
-	declare -a ARRAY=("${!1}")
+	declare -a ARRAY_INPUT=("${!1}")
 
 	# Convert array to string, swap spaces with newlines, unique sort
-	echo "${ARRAY[@]}" | sed 's/\ /\n/g' | sort -u
+	echo "${ARRAY_INPUT[@]}" | sed 's/\ /\n/g' | sort -u
+}
+
+_array_dedupe_line() {
+	_array_dedupe "${1}" | tr '\n' ' '; echo
+}
+
+_array_sort() {
+	# Declare vars as local
+	local ARRAY_INPUT
+
+	if [[ -z "${1}" ]]; then
+		_array_usage "sort"
+		return 254
+	fi
+
+	# Magic BASH function array argument workaround
+	declare -a ARRAY_INPUT=("${!1}")
+
+	# Convert array to string, swap spaces with newlines, sort
+	echo "${ARRAY_INPUT[@]}" | sed 's/\ /\n/g' | sort
+}
+
+_array_sort_line() {
+	_array_sort "${1}" | tr '\n' ' '; echo
 }
 
 # Function to get the length of the longest string in an array
 _array_width() {
 	# Declare vars as local
-	local ARRAY WIDTH_MAX
+	local ARRAY_INPUT WIDTH_MAX
 
 	if [[ -z "${1}" ]]; then
-		output usage "array-width array[@]"
-		output red   "NOTICE how there are NO curly brackets or quotes when you pass the variable"
-		output red   "Don't say I didn't warn you"
-		return
+		_array_usage "width"
+		return 254
 	fi
 
 	# Magic BASH function array argument workaround
-	declare -a ARRAY=("${!1}")
+	declare -a ARRAY_INPUT=("${!1}")
 
 	# Init counter
 	WIDTH_MAX="0"
 
 	# Loop through array
-	for VALUE in "${ARRAY[@]}"; do
+	for VALUE in "${ARRAY_INPUT[@]}"; do
 		[[ "${#VALUE}" -le "${WIDTH_MAX}" ]] && continue
 		WIDTH_MAX="${#VALUE}"
 	done
@@ -58,8 +85,11 @@ _array_width() {
 
 
 # Function aliases
-alias array-dedupe='_array_dedupe'
-alias array-width=' _array_width'
+alias array-dedupe='     _array_dedupe'
+alias array-dedupe-line='_array_dedupe_line'
+alias array-sort='       _array_sort'
+alias array-sort-line='  _array_sort_line'
+alias array-width='      _array_width'
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

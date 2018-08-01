@@ -1,9 +1,18 @@
-# Functions:
+# Functions: Date
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
+# Output example: '20180801' for August 1st 2018
+# Handy for naming backup files
+_ymd() {
+	date '+%Y%m%d'
+}
+
+
 # Function aliases
+alias ymd='_ymd'
+
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
