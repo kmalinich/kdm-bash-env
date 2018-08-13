@@ -31,6 +31,9 @@
 [submodule ".vim/pack/kdm/hexmode"]
 	path = .vim/pack/kdm/hexmode
 	url  = https://github.com/fidian/hexmode.git
+[submodule ".vim/pack/kdm/illuminate"]
+	path = .vim/pack/kdm/illuminate
+	url = https://github.com/RRethy/vim-illuminate.git
 [submodule ".vim/pack/kdm/interfaces"]
 	path = .vim/pack/kdm/interfaces
 	url  = https://github.com/vim-scripts/interfaces.git
