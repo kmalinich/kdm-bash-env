@@ -2,6 +2,9 @@
 # .bash_profile
 
 
+# Test for interactivity
+[[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"
+
 # Disable echo output
 [[ "${BASH_INTERACTIVE}" ]] && stty -echo
 

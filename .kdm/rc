@@ -5,6 +5,10 @@
 # shellcheck disable=SC1091
 
 
+# Test for interactivity
+[[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"
+
+
 # Source any possible global bashrc(s) under /etc
 ARRAY_SOURCE_GLOBAL=(bash.bashrc bashrc)
 for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
