@@ -1,15 +1,20 @@
 # kdm bash-env
 # .bashrc (wrapper)
 
+
 # File paths
 DIR_KDM="${HOME}/.kdm"
 FILE_RC="${DIR_KDM}/rc"
 FILE_PF="${DIR_KDM}/profile"
 
+# Test for interactivity
+[[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"
+
+
 # Workaround for non-login shells that do not source .bash_profile
 _validate_before_source() {
 	# Return if we're not in a terminal
-	[[ -t 0 ]] || return
+	[[ "${BASH_INTERACTIVE}" ]] || return
 
 	# Determine which file to source
 	# if ${BASH_ENV_FILE_RC} is already populated,
@@ -24,6 +29,8 @@ _validate_before_source() {
 	[[ -s "${SOURCE}" ]] && . "${SOURCE}" || echo "Error : Failed to source '${SOURCE}'"
 }
 
+
 _validate_before_source
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

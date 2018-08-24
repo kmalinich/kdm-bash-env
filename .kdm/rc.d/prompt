@@ -6,7 +6,7 @@
 # Generate / export PS1 prompt with color specfied by C_ENV
 _prompt_generate() {
 	# Return if we're not in a terminal
-	[[ -t 0 ]] || return
+	[[ "${BASH_INTERACTIVE}" ]] || return
 
 	# If $BASH_ENV_COLOR_16M is not true, render PS1 without multicolor
 	if [[ "${BASH_ENV_COLOR_16M}" != "true" ]]; then
@@ -46,7 +46,7 @@ _prompt_exitcode() {
 	local ARRAY_CMD CMD ENV GRY RED STR WHT YLW
 
 	# Return if we're not in a terminal
-	[[ -t 0 ]] || return
+	[[ "${BASH_INTERACTIVE}" ]] || return
 
 	# Bounce if no arguments passed
 	[[ -z "${1}" || -z "${2}" ]] && return
@@ -212,7 +212,7 @@ _prompt_titlebar() {
 	local TITLEBAR_SSH
 
 	# Return if we're not in a terminal
-	[[ -t 0 ]] || return
+	[[ "${BASH_INTERACTIVE}" ]] || return
 
 	# Add '[SSH]' to titlebar if in SSH session
 	[[ "${SSH_CONNECTION}" ]] && TITLEBAR_SSH="[SSH] "

@@ -1,10 +1,11 @@
 # kdm bash-env
 # init functions
 
+
 # Output loading message with auto-increment
 _bash_env_loading() {
 	# Bounce if not in TTY
-	[[ -t 0 ]] || return
+	[[ "${BASH_INTERACTIVE}" ]] || return
 
 	# Declare vars as local
 	local LOADING_DOT_STRING LOADING_STRING
@@ -53,7 +54,9 @@ hash() {
 	return "${?}"
 }
 
+
 alias _bash_env_loading='_bash_env_loading'
+
 
 # Init loading variables
 unset LOADING_DOT_COUNT

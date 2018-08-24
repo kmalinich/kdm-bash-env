@@ -34,7 +34,7 @@ _show_motd() {
 	local VER
 
 	# Return if we're not in a terminal
-	[[ -t 0 ]] || return
+	[[ "${BASH_INTERACTIVE}" ]] || return
 
 	# Color shortcuts
 	BAR="${C_BLK_BLD}|${C_RST}"
@@ -154,7 +154,7 @@ _show_motd() {
 	# Example output:
 	#
 	# kdm >  bash-env | #39cccec  < rev
-	# cpu > i7-4770HQ | 16G|80%   < ram
+		# cpu > i7-4770HQ | 16G|80%   < ram
 	#  os >     macOS | 10.13.1   < ver
 	#  up >    4 days | 1.86      < load
 

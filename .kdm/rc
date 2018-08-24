@@ -4,6 +4,7 @@
 # shellcheck disable=SC1090
 # shellcheck disable=SC1091
 
+
 # Source any possible global bashrc(s) under /etc
 ARRAY_SOURCE_GLOBAL=(bash.bashrc bashrc)
 for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
@@ -16,5 +17,6 @@ mapfile -t ARRAY_SOURCE_RC_D < <(ls -Fh1 "${BASH_ENV_DIR_RC_D}/"* 2> /dev/null)
 for FILE in "${ARRAY_SOURCE_RC_D[@]}"; do
 	. "${FILE}"
 done; unset FILE
+
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
