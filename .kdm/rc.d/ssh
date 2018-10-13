@@ -59,8 +59,8 @@ _ssh_ping() {
 	USAGE_STRING="ssh-ping <host>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	ping "${1}"
-	ssh  "${1}" "${2}"
+	ping "${PING_WAIT}" "${1}"
+	ssh                 "${1}" "${2}"
 }
 
 # Show full path for SCPing
