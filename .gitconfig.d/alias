@@ -9,8 +9,9 @@
 	bm  = branch --merged
 	bnm = branch --no-merged
 
-	cl    = clone --depth 1 -j8 --recursive --shallow-submodules
-	clone = clone --depth 1 -j8 --recursive --shallow-submodules
+	cl     = clone
+	cld    = clone           -j8 --recursive
+	clone  = clone --depth 1 -j8 --recursive --shallow-submodules
 
 	co  = checkout
 	cob = checkout -b
