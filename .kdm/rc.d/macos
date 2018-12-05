@@ -47,13 +47,15 @@ _macos_itunes_control() {
 	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
 	USAGE_STRING="itunes <${USAGE_OPTIONS_STRING}>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	case "${1}" in
 		pause|play) _macos_itunes_osascript "playpause"  && output green "Playback toggled" ;;
 		next)       _macos_itunes_osascript "next track" && output green "Skipped next"     ;;
 		prev)       _macos_itunes_osascript "back track" && output green "Skipped previous" ;;
-		*) output usage "${USAGE_STRING}" && return
+
+		*)
+			output usage "${USAGE_STRING}"
+			return
 	esac
 
 	_macos_itunes
@@ -62,19 +64,21 @@ _macos_itunes_control() {
 # iTunes information
 _macos_itunes() {
 	# Declare vars as local
-	local ITUNES_ALBUM ITUNES_ARTIST ITUNES_KIND ITUNES_NAME ITUNES_STATE
+	local ITUNES_ALBUM ITUNES_ARTIST ITUNES_KIND ITUNES_NA ITUNES_NAME ITUNES_STATE
 
-	ITUNES_ALBUM="$( _macos_itunes_osascript 'get album of current track' )"
+	ITUNES_ALBUM="$( _macos_itunes_osascript 'get album  of current track')"
 	ITUNES_ARTIST="$(_macos_itunes_osascript 'get artist of current track')"
-	ITUNES_KIND="$(  _macos_itunes_osascript 'get kind of current track'  )"
-	ITUNES_NAME="$(  _macos_itunes_osascript 'get name of current track'  )"
-	ITUNES_STATE="$( _macos_itunes_osascript 'get album of current track' )"
+	ITUNES_KIND="$(  _macos_itunes_osascript 'get kind   of current track')"
+	ITUNES_NAME="$(  _macos_itunes_osascript 'get name   of current track')"
+	ITUNES_STATE="$( _macos_itunes_osascript 'get album  of current track')"
 
-	[[ -z "${ITUNES_ALBUM}"  ]] && ITUNES_ALBUM="Not available"
-	[[ -z "${ITUNES_ARTIST}" ]] && ITUNES_ARTIST="Not available"
-	[[ -z "${ITUNES_KIND}"   ]] && ITUNES_KIND="Not available"
-	[[ -z "${ITUNES_NAME}"   ]] && ITUNES_NAME="Not available"
-	[[ -z "${ITUNES_STATE}"  ]] && ITUNES_STATE="Not available"
+	ITUNES_NA="Not available"
+
+	[[ -z "${ITUNES_ALBUM}"  ]] && ITUNES_ALBUM="${ITUNES_NA}"
+	[[ -z "${ITUNES_ARTIST}" ]] && ITUNES_ARTIST="${ITUNES_NA}"
+	[[ -z "${ITUNES_KIND}"   ]] && ITUNES_KIND="${ITUNES_NA}"
+	[[ -z "${ITUNES_NAME}"   ]] && ITUNES_NAME="${ITUNES_NA}"
+	[[ -z "${ITUNES_STATE}"  ]] && ITUNES_STATE="${ITUNES_NA}"
 
 	output purple "--------= Currently ${ITUNES_STATE} =--------"
 	echo
@@ -237,7 +241,7 @@ _macos_notify() {
 	NOTIFY_MESSAGE="${2}"
 	NOTIFY_SUBTITLE="${3}"
 
-	USAGE_STRING="macos-notify <title> <message> [<subtitle>]"
+	USAGE_STRING="notify <title> <message> [<subtitle>]"
 	[[ -z "${NOTIFY_TITLE}" || -z "${NOTIFY_MESSAGE}" ]] && output usage "${USAGE_STRING}" && return
 
 	# Add subtitle to osascript string if present
