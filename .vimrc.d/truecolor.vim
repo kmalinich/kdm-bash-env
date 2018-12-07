@@ -1,11 +1,11 @@
+" Color scheme
+colorscheme brogrammer
+
 " True (24-bit) color support (requires supporting terminal emulator)
 if has('termguicolors') && g:color_16m ==# 'true'
 	let &t_8f = "\e[38;2;%lu;%lu;%lum"
 	let &t_8b = "\e[48;2;%lu;%lu;%lum"
 	set termguicolors
-
-	" Color scheme
-	colorscheme brogrammer
 
 	" Italic support (requires neovim and proper ~/.terminfo)
 	if has('nvim')
