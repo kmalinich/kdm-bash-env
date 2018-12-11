@@ -1,10 +1,8 @@
 # kdm bash-env
 # .dircolors
 
-# This is all 24bit/16 million colors - may very likely not work in your terminal emulator
 
-COLOR   tty
-OPTIONS -F -T 0
+# This section is 24bit/16 million colors - may very likely not work in your terminal emulator
 
 TERM gnome-16mcolor
 TERM putty-16mcolor
@@ -36,13 +34,14 @@ ORPHAN 38;2;255;0;0;1;5;7 # Bad symlink (red, invert, bold, blink)
 BLK 38;2;240;32;32;1;48;2;96;96;96 # Block device (red, bold, grey background)
 CHR 38;2;252;106;8;1;48;2;96;96;96 # Character device (orange, bold, grey background)
 
+MISSING       0 # Symlink pointing to a nonexistent file
+MULTIHARDLINK 0 # Regular file with more than one link
+RESET         0 # Reset to "normal" color
+
 CAPABILITY            30;41 # File with capability
 DOOR                  01;35 # Door
 FIFO                  40;33 # Pipe
-MISSING               0     # ... and the files they point to
-MULTIHARDLINK         0     # Regular file with more than one link
 OTHER_WRITABLE        34;42 # Dir that is other-writable (o+w) and not sticky
-RESET                 0     # Reset to "normal" color
 SETGID                30;43 # File that is setgid (g+s)
 SETUID                37;41 # File that is setuid (u+s)
 SOCK                  01;35 # Socket
@@ -425,3 +424,428 @@ FILE   38;2;240;240;240
 .wpd      38;2;209;117;67
 .xls      38;2;209;117;67
 .xlsx     38;2;209;117;67
+
+
+
+
+
+
+# Below is 256color
+
+TERM gnome-256color
+TERM putty-256color
+TERM rxvt-256color
+TERM rxvt-unicode-256color
+TERM rxvt-unicode16m
+TERM screen-256color
+TERM st-256color
+TERM xterm-256color
+
+# Attribute codes:
+# 0 : none
+# 2 : dim
+# 1 : bold
+# 3 : italic
+# 4 : underscore
+# 5 : blink
+# 7 : reverse
+
+# Basic file type colors
+DIR    34       # Directory (blue)
+EXEC   32;3     # File with execute permission (green, italic)
+LINK   36       # Symlink (cyan)
+ORPHAN 31;1;5;7 # Bad symlink (red, invert, bold, blink)
+
+BLK 31;47;1 # Block device (red, bold, grey background)
+CHR 33;47;1 # Character device (yellow, bold, grey background)
+
+FILE          0
+MISSING       0 # Symlink pointing to a nonexistent file
+MULTIHARDLINK 0 # Regular file with more than one link
+NORMAL        0
+RESET         0 # Reset to "normal" color
+
+CAPABILITY            30;41 # File with capability
+DOOR                  01;35 # Door
+FIFO                  40;33 # Pipe
+OTHER_WRITABLE        34;42 # Dir that is other-writable (o+w) and not sticky
+SETGID                30;43 # File that is setgid (g+s)
+SETUID                37;41 # File that is setuid (u+s)
+SOCK                  01;35 # Socket
+STICKY                37;44 # Dir with sticky bit set (+t) and NOT other-writable
+STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+w)
+
+
+# Bash profile (green)
+.bash_logout  32
+.bash_profile 32
+.bashrc       32
+.lessfilter   32
+.profile      32
+
+# Scripts (green)
+# These should already have exec permission and be set to brighter green,
+# So this darker green helps weed them out
+.bash 32
+.bat  32
+.btm  32
+.cmd  32
+.com  32
+.csh  32
+.EXE  32
+.exe  32
+.py   32
+.sh   32
+
+# Archives/compressed (purple)
+.7z   35
+.ace  35
+.alz  35
+.arc  35
+.arj  35
+.br   35
+.bz   35
+.bz2  35
+.cab  35
+.cpio 35
+.deb  35
+.dmg  35
+.dz   35
+.ear  35
+.gz   35
+.jar  35
+.lha  35
+.lrz  35
+.lz   35
+.lz4  35
+.lzh  35
+.lzma 35
+.lzo  35
+.msi  35
+.pkg  35
+.rar  35
+.rpm  35
+.rz   35
+.sar  35
+.t7z  35
+.tar  35
+.taz  35
+.tbz  35
+.tbz2 35
+.tgz  35
+.tlz  35
+.txz  35
+.tz   35
+.tzo  35
+.war  35
+.xar  35
+.xz   35
+.Z    35
+.z    35
+.zip  35
+.zoo  35
+
+# Image formats (purple)
+.anx  35
+.asf  35
+.avi  35
+.axv  35
+.bmp  35
+.cgm  35
+.dl   35
+.emf  35
+.flc  35
+.fli  35
+.flv  35
+.gif  35
+.gl   35
+.ico  35
+.JPEG 35
+.jpeg 35
+.JPG  35
+.jpg  35
+.m2v  35
+.m4v  35
+.mkv  35
+.mng  35
+.mov  35
+.mp4  35
+.mp4v 35
+.mpeg 35
+.mpg  35
+.nuv  35
+.ogm  35
+.ogv  35
+.ogx  35
+.pbm  35
+.pcx  35
+.pgm  35
+.png  35
+.ppm  35
+.psd  35
+.qt   35
+.rm   35
+.rmvb 35
+.svg  35
+.svgz 35
+.swf  35
+.tga  35
+.tif  35
+.tiff 35
+.vob  35
+.webm 35
+.webp 35
+.wmv  35
+.xbm  35
+.xcf  35
+.xpm  35
+.xwd  35
+.yuv  35
+
+# Lossless audio formats (purple)
+.aif  35
+.aiff 35
+.dff  35
+.dsf  35
+.mid  35
+.midi 35
+.flac 35
+.wav  35
+
+# Lossy audio formats (purple)
+.aac  35
+.amr  35
+.au   35
+.axa  35
+.m4a  35
+.mka  35
+.mp3  35
+.mpc  35
+.oga  35
+.ogg  35
+.ra   35
+.spx  35
+.xspf 35
+
+# Data blobs (yellow)
+.A2L   33
+.a2l   33
+.cert  33
+.crt   33
+.csv   33
+.dtd   33
+.gemrc 33
+.json  33
+.key   33
+.mxml  33
+.p12   33
+.pem   33
+.PID   33
+.pid   33
+.plist 33
+.sls   33
+.sql   33
+.XDF   33
+.xdf   33
+.xml   33
+.xsd   33
+.xsl   33
+.xsls  33
+.xslt  33
+.yaml  33
+.yml   33
+
+# macOS data blobs (yellow)
+.CFUserTextEncoding 33
+
+# ViM data blobs (yellow)
+.nviminfo           33
+.vim_local_rc_cache 33
+.viminfo            33
+
+# Command data blobs (yellow)
+.bash_history      33
+.lesshst           33
+.node_repl_history 33
+.pry_history       33
+.wget-hsts         33
+
+# JSON config files (yellow)
+.eslintrc     33
+.csslintrc    33
+.htmlhintrc   33
+.jsbeautifyrc 33
+.prettierrc   33
+.proselintrc  33
+.stylelintrc  33
+
+# Git config files (cyan)
+.git           36
+.gitconfig     36
+.gitignore     36
+.gitattributes 36
+.gitmodules    36
+
+# Bash config files (cyan)
+.bash_sessions_disable 36
+.hushlogin             36
+.inputrc               36
+
+# Config files (cyan)
+.cfg       36
+.cnf       36
+.conf      36
+.conf.tmpl 36
+.dircolors 36
+.gdbinit   36
+.gtkrc-2.0 36
+.gypi      36
+.INI       36
+.ini       36
+.jinja     36
+.mount     36
+.nload     36
+.pa        36
+.piprc     36
+.rc        36
+.repo      36
+.repo.tmpl 36
+.screenrc  36
+.service   36
+.tidyrc    36
+.timer     36
+.vim       36
+.vimrc     36
+
+# Text documents (yellow)
+.ac       33
+.cmake    33
+.css      33
+.diff     33
+.ENG      33
+.gpg      33
+.h        33
+.hpp      33
+.htm      33
+.html     33
+.in       33
+.inf      33
+.lo       33
+.LOG      33
+.log      33
+.m4       33
+.map      33
+.markdown 33
+.md       33
+.md5      33
+.mdown    33
+.mib      33
+.MIB      33
+.patch    33
+.qml      33
+.rst      33
+.sass     33
+.scss     33
+.shtml    33
+.spec     33
+.textile  33
+.txt      33
+# ABOUT        33
+# ABOUT-NLS    33
+# AUTHOR       33
+# AUTHORS      33
+# BUILD        33
+# BUILDING     33
+# Changelog    33
+# CHANGES      33
+# Changes      33
+# CONTRIBUTING 33
+# COPYING      33
+# GPL          33
+# INSTALL      33
+# LGPL         33
+# LICENSE      33
+# MANIFEST     33
+# NEWS         33
+# PATENTS      33
+# PROTOCOL     33
+# README       33
+# TODO         33
+# WORKSPACE    33
+
+# Non-compiled code-ish (green)
+.c      32
+.cc     32
+.cl     32
+.coffee 32
+.cpp    32
+.dsl    32
+.erb    32
+.erl    32
+.go     32
+.gyp    32
+.hxx    32
+.il     32
+.ino    32
+.ips    32
+.java   32
+.js     32
+.lua    32
+.man    32
+.nse    32
+.php    32
+.PL     32
+.pl     32
+.pm     32
+.rb     32
+.rl     32
+.t      32
+.ts     32
+.xs     32
+# Makefile 32
+
+# Binary files (yellow)
+.a        33
+.abw      33
+.aml      33
+.bin      33
+.dam      33
+.dll      33
+.doc      33
+.docx     33
+.DS_Store 33
+.dtb      33
+.ecu      33
+.eot      33
+.epub     33
+.GER      33 # lol, INPA
+.GRP      33
+.grp      33
+.img      33
+.ipo      33
+.la       33
+.o        33
+.ocx      33
+.odp      33
+.ods      33
+.odt      33
+.otf      33
+.par2     33
+.pdf      33
+.ppt      33
+.pptx     33
+.PRG      33
+.prg      33
+.ps       33
+.pyc      33
+.pyo      33
+.rnd      33
+.rtf      33
+.terminfo 33
+.tex      33
+.ttf      33
+.woff     33
+.woff2    33
+.wpd      33
+.xls      33
+.xlsx     33
