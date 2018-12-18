@@ -43,6 +43,9 @@
 [submodule ".vim/pack/kdm/javascript-libraries-syntax"]
 	path = .vim/pack/kdm/javascript-libraries-syntax
 	url  = https://github.com/othree/javascript-libraries-syntax.vim.git
+[submodule ".vim/pack/kdm/kickstart"]
+	path = .vim/pack/kdm/kickstart
+	url = https://github.com/tangledhelix/vim-kickstart.git
 [submodule ".vim/pack/kdm/local-vimrc"]
 	path = .vim/pack/kdm/local-vimrc
 	url  = https://github.com/MarcWeber/vim-addon-local-vimrc.git
