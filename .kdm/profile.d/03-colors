@@ -434,7 +434,7 @@ alias show-colors-256='_show_colors_256'
 if [[ "${BASH_ENV_COLOR_16M}" == "true" ]]; then
 	[[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_GRN}}"
 else
-	[[ "${UID}" == "0" ]] && C_ENV='\[31m' || C_ENV='\e[32m'
+	[[ "${UID}" == "0" ]] && C_ENV='\e[31m' || C_ENV='\e[32m'
 fi
 
 C_ENV_BOLD="${C_BLD}${C_ENV}"
