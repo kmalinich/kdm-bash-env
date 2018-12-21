@@ -452,7 +452,7 @@ TERM xterm-256color
 
 # Basic file type colors
 DIR    34       # Directory (blue)
-EXEC   32;3     # File with execute permission (green, italic)
+EXEC   32;1     # File with execute permission (green, italic)
 LINK   36       # Symlink (cyan)
 ORPHAN 31;1;5;7 # Bad symlink (red, invert, bold, blink)
 

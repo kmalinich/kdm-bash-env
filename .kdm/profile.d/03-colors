@@ -430,8 +430,13 @@ alias show-colors-256='_show_colors_256'
 #### Environment color config ==start ####
 
 # Default "user color" configuration, overridden by library in 'extra' dir if present
-# Root = red, non-root = purple
-[[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_GRN}}"
+# Root = red, non-root = green
+if [[ "${BASH_ENV_COLOR_16M}" == "true" ]]; then
+	[[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_GRN}}"
+else
+	[[ "${UID}" == "0" ]] && C_ENV='\[31m' || C_ENV='\e[32m'
+fi
+
 C_ENV_BOLD="${C_BLD}${C_ENV}"
 export C_ENV C_ENV_BOLD
 

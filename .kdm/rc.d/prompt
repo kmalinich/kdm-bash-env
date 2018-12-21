@@ -15,6 +15,7 @@ _prompt_generate() {
 
 		PS1="\\[\\e[G\\]\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]$(_prompt_pwd) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 		export PS1
+
 		return
 	fi
 
