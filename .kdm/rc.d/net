@@ -293,13 +293,13 @@ _net_mac() {
 
 	# If the MAC entered is kosher, build out the variables
 	# Lowercase
-	NONE_LOWER=$(  echo "${CLEAN_MAC}"  | tr '[:upper:]' '[:lower:]')
+	NONE_LOWER="${CLEAN_MAC,,}"
 	COLONS_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1:/g' -e 's/\(.*\):$/\1/')
 	DASHES_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1-/g' -e 's/\(.*\)-$/\1/')
 	SPACES_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
 
 	# Uppercase
-	NONE_UPPER=$(  echo "${CLEAN_MAC}"  | tr '[:lower:]' '[:upper:]')
+	NONE_UPPER="${CLEAN_MAC^^}"
 	COLONS_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1:/g' -e 's/\(.*\):$/\1/')
 	DASHES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1-/g' -e 's/\(.*\)-$/\1/')
 	SPACES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
@@ -331,6 +331,7 @@ _net_mac_lookup() {
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	IEEE_STRING="$(oui "${1}" | sed 's/,/ /g' | sed 's/  / /g' | sed ':a;N;$!ba;s/\n/,/g')"
+
 	IEEE_COMPANY="$(echo "${IEEE_STRING}" | awk -F ',' '{print $1}')"
 	IEEE_ADDRESS="$(echo "${IEEE_STRING}" | awk -F ',' '{print $2 ", " $3}')"
 	IEEE_COUNTRY="$(echo "${IEEE_STRING}" | awk -F ',' '{print $4}')"
