@@ -36,7 +36,7 @@ PATH=$(     echo "${PATH}"      | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1)
 export MANPATH MIBDIRS NODE_PATH PATH
 
 # Get full path to which binary
-WHICHPATH="$(which which)"
+WHICHPATH="$(command -v which)"
 export WHICHPATH
 
 

@@ -8,7 +8,7 @@ for FILE_NAME in ./*-*; do
 	echo -n "${FILE_NAME//\.\//},"
 
 	export TIMEFORMAT='%3R'
-	time . "${FILE_NAME}"
+	time source "${FILE_NAME}"
 done
 
 export TIMEFORMAT="${TIMEFORMAT_OLD}"

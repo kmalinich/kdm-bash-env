@@ -8,7 +8,8 @@ done
 [[ -z "${EDITOR_NAME}" ]] && return 1
 
 # Set EDITOR and VISUAL variables to the proper path, if possible
-! EDITOR_PATH="$(which --skip-alias "${EDITOR_NAME}" 2> /dev/null)" && EDITOR_PATH="$(which "${EDITOR_NAME}")"
+# ! EDITOR_PATH="$(which --skip-alias "${EDITOR_NAME}" 2> /dev/null)" && EDITOR_PATH="$(which "${EDITOR_NAME}")"
+EDITOR_PATH="$(command -v "${EDITOR_NAME}")"
 [[ -z "${EDITOR_PATH}" ]] && return 1
 
 export EDITOR="${EDITOR_PATH}"
