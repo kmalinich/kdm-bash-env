@@ -4,6 +4,8 @@ TIMEFORMAT_OLD="${TIMEFORMAT}"
 
 export TIMEFORMAT_RACE="true"
 
+echo "File name,Time elapsed"
+
 for FILE_NAME in ./*-*; do
 	echo -n "${FILE_NAME//\.\//},"
 
