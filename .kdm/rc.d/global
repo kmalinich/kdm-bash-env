@@ -33,15 +33,15 @@ fi
 alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
 
 # File list aliases
-alias l.=' ls -d .*'
-alias ll.='ls -dl .*'
+alias lll='ls --all                          --file-type --human-readable -l'
+alias la=' ls       --almost-all'
+alias l.=' ls                    --directory                                 .*'
+alias ll.='ls                    --directory                              -l .*'
+alias l1=' ls                                --file-type --human-readable -1'
+alias l='  ls                                --file-type                     -C'
+alias ll=' ls                                --file-type --human-readable -l'
+alias lld='ls                    --directory --file-type --human-readable -l'
 
-alias l1=' ls -Fh1'
-alias l='  ls -CF'
-alias la=' ls -A'
-alias ll=' ls -Fhl'
-alias lld='ls -Fhld'
-alias lll='ls -Fahl'
 
 # Quick up-directory-n-list
 alias ..='cd ..; ll'

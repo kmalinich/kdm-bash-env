@@ -97,9 +97,9 @@ _alias_linux_macos_setup() {
 	alias ncgrep='grep -s --color=never'  # Force disable color
 
 	LS_TIME_STYLE="+%Y-%m-%d %r"
-	alias ls="  ls --color=if-tty --time-style='${LS_TIME_STYLE}' 2> /dev/null"
-	alias cls=" ls --color=always --time-style='${LS_TIME_STYLE}' 2> /dev/null" # Force enable color
-	alias ncls="ls --color=never  --time-style='${LS_TIME_STYLE}' 2> /dev/null" # Force disable color
+	alias ls="  ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"
+	alias cls=" ls --color=always --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null" # Force enable color
+	alias ncls="ls --color=never  --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null" # Force disable color
 
 	# Sort by IP address octets
 	alias sort-ip='sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n'
@@ -130,6 +130,7 @@ _alias_nmap() {
 	alias nmap-a='nmap -vv -A --open'
 }
 
+
 # noping command tweaks
 # shellcheck disable=SC2139
 _alias_noping() {
@@ -140,7 +141,7 @@ _alias_noping() {
 	hash noping || return;
 
 	# Get full path to binary
-	NOPING=$(which noping)
+	NOPING=$(command -v noping)
 
 	# noping needs sudo if not root
 	if [[ "${UID}" != "0" ]]; then
@@ -165,7 +166,7 @@ _alias_oping() {
 	hash oping || return;
 
 	# Get full path to binary
-	OPING=$(which oping)
+	OPING=$(command -v oping)
 
 	# oping needs sudo if not root
 	if [[ "${UID}" != "0" ]]; then
@@ -190,7 +191,7 @@ _alias_ping() {
 	hash ping || return;
 
 	# Get full path to binary
-	PING=$(which ping)
+	PING=$(command -v ping)
 
 	# ping-slow : normal (1.0 second interval)
 	#      ping : fast   (0.5 second interval)
@@ -203,6 +204,7 @@ _alias_ping() {
 	_alias_noping
 	_alias_oping
 }
+
 
 # Pretty print HTML with tidy, indent: 2 spaces, sorted alphabetically, then colorize with pygmentize
 _alias_pygmentize_html() {
