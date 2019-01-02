@@ -1,9 +1,9 @@
-BASH_ENV_COLOR_16M="false"
+[[ "${BASH_ENV_COLOR_16M}" != "true" ]] && BASH_ENV_COLOR_16M="false"
 
 if grep -q 'COLOR_16M=1' "${BASH_ENV_FILE_CONFIG}" 2> /dev/null; then
 	# Skip this if on physical console on Linux
 	if ! tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
-		if [[ "${TERM}" == "xterm-16mcolor" ]]; then
+		if [[ "${TERM}" == "xterm-16mcolor" || "${BASH_ENV_COLOR_16M}" == "true" ]]; then
 			BASH_ENV_COLOR_16M="true"
 		fi
 	fi
@@ -11,10 +11,20 @@ fi
 
 # If dircolors exists, run it
 if hash dircolors; then
+	if [[ "${BASH_ENV_COLOR_16M}" == "true" ]]; then
+		TERM_OLD="${TERM}"
+		TERM="xterm-16mcolor"
+	fi
+
 	# If ~/.dircolors exists, use it
 	[[ -s "${BASH_ENV_FILE_DIRCOLORS}" ]] && DIRCOLOR_DATA="$(dircolors "${BASH_ENV_FILE_DIRCOLORS}")" || DIRCOLOR_DATA="$(dircolors)"
 	[[ -n "${DIRCOLOR_DATA}"           ]] && eval "${DIRCOLOR_DATA}" &> /dev/null
 	unset DIRCOLOR_DATA
+
+	if [[ "${TERM_OLD}" ]]; then
+		TERM="${TERM_OLD}"
+		unset TERM_OLD
+	fi
 fi
 
 # Change TERM from xterm-16mcolor to xterm-256color
