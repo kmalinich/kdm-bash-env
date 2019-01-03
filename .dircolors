@@ -398,6 +398,7 @@ FILE   38;2;240;240;240
 .grp      38;2;209;117;67
 .img      38;2;209;117;67
 .ipo      38;2;209;117;67
+.iso      38;2;209;117;67
 .la       38;2;209;117;67
 .o        38;2;209;117;67
 .ocx      38;2;209;117;67
@@ -414,6 +415,8 @@ FILE   38;2;240;240;240
 .ps       38;2;209;117;67
 .pyc      38;2;209;117;67
 .pyo      38;2;209;117;67
+.qcow     38;2;209;117;67
+.qcow2    38;2;209;117;67
 .rnd      38;2;209;117;67
 .rtf      38;2;209;117;67
 .terminfo 38;2;209;117;67
@@ -823,6 +826,7 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .grp      33
 .img      33
 .ipo      33
+.iso      33
 .la       33
 .o        33
 .ocx      33
@@ -839,6 +843,8 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .ps       33
 .pyc      33
 .pyo      33
+.qcow     33
+.qcow2    33
 .rnd      33
 .rtf      33
 .terminfo 33
