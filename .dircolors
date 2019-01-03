@@ -97,6 +97,7 @@ FILE   38;2;240;240;240
 .lzma 38;2;192;25;108
 .lzo  38;2;192;25;108
 .msi  38;2;192;25;108
+.ova  38;2;192;25;108
 .pkg  38;2;192;25;108
 .rar  38;2;192;25;108
 .rpm  38;2;192;25;108
@@ -213,6 +214,7 @@ FILE   38;2;240;240;240
 .json  38;2;252;106;8
 .key   38;2;252;106;8
 .mxml  38;2;252;106;8
+.ovf   38;2;252;106;8
 .p12   38;2;252;106;8
 .pem   38;2;252;106;8
 .PID   38;2;252;106;8
@@ -314,6 +316,7 @@ FILE   38;2;240;240;240
 .md       38;2;255;255;0
 .md5      38;2;255;255;0
 .mdown    38;2;255;255;0
+.mf       38;2;255;255;0
 .mib      38;2;255;255;0
 .MIB      38;2;255;255;0
 .patch    38;2;255;255;0
@@ -525,6 +528,7 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .lzma 35
 .lzo  35
 .msi  35
+.ova  35
 .pkg  35
 .rar  35
 .rpm  35
@@ -641,6 +645,7 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .json  33
 .key   33
 .mxml  33
+.ovf   33
 .p12   33
 .pem   33
 .PID   33
@@ -742,6 +747,7 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .md       33
 .md5      33
 .mdown    33
+.mf       33
 .mib      33
 .MIB      33
 .patch    33
