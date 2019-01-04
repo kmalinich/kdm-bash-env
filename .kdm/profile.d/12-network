@@ -22,6 +22,13 @@ export DEFROUTE_NIC HOST_IP
 # If we have a hostname file, use it; otherwise call the hostname binary
 [[ -s /etc/hostname ]] && HOSTNAME_DATA="$(cat /etc/hostname)" || HOSTNAME_DATA="$(hostname -f)"
 
+# Failsafe
+if [[ -z "${HOSTNAME_DATA}" ]]; then
+	HOSTNAME_DATA="$(hostname -f)"
+
+	echo -e "\nWARNING : /etc/hostname may be invalid\n"
+fi
+
 # Determine subdomain count
 DOMAIN_COUNT="${HOSTNAME_DATA//[^.]}"
 DOMAIN_COUNT="${#DOMAIN_COUNT}"
