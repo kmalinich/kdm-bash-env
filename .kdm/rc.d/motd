@@ -115,6 +115,10 @@ _show_motd() {
 	RAM="$( echo "${FACTER_JSON}" | jq -Mcr .memory.system.total)"
 	RAMC="$(echo "${FACTER_JSON}" | jq -Mcr .memory.system.capacity)"
 
+	# Handle older versions of facter
+	[[ "${RAM}"  == "null" ]] && RAM="$( echo "${FACTER_JSON}" | jq -Mcr .memorysize)"
+	[[ "${RAMC}" == "null" ]] && RAMC="??"
+
 	CPU="$( echo "${FACTER_JSON}" | jq -Mcr '.processors.models[0]' | sed -r -e 's/(^\s?)|(\s?CPU)|(\s?@)|(\s?Processor)|(\(.?.?\))|(\s?[0-9]\.[0-9]{1,3}GHz\s?)|(\s[0-9]\s)|(Intel\(..?\)\sCore\(..?\)\s?)|Intel\sCore\s|\(|\)|Intel\(..?\)\s|Atom|Xeon|\sv[1-9]|\s//g' -e 's/(\s)+/\ /g')"
 	UPT="$( echo "${FACTER_JSON}" | jq -Mcr .system_uptime.uptime)"
 	LOAD="$(echo "${FACTER_JSON}" | jq -Mcr '.load_averages | .["5m"]')"
