@@ -1,6 +1,5 @@
 # kdm bash-env
-# .kdm/extra/README
 
-# Last modified : Fri 28 Oct 2016 07:30:53 PM EDT
+# .kdm/extra/README
 
 # Extra files to be sourced go here. They are sourced by .bash_profile
