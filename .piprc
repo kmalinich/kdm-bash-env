@@ -1,2 +1,5 @@
 [list]
-format=legacy
+format=columns
+
+
+; vim: set syntax=dosini filetype=dosini ts=2 sw=2 tw=0 noet :
