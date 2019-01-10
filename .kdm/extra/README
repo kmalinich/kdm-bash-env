@@ -2,4 +2,4 @@
 
 # .kdm/extra/README
 
-# Extra files to be sourced go here. They are sourced by .bash_profile
+# Extra files to be sourced on login go here. They are sourced by .kdm/profile.d/21-source

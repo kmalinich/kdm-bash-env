@@ -12,6 +12,7 @@ export BASH_ENV_DIR_VIM_BACKUP="${BASH_ENV_DIR_VIM}/backup"
 export BASH_ENV_DIR_VIM_TMP="${BASH_ENV_DIR_VIM}/tmp"
 
 export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
+export BASH_ENV_DIR_EXTRA_LOGOUT="${BASH_ENV_DIR_KDM}/extra-logout"
 export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
 export BASH_ENV_FILE_HISTORY="${BASH_ENV_DIR_KDM}/history"
 

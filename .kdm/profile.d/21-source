@@ -19,7 +19,7 @@ for ENTRY in "${ARRAY_SOURCE[@]}"; do
 	output keyval-f "Failed" "${SOURCE_FILE}"
 done
 
-# Source bash libraries from the 'extra' dir
+# Source bash libraries from ~/.kdm/extra
 for ENTRY in $(find -L "${BASH_ENV_DIR_EXTRA}" -maxdepth 1 -type f -executable | sort); do
 	# Skip README
 	[[ "${ENTRY}" == "README" ]] && continue

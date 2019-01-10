@@ -68,7 +68,7 @@ _kdm_source() {
 	# Quiet output
 	[[ "${1}" != "-q" ]] && export SOURCE_VERBOSE="true"
 
-	for i in {0..22}; do
+	for i in {0..23}; do
 		SOURCE_FILE="$(printf '%02d' "${i}")"
 		SOURCE_PATH="$(ls "profile.d/${SOURCE_FILE}"-*)"
 		[[ ! -s "${SOURCE_PATH}" ]] && continue

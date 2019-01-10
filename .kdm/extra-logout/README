@@ -1,0 +1,5 @@
+# kdm bash-env
+
+# .kdm/extra-logout/README
+
+# Extra files to be sourced on logout go here.
