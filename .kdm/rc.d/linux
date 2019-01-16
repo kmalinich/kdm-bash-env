@@ -3,7 +3,7 @@
 # Bounce if we're not on Linux
 [[ "${UNAME_KERNEL_NAME}" != "Linux" ]] && return 0
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # PING_WAIT for use in ping functions
@@ -37,10 +37,10 @@ _sys_restart() {
 # Network config information
 _net_info() {
 	if hash hostname; then
-		output keyval "hostname"    "$(hostname)"
-		output keyval "hostname -s" "$(hostname -s)"
-		output keyval "hostname -d" "$(hostname -d)"
-		output keyval "hostname -f" "$(hostname -f)"
+		output kv "hostname"    "$(hostname)"
+		output kv "hostname -s" "$(hostname -s)"
+		output kv "hostname -d" "$(hostname -d)"
+		output kv "hostname -f" "$(hostname -f)"
 	fi
 
 	if [[ -s /etc/resolv.conf ]]; then

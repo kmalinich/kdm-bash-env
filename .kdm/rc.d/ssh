@@ -1,6 +1,6 @@
 # Functions: SSH
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # Generate ssh host aliases
@@ -9,12 +9,12 @@ _ssh_alias_generate() {
 	: > "${BASH_ENV_FILE_SSH_CACHE}"
 
 	# Process ssh-host alias generation, output to sshcache file
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output keyval-t "Generated" "SSH bash aliases"
+		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH bash aliases"
 	fi
 
 	# Source sshcache file

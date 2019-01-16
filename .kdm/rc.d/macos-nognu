@@ -3,7 +3,7 @@
 # Bounce if on GNU-converted macOS or not on Darwin
 [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 _alias_macos_nognu_setup() {

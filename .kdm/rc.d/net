@@ -1,6 +1,6 @@
 # Functions: Net
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # Usage function for _net_curl
@@ -68,10 +68,10 @@ _net_curl() {
 # Network config information
 _net_info() {
 	if hash hostname; then
-		output keyval "hostname   " "$(hostname)"
-		output keyval "hostname -s" "$(hostname -s)"
-		[[ "${UNAME_KERNEL_NAME}" == "Linux" ]] && output keyval "hostname -d" "$(hostname -d)"
-		output keyval "hostname -f" "$(hostname -f)"
+		output kv "hostname   " "$(hostname)"
+		output kv "hostname -s" "$(hostname -s)"
+		[[ "${UNAME_KERNEL_NAME}" == "Linux" ]] && output kv "hostname -d" "$(hostname -d)"
+		output kv "hostname -f" "$(hostname -f)"
 		echo
 	fi
 

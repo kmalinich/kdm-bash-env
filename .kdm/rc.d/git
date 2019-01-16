@@ -1,6 +1,6 @@
 # Functions: Git
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # Show Git-related info
@@ -24,11 +24,11 @@ _g_gi() {
 	[[ ! -s "${CONFIG}" ]] && output error "No config data detected" && return
 
 	output orange "---------------------= git info =---------------------"
-	output keyval "    URL" "${URL}"
-	output keyval " Branch" "${BRANCH}"
-	output keyval "Top lvl" "${TOP/$HOME/\~}"
-	output keyval " Config" "${CONFIG/$HOME/\~}"
-	output keyval " Commit" "${COMMIT}"
+	output kv "    URL" "${URL}"
+	output kv " Branch" "${BRANCH}"
+	output kv "Top lvl" "${TOP/$HOME/\~}"
+	output kv " Config" "${CONFIG/$HOME/\~}"
+	output kv " Commit" "${COMMIT}"
 
 	# Git tag-related data
 	TAGS="$(git get-tags 2> /dev/null)"
@@ -38,12 +38,12 @@ _g_gi() {
 		TAG=$(     echo "${TAGS##v}" | awk -F '-' '{print $1}')
 		RELEASE="$(echo "${TAGS##v}" | awk -F '-' '{print $2}').git${HASH##g}"
 
-		[[ "${TAGS}" ]] && output keyval "   Tags" "${TAGS}"
-		[[ "${HASH}" ]] && output keyval "   Hash" "${HASH}"
-		[[ "${TAG}"  ]] && output keyval "Version" "${TAG}"
+		[[ "${TAGS}" ]] && output kv "   Tags" "${TAGS}"
+		[[ "${HASH}" ]] && output kv "   Hash" "${HASH}"
+		[[ "${TAG}"  ]] && output kv "Version" "${TAG}"
 
 		if [[ "${RELEASE}" && "${RELEASE}" != ".git" ]]; then
-			output keyval "Release" "${RELEASE}"
+			output kv "Release" "${RELEASE}"
 		fi
 	fi
 	echo
@@ -155,7 +155,7 @@ _g_gca() {
 		return 1
 	fi
 
-	output keyval "Committing changes, with message" "${COMMIT_MSG}"
+	output kv "Committing changes, with message" "${COMMIT_MSG}"
 	echo
 
 	# Generate temp file for output (until I learn how to do it without that)
@@ -231,7 +231,7 @@ _g_gpo() {
 		return 2
 	fi
 
-	output keyval "Pushing to branch" "${SELECTED_BRANCH}"
+	output kv "Pushing to branch" "${SELECTED_BRANCH}"
 	echo
 
 	if [[ "${2##\-}" != [Yy] ]]; then

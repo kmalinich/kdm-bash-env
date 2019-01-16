@@ -1,6 +1,6 @@
 # Functions: Array
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 _array_usage() {
@@ -80,7 +80,7 @@ _array_width() {
 	fi
 
 	# Colorized/formatted output if not in subshell
-	output keyval "Array width" "${WIDTH_MAX}"
+	output kv "Array width" "${WIDTH_MAX}"
 }
 
 

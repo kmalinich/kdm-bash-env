@@ -4,7 +4,7 @@
 [[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
 
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # PING_WAIT for use in ping functions
@@ -83,10 +83,10 @@ _macos_itunes() {
 	output purple "--------= Currently ${ITUNES_STATE} =--------"
 	echo
 
-	output keyval "  Name" "${ITUNES_NAME-Nothing}"
-	output keyval "Artist" "${ITUNES_ARTIST-Nothing}"
-	output keyval " Album" "${ITUNES_ALBUM-Nothing}"
-	output keyval "  Kind" "${ITUNES_KIND-Nothing}"
+	output kv "  Name" "${ITUNES_NAME-Nothing}"
+	output kv "Artist" "${ITUNES_ARTIST-Nothing}"
+	output kv " Album" "${ITUNES_ALBUM-Nothing}"
+	output kv "  Kind" "${ITUNES_KIND-Nothing}"
 }
 
 # Fake lsusb function
@@ -123,8 +123,8 @@ _macos_volume() {
 	if [[ -z "${1}" ]]; then
 		output usage "volume [${FUNCNAME[*]}] <${USAGE_OPTIONS_STRING}>"
 		echo
-		output keyval "Current volume" "${VOLUME_CURRENT}%"
-		output keyval "   Mute status" "${VOLUME_MUTE}"
+		output kv "Current volume" "${VOLUME_CURRENT}%"
+		output kv "   Mute status" "${VOLUME_MUTE}"
 		return
 	fi
 

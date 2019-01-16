@@ -1,6 +1,6 @@
 # Functions: kdm-bash-env
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # Get Git hash of bash-env
@@ -76,7 +76,7 @@ _kdm_source() {
 		# Quiet output
 		[[ "${1}" == "-q" ]] && . "${SOURCE_PATH}" && continue
 
-		if . "${SOURCE_PATH}"; then output keyval-t "Loaded" "${SOURCE_PATH}"; else output keyval-f "Failed" "${SOURCE_PATH}"; fi
+		if . "${SOURCE_PATH}"; then output kvt "Loaded" "${SOURCE_PATH}"; else output kvf "Failed" "${SOURCE_PATH}"; fi
 	done
 
 	# Quiet output
