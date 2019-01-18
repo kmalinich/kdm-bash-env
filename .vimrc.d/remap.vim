@@ -36,7 +36,7 @@ nnoremap ; :
 nnoremap j k
 nnoremap k j
 
-" Ctrl-d : delete to the end of line
+" Ctrl-d : delete current line
 inoremap <C-d> <Esc>ddi
 nnoremap <C-d> <Esc>dd
 
@@ -62,12 +62,3 @@ nnoremap <C-t>     :tabnew<CR>
 inoremap <C-S-tab> <Esc>:tabprevious<CR>i
 inoremap <C-tab>   <Esc>:tabnext<CR>i
 inoremap <C-t>     <Esc>:tabnew<CR>
-
-" This is for working across multiple xterms and/or gvims
-" Transfer/read and write one block of text between vim sessions (capture whole line):
-" Append
-" nmap ;a :. w! >>~/.vimxfer<CR>
-" Read
-" nmap ;r :r ~/.vimxfer<CR>
-" Write
-" nmap ;w :. w! ~/.vimxfer<CR>

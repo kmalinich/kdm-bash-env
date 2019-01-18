@@ -34,6 +34,7 @@ map <C-w> :call RemoveTrailingChars()<CR>
 " Ctrl-e to reindent files
 map <C-e> :call TrimReindent()<CR>
 
+
 " Whitespace highlighting
 highlight whitespace_bad  guibg=#f1c40f guifg=#2f2f2f
 highlight whitespace_odd  guibg=#3498db guifg=#2f2f2f
