@@ -51,16 +51,16 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 NORMAL 38;2;200;200;200
 FILE   38;2;240;240;240
 
-# Bash profile (darker green, italic)
+# Bash profile (dark green, italic)
 .bash_logout  38;2;63;183;58;3
 .bash_profile 38;2;63;183;58;3
 .bashrc       38;2;63;183;58;3
 .lessfilter   38;2;63;183;58;3
 .profile      38;2;63;183;58;3
 
-# Scripts (darker green, italic)
+# Scripts (dark green, italic)
 # These should already have exec permission and be set to brighter green,
-# So this darker green helps weed them out
+# So this dark green helps weed them out
 .bash 38;2;63;183;58;3
 .bat  38;2;63;183;58;3
 .btm  38;2;63;183;58;3
@@ -178,7 +178,7 @@ FILE   38;2;240;240;240
 .xwd  38;2;201;68;127
 .yuv  38;2;201;68;127
 
-# Lossless audio formats (darker purple)
+# Lossless audio formats (dark purple)
 .aif  38;2;108;113;196
 .aiff 38;2;108;113;196
 .dff  38;2;108;113;196
@@ -231,6 +231,11 @@ FILE   38;2;240;240;240
 .xslt  38;2;252;106;8
 .yaml  38;2;252;106;8
 .yml   38;2;252;106;8
+
+# .NET application XML (orange)
+.application 38;2;252;106;8
+.config      38;2;252;106;8
+.manifest    38;2;252;106;8
 
 # macOS data blobs (orange)
 .CFUserTextEncoding 38;2;252;106;8
@@ -382,6 +387,9 @@ FILE   38;2;240;240;240
 .xs     38;2;77;190;129
 # Makefile 38;2;77;190;129
 
+# .NET application deploy (dark yellow/brown)
+.deploy 38;2;209;117;67
+
 # Binary files (dark yellow/brown)
 .a        38;2;209;117;67
 .abw      38;2;209;117;67
@@ -491,7 +499,7 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 
 # Scripts (green)
 # These should already have exec permission and be set to brighter green,
-# So this darker green helps weed them out
+# So this dark green helps weed them out
 .bash 32
 .bat  32
 .btm  32
@@ -663,6 +671,11 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .yaml  33
 .yml   33
 
+# .NET application XML (yellow)
+.application 33
+.config      33
+.manifest    33
+
 # macOS data blobs (yellow)
 .CFUserTextEncoding 33
 
@@ -812,6 +825,9 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .ts     32
 .xs     32
 # Makefile 32
+
+# .NET application deploy (yellow)
+.deploy 33
 
 # Binary files (yellow)
 .a        33
