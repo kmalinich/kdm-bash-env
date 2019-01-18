@@ -44,7 +44,7 @@ _array_sort() {
 	declare -a ARRAY_INPUT=("${!1}")
 
 	# Convert array to string, swap spaces with newlines, sort
-	echo "${ARRAY_INPUT[@]}" | sed 's/\ /\n/g' | sort
+	echo "${ARRAY_INPUT[@]}" | sed 's/\ /\n/g' | sort -n
 }
 
 _array_sort_line() {
