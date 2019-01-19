@@ -1,6 +1,6 @@
 [[ "${BASH_ENV_COLOR_16M}" != "true" ]] && BASH_ENV_COLOR_16M="false"
 
-if grep -q 'COLOR_16M=1' "${BASH_ENV_FILE_CONFIG}" 2> /dev/null; then
+if [[ "${BASH_ENV_CONF[COLOR_16M]}" == "true" ]]; then
 	# Skip this if on physical console on Linux
 	if ! tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
 		if [[ "${TERM}" == "xterm-16mcolor" || "${BASH_ENV_COLOR_16M}" == "true" ]]; then

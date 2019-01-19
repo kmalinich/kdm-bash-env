@@ -65,9 +65,8 @@ _show_motd() {
 	# Use facter if possible, if not, too bad..
 	if ! hash facter; then
 		# Check if we already said this
-		if ! grep -q 'WARN_FACTER=1' "${BASH_ENV_FILE_CONFIG}"; then
-			sed -i '/WARN_FACTER/d' "${BASH_ENV_FILE_CONFIG}"
-			echo   'WARN_FACTER=1' >> "${BASH_ENV_FILE_CONFIG}"
+		if [[ "${BASH_ENV_CONF[WARN_FACTER]}" != "true" ]]; then
+			BASH_ENV_CONF[WARN_FACTER]="true"
 
 			# Output warning message about facter being missing
 			echo -e "facter not available; dynamic MOTD not possible\\n"

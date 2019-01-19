@@ -55,9 +55,6 @@ hash() {
 }
 
 
-alias _bash_env_loading='_bash_env_loading'
-
-
 # Init loading variables
 unset LOADING_DOT_COUNT
 unset LOADING_WHITESPACE_COUNT
