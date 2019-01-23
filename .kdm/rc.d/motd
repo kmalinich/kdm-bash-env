@@ -7,31 +7,13 @@
 _show_motd() {
 	# Declare vars as local
 	local ARRAY_VALUES
-	local ARROW_L
-	local ARROW_R
-	local BAR
-	local BASE_KEY
-	local BASE_VAL1
-	local BASE_VAL2
-	local CPU
-	local DST
+	local ARROW_L ARROW_R
+	local BAR HASH DST LEN_MAX
+	local BASE_KEY BASE_VAL1 BASE_VAL2
 	local FACTER_JSON
-	local HASH
-	local HEAD_FMT
-	local HEAD_KEY
-	local HEAD_VAL1
-	local HEAD_VAL2
-	local LEN_MAX
-	local LOAD
-	local MOTD_FMT
-	local MOTD_KEY
-	local MOTD_VAL1
-	local MOTD_VAL2
-	local RAM
-	local RAMC
-	local STR
-	local UPT
-	local VER
+	local HEAD_FMT HEAD_KEY HEAD_VAL1 HEAD_VAL2
+	local MOTD_FMT MOTD_KEY MOTD_VAL1 MOTD_VAL2
+	local CPU LOAD RAM RAMC STR UPT VER
 
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
