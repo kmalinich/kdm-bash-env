@@ -39,7 +39,7 @@ _prompt_generate() {
 	fi
 
 	# Kick _prompt_pwd again with no output to export environment variables
-	_prompt_pwd > /dev/null 2>&1
+	# _prompt_pwd > /dev/null 2>&1
 
 	# Normal PS1 prompt (with hostname)
 	PS1="\\[\\e[G\\]\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]$(_prompt_pwd_color) \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
@@ -123,8 +123,16 @@ _prompt_right() {
 
 _prompt_pwd() {
 	# Get the current directory, swap out the home directory with a tilde
-	PWD_FMT=${PWD/${HOME}/\~}
+	PWD_FMT="${PWD/${HOME}/\~}"
 	export PWD_FMT
+
+	# Skip if the PWD hasn't changed
+	if [[ "${PWD_FMT_LAST}" == "${PWD_FMT}" ]]; then
+		echo "${PWD_FINAL}"
+		return
+	fi
+
+	export PWD_FMT_LAST="${PWD_FMT}"
 
 	# Here we modify the pwd string to shorten the display
 	# Find how many folders deep we are
