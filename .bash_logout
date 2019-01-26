@@ -2,8 +2,14 @@
 # .bash_logout
 
 
-# Skip if var isn't populated
+# If ${BASH_ENV_DIR_EXTRA_LOGOUT} isn't populated, return (probably just recently updated the git repo)
 [[ -z "${BASH_ENV_DIR_EXTRA_LOGOUT}" ]] && return 0
+
+# If extra-logout dir is missing, create it and then return (it'll be empty anyway)
+if [[ ! -d "${BASH_ENV_DIR_EXTRA_LOGOUT}" ]]; then
+	mkdir -p "${BASH_ENV_DIR_EXTRA_LOGOUT}"
+	return 0
+fi
 
 
 # Source bash libraries from ~/.kdm/extra-logout
