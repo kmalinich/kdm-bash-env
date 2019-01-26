@@ -8,6 +8,10 @@ _prompt_generate() {
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
 
+	if ! type -t _bash_env_conf_setup > /dev/null 2>&1; then
+		. "${BASH_ENV_DIR_PROFILE_D}/02-arrays"
+	fi
+
 	# Reload data from conf file if missing
 	[[ -z "${BASH_ENV_CONF[COLOR_16M]}" ]] && _bash_env_conf_setup
 
