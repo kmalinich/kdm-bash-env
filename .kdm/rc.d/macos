@@ -111,8 +111,8 @@ _macos_volume() {
 	# Create variable of pipe-separated options from array
 	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
 
-	VOLUME_CURRENT="$(osascript -e 'output volume of (get volume settings)')"
-	VOLUME_MUTE="$(   osascript -e 'get output muted of (get volume settings)')"
+	VOLUME_CURRENT="$(osascript -e '    output volume of (get volume settings)')"
+	VOLUME_MUTE="$(   osascript -e 'get output muted  of (get volume settings)')"
 
 	# Make sure it's doesn't have any missing values
 	if [[ "${VOLUME_CURRENT}" == *"missing"* || "${VOLUME_MUTE}" == *"missing"* ]]; then
@@ -291,9 +291,17 @@ _macos_system_profiler_list() {
 
 
 # EFI partition mount for disk0, disk1, and disk2
-[[ -b /dev/disk0s1 ]] && alias efi-mount-0='diskutil mount /dev/disk0s1; [[ -d /Volumes/EFI/EFI ]] && cd /Volumes/EFI/EFI'
-[[ -b /dev/disk1s1 ]] && alias efi-mount-1='diskutil mount /dev/disk1s1; [[ -d /Volumes/EFI/EFI ]] && cd /Volumes/EFI/EFI'
-[[ -b /dev/disk2s1 ]] && alias efi-mount-2='diskutil mount /dev/disk2s1; [[ -d /Volumes/EFI/EFI ]] && cd /Volumes/EFI/EFI'
+for NUM in {0..3}; do
+	DSK="disk${NUM}s1"
+	PATH_DSK="/dev/${DSK}"
+	PATH_MNT="/Volumes/${DSK}"
+
+	[[ ! -b "${PATH_DSK}" ]] && continue
+
+	# shellcheck disable=SC2139
+	# shellcheck disable=SC2140
+	alias "efi-mount-${NUM}"="sudo mkdir ${PATH_MNT} && diskutil mount -mountPoint ${PATH_MNT} ${PATH_DSK} && cd ${PATH_MNT}"
+done
 
 # Show listening ports a bit easier
 alias net-listening-ipv4="netstat -an | grep -E '^..p4.*.LISTEN' | sort"
