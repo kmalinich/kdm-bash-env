@@ -91,7 +91,7 @@ _macos_itunes() {
 
 # Fake lsusb function
 _macos_lsusb() {
-	_macos_system_profiler 'USB' | jq -S '.items[]'
+	_macos_system_profiler 'USB'
 }
 
 # Volume config function
