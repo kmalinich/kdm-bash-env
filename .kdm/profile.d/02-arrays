@@ -99,9 +99,12 @@ ARRAY_PATH=(
 /usr/local/rvm/gems/ruby-2.4.0@global/bin
 /usr/local/rvm/rubies/ruby-2.4.0/bin
 /usr/local/rvm/bin
+/usr/local/opt/coreutils/libexec/gnubin
+/usr/local/opt/gawk/libexec/gnubin
+/usr/local/opt/gnu-sed/libexec/gnubin
+/usr/local/opt/grep/libexec/gnubin
 /usr/local/opt/gnu-getopt/bin
 /usr/local/opt/gnu-which/bin/which
-/usr/local/opt/coreutils/libexec/gnubin
 /usr/local/opt/curl/bin
 /usr/local/opt/libxml2/bin
 /usr/local/opt/libxslt/bin
