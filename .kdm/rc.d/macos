@@ -308,7 +308,11 @@ alias net-listening-ipv4="netstat -an | grep -E '^..p4.*.LISTEN' | sort"
 alias net-listening-ipv6="netstat -an | grep -E '^..p6.*.LISTEN' | sort"
 
 # Fake lspci
-if hash dspci && ! hash lspci; then alias lspci='dspci'; fi
+if ! hash lspci > /dev/null 2>&1; then
+	if hash dspci > /dev/null 2>&1; then
+		alias lspci='dspci'
+	fi
+fi
 
 # Fake lsusb
 alias lsusb='_macos_lsusb'

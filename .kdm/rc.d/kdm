@@ -60,7 +60,8 @@ _kdm_pull() {
 # shellcheck disable=SC1090
 _kdm_source() {
 	# Declare vars as local
-	local OLD_PWD SOURCE_FILE SOURCE_PATH
+	local OLD_PWD
+	local SOURCE_CLR SOURCE_FILE SOURCE_MSG SOURCE_PATH
 
 	OLD_PWD="${PWD}"
 	cd "${BASH_ENV_DIR_KDM}" || return
@@ -76,7 +77,15 @@ _kdm_source() {
 		# Quiet output
 		[[ "${1}" == "-q" ]] && . "${SOURCE_PATH}" && continue
 
-		if . "${SOURCE_PATH}"; then output kvt "Loaded" "${SOURCE_PATH}"; else output kvf "Failed" "${SOURCE_PATH}"; fi
+		SOURCE_CLR="f"
+		SOURCE_MSG="Failed"
+
+		if . "${SOURCE_PATH}"; then
+			SOURCE_CLR="t"
+			SOURCE_MSG="Loaded"
+		fi
+
+		output "kv${SOURCE_CLR}" "${SOURCE_MSG}" "${SOURCE_PATH}"
 	done
 
 	# Quiet output

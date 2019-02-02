@@ -17,7 +17,9 @@ export VISUAL="${EDITOR_PATH}"
 
 # Set aliases
 for EDITOR_ALIAS in "${ARRAY_EDITOR_ALIASES[@]}"; do
-	alias "${EDITOR_ALIAS}"="${EDITOR_PATH}"
+	if ! alias "${EDITOR_ALIAS}" > /dev/null 2>&1; then
+		alias "${EDITOR_ALIAS}"="${EDITOR_PATH}"
+	fi
 done
 unset EDITOR_PATH
 
