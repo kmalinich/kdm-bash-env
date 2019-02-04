@@ -116,6 +116,7 @@ ARRAY_PATH=(
 /opt/puppetlabs/bin
 /usr/local/sbin
 /usr/local/bin
+/System/Library/Filesystems/apfs.fs/Contents/Resources
 /usr/lib/nvidia-375/bin
 /usr/pgsql-10/bin
 /usr/pgsql-9.6/bin
