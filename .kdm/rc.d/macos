@@ -233,6 +233,23 @@ _macos_fix_office_2011() {
 	output green "Complete; you should reboot, preferably"
 }
 
+# Show listening ports a bit easier
+_macos_net_listening() {
+	local FILE_TEMP
+
+	FILE_TEMP="$(mktemp)"
+
+	sudo netstat -an | grep -E "^tcp4.*.LISTEN" | awk '{print $4}' | sort > "${FILE_TEMP}"
+
+	for IP_VER in 4 6; do
+		output keyval "Listening ports" "IPv${IP_VER}"
+		netstat -an | grep -E "^..p${IP_VER}.*.LISTEN" | awk '{print $4}' | sort
+		[[ "${IP_VER}" == "4" ]] && echo
+	done
+
+	rm -f "${FILE_TEMP}"
+}
+
 _macos_notify() {
 	# Declare vars as local
 	local NOTIFY_MESSAGE NOTIFY_SUBTITLE NOTIFY_TITLE USAGE_STRING
@@ -290,6 +307,7 @@ _macos_system_profiler_list() {
 }
 
 
+
 # EFI partition mount for disk0, disk1, and disk2
 for NUM in {0..3}; do
 	DSK="disk${NUM}s1"
@@ -303,10 +321,6 @@ for NUM in {0..3}; do
 	alias "efi-mount-${NUM}"="sudo mkdir ${PATH_MNT} && diskutil mount -mountPoint ${PATH_MNT} ${PATH_DSK} && cd ${PATH_MNT}"
 done
 
-# Show listening ports a bit easier
-alias net-listening-ipv4="netstat -an | grep -E '^..p4.*.LISTEN' | sort"
-alias net-listening-ipv6="netstat -an | grep -E '^..p6.*.LISTEN' | sort"
-
 # Fake lspci
 if ! hash lspci > /dev/null 2>&1; then
 	if hash dspci > /dev/null 2>&1; then
@@ -318,7 +332,9 @@ fi
 alias lsusb='_macos_lsusb'
 
 # Clear font cache
-alias fix-fontcache='sudo atsutil databases -remove'
+if hash atsutil; then
+	alias fix-fontcache='sudo atsutil databases -remove'
+fi
 
 # Lock screen and screensaver shortcuts
 alias screen-off='  pmset displaysleepnow'
@@ -327,24 +343,35 @@ alias screen-saver='open -a ScreenSaverEngine'
 
 alias sleep-system="osascript -e 'tell app \"System Events\" to sleep'"
 
-# El Capitan and up
-if [[ "${UNAME_KERNEL_RELEASE%%.*}" -ge "15" ]]; then
-	# Enable and disable indexing
-	alias indexing-enable=' sudo mdutil -a -i on'
-	alias indexing-disable='sudo mdutil -a -i off'
 
-	# Flush DNS cache
-	alias fix-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
-else # Pre-El Capitan
-	alias fix-dns='sudo killall -HUP mDNSResponder'
-	alias fix-diskperms="sudo diskutil repairPermissions /; sudo chown -R \${USER} /usr/local"
-fi
+# 14 : Yosemite
+# 15 : El Capitan
+# 16 : Sierra
+# 17 : High Sierra
+# 18 : Mojave
+case "${UNAME_KERNEL_RELEASE%%.*}" in
+	1[4-5])
+		# Fix disk permissions
+		alias fix-diskperms="sudo repair_packages --repair --standard-pkgs /; sudo chown -R \${USER} /usr/local"
+		;;
+esac
 
-# Yosemite/El Capitan
-if [[ "${UNAME_KERNEL_RELEASE%%.*}" == "14" || "${UNAME_KERNEL_RELEASE%%.*}" == "15" ]]; then
-	# Fix disk permissions
-	alias fix-diskperms="sudo repair_packages --repair --standard-pkgs /; sudo chown -R \${USER} /usr/local"
-fi
+case "${UNAME_KERNEL_RELEASE%%.*}" in
+	1[1-4])
+		# Flush DNS cache
+		alias fix-dns='sudo killall -HUP mDNSResponder'
+		alias fix-diskperms="sudo diskutil repairPermissions /; sudo chown -R \${USER} /usr/local"
+		;;
+
+	1[5-8])
+		# Enable and disable indexing
+		alias indexing-enable=' sudo mdutil -a -i on'
+		alias indexing-disable='sudo mdutil -a -i off'
+
+		# Flush DNS cache
+		alias fix-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+	;;
+esac
 
 
 # Function aliases
@@ -355,6 +382,8 @@ alias itunes-control-macos='_macos_itunes_control'
 
 alias itunes='      _macos_itunes'
 alias itunes-macos='_macos_itunes'
+
+alias net-listening='_macos_net_listening'
 
 alias notify='      _macos_notify'
 alias notify-macos='_macos_notify'
