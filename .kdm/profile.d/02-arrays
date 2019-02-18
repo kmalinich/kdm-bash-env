@@ -277,7 +277,7 @@ ARRAY_TOUCH=(
 )
 
 
-[[ -z "${BASH_ENV_CONF}" ]] && declare -A BASH_ENV_CONF
+[[ -z "${BASH_ENV_CONF[*]}" ]] && declare -A BASH_ENV_CONF
 
 # Read config entries from config file
 _bash_env_conf_setup() {

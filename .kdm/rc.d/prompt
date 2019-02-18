@@ -13,7 +13,8 @@ _prompt_generate() {
 	fi
 
 	# Reload data from conf file if missing
-	[[ -z "${BASH_ENV_CONF[COLOR_16M]}" ]] && _bash_env_conf_setup
+	[[ -z "${BASH_ENV_CONF[PROMPT_NO_HOSTNAME]}" ]] && _bash_env_conf_setup
+	[[ -z "${BASH_ENV_CONF[COLOR_16M]}"          ]] && _bash_env_conf_setup
 
 	# If $BASH_ENV_COLOR_16M is not true, render PS1 without multicolor
 	if [[ "${BASH_ENV_CONF[COLOR_16M]}" != "true" ]]; then
