@@ -144,6 +144,7 @@ _net_webserver() {
 			fi
 
 			kill -9 "${WEBSERVER_PID}"
+			export WEBSERVER_RUNNING="0"
 			output red "Webserver stopped"
 			;;
 	esac
