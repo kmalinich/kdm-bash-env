@@ -1,17 +1,21 @@
-[[ "${BASH_ENV_COLOR_16M}" != "true" ]] && BASH_ENV_COLOR_16M="false"
+# Load data from conf file
+PATH="/usr/local/bin:${PATH}"
+COLOR_16M="$(facter bash-env.color.16m 2> /dev/null)"
 
-if [[ "${BASH_ENV_CONF[COLOR_16M]}" == "true" ]]; then
+[[ "${COLOR_16M}" != "true" ]] && COLOR_16M="false"
+
+if [[ "${COLOR_16M}" == "true" ]]; then
 	# Skip this if on physical console on Linux
 	if ! tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
-		if [[ "${TERM}" == "xterm-16mcolor" || "${BASH_ENV_COLOR_16M}" == "true" ]]; then
-			BASH_ENV_COLOR_16M="true"
+		if [[ "${TERM}" == "xterm-16mcolor" || "${COLOR_16M}" == "true" ]]; then
+			COLOR_16M="true"
 		fi
 	fi
 fi
 
 # If dircolors exists, run it
 if hash dircolors; then
-	if [[ "${BASH_ENV_COLOR_16M}" == "true" ]]; then
+	if [[ "${COLOR_16M}" == "true" ]]; then
 		TERM_OLD="${TERM}"
 		TERM="xterm-16mcolor"
 	fi
@@ -30,7 +34,7 @@ fi
 # Change TERM from xterm-16mcolor to xterm-256color
 [[ "${TERM}" == "xterm-16mcolor" ]] && TERM="xterm-256color"
 
-export BASH_ENV_COLOR_16M TERM
+export COLOR_16M TERM
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

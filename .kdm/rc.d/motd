@@ -46,13 +46,8 @@ _show_motd() {
 
 	# Use facter if possible, if not, too bad..
 	if ! hash facter; then
-		# Check if we already said this
-		if [[ "${BASH_ENV_CONF[WARN_FACTER]}" != "true" ]]; then
-			BASH_ENV_CONF[WARN_FACTER]="true"
-
-			# Output warning message about facter being missing
-			echo -e "facter not available; dynamic MOTD not possible\\n"
-		fi
+		# Output warning message about facter being missing
+		echo -e "facter not available; dynamic MOTD not possible\\n"
 
 		# Print just the env hash
 		# Assemble header format string
@@ -139,7 +134,7 @@ _show_motd() {
 	# Example output:
 	#
 	# kdm >  bash-env | #39cccec  < rev
-		# cpu > i7-4770HQ | 16G|80%   < ram
+	# cpu > i7-4770HQ | 16G|80%   < ram
 	#  os >     macOS | 10.13.1   < ver
 	#  up >    4 days | 1.86      < load
 

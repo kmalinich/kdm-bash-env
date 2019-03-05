@@ -429,9 +429,13 @@ alias show-colors-256='_show_colors_256'
 
 #### Environment color config ==start ####
 
+# Load data from conf file
+PATH="/usr/local/bin:${PATH}"
+COLOR_16M="$(facter bash-env.color.16m 2> /dev/null)"
+
 # Default "user color" configuration, overridden by library in 'extra' dir if present
 # Root = red, non-root = green
-if [[ "${BASH_ENV_COLOR_16M}" == "true" ]]; then
+if [[ "${COLOR_16M}" == "true" ]]; then
 	[[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_GRN}}"
 else
 	[[ "${UID}" == "0" ]] && C_ENV='\e[31m' || C_ENV='\e[32m'

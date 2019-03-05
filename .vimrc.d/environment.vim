@@ -1,5 +1,5 @@
 " Pull in some environment variables
-let g:color_16m = $BASH_ENV_COLOR_16M
+let g:color_16m = $COLOR_16M
 
 let g:domain      = $DOMAIN
 let g:domain_full = $DOMAIN_FULL

@@ -2,12 +2,6 @@
 
 # kdm bash-env bash_profile arrays
 
-ARRAY_CONF_INIT=(
-COLOR_16M
-PROMPT_NO_HOSTNAME
-WARN_FACTER
-)
-
 # Ignore bland commands
 ARRAY_HISTIGNORE=(
 ..
@@ -275,30 +269,6 @@ ARRAY_TOUCH=(
 "${BASH_ENV_FILE_SUDOCACHE}"
 "${BASH_ENV_DIR_SSH_CONFIG}/base.conf"
 )
-
-
-[[ -z "${BASH_ENV_CONF[*]}" ]] && declare -A BASH_ENV_CONF
-
-# Read config entries from config file
-_bash_env_conf_setup() {
-	while IFS='=' read -r KEY VALUE; do
-		BASH_ENV_CONF["${KEY}"]="${VALUE}"
-		unset KEY VALUE
-	done < "${BASH_ENV_FILE_CONFIG}"
-
-	# Initialize config entries if missing
-	for KEY in "${ARRAY_CONF_INIT[@]}"; do
-		if [[ -z "${BASH_ENV_CONF[${KEY}]}" ]]; then
-			BASH_ENV_CONF["${KEY}"]="false"
-		fi
-
-		unset KEY
-	done
-
-}
-
-_bash_env_conf_setup
-export BASH_ENV_CONF
 
 
 # Export above array variables

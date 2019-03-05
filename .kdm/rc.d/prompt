@@ -8,16 +8,13 @@ _prompt_generate() {
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
 
-	if ! type -t _bash_env_conf_setup > /dev/null 2>&1; then
-		. "${BASH_ENV_DIR_PROFILE_D}/02-arrays"
-	fi
-
-	# Reload data from conf file if missing
-	[[ -z "${BASH_ENV_CONF[PROMPT_NO_HOSTNAME]}" ]] && _bash_env_conf_setup
-	[[ -z "${BASH_ENV_CONF[COLOR_16M]}"          ]] && _bash_env_conf_setup
+	# Load data from conf file
+	PATH="/usr/local/bin:${PATH}"
+	COLOR_16M="$(      facter bash-env.color.16m       2> /dev/null)"
+	PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
 
 	# If $BASH_ENV_COLOR_16M is not true, render PS1 without multicolor
-	if [[ "${BASH_ENV_CONF[COLOR_16M]}" != "true" ]]; then
+	if [[ "${COLOR_16M}" != "true" ]]; then
 		# Kick _prompt_pwd again with no output to export environment variables
 		_prompt_pwd > /dev/null 2>&1
 
@@ -27,9 +24,9 @@ _prompt_generate() {
 		return
 	fi
 
-	# If NOT connected via SSH and PROMPT_NO_HOSTNAME is set to true in bash-env.conf,
+	# If NOT connected via SSH and PROMPT_HOSTNAME is false,
 	# render PS1 without hostname
-	if [[ -z "${SSH_CONNECTION}" && "${BASH_ENV_CONF[PROMPT_NO_HOSTNAME]}" == "true" ]]; then
+	if [[ -z "${SSH_CONNECTION}" && "${PROMPT_HOSTNAME}" == "false" ]]; then
 		# Kick _prompt_pwd again with no output to export environment variables
 		_prompt_pwd > /dev/null 2>&1
 
