@@ -47,12 +47,35 @@ augroup ale_lintdelay_set
 	au BufRead * silent call ALELintDelay()
 augroup END
 
+" Warn of trailing whitespace
+let g:ale_warn_about_trailing_whitespace = 1
+
 
 " Symbols
 highlight ALEErrorSign   guibg=#2f2f2f guifg=#e74c3c
 highlight ALEWarningSign guibg=#2f2f2f guifg=#f1c40f
+
 let g:ale_sign_error   = '✗'
 let g:ale_sign_warning = '⚠'
+
+let g:ale_echo_msg_error_str   = '✗'
+let g:ale_echo_msg_warning_str = '⚠'
+let g:ale_echo_msg_format      = '[%linter%] [%severity%] %s'
+
+
+" Disable linting minified files
+let g:ale_pattern_options_enabled = 1
+
+let g:ale_pattern_options = {
+	\ '\.min\.css$' : {
+		\ 'ale_fixers'  : [],
+		\ 'ale_linters' : [],
+	\ },
+	\ '\.min\.js$' : {
+		\ 'ale_fixers'  : [],
+		\ 'ale_linters' : [],
+	\ },
+\ }
 
 
 " Filetype-specific fixers/linters
