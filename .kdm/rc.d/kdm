@@ -18,26 +18,28 @@ _kdm_hash() {
 # Help with/list bashrc functions
 _kdm_help() {
 	# Declare vars as local
-	local BASHRC_CMDS
+	local BAR="${C_PRP}============${C_RST}"
 
-	output purple "kdm bash-env functions:"
-	echo
+	local ENV_CMD ENV_CMDS
+	local ENV_CMD_GROUP_FMT ENV_CMD_GROUP_NEW ENV_CMD_GROUP_OLD
 
-	mapfile -t BASHRC_CMDS < <(grep -hor 'alias\ .*.=' "${BASH_ENV_DIR_RC_D}" | sort -u | awk -F '[ =]' '{print $2}' | sort -u | sed -r '/^.{,3}$/d' | grep -Ev 'pign|tial|namp|mkdir|grep|grpe|ehco|clean|CMD|^config|^log|^html\-|^xml\-|^json\-|lsusb|md5sum|\-\-skip\-function')
+	mapfile -t ENV_CMDS < <(alias | grep -Ev 'CMD|ehco|grep|grpe|ls\ .*.\-\-|lsusb|md5sum|namp|pign|ping=|kk|vim|\.\.|showbin|ssh|sudo|tial|\-format=' | awk -F '[ =]' '{print $2}' | sed -r '/^.{,2}$/d')
 
-	# macOS commands
-	if [[ "${UNAME_KERNEL_NAME}" == "Darwin" ]]; then
-		for CMD in "${BASHRC_CMDS[@]}"; do
-			echo "${CMD}"
-		done | grep -Ev '^sys\-restart|^kvm\-'
+	ENV_CMD_GROUP_OLD=""
+	for ENV_CMD in "${ENV_CMDS[@]}"; do
+		# Get 1st 3 letters of command
+		ENV_CMD_GROUP_NEW="${ENV_CMD:0:3}"
 
-		return
-	fi
+		# If we've moved to a new group, add an extra newline
+		if [[ "${ENV_CMD_GROUP_NEW}" != "${ENV_CMD_GROUP_OLD}" ]]; then
+			ENV_CMD_GROUP_FMT="$(echo "${ENV_CMD:0:4}" | awk -F '-' '{printf $1}')"
+			echo -e "\n\n${C_WHT_BRT}-${C_RST}${BAR}${BAR}${BAR} ${C_GRN_BRT}${ENV_CMD_GROUP_FMT}${C_RST} ${C_WHT_BRT}-${C_RST}"
+		fi
 
-	# Linux commands
-	for CMD in "${BASHRC_CMDS[@]}"; do
-		echo "${CMD}"
-	done | grep -Ev '^osx\-|^net\-listening|efi\-mount'
+		output keyval-o "Command" "${ENV_CMD}"
+
+		ENV_CMD_GROUP_OLD="${ENV_CMD_GROUP_NEW}"
+	done
 }
 
 # Quick-draw pull bash env
