@@ -23,7 +23,7 @@
 
 	cp = "!cp() { git cam 'Update'; }; cp"
 
-	d  = diff
+	d  = diff --color=auto --ignore-space-change --ignore-blank-lines --color-moved-ws=ignore-all-space --ws-error-highlight=all 
 	ds = describe
 
 	# Delete any branches that have been merged into master
