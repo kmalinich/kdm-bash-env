@@ -107,7 +107,7 @@ _net_info() {
 # Python webserver
 _net_webserver() {
 	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS USAGE_OPTIONS_STRING USAGE_STRING
+	local ARRAY_USAGE_OPTIONS USAGE_OPTIONS_STRING USAGE_STRING WEBSERVER_PID
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
@@ -121,30 +121,28 @@ _net_webserver() {
 	USAGE_STRING="net-webserver <${USAGE_OPTIONS_STRING}>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
+	WEBSERVER_PID="$(pgrep -f 'SimpleHTTPServer' 2> /dev/null)"
+
 	case "${1}" in
 		start)
-			if [[ "${WEBSERVER_RUNNING}" == "1" ]]; then
+			if [[ "${WEBSERVER_PID}" ]]; then
 				output cyan "Webserver already running on port 8000"
 				return
 			fi
 
 			# Start webserver
-			{
-				python -m SimpleHTTPServer &> /dev/null & disown
-			}
+			{ python -m SimpleHTTPServer &> /dev/null & disown; }
 
-			export WEBSERVER_PID="${!}"
-			export WEBSERVER_RUNNING="1"
 			output green "Webserver started on port 8000"
 			;;
+
 		stop)
-			if [[ "${WEBSERVER_RUNNING}" != "1" ]]; then
+			if [[ -z "${WEBSERVER_PID}" ]]; then
 				output yellow "Webserver not running"
 				return
 			fi
 
 			kill -9 "${WEBSERVER_PID}"
-			export WEBSERVER_RUNNING="0"
 			output red "Webserver stopped"
 			;;
 	esac
