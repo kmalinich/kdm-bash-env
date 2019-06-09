@@ -69,6 +69,8 @@ FILE   38;2;240;240;240
 .csh  38;2;63;183;58;3
 .EXE  38;2;63;183;58;3
 .exe  38;2;63;183;58;3
+.ps1  38;2;63;183;58;3
+.PS1  38;2;63;183;58;3
 .py   38;2;63;183;58;3
 .sh   38;2;63;183;58;3
 
@@ -508,6 +510,8 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .csh  32
 .EXE  32
 .exe  32
+.ps1  32
+.PS1  32
 .py   32
 .sh   32
 
