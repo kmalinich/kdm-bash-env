@@ -1,0 +1,5 @@
+# Compressed, JSON data
+-f
+--compressed
+-H "Accept: application/json"
+-H "Content-Type: application/json"

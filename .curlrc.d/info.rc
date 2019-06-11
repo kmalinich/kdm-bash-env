@@ -1,0 +1,6 @@
+# Output all information
+-f
+-s
+-S
+-o /dev/null
+-w "\nHTTP code    : %{http_code}\nHTTP connect : %{http_connect}\nHTTP version : %{http_version}\n\n# of connects  : %{num_connects}\n# of redirects : %{num_redirects}\n\nURL, redirect  : %{redirect_url}\nURL, effective : %{url_effective}\n\nIP, local  : %{local_ip}\nIP, remote : %{remote_ip}\n\nPort, local  : %{local_port}\nPort, remote : %{remote_port}\n\nSize, download : %{size_download}\nSize, header   : %{size_header}\nSize, request  : %{size_request}\nSize, upload   : %{size_upload}\n\nSpeed, download : %{speed_download}\nSpeed, upload   : %{speed_upload}\n\nTime, connect       : %{time_connect}\nTime, connect (app) : %{time_appconnect}\nTime, DNS lookup    : %{time_namelookup}\nTime, redirect      : %{time_redirect}\nTime, pre-Xfer      : %{time_pretransfer}\nTime, start Xfer    : %{time_starttransfer}\nTime, total         : %{time_total}\n\nContent type    : %{content_type}\nOutput filename : %{filename_effective}\nFTP entry path  : %{ftp_entry_path}\nScheme          : %{scheme}\n\nSSL verification        : %{ssl_verify_result}\nSSL verification, proxy : %{proxy_ssl_verify_result}\n\n"

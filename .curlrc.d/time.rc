@@ -1,0 +1,7 @@
+# Output timing data
+-f
+-s
+-S
+-o /dev/null
+-v
+-w "Time, connect       : %{time_connect}\nTime, connect (app) : %{time_appconnect}\nTime, DNS lookup    : %{time_namelookup}\nTime, redirect      : %{time_redirect}\nTime, pre-Xfer      : %{time_pretransfer}\nTime, start Xfer    : %{time_starttransfer}\nTime, total         : %{time_total}\n\n"
