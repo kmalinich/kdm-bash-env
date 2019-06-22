@@ -306,6 +306,22 @@ _macos_system_profiler_list() {
 	sudo system_profiler -listDataTypes | grep -Ev 'Available\ Datatypes:' | sed -e 's/^SP//g' -e 's/DataType$//g' | sort -df
 }
 
+# E-Z copy file into pasteboard (clipboard)
+_macos_pb_copy() {
+	if [[ ! -s "${1}" ]]; then
+		output error "'${1}' is not present"
+		return 1
+	fi
+
+	set -o pipefail
+	if ! tr -d '\n' < "${1}" | pbcopy; then
+		output error "Failed to copy contents of '${1}' to pasteboard"
+		return 2
+	fi
+	set +o pipefail
+
+	output keyval-t "Pasteboard filled with contents of" "${1}"
+}
 
 
 # EFI partition mount for disk0, disk1, and disk2
@@ -375,6 +391,8 @@ esac
 
 
 # Function aliases
+alias copy='_macos_pb_copy'
+
 alias hostname-macos='_macos_hostname'
 
 alias itunes-control='      _macos_itunes_control'
