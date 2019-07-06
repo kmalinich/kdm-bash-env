@@ -26,8 +26,13 @@ _macos_hostname() {
 	output green "Hostname set to '${1}' / '${1%%.*}'"
 }
 
-_macos_itunes_osascript() {
+
+_itunes_cmd() {
 	osascript -e 'tell application "iTunes"' -e "${1}" -e 'end tell' 2> /dev/null
+}
+
+_itunes_get() {
+	osascript -e 'tell application "iTunes"' -e "get ${1} of current track" -e 'end tell' 2> /dev/null
 }
 
 # iTunes control
@@ -49,9 +54,9 @@ _macos_itunes_control() {
 	USAGE_STRING="itunes <${USAGE_OPTIONS_STRING}>"
 
 	case "${1}" in
-		pause|play) _macos_itunes_osascript "playpause"  && output green "Playback toggled" ;;
-		next)       _macos_itunes_osascript "next track" && output green "Skipped next"     ;;
-		prev)       _macos_itunes_osascript "back track" && output green "Skipped previous" ;;
+		pause|play) _itunes_cmd "playpause"  && output green "Playback toggled" ;;
+		next)       _itunes_cmd "next track" && output green "Skipped next"     ;;
+		prev)       _itunes_cmd "back track" && output green "Skipped previous" ;;
 
 		*)
 			output usage "${USAGE_STRING}"
@@ -66,11 +71,11 @@ _macos_itunes() {
 	# Declare vars as local
 	local ITUNES_ALBUM ITUNES_ARTIST ITUNES_KIND ITUNES_NA ITUNES_NAME ITUNES_STATE
 
-	ITUNES_ALBUM="$( _macos_itunes_osascript 'get album  of current track')"
-	ITUNES_ARTIST="$(_macos_itunes_osascript 'get artist of current track')"
-	ITUNES_KIND="$(  _macos_itunes_osascript 'get kind   of current track')"
-	ITUNES_NAME="$(  _macos_itunes_osascript 'get name   of current track')"
-	ITUNES_STATE="$( _macos_itunes_osascript 'get album  of current track')"
+	ITUNES_ALBUM="$( _itunes_get 'album')"
+	ITUNES_ARTIST="$(_itunes_get 'artist')"
+	ITUNES_KIND="$(  _itunes_get 'kind')"
+	ITUNES_NAME="$(  _itunes_get 'name')"
+	ITUNES_STATE="$( _itunes_get 'album')"
 
 	ITUNES_NA="Not available"
 
@@ -94,6 +99,15 @@ _macos_lsusb() {
 	_macos_system_profiler 'USB'
 }
 
+
+_volume_cmd() {
+	osascript -e "set volume ${1}"
+}
+
+_volume_set() {
+	_volume_set "set volume output volume ${1}"
+}
+
 # Volume config function
 _macos_volume() {
 	# Declare vars as local
@@ -101,7 +115,6 @@ _macos_volume() {
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
-	mute
 	max
 	up
 	down
@@ -121,8 +134,10 @@ _macos_volume() {
 	fi
 
 	if [[ -z "${1}" ]]; then
-		output usage "volume [${FUNCNAME[*]}] <${USAGE_OPTIONS_STRING}>"
+		output usage  "volume <${USAGE_OPTIONS_STRING}>"
+		1>&2 echo     "        volume <mute>"
 		echo
+
 		output kv "Current volume" "${VOLUME_CURRENT}%"
 		output kv "   Mute status" "${VOLUME_MUTE}"
 		return
@@ -131,29 +146,29 @@ _macos_volume() {
 	case "${1}" in
 		mute)
 			if [[ "${VOLUME_MUTE}" == "false" ]]; then
-				osascript -e 'set volume with output muted'
+				_volume_cmd 'with output muted'
 				output red "Volume muted"
 				return
 			fi
 
-			osascript -e 'set volume without output muted'
+			_volume_cmd 'without output muted'
 			output green "Volume unmuted"
 			;;
 
 		max)
-			osascript -e 'set volume output volume 100'
+			_volume_set '100'
 			output green "Volume set to 100%"
 			;;
 
 		up)
 			if [[ "${VOLUME_CURRENT}" -lt "95" ]]; then
-				osascript -e "set volume output volume $((VOLUME_CURRENT+5))"
+				_volume_set "$((VOLUME_CURRENT+5))"
 				output green "Volume set to $((VOLUME_CURRENT+5))%"
 				return
 			fi
 
 			if [[ "${VOLUME_CURRENT}" -ge "95" && "${VOLUME_CURRENT}" -lt "100" ]]; then
-				osascript -e 'set volume output volume 100'
+				_volume_set '100'
 				output green "Volume set to 100%"
 				return
 			fi
@@ -163,13 +178,13 @@ _macos_volume() {
 
 		down)
 			if [[ "${VOLUME_CURRENT}" -gt "5" ]]; then
-				osascript -e "set volume output volume $((VOLUME_CURRENT-5))"
+				_volume_set "$((VOLUME_CURRENT-5))"
 				output green "Volume set to $((VOLUME_CURRENT-5))%"
 				return
 			fi
 
 			if [[ "${VOLUME_CURRENT}" -le "5" && "${VOLUME_CURRENT}" -gt "0" ]]; then
-				osascript -e 'set volume output volume 0'
+				_volume_set '0'
 				output green "Volume set to 0%"
 				return
 			fi
@@ -184,7 +199,7 @@ _macos_volume() {
 				return
 			fi
 
-			osascript -e "set volume output volume ${VOLUME_CLEAN}"
+			_volume_set "${VOLUME_CLEAN}"
 			output green "Volume set to ${VOLUME_CLEAN}%"
 			;;
 	esac
@@ -309,7 +324,7 @@ _macos_system_profiler_list() {
 # E-Z copy file into pasteboard (clipboard)
 _macos_pb_copy() {
 	if [[ ! -s "${1}" ]]; then
-		output error "'${1}' is not present"
+		output error "'${1}' is not present or is empty"
 		return 1
 	fi
 
@@ -322,6 +337,25 @@ _macos_pb_copy() {
 
 	output keyval-t "Pasteboard filled with contents of" "${1}"
 }
+
+# Change wallpaper
+_macos_wallpaper() {
+	local WP_DB="${HOME}/Library/Application Support/Dock/desktoppicture.db"
+
+	if [[ ! -s "${WP_DB}" ]]; then
+		output error "'${WP_DB}' is not present or is empty"
+		return 1
+	fi
+
+	if [[ ! -s "${1}" ]]; then
+		output error "'${1}' is not present or is empty"
+		return 2
+	fi
+
+	sqlite3 "${WP_DB}" "update data set value = '${1}'"
+	killall Dock
+}
+
 
 
 # EFI partition mount for disk0, disk1, and disk2
@@ -395,11 +429,9 @@ alias copy='_macos_pb_copy'
 
 alias hostname-macos='_macos_hostname'
 
-alias itunes-control='      _macos_itunes_control'
-alias itunes-control-macos='_macos_itunes_control'
+alias itunes-control='_macos_itunes_control'
 
-alias itunes='      _macos_itunes'
-alias itunes-macos='_macos_itunes'
+alias itunes='_macos_itunes'
 
 alias net-listening='_macos_net_listening'
 
@@ -413,8 +445,9 @@ alias scutil-set='_macos_scutil_set'
 alias system-profiler='     _macos_system_profiler'
 alias system-profiler-list='_macos_system_profiler_list'
 
-alias volume-macos='_macos_volume'
-alias volume='      _macos_volume'
+alias volume='_macos_volume'
+
+alias wallpaper='_macos_wallpaper'
 
 
 # vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :

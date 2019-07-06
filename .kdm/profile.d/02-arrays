@@ -99,6 +99,7 @@ ARRAY_PATH=(
 /usr/local/opt/curl/bin
 /usr/local/opt/gawk/libexec/gnubin
 /usr/local/opt/gnu-getopt/bin
+/usr/local/opt/gnu-indent/libexec/gnubin
 /usr/local/opt/gnu-sed/libexec/gnubin
 /usr/local/opt/gnu-which/bin/which
 /usr/local/opt/grep/libexec/gnubin
