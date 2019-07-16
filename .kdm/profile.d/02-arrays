@@ -6,18 +6,22 @@
 ARRAY_HISTIGNORE=(
 ..
 [bf]g
+c
 cd
 clear
+cs
 dc
 dl
 dt
 env
 env-sort
 exit
-screen
+g-gca
+g-gcp
 g-gi
 g-gs
 g-gu
+go2sleep
 l
 l.
 l1
@@ -26,10 +30,10 @@ ll
 ll.
 lld
 lll
+logout
 ls
-mount
-pwd
-umount
+screen
+stayup
 )
 # Generate HISTIGNORE from array
 HISTIGNORE="$(for IGNORE in "${ARRAY_HISTIGNORE[@]}"; do echo -n "${IGNORE}:"; done | sed 's/:$//g'; echo)"
