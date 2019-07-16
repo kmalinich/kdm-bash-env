@@ -140,7 +140,7 @@ _show_top_cmds() {
 	COUNT="${1-15}"
 
 	output stderr "-- ${HIST_CMDS} commands total -------------------- Top ${COUNT} --"
-	grep --invert-match '#' "${HISTFILE}" | sort | uniq -c | sort -rn | head -n "${COUNT}"
+	grep --invert-match --text '#' "${HISTFILE}" | sort | uniq -c | sort -rn | head -n "${COUNT}"
 
 	if ! rm -f "${HIST_TEMP}" > /dev/null 2>&1; then
 		output error "Failed to remove temporary bash history file '${HIST_TEMP}'"
