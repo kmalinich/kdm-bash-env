@@ -33,4 +33,4 @@ _validate_before_source() {
 _validate_before_source
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :
