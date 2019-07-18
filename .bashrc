@@ -1,6 +1,8 @@
 # kdm bash-env
 # .bashrc (wrapper)
 
+# Uncomment for debug mode
+# set -x
 
 # File paths
 DIR_KDM="${HOME}/.kdm"

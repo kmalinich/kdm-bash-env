@@ -13,11 +13,14 @@ export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
 
 
-# Source data from ~/.kdm/profile.d
+# Set initial PATH
+export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Initial plaintext loading message
 [[ -t 0 ]] && echo -en "\\nLoading...\\r"
-[[ "${PATH}" != *"/usr/local/bin"* ]] && PATH="/usr/local/bin:${PATH}"
+
+# Source data from ~/.kdm/profile.d
 for FILE in $(find "${BASH_ENV_DIR_PROFILE_D}" -maxdepth 1 -name '[0-9][0-9]-*' -type f | sort); do
-	# shellcheck disable=SC1090
 	. "${FILE}"
 done
 

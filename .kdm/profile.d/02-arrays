@@ -36,7 +36,8 @@ screen
 stayup
 )
 # Generate HISTIGNORE from array
-HISTIGNORE="$(for IGNORE in "${ARRAY_HISTIGNORE[@]}"; do echo -n "${IGNORE}:"; done | sed 's/:$//g'; echo)"
+STR_HISTIGNORE="${ARRAY_HISTIGNORE[*]}"
+HISTIGNORE="${STR_HISTIGNORE//\ /:}"
 
 
 # Array of editor aliases
@@ -91,6 +92,7 @@ mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
 ARRAY_PATH=(
 "${HOME}/bin"
 "${HOME}/.local/bin"
+"${HOME}/.go/bin"
 "${HOME}/.composer/vendor/bin"
 "${HOME}/perl5/bin"
 "${HOME}/Library/Android/sdk/platform-tools"
@@ -98,6 +100,7 @@ ARRAY_PATH=(
 /usr/local/rvm/gems/ruby-2.4.0@global/bin
 /usr/local/rvm/rubies/ruby-2.4.0/bin
 /usr/local/rvm/bin
+/usr/local/opt/go/libexec/bin
 /usr/local/opt/coreutils/libexec/gnubin
 /usr/local/opt/curl-openssl/bin
 /usr/local/opt/curl/bin

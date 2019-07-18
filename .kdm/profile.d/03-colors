@@ -430,7 +430,7 @@ alias show-colors-256='_show_colors_256'
 #### Environment color config ==start ####
 
 # Load data from conf file
-[[ "${PATH}" != *"/usr/local/bin"* ]] && PATH="/usr/local/bin:${PATH}"
+# [[ "${PATH}" != *"/usr/local/bin"* ]] && PATH="/usr/local/bin:${PATH}"
 COLOR_16M="$(facter bash-env.color.16m 2> /dev/null)"
 
 # Default "user color" configuration, overridden by library in 'extra' dir if present

@@ -1,5 +1,5 @@
 # Load data from conf file
-[[ "${PATH}" != *"/usr/local/bin"* ]] && PATH="/usr/local/bin:${PATH}"
+# [[ "${PATH}" != *"/usr/local/bin"* ]] && PATH="/usr/local/bin:${PATH}"
 COLOR_16M="$(facter bash-env.color.16m 2> /dev/null)"
 
 [[ "${COLOR_16M}" != "true" ]] && COLOR_16M="false"
