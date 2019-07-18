@@ -3,12 +3,12 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
-# Generate ssh host aliases
+# Generate SSH host aliases
 _ssh_alias_generate() {
-	# Clear sshcache file
+	# Clear SSH alias cache file
 	: > "${BASH_ENV_FILE_SSH_CACHE}"
 
-	# Process ssh-host alias generation, output to sshcache file
+	# Process SSH host alias generation, output to SSH alias cache file
 	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
 	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
 
@@ -17,20 +17,24 @@ _ssh_alias_generate() {
 		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH bash aliases"
 	fi
 
-	# Source sshcache file
+	# Source SSH alias cache file
 	# shellcheck source=../sshcache
 	. "${BASH_ENV_FILE_SSH_CACHE}"
 }
 
-# Configure ssh host aliases
+# Configure SSH host aliases
 _ssh_alias_setup() {
-	# Regenerate sshcache file if empty
-	[[ ! -s "${BASH_ENV_FILE_SSH_CACHE}" ]] && _ssh_alias_generate
+	# Generate SSH alias cache file if empty
+	if [[ ! -s "${BASH_ENV_FILE_SSH_CACHE}" ]]; then
+		_ssh_alias_generate
+		# If generation required, we're done here
+		return 0
+	fi
 
 	# Declare vars as local
 	local SSH_CACHE_AGE SSH_CACHE_TIME
 
-	# Determine age of sshcache file
+	# Determine age of SSH alias cache file
 	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		SSH_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_SSH_CACHE}")
 	else
@@ -39,18 +43,18 @@ _ssh_alias_setup() {
 
 	SSH_CACHE_AGE=$(($(date +%s)-SSH_CACHE_TIME))
 
-	# Regenerate sshcache file if older than 1 day
+	# Regenerate SSH alias cache file if older than 1 day
 	if [[ "${SSH_CACHE_AGE}" -ge "86400" ]]; then
 		_ssh_alias_generate
 		return 0
 	fi
 
-	# Source sshcache file
+	# Source SSH alias cache file
 	# shellcheck source=../sshcache
 	. "${BASH_ENV_FILE_SSH_CACHE}"
 }
 
-# Ping it, then ssh to it
+# Ping it, then SSH to it
 # shellcheck disable=SC2029
 _ssh_ping() {
 	# Declare vars as local
@@ -144,13 +148,13 @@ _ssh_xc() {
 }
 
 
-# Execute ssh-host alias setup
+# Execute SSH alias setup
 _ssh_alias_setup
 
 
 # Function aliases
 alias ssh-alias-generate='_ssh_alias_generate'
-alias ssh-alias-setup='   _ssh_alias_setup'
+# alias ssh-alias-setup='   _ssh_alias_setup'
 
 alias ssh-ping='_ssh_ping'
 
