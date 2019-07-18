@@ -9,8 +9,8 @@ _ssh_alias_generate() {
 	: > "${BASH_ENV_FILE_SSH_CACHE}"
 
 	# Process SSH host alias generation, output to SSH alias cache file
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     2> /dev/null | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf 2> /dev/null | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
 
 	# Output message if output function available and in a TTY
 	if hash output; then
