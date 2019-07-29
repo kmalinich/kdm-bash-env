@@ -13,8 +13,6 @@ cs
 dc
 dl
 dt
-env
-env-sort
 exit
 g-gca
 g-gcp
@@ -32,7 +30,6 @@ lld
 lll
 logout
 ls
-screen
 stayup
 )
 # Generate HISTIGNORE from array

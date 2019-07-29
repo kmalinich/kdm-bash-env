@@ -1,24 +1,64 @@
 #!/usr/bin/env bash
 
+# exit 1 if no 1st argument present
 [[ -z "${1}" ]] && exit 1
 
-case "${1}" in
-	*.[ch]|*.[ch]pp|*.[ch]xx|*.ad[asb]|*.asm|*.awk|*.axp|*.cc|*.diff|*.ebuild|*.eclass|*.groff|*.hh|*.inc|*.java|*.js|*.l|*.lsp|*.m4|*.p|*.pas|*.patch|*.php|*.pl|*.pm|*.pod|*.pov|*.ppd|*.py|*.rb|*.sh|*.sql|*.xml|*.xps|*.xsl)
-		# pygmentize -f terminal16m -O style=monokai "${1}" | sed 's/\t/|/g'
-		pygmentize -f terminal16m -O style=monokai "${1}" | sed 's/\t/\[38;2;56;56;56m|\[0m/g'
+# Default return code
+PYGMENTIZE_RETURN="3"
+
+# Pygments formatter and style
+PYG_FMT="terminal16m"
+PYG_STYLE="monokai"
+
+# Get base file name
+FILE_NAME="$(basename "${1}")"
+
+# Force lowercase filename
+FILE_NAME="${FILE_NAME,,}"
+
+
+
+
+case "${FILE_NAME}" in
+	# Fairly common file types normally supported by pygmentize
+	*.[ch]|*.[ch]pp|*.[ch]xx|*.ad[asb]|*.asm|*.awk|*.axp|*.bat|*.c|*.cc|*.cmd|*.cnf|*.conf|*.config|*.cpp|*.css|*.diff|*.ebuild|*.eclass|*.groff|*.h|*.hh|*.htm|*.html|*.inc|*.ino|*.java|*.js|*.json|*.l|*.lsp|*.m4|*.md|*.p|*.pas|*.patch|*.php|*.pl|*.pm|*.pod|*.pov|*.ppd|*.py|*.rb|*.sass|*.scss|*.sh|*.sls|*.sql|*.svg|*.xml|*.xps|*.xsd|*.xsl|*.yml)
+		# Not setting a lexer here, let it attempt to autodetect
+		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"
+		PYGMENTIZE_RETURN="${?}"
 		;;
 
+	# .bash_logout, .bash_profile, .bashrc, .profile, etc
 	.bash*|.profile)
-		pygmentize -f terminal16m -O style=monokai -l sh "${1}"
+		# Manually set the 'sh' lexer
+		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l sh "${1}"
+		PYGMENTIZE_RETURN="${?}"
 		;;
 
-	*)
-		if grep -Eq '#!.*.\/bin.*.sh' "${1}"; then
-			pygmentize -f terminal16m -O style=monokai -l sh "${1}"
-			exit 0
-		fi
+	# systemd files
+	*.mount|*.service|*.socket|*.target|*.timer)
+		# Manually set the 'dosini' lexer
+		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l dosini "${1}"
+		PYGMENTIZE_RETURN="${?}"
+		;;
 
-		exit 1
+	# TunerPro xdf
+	*.xdf)
+		# Manually set the 'xml' lexer
+		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l xml "${1}"
+		PYGMENTIZE_RETURN="${?}"
+		;;
+
+	# Catch any other filetype here, but first grep for sh-like shebang
+	# If it passes, treat it as sh-like
+	*)
+		grep -Eq '#!.*.\/bin.*.sh' "${1}" || exit 2
+
+		# Manually set the 'sh' lexer
+		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l sh "${1}"
+		PYGMENTIZE_RETURN="${?}"
 		;;
 esac
 
+
+# exit with captured or default return code
+exit "${PYGMENTIZE_RETURN}"
