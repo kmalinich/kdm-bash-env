@@ -42,7 +42,14 @@ _find_largest() {
 	output stderr "Searching for ${COUNT} largest items under '${PWD_FINAL}'"
 	output stderr " "
 
-	du -hs ./* | sort -hr | head -n "${COUNT}"
+	du \
+		--human-readable   \
+		--summarize        \
+		./* 2> /dev/null | \
+		sort \
+		--human-numeric-sort \
+		--reverse | head \
+		"--lines=${COUNT}"
 }
 
 
