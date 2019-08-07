@@ -11,8 +11,8 @@ set backspace=indent,eol,start
 " WARNING this does the opposite if you use /g and have it enabled
 " set gdefault
 
-" Temporarily deactivate mouse handling in ViM8/neoViM while I figure it out
-set mouse=
+" Enable mouse handling in normal mode (iTerm 3+)
+set mouse=n
 
 " Shorten messages and don't show intro
 set shortmess=atI
