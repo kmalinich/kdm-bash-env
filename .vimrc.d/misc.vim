@@ -11,8 +11,8 @@ set backspace=indent,eol,start
 " WARNING this does the opposite if you use /g and have it enabled
 " set gdefault
 
-" Enable mouse handling in normal mode (iTerm 3+)
-set mouse=n
+" Enable mouse handling in all modes (iTerm 3+)
+set mouse=a
 
 " Shorten messages and don't show intro
 set shortmess=atI

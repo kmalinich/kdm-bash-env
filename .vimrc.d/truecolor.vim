@@ -7,6 +7,9 @@ if has('termguicolors') && g:color_16m ==# 'true'
 	let &t_8b = "\e[48;2;%lu;%lu;%lum"
 	set termguicolors
 
+	" Extend vim-illuminate delay
+	let g:Illuminate_delay = 750
+
 	" Italic support (requires neovim and proper ~/.terminfo)
 	if has('nvim')
 		let &t_ZH="\e[3m"
