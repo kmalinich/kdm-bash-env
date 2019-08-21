@@ -7,12 +7,9 @@ set backspace=indent,eol,start
 " Enable code concealing
 " set conceallevel=1
 
-" Set /g flag on :s substitutions by default
-" WARNING this does the opposite if you use /g and have it enabled
+" Set /g flag (replace all occurrences on line) on :s substitutions by default
+" WARNING : This will do the opposite if you use /g and have it enabled
 " set gdefault
-
-" Enable mouse handling in all modes (iTerm 3+)
-set mouse=a
 
 " Shorten messages and don't show intro
 set shortmess=atI
