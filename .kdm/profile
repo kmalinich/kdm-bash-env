@@ -14,7 +14,17 @@ export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
 
 
 # Set initial PATH
-export PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+
+# Add GNU coreutils and findutils to PATH if macOS brew-installed package present
+DIR_COREUTILS="/usr/local/opt/coreutils/libexec/gnubin"
+DIR_FINDUTILS="/usr/local/opt/findutils/libexec/gnubin"
+
+[[ -d "${DIR_COREUTILS}" ]] && PATH="${DIR_COREUTILS}:${PATH}"
+[[ -d "${DIR_FINDUTILS}" ]] && PATH="${DIR_FINDUTILS}:${PATH}"
+
+export PATH
+
 
 # Initial plaintext loading message
 [[ -t 0 ]] && echo -en "\\nLoading...\\r"
