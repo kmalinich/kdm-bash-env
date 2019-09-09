@@ -11,7 +11,7 @@ let g:ale_sign_column_always = 0
 
 
 " Set lint delay to value of argument, or (number of lines in file * 2) ms, minimum 100 ms
-function ALELintDelay(...)
+function! ALELintDelay(...)
 	" If argument provided, set lint delay to argument value
 	if exists('a:1')
 		let g:ale_lint_delay = a:1
