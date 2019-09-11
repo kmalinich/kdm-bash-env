@@ -122,6 +122,13 @@ _prompt_right() {
 _prompt_pwd() {
 	# Get the current directory, swap out the home directory with a tilde
 	PWD_FMT="${PWD/${HOME}/\~}"
+
+	# Sometimes older bash versions get weird with the above substring replacement                                                                                                      
+	# shellcheck disable=SC1003
+	if echo "${PWD_FMT}" | grep -Eq '\\'; then                                                                                                                                          
+		PWD_FMT="${PWD/${HOME}/~}"                                                                                                                                                        
+	fi  
+
 	export PWD_FMT
 
 	# Skip if the PWD hasn't changed
