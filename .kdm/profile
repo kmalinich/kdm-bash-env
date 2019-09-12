@@ -16,12 +16,14 @@ export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
 # Set initial PATH
 PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# Add GNU coreutils and findutils to PATH if macOS brew-installed package present
+# Add GNU coreutils, findutils, and grep to PATH if macOS brew-installed package present
 DIR_COREUTILS="/usr/local/opt/coreutils/libexec/gnubin"
 DIR_FINDUTILS="/usr/local/opt/findutils/libexec/gnubin"
+DIR_GREP="/usr/local/opt/grep/libexec/gnubin"
 
-[[ -d "${DIR_COREUTILS}" ]] && PATH="${DIR_COREUTILS}:${PATH}"
 [[ -d "${DIR_FINDUTILS}" ]] && PATH="${DIR_FINDUTILS}:${PATH}"
+[[ -d "${DIR_GREP}"      ]] && PATH="${DIR_GREP}:${PATH}"
+[[ -d "${DIR_COREUTILS}" ]] && PATH="${DIR_COREUTILS}:${PATH}"
 
 export PATH
 

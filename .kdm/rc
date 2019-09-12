@@ -6,19 +6,6 @@
 [[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"
 
 
-# Set initial PATH
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
-
-# Add GNU coreutils and findutils to PATH if macOS brew-installed package present
-DIR_COREUTILS="/usr/local/opt/coreutils/libexec/gnubin"
-DIR_FINDUTILS="/usr/local/opt/findutils/libexec/gnubin"
-
-[[ -d "${DIR_COREUTILS}" ]] && PATH="${DIR_COREUTILS}:${PATH}"
-[[ -d "${DIR_FINDUTILS}" ]] && PATH="${DIR_FINDUTILS}:${PATH}"
-
-export PATH
-
-
 # Source any possible global bashrc(s) under /etc
 ARRAY_SOURCE_GLOBAL=(bash.bashrc bashrc)
 for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
