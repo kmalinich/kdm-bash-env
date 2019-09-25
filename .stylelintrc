@@ -29,6 +29,8 @@
 			{
 				"severity": "warning",
 				"ignoreTypes": [
+					"/^g-/",
+					"/^jsl/",
 					"/^ng-/",
 					"/^ui-/",
 					"/^wz-/"
