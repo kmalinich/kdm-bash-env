@@ -1,0 +1,14 @@
+[filter "tabspace"]
+	clean  = "expand   --tabs=2 --initial"
+	smudge = "unexpand --tabs=2 --first-only"
+
+[filter "tabspace2"]
+	clean  = "expand   --tabs=2 --initial"
+	smudge = "unexpand --tabs=2 --first-only"
+
+[filter "tabspace4"]
+	clean  = "expand   --tabs=4 --initial"
+	smudge = "unexpand --tabs=4 --first-only"
+
+
+# vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :

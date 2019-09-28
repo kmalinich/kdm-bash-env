@@ -163,4 +163,4 @@ alias ssh-x=' _ssh_x'
 alias ssh-xc='_ssh_xc'
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

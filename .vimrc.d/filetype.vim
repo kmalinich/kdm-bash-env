@@ -58,7 +58,6 @@ augroup END
 " Interfaces file
 augroup ft_interfaces
 	au BufRead /etc/network/interfaces set filetype=interfaces
-	au BufRead /etc/network/interfaces set syntax=interfaces
 augroup END
 
 " JSON family

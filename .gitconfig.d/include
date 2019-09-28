@@ -3,6 +3,7 @@
 	path = ~/.gitconfig.d/apply
 	path = ~/.gitconfig.d/color
 	path = ~/.gitconfig.d/core
+	path = ~/.gitconfig.d/filter
 	path = ~/.gitconfig.d/merge
 	path = ~/.gitconfig.d/pull
 	path = ~/.gitconfig.d/push
@@ -12,4 +13,4 @@
 	path = ~/.gitconfig.d/user
 
 
-# vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :
+# vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :

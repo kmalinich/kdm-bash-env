@@ -2,4 +2,4 @@
 	pager = cat
 
 
-# vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :
+# vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :

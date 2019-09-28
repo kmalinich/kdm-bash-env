@@ -16,4 +16,4 @@ sources:
 # http_proxy: http://proxy-host:8080
 
 
-# vim: set syntax=yaml filetype=yaml ts=2 sw=2 tw=0 et :
+# vim: set filetype=yaml ts=2 sw=2 tw=0 et :

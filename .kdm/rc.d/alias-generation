@@ -243,4 +243,4 @@ _alias_pygmentize() {
 _alias_linux_macos_setup
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

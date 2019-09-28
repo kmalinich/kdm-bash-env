@@ -60,4 +60,4 @@ alias auto-sudo-generate='_auto_sudo_generate'
 alias auto-sudo-setup='   _auto_sudo_setup'
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

@@ -13,4 +13,4 @@ export UNAME_KERNEL_NAME UNAME_KERNEL_RELEASE
 # export UNAME UNAME_ALL UNAME_KERNEL_VERSION UNAME_MACHINE UNAME_NODE UNAME_PROCESSOR
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

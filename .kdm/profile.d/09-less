@@ -4,4 +4,4 @@ LESSOPEN="|${BASH_ENV_FILE_LESSFILTER} %s"
 export LESS LESSOPEN
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

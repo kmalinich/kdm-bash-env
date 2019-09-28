@@ -6,4 +6,4 @@
 [[ -d /usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders ]] && export GDK_PIXBUF_MODULEDIR="/usr/local/lib/gdk-pixbuf-2.0/2.10.0/loaders"
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

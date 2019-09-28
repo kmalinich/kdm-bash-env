@@ -92,4 +92,4 @@ alias array-sort-line='  _array_sort_line'
 alias array-width='      _array_width'
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

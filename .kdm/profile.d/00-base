@@ -45,4 +45,4 @@ export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
 export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

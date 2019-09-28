@@ -23,7 +23,7 @@
 
 	cp = "!cp() { git cam 'Update'; }; cp"
 
-	d  = diff --color=auto --ignore-space-change --ignore-blank-lines --color-moved-ws=ignore-all-space --ws-error-highlight=all 
+	d  = diff --color=auto --ignore-space-change --ignore-blank-lines --color-moved-ws=ignore-all-space --ws-error-highlight=all
 	ds = describe
 
 	# Delete any branches that have been merged into master
@@ -78,4 +78,4 @@
 	up = pull --rebase --prune
 
 
-# vim: set syntax=gitconfig filetype=gitconfig ts=2 sw=2 tw=0 noet :
+# vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :

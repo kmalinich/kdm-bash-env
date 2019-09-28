@@ -401,4 +401,4 @@ alias net-ping-subnet='     _net_ping_subnet'
 alias net-webserver='       _net_webserver'
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

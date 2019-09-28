@@ -60,4 +60,4 @@ unset LOADING_DOT_COUNT
 unset LOADING_WHITESPACE_COUNT
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

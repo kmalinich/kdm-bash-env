@@ -6,4 +6,4 @@ rules:
     max: 120
     level: warning
 
-# vim: set syntax=yaml filetype=yaml ts=2 sw=2 tw=0 et :
+# vim: set filetype=yaml ts=2 sw=2 tw=0 et :

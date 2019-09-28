@@ -10,4 +10,4 @@ export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; _prompt_titl
 export PROMPT_COMMAND="${PROMPT_COMMAND}; _prompt_generate"
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

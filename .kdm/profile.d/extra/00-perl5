@@ -6,4 +6,4 @@ if [[ -d "${HOME}/perl5" ]]; then
 	export PERL_MM_OPT="INSTALL_BASE='${HOME}/perl5'"
 fi
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

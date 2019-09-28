@@ -262,4 +262,4 @@ alias update-all=' _update_all'
 alias update-cpan='_update_cpan'
 
 
-# vim: set syntax=sh filetype=sh ts=2 sw=2 tw=0 noet :
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :
