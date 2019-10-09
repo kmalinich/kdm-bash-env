@@ -153,13 +153,14 @@ _net_ping_subnet() {
 	# Declare vars as local
 	local USAGE_STRING
 
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 	USAGE_STRING="net-ping-subnet <CIDR range>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
 	# Return if fping is missing
 	! hash fping && output error "fping not available" && return
 
 	output purple "Pinging subnet '${1}'"
+
 	# Sort by IP octets
 	fping -a -i 10 -r 1 -p 20 -t 250 -g "${1}" 2> /dev/null | sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n
 }
