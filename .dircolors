@@ -31,8 +31,8 @@ EXEC   38;2;0;255;0;3     # File with execute permission (bright green, italic)
 LINK   38;2;0;246;248;3   # Symlink (cyan)
 ORPHAN 38;2;255;0;0;1;5;7 # Bad symlink (red, invert, bold, blink)
 
-BLK 38;2;240;32;32;1;48;2;96;96;96 # Block device (red, bold, grey background)
-CHR 38;2;252;106;8;1;48;2;96;96;96 # Character device (orange, bold, grey background)
+BLK 38;2;240;32;32;1;48;2;32;32;32 # Block device (red, bold, grey background)
+CHR 38;2;252;106;8;1;48;2;32;32;32 # Character device (orange, bold, grey background)
 
 MISSING       0 # Symlink pointing to a nonexistent file
 MULTIHARDLINK 0 # Regular file with more than one link
