@@ -329,7 +329,7 @@ _macos_pb_copy() {
 	fi
 
 	set -o pipefail
-	if ! tr -d '\n' < "${1}" | pbcopy; then
+	if ! pbcopy < "${1}"; then
 		output error "Failed to copy contents of '${1}' to pasteboard"
 		return 2
 	fi

@@ -116,21 +116,21 @@ set visible-stats on
 
 
 # F13 : Insert open and close double-quotes and move to just after the open double-quote
-"\e[25~": "\"\"\C-b"
+# "\e[25~": "\"\"\C-b"
 
 
 # F16 : Insert open and close single-quotes and move to just after the open single-quote
 # (Like when you're about to type JSON)
-"\e[29~": "\'\'\C-b"
+# "\e[29~": "\'\'\C-b"
 
 # F17 : Insert open and close double-quotes and move to just after the open double-quote
-"\e[31~": "\"\"\C-b"
+# "\e[31~": "\"\"\C-b"
 
 # F18 : Double-quote the current or previous word
-"\e[32~": "\eb\"\ef\""
+# "\e[32~": "\eb\"\ef\""
 
 # F19 : Escaped-double-quote the current or previous word
-"\e[33~": "\eb\\\"\ef\\\""
+# "\e[33~": "\eb\\\"\ef\\\""
 
 
 # F__ : Single-quote the current or previous word
