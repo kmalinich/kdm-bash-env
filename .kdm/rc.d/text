@@ -53,7 +53,7 @@ output() {
 			OUTPUT_STRING="failure"
 			;;
 
-		k|kv|keyval)
+		ky|kvy|keyval-y|k|kv|keyval)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -137,7 +137,7 @@ output() {
 			return
 			;;
 
-		kt|kvt|keyval-t)
+		kg|kvg|keyval-g|kt|kvt|keyval-t)
 			# Check for 2nd and 3rd args
 			if [[ -z "${2}" || -z "${3}" ]]; then
 				output usage "${USAGE_STRING}"
@@ -253,7 +253,16 @@ _output_completion() {
 
 	failure success
 
-	keyval keyval-b keyval-c keyval-f keyval-o keyval-p keyval-r keyval-t
+	keyval
+	keyval-b
+	keyval-c
+	keyval-f
+	keyval-g
+	keyval-o
+	keyval-p
+	keyval-r
+	keyval-t
+	keyval-y
 
 	backtick stderr
 	)
