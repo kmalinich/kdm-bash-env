@@ -1,0 +1,51 @@
+# Functions: URL decode/encode
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+
+urldecode() {
+	: "${*//+/ }"
+	echo -e "${_//%/\\x}"
+}
+
+urlencode() {
+	# Declare vars as local
+	local CHAR INDEX LC_COLLATE_ORIG LENGTH STRING
+
+	# Save original LC_COLLATE value
+	LC_COLLATE_ORIG="${LC_COLLATE}"
+
+	# Set LC_COLLATE to C
+	LC_COLLATE="C"
+
+	STRING=""
+	LENGTH="${#1}"
+
+	for ((INDEX = 0; INDEX < LENGTH; INDEX++)); do
+		CHAR="${1:INDEX:1}"
+
+		case "${CHAR}" in
+			[a-zA-Z0-9.~_-]) STRING="${STRING}${CHAR}" ;;
+			*)               STRING="${STRING}$(printf '%%%02X' "'${CHAR}")" ;;
+		esac
+	done
+
+	# Restore original LC_COLLATE value
+	LC_COLLATE="${LC_COLLATE_ORIG}"
+
+	echo "${STRING}"
+}
+
+
+# Function aliases
+alias urldec='urldecode'
+alias urlenc='urlencode'
+
+alias udec='urldecode'
+alias uenc='urlencode'
+
+alias urld='urldecode'
+alias urle='urlencode'
+
+
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :
