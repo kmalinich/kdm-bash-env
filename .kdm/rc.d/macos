@@ -413,7 +413,7 @@ case "${UNAME_KERNEL_RELEASE%%.*}" in
 		alias fix-diskperms="sudo diskutil repairPermissions /; sudo chown -R \${USER} /usr/local"
 		;;
 
-	1[5-8])
+	1[5-9])
 		# Enable and disable indexing
 		alias indexing-enable=' sudo mdutil -a -i on'
 		alias indexing-disable='sudo mdutil -a -i off'
