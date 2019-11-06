@@ -26,11 +26,23 @@ for ENTRY in "${ARRAY_PATH[@]}"; do
 	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
 done
 
-# Remove any duplicates from PATHs
+# Temporarily remove spaces from PATHs before dedupe process below
+MANPATH="${MANPATH//\ /SPACE_CHARACTER_REPLACEMENT}"
+MIBDIRS="${MIBDIRS//\ /SPACE_CHARACTER_REPLACEMENT}"
+NODE_PATH="${NODE_PATH//\ /SPACE_CHARACTER_REPLACEMENT}"
+PATH="${PATH//\ /SPACE_CHARACTER_REPLACEMENT}"
+
+# Remove any duplicates from PATHs - this command string does not account for spaces (TODO/BUG)
 MANPATH=$(  echo "${MANPATH}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
 MIBDIRS=$(  echo "${MIBDIRS}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
 NODE_PATH=$(echo "${NODE_PATH}" | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
 PATH=$(     echo "${PATH}"      | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
+
+# Re-insert spaces into PATHs that were removed above
+MANPATH="${MANPATH//SPACE_CHARACTER_REPLACEMENT/\ }"
+MIBDIRS="${MIBDIRS//SPACE_CHARACTER_REPLACEMENT/\ }"
+NODE_PATH="${NODE_PATH//SPACE_CHARACTER_REPLACEMENT/\ }"
+PATH="${PATH//SPACE_CHARACTER_REPLACEMENT/\ }"
 
 # Export PATHs
 export MANPATH MIBDIRS NODE_PATH PATH
