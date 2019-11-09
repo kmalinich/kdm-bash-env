@@ -13,7 +13,7 @@ _show_motd() {
 	local FACTER_JSON
 	local HEAD_FMT HEAD_KEY HEAD_VAL1 HEAD_VAL2
 	local MOTD_FMT MOTD_KEY MOTD_VAL1 MOTD_VAL2
-	local CPU LOAD RAM RAMC STR UPT VER
+	local CPU HST IP LOAD RAM RAMC STR UPT VER
 
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
@@ -95,8 +95,10 @@ _show_motd() {
 	[[ "${RAM}"  == "null" ]] && RAM="$( echo "${FACTER_JSON}" | jq -Mcr .memorysize)"
 	[[ "${RAMC}" == "null" ]] && RAMC="??"
 
+	IP="$(  echo "${FACTER_JSON}" | jq -Mcr '.networking.ip' | awk -F '.' '{print $2 "." $3 "." $4}')"
+	HST="$( echo "${FACTER_JSON}" | jq -Mcr '.networking.hostname')"
 	CPU="$( echo "${FACTER_JSON}" | jq -Mcr '.processors.models[0]' | sed -r -e 's/(^\s?)|(\s?CPU)|(\s?@)|(\s?Processor)|(\(.?.?\))|(\s?[0-9]\.[0-9]{1,3}GHz\s?)|(\s[0-9]\s)|(Intel\(..?\)\sCore\(..?\)\s?)|Intel\sCore\s|\(|\)|Intel\(..?\)\s|Atom|Xeon|\sv[1-9]|\s//g' -e 's/(\s)+/\ /g')"
-	UPT="$( echo "${FACTER_JSON}" | jq -Mcr .system_uptime.uptime)"
+	UPT="$( echo "${FACTER_JSON}" | jq -Mcr '.system_uptime.uptime')"
 	LOAD="$(echo "${FACTER_JSON}" | jq -Mcr '.load_averages | .["5m"]')"
 
 	# Format a couple things
@@ -116,6 +118,8 @@ _show_motd() {
 	"${DST}"
 	"${VER}"
 	"${UPT}"
+	"${IP}"
+	"${HST}"
 	"${LOAD}"
 	)
 
@@ -156,10 +160,11 @@ _show_motd() {
 	MOTD_FMT="${MOTD_KEY} ${ARROW_R} ${MOTD_VAL1} ${BAR} ${MOTD_VAL2} ${ARROW_L} ${MOTD_KEY}${C_RST}\\n"
 
 	# Output the header line, then the MOTD
-	printf "${HEAD_FMT}" "kdm" "bash-env" "${HASH}" "rev"
-	printf "${MOTD_FMT}" "cpu"   "${CPU}" "${RAM}"  "ram"
-	printf "${MOTD_FMT}" " os"   "${DST}" "${VER}"  "ver"
-	printf "${MOTD_FMT}" " up"   "${UPT}" "${LOAD}" "load"
+	printf "${HEAD_FMT}" " kdm" "bash-env" "${HASH}" "rev"
+	printf "${MOTD_FMT}" " cpu"   "${CPU}" "${RAM}"  "ram"
+	printf "${MOTD_FMT}" "  os"   "${DST}" "${VER}"  "ver"
+	printf "${MOTD_FMT}" "  up"   "${UPT}" "${LOAD}" "load"
+	printf "${HEAD_FMT}" "host"   "${HST}" "${IP}"   "ip"
 	echo
 }
 
