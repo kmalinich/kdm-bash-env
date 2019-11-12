@@ -3,6 +3,35 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
+# Flash full terminal screen (reverse video) until a key is pressed
+#
+# https://en.wikipedia.org/wiki/ANSI_escape_code#Example_of_use_in_shell_scripting
+# https://stackoverflow.com/a/25845393
+_flash_term() {
+	# Declare vars as local
+	local FLASH_INTERVAL="${1-0.5}"
+
+	# Some sanity checking
+	[[ "$(awk "BEGIN { print (${FLASH_INTERVAL} < .05) ? \"Y\" : \"N\" }")" == "Y" ]] && FLASH_INTERVAL=".05"
+	[[ "$(awk "BEGIN { print (${FLASH_INTERVAL} >   1) ? \"Y\" : \"N\" }")" == "Y" ]] && FLASH_INTERVAL="1"
+
+	while true; do
+		# Reverse video
+		printf '\e[?5h'
+
+		sleep "${FLASH_INTERVAL}"
+
+		# Reset video
+		printf '\e[?5l'
+
+		# Break if a key is pressed
+		read -n 1 -r -s -t "${FLASH_INTERVAL}" && break
+
+		sleep 0.1
+	done
+}
+
+
 # Output formatted text
 # I would have used an associative array (and in one version, I did),
 # but it's only in bash 4+ which is ... more rarely seen than I'd like
@@ -300,6 +329,12 @@ _o_completion() {
 complete -F _output_completion output
 complete -F _o_completion      o
 
+
+# Function aliases
+alias flash-term='     _flash_term'
+alias flash-terminal=' _flash_term'
+alias term-flash='     _flash_term'
+alias terminal-flash=' _flash_term'
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
