@@ -16,3 +16,6 @@ hardstatus string "%{= kb}[ %=%{w}%?%-Lw%?%{C}(%{W}%n*%f %t%?(%u)%?%{C})%{w}%?%+
 
 # Set terminal type/TERM variable
 # term screen-256color
+
+# Enable 24bit color
+truecolor on

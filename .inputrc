@@ -18,8 +18,8 @@ set bell-style none
 # Enable tab-completion regardless of filename case
 set completion-ignore-case on
 
-# Common prefixes longer than 10 are replaced with an ellipsis when displaying possible completions
-set completion-prefix-display-length 10
+# Common prefixes longer than 5 are replaced with an ellipsis when displaying possible completions
+set completion-prefix-display-length 5
 
 # Enable returning up to 500 tab-completions without having to be asked
 set completion-query-items 500
@@ -67,6 +67,9 @@ set skip-completed-text on
 
 # Suffix each returned file tab-completion with a character denoting its type
 set visible-stats on
+
+# Colored file types
+set colored-stats on
 
 
 # The below keys are configured with this setup in mind:
