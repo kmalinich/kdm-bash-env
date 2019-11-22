@@ -19,3 +19,6 @@ hardstatus string "%{= kb}[ %=%{w}%?%-Lw%?%{C}(%{W}%n*%f %t%?(%u)%?%{C})%{w}%?%+
 
 # Enable 24bit color
 truecolor on
+
+# Enable monitoring of background screens
+monitor on
