@@ -119,12 +119,99 @@ _kdm_time() {
 }
 
 
+# Update Git submodule, but detach and return immediately (or close to immediately)
+_kdm_update_submodule() {
+	# Declare vars as local
+	local DIR_SUBMODULE SUBMODULE
+
+	SUBMODULE="${1}"
+
+	DIR_SUBMODULE="${HOME}/${SUBMODULE}"
+	cd "${DIR_SUBMODULE}" || return 2
+
+	{
+		git fetch --all --prune
+		git checkout master
+		git pull
+	} > /dev/null 2>&1
+
+	output keyval-o "[kdm-update]      [subm]" "${SUBMODULE}"
+}
+
+# Update all Git submodules for kdm-bash-env (in a parallel-ish fashion)
+_kdm_update() {
+	# Declare vars as local
+	local ARRAY_SUBMODULES DIR_SUBMODULE SUBMODULE OLD_PWD WAIT_COUNT
+
+	OLD_PWD="${PWD}"
+
+	# Change to home directory
+	if ! cd; then
+		output error "Unable to change to home directory"
+		return 1
+	fi
+
+	output keyval "[kdm-update][main]" "Repo fetch"
+	git fetch --all --prune
+	echo
+
+	output keyval "[kdm-update][main]" "Repo pull"
+	git pull --prune
+	echo
+
+	output keyval "[kdm-update][main]" "Generating submodule list"
+	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
+	echo
+
+	output keyval "[kdm-update][main]" "Updating submodules"
+	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
+		_kdm_update_submodule "${SUBMODULE}" &
+	done
+	echo
+
+	# Wait for Git processes to complete
+	output keyval "[kdm-update][main]" "Waiting for Git processes to complete"
+	echo
+
+	WAIT_COUNT="0"
+	while pgrep -f 'git fetch|git pull|git status|git submodule' > /dev/null 2>&1; do
+		((WAIT_COUNT++))
+
+		if [[ "${WAIT_COUNT}" -ge "200" ]]; then
+			output error "Waiting for Git processes to complete took too long"
+			return 6
+		fi
+
+		sleep 0.1
+	done
+
+	echo
+	output keyval "[kdm-update][main]" "Submodule status"
+	git submodule
+	echo
+
+	output keyval "[kdm-update][main]" "Repo status"
+	git status
+	echo
+
+	# Change back to original pwd
+	if ! cd "${OLD_PWD}"; then
+		output error "Unable to change back to old pwd '${OLD_PWD}'"
+		return 9
+	fi
+
+	output keyval-g "[kdm-update][main]" "Complete"
+	return 0
+}
+
+
 # Function aliases
 alias kdm-hash='  _kdm_hash'
 alias kdm-help='  _kdm_help'
 alias kdm-pull='  _kdm_pull'
 alias kdm-source='_kdm_source'
 alias kdm-time='  _kdm_time'
+alias kdm-update='_kdm_update'
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
