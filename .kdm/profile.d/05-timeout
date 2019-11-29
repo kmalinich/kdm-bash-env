@@ -1,8 +1,11 @@
-# Set timeout to something reasonable, if missing
-if [[ -z "${TMOUT}" ]]; then
-	unset TMOUT
-	export TMOUT="3600"
-fi
+TMOUT_HR="8"
+TMOUT_MIN="$((60*TMOUT_HR))"
+TMOUT_SEC="$((60*TMOUT_MIN))"
+
+# Set timeout to 8 hours, if missing
+[[ -z "${TMOUT}" ]] && export TMOUT="${TMOUT_SEC}"
+
+unset TMOUT_HR TMOUT_MIN TMOUT_SEC
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
