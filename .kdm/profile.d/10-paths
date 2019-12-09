@@ -1,51 +1,126 @@
-# . "${BASH_ENV_DIR_PROFILE_D}/02-arrays"
+# Configure MANPATH from array ARRAY_MANPATH
+MANPATH_OLD="${MANPATH}"
 
-# Configure MANPATH from array if entry is present
+# Find entries currently in MANPATH that are not present in ARRAY_MANPATH
+for ENTRY in "${ARRAY_MANPATH[@]}"; do
+	# If entry is not a directory, remove entry from MANPATH_OLD
+	[[ ! -d "${ENTRY}" ]] && MANPATH_OLD="${MANPATH_OLD//:$ENTRY/}"
+
+	# If entry already present in MANPATH_OLD (at any position), remove entry from MANPATH_OLD
+	[[ "${MANPATH_OLD}" =~ (:|^)${ENTRY}(:|$) ]] && MANPATH_OLD="${MANPATH_OLD//:$ENTRY/}"
+done
+
 unset MANPATH
 for ENTRY in "${ARRAY_MANPATH[@]}"; do
-	[[ -d ${ENTRY} ]] && MANPATH="${MANPATH}${MANPATH+:}${ENTRY}"
+	# Skip entry if it is not a directory
+	[[ ! -d "${ENTRY}" ]] && continue
+
+	# If entry already present in MANPATH (at any position), remove entry from MANPATH
+	[[ "${MANPATH}" =~ (:|^)${ENTRY}(:|$) ]] && MANPATH="${MANPATH//:$ENTRY/}"
+
+	# Add entry to beginning of MANPATH
+	MANPATH="${ENTRY}${MANPATH+:}${MANPATH}"
 done
 
-# Configure MIBDIRS from array if entry is present
+# Add what remains of MANPATH_OLD to beginning of MANPATH
+MANPATH="${MANPATH_OLD}${MANPATH+:}${MANPATH}"
+unset MANPATH_OLD
+
+
+
+# Configure MIBDIRS from array ARRAY_MIBDIRS
+MIBDIRS_OLD="${MIBDIRS}"
+
+# Find entries currently in MIBDIRS that are not present in ARRAY_MIBDIRS
+for ENTRY in "${ARRAY_MIBDIRS[@]}"; do
+	# If entry is not a directory, remove entry from MIBDIRS_OLD
+	[[ ! -d "${ENTRY}" ]] && MIBDIRS_OLD="${MIBDIRS_OLD//:$ENTRY/}"
+
+	# If entry already present in MIBDIRS_OLD (at any position), remove entry from MIBDIRS_OLD
+	[[ "${MIBDIRS_OLD}" =~ (:|^)${ENTRY}(:|$) ]] && MIBDIRS_OLD="${MIBDIRS_OLD//:$ENTRY/}"
+done
+
 unset MIBDIRS
 for ENTRY in "${ARRAY_MIBDIRS[@]}"; do
-	[[ -d ${ENTRY} ]] && MIBDIRS="${MIBDIRS}${MIBDIRS+:}${ENTRY}"
-done
-export MIBS="ALL"
+	# Skip entry if it is not a directory
+	[[ ! -d "${ENTRY}" ]] && continue
 
-# Configure NODE_PATH from array if entry is present
+	# If entry already present in MIBDIRS (at any position), remove entry from MIBDIRS
+	[[ "${MIBDIRS}" =~ (:|^)${ENTRY}(:|$) ]] && MIBDIRS="${MIBDIRS//:$ENTRY/}"
+
+	# Add entry to beginning of MIBDIRS
+	MIBDIRS="${ENTRY}${MIBDIRS+:}${MIBDIRS}"
+done
+
+# Add what remains of MIBDIRS_OLD to beginning of MIBDIRS
+MIBDIRS="${MIBDIRS_OLD}${MIBDIRS+:}${MIBDIRS}"
+unset MIBDIRS_OLD
+
+
+
+# Configure NODE_PATH from array ARRAY_NODE_PATH
+NODE_PATH_OLD="${NODE_PATH}"
+
+# Find entries currently in NODE_PATH that are not present in ARRAY_NODE_PATH
+for ENTRY in "${ARRAY_NODE_PATH[@]}"; do
+	# If entry is not a directory, remove entry from NODE_PATH_OLD
+	[[ ! -d "${ENTRY}" ]] && NODE_PATH_OLD="${NODE_PATH_OLD//:$ENTRY/}"
+
+	# If entry already present in NODE_PATH_OLD (at any position), remove entry from NODE_PATH_OLD
+	[[ "${NODE_PATH_OLD}" =~ (:|^)${ENTRY}(:|$) ]] && NODE_PATH_OLD="${NODE_PATH_OLD//:$ENTRY/}"
+done
+
 unset NODE_PATH
 for ENTRY in "${ARRAY_NODE_PATH[@]}"; do
-	[[ -d ${ENTRY} ]] && NODE_PATH="${NODE_PATH}${NODE_PATH+:}${ENTRY}"
+	# Skip entry if it is not a directory
+	[[ ! -d "${ENTRY}" ]] && continue
+
+	# If entry already present in NODE_PATH (at any position), remove entry from NODE_PATH
+	[[ "${NODE_PATH}" =~ (:|^)${ENTRY}(:|$) ]] && NODE_PATH="${NODE_PATH//:$ENTRY/}"
+
+	# Add entry to beginning of NODE_PATH
+	NODE_PATH="${ENTRY}${NODE_PATH+:}${NODE_PATH}"
 done
 
-# Configure PATH from ARRAY_PATH
+# Add what remains of NODE_PATH_OLD to beginning of NODE_PATH
+NODE_PATH="${NODE_PATH_OLD}${NODE_PATH+:}${NODE_PATH}"
+unset NODE_PATH_OLD
+
+
+
+# Configure PATH from array ARRAY_PATH
+PATH_OLD="${PATH}"
+
+# Find entries currently in PATH that are not present in ARRAY_PATH
+for ENTRY in "${ARRAY_PATH[@]}"; do
+	# If entry is not a directory, remove entry from PATH_OLD
+	[[ ! -d "${ENTRY}" ]] && PATH_OLD="${PATH_OLD//:$ENTRY/}"
+
+	# If entry already present in PATH_OLD (at any position), remove entry from PATH_OLD
+	[[ "${PATH_OLD}" =~ (:|^)${ENTRY}(:|$) ]] && PATH_OLD="${PATH_OLD//:$ENTRY/}"
+done
+
 unset PATH
 for ENTRY in "${ARRAY_PATH[@]}"; do
-	# Add entry from array if it is present and a directory
-	[[ -d ${ENTRY} ]] && PATH="${PATH}${PATH+:}${ENTRY}"
+	# Skip entry if it is not a directory
+	[[ ! -d "${ENTRY}" ]] && continue
+
+	# If entry already present in PATH (at any position), remove entry from PATH
+	[[ "${PATH}" =~ (:|^)${ENTRY}(:|$) ]] && PATH="${PATH//:$ENTRY/}"
+
+	# Add entry to beginning of PATH
+	PATH="${ENTRY}${PATH+:}${PATH}"
 done
 
-# Temporarily remove spaces from PATHs before dedupe process below
-MANPATH="${MANPATH//\ /SPACE_CHARACTER_REPLACEMENT}"
-MIBDIRS="${MIBDIRS//\ /SPACE_CHARACTER_REPLACEMENT}"
-NODE_PATH="${NODE_PATH//\ /SPACE_CHARACTER_REPLACEMENT}"
-PATH="${PATH//\ /SPACE_CHARACTER_REPLACEMENT}"
+# Add what remains of PATH_OLD to beginning of PATH
+PATH="${PATH_OLD}${PATH+:}${PATH}"
+unset PATH_OLD
 
-# Remove any duplicates from PATHs - this command string does not account for spaces (TODO/BUG)
-MANPATH=$(  echo "${MANPATH}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
-MIBDIRS=$(  echo "${MIBDIRS}"   | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
-NODE_PATH=$(echo "${NODE_PATH}" | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
-PATH=$(     echo "${PATH}"      | awk -v RS=':' -v ORS=":" '!a[$1]++{if (NR > 1) printf ORS; printf $a[$1]}')
-
-# Re-insert spaces into PATHs that were removed above
-MANPATH="${MANPATH//SPACE_CHARACTER_REPLACEMENT/\ }"
-MIBDIRS="${MIBDIRS//SPACE_CHARACTER_REPLACEMENT/\ }"
-NODE_PATH="${NODE_PATH//SPACE_CHARACTER_REPLACEMENT/\ }"
-PATH="${PATH//SPACE_CHARACTER_REPLACEMENT/\ }"
 
 # Export PATHs
 export MANPATH MIBDIRS NODE_PATH PATH
+export MIBS="ALL"
+
 
 # Get full path to which binary
 WHICHPATH="$(command -v which)"
