@@ -1,12 +1,17 @@
 # Functions: Date
+# Handy for naming backup files
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
 # Output example: '20180801' for August 1st 2018
-# Handy for naming backup files
 ymd() {
 	date '+%Y%m%d'
+}
+
+# Output example: '20180801-115522' for August 1st 2018 11:55:22
+ymdt() {
+	date '+%Y%m%d-%H%M%S'
 }
 
 
