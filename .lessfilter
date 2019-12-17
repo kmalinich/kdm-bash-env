@@ -3,8 +3,14 @@
 # exit 1 if no 1st argument present
 [[ -z "${1}" ]] && exit 1
 
+# Source clean-hash function from kdm-bash-env, or exit 2
+source "${HOME}/.kdm/rc.d/00-base" || exit 2
+
+# exit 3 if pygmentize is not present
+hash pygmentize || exit 3
+
 # Default return code
-PYGMENTIZE_RETURN="3"
+PYGMENTIZE_RETURN="5"
 
 # Pygments formatter and style
 PYG_FMT="terminal16m"
@@ -19,11 +25,23 @@ FILE_NAME="${FILE_NAME,,}"
 
 
 
+
 case "${FILE_NAME}" in
 	# Fairly common file types normally supported by pygmentize
-	*.[ch]|*.[ch]pp|*.[ch]xx|*.ad[asb]|*.asm|*.awk|*.axp|*.bat|*.c|*.cc|*.cmd|*.cnf|*.conf|*.config|*.cpp|*.css|*.diff|*.ebuild|*.eclass|*.groff|*.h|*.hh|*.htm|*.html|*.inc|*.ino|*.java|*.js|*.json|*.l|*.lsp|*.m4|*.md|*.p|*.pas|*.patch|*.php|*.pl|*.pm|*.pod|*.pov|*.ppd|*.py|*.rb|*.sass|*.scss|*.sh|*.sls|*.sql|*.svg|*.xml|*.xps|*.xsd|*.xsl|*.yml)
+	*.[ch]|*.[ch]pp|*.[ch]xx|*.ad[asb]|*.asm|*.awk|*.axp|*.bat|*.c|*.cc|*.cmd|*.cnf|*.conf|*.config|*.cpp|*.css|*.diff|*.ebuild|*.eclass|*.groff|*.h|*.hh|*.htm|*.html|*.inc|*.ino|*.java|*.js|*.l|*.lsp|*.m4|*.md|*.p|*.pas|*.patch|*.php|*.pl|*.pm|*.pod|*.pov|*.ppd|*.py|*.rb|*.sass|*.scss|*.sh|*.sls|*.sql|*.svg|*.xml|*.xps|*.xsd|*.xsl|*.yml)
 		# Not setting a lexer here, let it attempt to autodetect
 		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"
+		PYGMENTIZE_RETURN="${?}"
+		;;
+
+	# JSON, sorted by jq, with default spaces (no tabs) output
+	*.json)
+		if ! hash jq; then
+			pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l json "${1}"
+		fi
+
+		# Not setting a lexer here, let it attempt to autodetect
+		jq -S . "${1}" | pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l json
 		PYGMENTIZE_RETURN="${?}"
 		;;
 
@@ -51,7 +69,7 @@ case "${FILE_NAME}" in
 	# Catch any other filetype here, but first grep for sh-like shebang
 	# If it passes, treat it as sh-like
 	*)
-		grep -Eq '#!.*.\/bin.*.sh' "${1}" || exit 2
+		grep -Eq '#!.*.\/bin.*.sh' "${1}" || exit 4
 
 		# Manually set the 'sh' lexer
 		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l sh "${1}"
