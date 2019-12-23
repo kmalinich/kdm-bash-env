@@ -1,0 +1,6 @@
+{
+	"reject": [
+		"sort-json"
+	],
+	"upgrade": true
+}
