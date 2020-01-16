@@ -13,7 +13,8 @@ _show_motd() {
 	local FACTER_JSON
 	local HEAD_FMT HEAD_KEY HEAD_VAL1 HEAD_VAL2
 	local MOTD_FMT MOTD_KEY MOTD_VAL1 MOTD_VAL2
-	local CPU HST IP LOAD RAM RAMC STR UPT VER
+	local CPU HST IP LOAD STR UPT VER
+	local RAM RAMB RAMC RAMG
 
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
@@ -88,18 +89,23 @@ _show_motd() {
 	esac
 
 	# Get CPU, RAM, uptime, sysload, perhaps do some formatting
-	RAM="$( echo "${FACTER_JSON}" | jq -Mcr .memory.system.total)"
 	RAMC="$(echo "${FACTER_JSON}" | jq -Mcr .memory.system.capacity)"
+	RAMB="$(echo "${FACTER_JSON}" | jq -Mcr .memory.system.total_bytes)"
+	RAMG="$( echo "scale=2; ${RAMB}/1073741824" | bc)G"
 
 	# Handle older versions of facter
-	[[ "${RAM}"  == "null" ]] && RAM="$( echo "${FACTER_JSON}" | jq -Mcr .memorysize)"
+	[[ "${RAM}"  == "null" ]] && RAMG="$( echo "${FACTER_JSON}" | jq -Mcr .memorysize)G"
 	[[ "${RAMC}" == "null" ]] && RAMC="??"
+
+	# RAM gibibytes: trim trailing zeros and zero-pad
+	RAMG="${RAMG//\.00/}"
+	[[ "${RAMG:0:1}" == "." ]] && RAMG="0${RAMG}"
 
 	IP="$(  echo "${FACTER_JSON}" | jq -Mcr '.networking.ip' | awk -F '.' '{print $2 "." $3 "." $4}')"
 	HST="$( echo "${FACTER_JSON}" | jq -Mcr '.networking.hostname')"
 	CPU="$( echo "${FACTER_JSON}" | jq -Mcr '.processors.models[0]' | sed -r -e 's/(^\s?)|(\s?CPU)|(\s?@)|(\s?Processor)|(\(.?.?\))|(\s?[0-9]\.[0-9]{1,3}GHz\s?)|(\s[0-9]\s)|(Intel\(..?\)\sCore\(..?\)\s?)|Intel\sCore\s|\(|\)|Intel\(..?\)\s|Atom|Xeon|\sv[1-9]|\s//g' -e 's/(\s)+/\ /g')"
 	UPT="$( echo "${FACTER_JSON}" | jq -Mcr '.system_uptime.uptime')"
-	LOAD="$(echo "${FACTER_JSON}" | jq -Mcr '.load_averages | .["5m"]')"
+	LOAD="$(echo "${FACTER_JSON}" | jq -Mcr '.load_averages | .["1m"]')"
 
 	# Format a couple things
 	UPT="${UPT:0:8}"
@@ -107,7 +113,12 @@ _show_motd() {
 	UPT="${UPT/\ ho/}"
 	LOAD="${LOAD:0:4}"
 	RAMC="${RAMC%%.*}%"
-	RAM="${RAM%%.*}G|${RAMC}"
+	RAM="${RAMG}|${RAMC}"
+
+	# Clean up CPU string for ARM devices
+	[[ "${CPU}" == *"ARMv6"* ]] && CPU="ARMv6"
+	[[ "${CPU}" == *"ARMv7"* ]] && CPU="ARMv7"
+	[[ "${CPU}" == *"ARMv8"* ]] && CPU="ARMv8"
 
 	# Find longest string in array for dynamic width
 	ARRAY_VALUES=(
