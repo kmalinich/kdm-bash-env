@@ -1,9 +1,9 @@
 " Load files from ~/.vimrc.d
 function! LoadFile(name)
-	let l:path = $HOME.'/.vimrc.d/' . a:name . '.vim'
+	let l:path = $HOME . '/.vimrc.d/' . a:name . '.vim'
 
 	if !filereadable(l:path)
-		echo 'Failed to load: '.l:path
+		echo 'Failed to load: ' . l:path
 	endif
 
 	if filereadable(l:path)
@@ -39,6 +39,7 @@ call LoadFile('modeline')
 call LoadFile('spell')
 call LoadFile('fileformat')
 call LoadFile('case')
+" call LoadFile('coc.nvim')
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
