@@ -1,4 +1,4 @@
-" if hidden is not set, TextEdit might fail.
+" if hidden is not set, TextEdit might fail
 set hidden
 
 " Some servers have issues with backup files, see #649
@@ -8,21 +8,15 @@ set nowritebackup
 " Better display for messages
 set cmdheight=2
 
-" You will have bad experience for diagnostic messages when it's default 4000.
+" You will have bad experience for diagnostic messages when it's default 4000
 set updatetime=300
 
-" don't give |ins-completion-menu| messages.
+" don't give |ins-completion-menu| messages
 set shortmess+=c
 
-" always show signcolumns
-set signcolumn=yes
-
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-			\ pumvisible() ? "\<C-n>" :
-			\ <SID>check_back_space() ? "\<TAB>" :
-			\ coc#refresh()
+" Use tab for trigger completion with characters ahead and navigate
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin
+inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
@@ -30,11 +24,11 @@ function! s:check_back_space() abort
 	return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <c-space> to trigger completion.
+" Use <c-space> to trigger completion
 inoremap <silent><expr> <c-space> coc#refresh()
 
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position
+" Coc only does snippet and additional edit on confirm
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Or use `complete_info` if your vim support it, like:
 " inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -72,7 +66,7 @@ nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
 	autocmd!
-	" Setup formatexpr specified filetype(s).
+	" Setup formatexpr specified filetype(s)
 	autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
 	" Update signature help on jump placeholder
 	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
@@ -87,7 +81,7 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 " Fix autofix problem of current line
 nmap <leader>qf  <Plug>(coc-fix-current)
 
-" Create mappings for function text object, requires document symbols feature of languageserver.
+" Create mappings for function text object, requires document symbols feature of languageserver
 xmap if <Plug>(coc-funcobj-i)
 xmap af <Plug>(coc-funcobj-a)
 omap if <Plug>(coc-funcobj-i)
@@ -120,9 +114,9 @@ nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
 nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
 " Search workspace symbols
 nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
-" Do default action for next item.
+" Do default action for next item
 nnoremap <silent> <space>j  :<C-u>CocNext<CR>
-" Do default action for previous item.
+" Do default action for previous item
 nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>

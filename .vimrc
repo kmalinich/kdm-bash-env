@@ -39,7 +39,7 @@ call LoadFile('modeline')
 call LoadFile('spell')
 call LoadFile('fileformat')
 call LoadFile('case')
-" call LoadFile('coc.nvim')
+call LoadFile('coc.nvim')
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :

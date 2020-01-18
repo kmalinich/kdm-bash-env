@@ -73,9 +73,6 @@
 [submodule ".vim/pack/kdm/securemodelines"]
 	path = .vim/pack/kdm/securemodelines
 	url = https://github.com/ciaranm/securemodelines.git
-[submodule ".vim/pack/kdm/supertab"]
-	path = .vim/pack/kdm/supertab
-	url  = https://github.com/ervandew/supertab.git
 [submodule ".vim/pack/kdm/tabular"]
 	path = .vim/pack/kdm/tabular
 	url  = https://github.com/godlygeek/tabular.git
