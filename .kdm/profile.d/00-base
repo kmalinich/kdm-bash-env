@@ -4,12 +4,10 @@ export BASH_ENV_DIR_CODE="${HOME}/code"
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_NMAP="${HOME}/.nmap"
 export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
+
 export BASH_ENV_DIR_SSH="${HOME}/.ssh"
 export BASH_ENV_DIR_SSH_CONFIG="${HOME}/.ssh/config.d"
 export BASH_ENV_DIR_SSH_SESSIONS="${HOME}/.ssh-sessions"
-export BASH_ENV_DIR_VIM="${HOME}/.vim"
-export BASH_ENV_DIR_VIM_BACKUP="${BASH_ENV_DIR_VIM}/backup"
-export BASH_ENV_DIR_VIM_TMP="${BASH_ENV_DIR_VIM}/tmp"
 
 export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
 export BASH_ENV_DIR_EXTRA_LOGOUT="${BASH_ENV_DIR_KDM}/extra-logout"
