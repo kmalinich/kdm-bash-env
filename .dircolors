@@ -449,6 +449,7 @@ FILE   38;2;240;240;240
 # Below is 256color
 
 TERM gnome-256color
+TERM linux
 TERM putty-256color
 TERM rxvt-256color
 TERM rxvt-unicode-256color
