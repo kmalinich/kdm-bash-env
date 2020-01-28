@@ -26,6 +26,9 @@ done
 MANPATH="${MANPATH_OLD}${MANPATH+:}${MANPATH}"
 unset MANPATH_OLD
 
+# Remove leading colon if present
+[[ "${MANPATH:0:1}" == ":" ]] && MANPATH="${MANPATH#:}"
+
 
 
 # Configure MIBDIRS from array ARRAY_MIBDIRS
@@ -55,6 +58,9 @@ done
 # Add what remains of MIBDIRS_OLD to beginning of MIBDIRS
 MIBDIRS="${MIBDIRS_OLD}${MIBDIRS+:}${MIBDIRS}"
 unset MIBDIRS_OLD
+
+# Remove leading colon if present
+[[ "${MIBDIRS:0:1}" == ":" ]] && MIBDIRS="${MIBDIRS#:}"
 
 
 
@@ -86,6 +92,9 @@ done
 NODE_PATH="${NODE_PATH_OLD}${NODE_PATH+:}${NODE_PATH}"
 unset NODE_PATH_OLD
 
+# Remove leading colon if present
+[[ "${NODE_PATH:0:1}" == ":" ]] && NODE_PATH="${NODE_PATH#:}"
+
 
 
 # Configure PATH from array ARRAY_PATH
@@ -115,6 +124,9 @@ done
 # Add what remains of PATH_OLD to beginning of PATH
 PATH="${PATH_OLD}${PATH+:}${PATH}"
 unset PATH_OLD
+
+# Remove leading colon if present
+[[ "${PATH:0:1}" == ":" ]] && PATH="${PATH#:}"
 
 
 # Export PATHs
