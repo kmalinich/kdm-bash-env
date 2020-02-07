@@ -1,9 +1,16 @@
+# Just (attempt to) unset the timeout if override file is present
+
+if [[ -e "${HOME}/.notimeout" || -e "${HOME}/.no-timeout" ]]; then
+	unset TMOUT
+	return 0
+fi
+
+
 TMOUT_HR="8"
 TMOUT_MIN="$((60*TMOUT_HR))"
 TMOUT_SEC="$((60*TMOUT_MIN))"
 
 # Set timeout to 8 hours, if missing
-# TODO: Provide a way to override this
 [[ -z "${TMOUT}" ]] && export TMOUT="${TMOUT_SEC}"
 
 unset TMOUT_HR TMOUT_MIN TMOUT_SEC
