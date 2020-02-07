@@ -55,12 +55,6 @@
 [submodule ".vim/pack/kdm/logrotate"]
 	path = .vim/pack/kdm/logrotate
 	url  = https://github.com/moon-musick/vim-logrotate.git
-[submodule ".vim/pack/kdm/nerdtree"]
-	path = .vim/pack/kdm/nerdtree
-	url  = https://github.com/scrooloose/nerdtree.git
-[submodule ".vim/pack/kdm/nerdtree-git-plugin"]
-	path = .vim/pack/kdm/nerdtree-git-plugin
-	url  = https://github.com/Xuyuanp/nerdtree-git-plugin.git
 [submodule ".vim/pack/kdm/polyglot"]
 	path = .vim/pack/kdm/polyglot
 	url  = https://github.com/sheerun/vim-polyglot

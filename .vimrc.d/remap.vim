@@ -1,14 +1,5 @@
 " Shortcut key maps
 
-" pbcopy for macOS copy/paste
-" if has('macunix')
-" 	vmap <C-x> :!pbcopy<CR>
-" 	vmap <C-c> :w !pbcopy<CR><CR>
-"
-" 	" Make it so copy/paste to system works from vim
-" 	set clipboard=unnamed
-" endif
-
 " Oops-Caps-Lock abbreviations
 cnoreabbrev Q q
 cnoreabbrev Q! q!
@@ -42,9 +33,6 @@ nnoremap <C-d> <Esc>dd
 
 " Ctrl-h : Enable/disable code concealing
 map <C-h> :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
-
-" Ctrl-t to toggle NERDTree
-map <C-t> :NERDTreeToggle<CR>
 
 " Map \ml to append modeline
 nnoremap ml :call ModelineAppend()<CR>
