@@ -329,12 +329,13 @@ FILE   38;2;240;240;240
 .patch    38;2;255;255;0
 .qml      38;2;255;255;0
 .rst      38;2;255;255;0
-.sass     38;2;255;255;0
-.scss     38;2;255;255;0
 .shtml    38;2;255;255;0
 .spec     38;2;255;255;0
 .textile  38;2;255;255;0
 .txt      38;2;255;255;0
+# Make sass/scss slightly more orange from vanilla css
+.sass     38;2;255;172;0
+.scss     38;2;255;172;0
 # ABOUT        38;2;255;255;0
 # ABOUT-NLS    38;2;255;255;0
 # AUTHOR       38;2;255;255;0
