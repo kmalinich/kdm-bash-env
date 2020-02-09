@@ -44,6 +44,8 @@ ARRAY_EDITOR_ALIASES=(v vi vim nvim)
 ARRAY_EDITOR_NAMES=(nvim vim vi)
 
 
+# Entries at the end       of this array will end up at the beginning of MANPATH
+# Entries at the beginning of this array will end up at the end       of MANPATH
 ARRAY_MANPATH=(
 "${HOME}/perl5/man"
 /usr/local/share/man
@@ -55,6 +57,8 @@ ARRAY_MANPATH=(
 /opt/X11/share/man
 )
 
+# Entries at the end       of this array will end up at the beginning of MIBDIRS
+# Entries at the beginning of this array will end up at the end       of MIBDIRS
 ARRAY_MIBDIRS=(
 "${BASH_ENV_DIR_SNMP}/mibs"
 /usr/share/snmp/mibs
@@ -66,6 +70,8 @@ ARRAY_MKDIR=(
 "${BASH_ENV_DIR_SSH_SESSIONS}"
 )
 
+# Entries at the end       of this array will end up at the beginning of NODE_PATH
+# Entries at the beginning of this array will end up at the end       of NODE_PATH
 ARRAY_NODE_PATH=(
 /usr/lib/nodejs
 /usr/lib/node_modules
@@ -83,6 +89,8 @@ yum
 zypper
 )
 
+# Entries at the end       of this array will end up at the beginning of PATH
+# Entries at the beginning of this array will end up at the end       of PATH
 mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
 ARRAY_PATH=(
 "${ARRAY_PATH[@]}"
@@ -113,6 +121,7 @@ ARRAY_PATH=(
 '/usr/local/opt/openssl@1.1/bin'
 '/usr/local/opt/libxslt/bin'
 '/usr/local/opt/libxml2/bin'
+'/usr/local/opt/python/libexec/bin'
 '/usr/local/opt/gnu-which/bin'
 '/usr/local/opt/gnu-getopt/bin'
 '/usr/local/opt/curl/bin'

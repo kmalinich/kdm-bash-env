@@ -7,8 +7,8 @@
 	],
 
 	"rules": {
-		"no-descending-specificity": [ true ],
-		"no-duplicate-selectors": [ true ],
+		"no-descending-specificity": true,
+		"no-duplicate-selectors": true,
 
 		"comment-no-empty": true,
 		"declaration-block-no-redundant-longhand-properties": true,

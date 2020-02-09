@@ -94,10 +94,11 @@ augroup ft_json
 
 	au BufRead composer.lock set filetype=json
 	au BufRead composer.lock set noexpandtab
-
-	au BufRead tiddlywiki.info set filetype=json
-	au BufRead tiddlywiki.info set noexpandtab
 augroup END
+
+" jsonc support
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
 
 " Markdown
 augroup ft_markdown
