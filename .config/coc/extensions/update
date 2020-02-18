@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+set -e
+
+
+cd "${HOME}/.config/coc/extensions" || exit 1
+
+
+if ! hash ncu > /dev/null 2>&1; then
+	exit 2
+fi
+
+if ! hash npm > /dev/null 2>&1; then
+	exit 3
+fi
+
+if ! hash sort-json > /dev/null 2>&1; then
+	exit 4
+fi
+
+if ! hash jq > /dev/null 2>&1; then
+	exit 5
+fi
+
+
+rm -rf ./node_modules/ ./package-lock.json
+
+ncu -u
+
+FILE_TEMP="$(mktemp)"
+jq -S --tab . ./package.json > "${FILE_TEMP}"
+rm -f ./package.json
+mv "${FILE_TEMP}" ./package.json
+rm -f "${FILE_TEMP}"
+
+npm i
