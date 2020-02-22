@@ -36,9 +36,9 @@ nnoremap as :call ALELintDelay(5000)<CR>
 " Ctrl-f : Run fixer
 nmap <silent> <C-f> <Plug>(ale_fix)
 
-" Ctrl-k/Ctrl-k : Navigate errors
-" nmap <silent> <C-j> <Plug>(ale_previous_wrap)
-" nmap <silent> <C-k> <Plug>(ale_next_wrap)
+" Ctrl-j/Ctrl-k : Navigate errors
+nmap <silent> <C-j> <Plug>(ale_previous_wrap)
+nmap <silent> <C-k> <Plug>(ale_next_wrap)
 
 
 " Base configuration
