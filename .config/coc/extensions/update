@@ -1,36 +1,47 @@
 #!/usr/bin/env bash
 
-set -e
 
+mkdir -p "${HOME}/.config/coc/extensions"
 
 cd "${HOME}/.config/coc/extensions" || exit 1
 
 
 if ! hash ncu > /dev/null 2>&1; then
+	echo "Command unavailable : 'ncu', cannot continue"
 	exit 2
 fi
 
 if ! hash npm > /dev/null 2>&1; then
+	echo "Command unavailable : 'npm', cannot continue"
 	exit 3
 fi
 
-if ! hash sort-json > /dev/null 2>&1; then
+if ! hash jq > /dev/null 2>&1; then
+	echo "Command unavailable : 'jq', cannot continue"
 	exit 4
 fi
 
-if ! hash jq > /dev/null 2>&1; then
-	exit 5
+
+ncu -e 2
+NCU_EXIT="${?}"
+
+if [[ "${NCU_EXIT}" != "0" ]]; then
+	ncu -u > /dev/null 2>&1
+
+	rm -rf ./node_modules/ ./package-lock.json
+
+	FILE_TEMP="$(mktemp)"
+	jq -S --tab . ./package.json > "${FILE_TEMP}"
+
+	rm -f ./package.json
+
+	mv "${FILE_TEMP}" ./package.json
+
+	rm -f "${FILE_TEMP}"
 fi
 
-
-rm -rf ./node_modules/ ./package-lock.json
-
-ncu -u
-
-FILE_TEMP="$(mktemp)"
-jq -S --tab . ./package.json > "${FILE_TEMP}"
-rm -f ./package.json
-mv "${FILE_TEMP}" ./package.json
-rm -f "${FILE_TEMP}"
-
 npm i
+echo; echo
+
+echo "Performing nvim CocUpdateSync"
+nvim -c 'CocUpdateSync|q'
