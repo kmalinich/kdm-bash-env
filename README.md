@@ -1,4 +1,5 @@
 # Overview
+
 * ~2700+ lines of code/functions that _should probably be individual scripts_
   * It used to be a lot longer - but I'm getting smarter, slowly
 * I originally wrote most of this for/at work
@@ -7,50 +8,53 @@
 * It got a wee bit out of control after a while
 
 # Disclaimers
+
 * It's the worst.
 * I'm the worst.
 * Don't use it.
   * (or do)
 
 # "Tested" against
-* **Frequently**
-  * Arch Linux 4.9+
-  * macOS 10.11+
+
+  * bash 4+
+  * Arch Linux 5.5+
+  * macOS 10.15+
     * Requires w/GNU coreutils+findutils installed via brew, force linked
-  * RHEL/CentOS 6+
-  * Raspbian jessie+
-* **Infrequently**
-  * Ubuntu 14.04+
+  * RHEL/CentOS 7+
+  * Raspbian buster+
 * **Notes**
   * This isn't to say everything is 100% working across all platforms
   * "Tested" is in air quotes
   * I fix the broken code as/if I find it
 
 # [Submodules](.gitmodules)
-* **ViM plugins**
+
+* **neovim plugins**
   * ap/vim-css-color
-  * ervandew/supertab
+  * ciaranm/securemodelines
   * fidian/hexmode
-  * godlygeek/tabular
   * kmalinich/salt-jinja-vim
   * kmalinich/vim-brogrammer-theme
   * MarcWeber/vim-addon-local-vimrc
   * moon-musick/vim-logrotate
+  * neoclide/coc.nvim
   * othree/javascript-libraries-syntax.vim
   * pangloss/vim-javascript
   * paranoida/vim-airlineish
+  * RRethy/vim-illuminate
   * saltstack/salt-vim
-  * scrooloose/nerdtree
   * sheerun/vim-polyglot
+  * tangledhelix/vim-kickstart
   * tpope/vim-fugitive
   * vim-airline/vim-airline
   * vim-scripts/Align
   * vim-scripts/interfaces
   * w0rp/ale
-  * Xuyuanp/nerdtree-git-plugin
+  * zimbatm/haproxy.vim
 
 # Notes
-* **ViM plugins**
+
+* **neovim plugins**
   * All vim plugins are loaded using native vim package management
 * **True color**
   * Make sure you're using a terminal emulator that supports this
@@ -63,12 +67,10 @@
 * **Misc**
   * Facter 4+ is required for the dynamic MOTD
     * For best performance, configure fact caching in `facter.conf`
-  * There's way, _way, **way**_ too many SNMP MIBs in the `~/.snmp/mibs` submodule
-    * It slows down snmp commands quite a lot
-    * If you don't want/need ~500 SNMP MIBs, remove the submodule
   * Any missing binaries/libraries it (probably) should warn you about
 
 # Install
+
 First, back up your existing bash history (probably located at `~/.bash_history`)
 ```
 cd
