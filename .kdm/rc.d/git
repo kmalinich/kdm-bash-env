@@ -8,11 +8,11 @@ _g_gi() {
 	# Declare vars as local
 	local BRANCH COMMIT CONFIG DIR HASH RELEASE TAG TAGS TOP URL
 
-	BRANCH="$(git get-branch 2> /dev/null)"
-	COMMIT="$(git get-commit 2> /dev/null)"
-	DIR="$(   git get-dir    2> /dev/null)"
-	TOP="$(   git get-top    2> /dev/null)"
-	URL="$(   git get-url    2> /dev/null)"
+	BRANCH="$(git get-branch  2> /dev/null)"
+	COMMIT="$(git get-commit  2> /dev/null)"
+	DIR="$(   git get-gitdir  2> /dev/null)"
+	TOP="$(   git get-repodir 2> /dev/null)"
+	URL="$(   git get-url     2> /dev/null)"
 
 	[[ -z "${BRANCH}" ]] && output error "No branch detected" && return
 	[[ -z "${COMMIT}" ]] && output error "No commit detected" && return
@@ -124,7 +124,7 @@ _g_gu() {
 	# Generate temp file for output (until I learn how to do it without that)
 	TEMP_FILE="$(mktemp)"
 
-	git smp > "${TEMP_FILE}" 2>&1
+	git smi > "${TEMP_FILE}" 2>&1
 	CMD_EXIT="${?}"
 
 	if [[ -s "${TEMP_FILE}" ]]; then

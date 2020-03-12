@@ -48,8 +48,6 @@
   * vim-scripts/interfaces
   * w0rp/ale
   * Xuyuanp/nerdtree-git-plugin
-* **Other**
-  * kmalinich/snmp-mibs
 
 # Notes
 * **ViM plugins**

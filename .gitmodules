@@ -1,9 +1,3 @@
-[submodule ".nmap"]
-	path = .nmap
-	url  = https://github.com/kmalinich/nmap-scripts.git
-[submodule ".snmp/mibs"]
-	path = .snmp/mibs
-	url  = https://github.com/kmalinich/snmp-mibs.git
 [submodule ".vim/pack/kdm/airline"]
 	path = .vim/pack/kdm/airline
 	url  = https://github.com/vim-airline/vim-airline.git

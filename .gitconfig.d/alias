@@ -9,9 +9,8 @@
 	bm  = branch --merged
 	bnm = branch --no-merged
 
-	cl    = clone -j8 --recursive --depth 1 --shallow-submodules
-	cld   = clone -j8 --recursive
-	# clone = clone -j8 --recursive --depth 1 --shallow-submodules
+	cl  = clone -j8 --recursive --depth 1 --shallow-submodules
+	cld = clone -j8 --recursive
 
 	co  = checkout
 	cob = checkout -b
@@ -28,28 +27,29 @@
 
 	# Delete any branches that have been merged into master
 	# See also: https://gist.github.com/robmiller/5133264
-	dm = "!dm() { git up && git branch --merged | grep -v '\\*' | xargs -n 1 git bd 2> /dev/null; }; dm"
+	dm = "!dm() { git up && git bm | grep -v '\\*' | xargs -n 1 git bd 2> /dev/null; }; dm"
 
 	f = fetch --all --prune
 
 	# Fix upstream
-	fu = "!fu() { BRANCH=\"$(git get-b 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git b \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; fu"
+	fu = "!fu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git b \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; fu"
 
-	get-b      = symbolic-ref --short HEAD
-	get-br     = symbolic-ref --short HEAD
-	get-branch = symbolic-ref --short HEAD
-	get-commit = rev-parse HEAD
-	get-dir    = rev-parse --git-dir
-	get-tags   = describe --tags
-	get-top    = rev-parse --show-toplevel
-	get-url    = config remote.origin.url
-
-	i = init
+	get-branch  = symbolic-ref --short HEAD
+	get-commit  = rev-parse HEAD
+	get-gitdir  = rev-parse --git-dir
+	get-repodir = rev-parse --show-toplevel
+	get-tags    = describe --tags
+	get-url     = config remote.origin.url
 
 	l  = log
-	ll = log --pretty='tformat:[%C(yellow)%h%C(reset)] [%C(blue)%aI%C(reset)] [%C(red)%cn%C(reset)] %C(cyan)::%C(reset) %s'
+
+	# Maybe add commit URL, example: https://github.com/kmalinich/node-bmw-client/commit/ab657ff5cfb3cf190ab3fd9699ff30fd365c5b4f
+	ll = log --pretty='tformat:[ %C(yellow)%h%C(reset) ] [ %C(blue)%aI%C(reset) ] [ %C(red)%><(15)%an%C(reset) ] %C(cyan)%s%C(reset)'
 
 	m = merge
+
+	# Requires GitHub CLI (https://hub.github.com/)
+	o = browse
 
 	pl  = pull
 	plm = "!plm() { git f; git com; git plp; git s; }; plm"
@@ -59,7 +59,9 @@
 	ps   = push
 	psvo = push --verbose origin
 
-	pr = !bash -c 'stash pull-request $0 $@'
+	# Requires GitHub CLI (https://hub.github.com/)
+	pr = !bash -c 'hub pull-request $0 $@'
+	# pr = "!pr() { hub pull-request $0 $@; }; pr"
 
 	prune = fetch --all --prune
 
@@ -70,7 +72,7 @@
 
 	sm   = submodule
 	smf  = submodule foreach --recursive
-	smp  = submodule update  --recursive --init
+	smi  = submodule update  --recursive --init
 	smup = "!smup() { git f; git up; git smf 'BAR=\"=---------------------------------------------=\"; echo \"${BAR}\"; git plu; echo \"${BAR}\\n\\n\"'; }; smup"
 
 	undo = checkout --
