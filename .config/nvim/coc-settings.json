@@ -1,4 +1,4 @@
 {
-	"suggest.autoTrigger": "trigger",
-	"javascript.suggestionActions.enabled": false
+	"javascript.suggestionActions.enabled": false,
+	"suggest.autoTrigger": "trigger"
 }

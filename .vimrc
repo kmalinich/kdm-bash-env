@@ -11,12 +11,17 @@ function! LoadFile(name)
 	endif
 endfunction
 
+
+" These are in a specific order
+call LoadFile('environment')
 call LoadFile('indent')
+call LoadFile('spell')
+call LoadFile('coc.nvim')
 call LoadFile('polyglot')
 call LoadFile('encoding')
-call LoadFile('environment')
 call LoadFile('syntax')
 call LoadFile('backup')
+call LoadFile('truecolor')
 call LoadFile('search')
 call LoadFile('scroll')
 call LoadFile('titlebar')
@@ -24,7 +29,7 @@ call LoadFile('buffers')
 call LoadFile('misc')
 call LoadFile('mouse')
 call LoadFile('history')
-call LoadFile('truecolor')
+call LoadFile('illuminate')
 call LoadFile('functions')
 call LoadFile('remap')
 call LoadFile('filetype')
@@ -36,10 +41,8 @@ call LoadFile('javascript')
 call LoadFile('ale')
 call LoadFile('airline')
 call LoadFile('modeline')
-call LoadFile('spell')
 call LoadFile('fileformat')
 call LoadFile('case')
-call LoadFile('coc.nvim')
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
