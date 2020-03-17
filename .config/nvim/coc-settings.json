@@ -2,15 +2,15 @@
 	"javascript.suggestionActions.enabled": false,
 	"stylelint.filetypes": [
 		"css",
-		"wxss",
-		"scss",
+		"javascriptreact",
 		"less",
 		"postcss",
+		"scss",
 		"sugarss",
-		"vue",
-		"javascriptreact",
 		"typescript",
-		"typescriptreact"
+		"typescriptreact",
+		"vue",
+		"wxss"
 	],
 	"suggest.autoTrigger": "trigger"
 }

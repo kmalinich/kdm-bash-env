@@ -1,16 +1,13 @@
 # jenv setup to manage multiple java versions
-# first, check if jenv is installed
-if hash jenv; then
-	# Java home variable on OS X
-	[[ -d /usr/local/var/jenv ]] && export JENV_ROOT="/usr/local/var/jenv"
 
+# Check if jenv is installed
+if hash jenv; then
 	# Load jenv automatically
 	eval "$(jenv init - --no-rehash)"
-
-	[[ "${BASH_SOURCE[0]}" != "${0}" ]] && return 0 || exit 0
 fi
 
-# If no jenv, setup JAVA_HOME variable.
+# Init JAVA_HOME variable
+
 # Check if the java_home binary is present
 if [[ -s /usr/libexec/java_home ]]; then
 	# Send all to stdout and grep for filepath
@@ -19,6 +16,7 @@ if [[ -s /usr/libexec/java_home ]]; then
 	# If the return is a path (aka not empty) - export it; otherwise, unset it
 	if [[ "${JAVA_HOME}" ]]; then
 		export JAVA_HOME
+		export JDK_HOME="${JAVA_HOME}"
 	else
 		unset JAVA_HOME
 	fi
