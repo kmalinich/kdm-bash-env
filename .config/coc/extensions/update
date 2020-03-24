@@ -22,24 +22,21 @@ if ! hash jq > /dev/null 2>&1; then
 fi
 
 
-ncu -e 2
-NCU_EXIT="${?}"
-
-if [[ "${NCU_EXIT}" != "0" ]]; then
-	ncu -u > /dev/null 2>&1
-
-	rm -rf ./node_modules/ ./package-lock.json
-
-	FILE_TEMP="$(mktemp)"
-	jq -S --tab . ./package.json > "${FILE_TEMP}"
-
-	rm -f ./package.json
-
-	mv "${FILE_TEMP}" ./package.json
-
-	rm -f "${FILE_TEMP}"
+echo "Checking for updates"
+if ncu --error-level 2 --loglevel silent --upgrade; then
+	echo "No update needed"
+	exit 0
 fi
 
+echo "Cleaning up old modules"
+rm -rf ./node_modules/ ./package-lock.json
+
+echo "Formatting/sorting package.json"
+FILE_TEMP="$(mktemp)"
+jq -S --tab . ./package.json > "${FILE_TEMP}"
+mv ---force --verbose "${FILE_TEMP}" ./package.json
+
+echo "Executing 'npm i'"
 npm i
 echo; echo
 
