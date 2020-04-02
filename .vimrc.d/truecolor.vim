@@ -80,3 +80,7 @@ if has('termguicolors') && g:color_16m ==# 'true'
 		augroup END
 	endif
 endif
+
+
+" F10 : Show highlight group for text under cursor
+map <F10> :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
