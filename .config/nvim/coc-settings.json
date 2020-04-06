@@ -1,16 +1,10 @@
 {
 	"javascript.suggestionActions.enabled": false,
-	"stylelint.filetypes": [
-		"css",
-		"javascriptreact",
-		"less",
-		"postcss",
-		"scss",
-		"sugarss",
-		"typescript",
-		"typescriptreact",
-		"vue",
-		"wxss"
-	],
-	"suggest.autoTrigger": "trigger"
+	"css.validate": false,
+	"less.validate": false,
+	"scss.validate": false,
+	"wxss.validate": false,
+	"suggest.autoTrigger": "trigger",
+	"suggest.noselect": false,
+	"suggest.timeout": 500
 }

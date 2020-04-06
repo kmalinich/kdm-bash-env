@@ -144,3 +144,8 @@ nnoremap <silent> <space>k :<C-u>CocPrev<CR>
 
 " Resume latest coc list
 nnoremap <silent> <space>p :<C-u>CocListResume<CR>
+
+
+
+" Global extensions (auto-install)
+let g:coc_global_extensions = [ 'coc-clangd', 'coc-css', 'coc-eslint', 'coc-highlight', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-omnisharp', 'coc-phpls', 'coc-powershell', 'coc-python', 'coc-stylelintplus', 'coc-svg', 'coc-tsserver', 'coc-xml', 'coc-yaml' ]

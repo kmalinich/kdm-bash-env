@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "coc-clangd": ">=0.3.0",
+    "coc-clangd": ">=0.3.1",
     "coc-css": ">=1.2.2",
     "coc-eslint": ">=1.2.6",
     "coc-highlight": ">=1.2.5",
@@ -11,7 +11,7 @@
     "coc-phpls": ">=2.1.8",
     "coc-powershell": ">=0.0.21",
     "coc-python": ">=1.2.9",
-    "coc-stylelint": ">=1.1.0",
+    "coc-stylelintplus": ">=1.0.3",
     "coc-svg": ">=0.0.13",
     "coc-tsserver": ">=1.4.12",
     "coc-xml": ">=1.11.0",
