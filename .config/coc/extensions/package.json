@@ -14,7 +14,7 @@
     "coc-python": ">=1.2.9",
     "coc-stylelintplus": ">=1.0.3",
     "coc-svg": ">=0.0.13",
-    "coc-tsserver": ">=1.4.12",
+    "coc-tsserver": ">=1.4.13",
     "coc-xml": ">=1.11.0",
     "coc-yaml": ">=1.0.4"
   }
