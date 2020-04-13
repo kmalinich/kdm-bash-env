@@ -12,7 +12,7 @@
     "coc-phpls": ">=2.1.8",
     "coc-powershell": ">=0.0.21",
     "coc-python": ">=1.2.9",
-    "coc-stylelintplus": ">=1.0.3",
+    "coc-stylelintplus": ">=1.0.4",
     "coc-svg": ">=0.0.13",
     "coc-tsserver": ">=1.4.13",
     "coc-xml": ">=1.11.0",
