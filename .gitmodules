@@ -7,6 +7,9 @@
 [submodule ".vim/pack/kdm/ale"]
 	path = .vim/pack/kdm/ale
 	url  = https://github.com/w0rp/ale
+[submodule ".vim/pack/kdm/align"]
+	path = .vim/pack/kdm/align
+	url  = https://github.com/kmalinich/Align
 [submodule ".vim/pack/kdm/brogrammer-theme"]
 	path = .vim/pack/kdm/brogrammer-theme
 	url  = https://github.com/kmalinich/vim-brogrammer-theme
@@ -27,7 +30,7 @@
 	url  = https://github.com/fidian/hexmode
 [submodule ".vim/pack/kdm/illuminate"]
 	path = .vim/pack/kdm/illuminate
-	url = https://github.com/RRethy/vim-illuminate
+	url  = https://github.com/RRethy/vim-illuminate
 [submodule ".vim/pack/kdm/interfaces"]
 	path = .vim/pack/kdm/interfaces
 	url  = https://github.com/vim-scripts/interfaces
@@ -39,7 +42,7 @@
 	url  = https://github.com/othree/javascript-libraries-syntax.vim
 [submodule ".vim/pack/kdm/kickstart"]
 	path = .vim/pack/kdm/kickstart
-	url = https://github.com/tangledhelix/vim-kickstart
+	url  = https://github.com/tangledhelix/vim-kickstart
 [submodule ".vim/pack/kdm/local-vimrc"]
 	path = .vim/pack/kdm/local-vimrc
 	url  = https://github.com/MarcWeber/vim-addon-local-vimrc
@@ -57,4 +60,4 @@
 	url  = https://github.com/kmalinich/salt-jinja-vim
 [submodule ".vim/pack/kdm/securemodelines"]
 	path = .vim/pack/kdm/securemodelines
-	url = https://github.com/ciaranm/securemodelines
+	url  = https://github.com/ciaranm/securemodelines
