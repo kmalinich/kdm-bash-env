@@ -7,7 +7,7 @@
     "coc-highlight": ">=1.2.5",
     "coc-html": ">=1.2.4",
     "coc-json": ">=1.2.5",
-    "coc-markdownlint": ">=1.1.1",
+    "coc-markdownlint": ">=1.2.0",
     "coc-omnisharp": ">=0.0.25",
     "coc-phpls": ">=2.1.8",
     "coc-powershell": ">=0.0.21",
