@@ -1,21 +1,21 @@
 {
   "dependencies": {
-    "coc-clangd": ">=0.3.1",
-    "coc-css": ">=1.2.2",
+    "coc-clangd": ">=0.4.1",
+    "coc-css": ">=1.2.3",
     "coc-diagnostic": ">=0.2.6",
     "coc-eslint": ">=1.2.6",
     "coc-highlight": ">=1.2.5",
     "coc-html": ">=1.2.4",
     "coc-json": ">=1.2.5",
-    "coc-markdownlint": ">=1.2.0",
-    "coc-omnisharp": ">=0.0.25",
+    "coc-markdownlint": ">=1.3.0",
+    "coc-omnisharp": ">=0.0.26",
     "coc-phpls": ">=2.1.8",
-    "coc-powershell": ">=0.0.21",
-    "coc-python": ">=1.2.9",
+    "coc-powershell": ">=0.1.1",
+    "coc-python": ">=1.2.12",
     "coc-stylelintplus": ">=1.0.4",
     "coc-svg": ">=0.0.13",
-    "coc-tsserver": ">=1.4.13",
-    "coc-xml": ">=1.11.0",
+    "coc-tsserver": ">=1.5.1",
+    "coc-xml": ">=1.11.1",
     "coc-yaml": ">=1.0.4"
   }
 }
