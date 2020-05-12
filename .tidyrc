@@ -93,7 +93,7 @@ replace-color: no
 
 // Teaching Tidy options
 // new-blocklevel-tags: article, aside, canvas, command, details, dialog, figcaption, figure, footer, header, hgroup, menu, meter, nav, section, summary
-new-blocklevel-tags: ang-select-usstates, article, aside, canvas, command, details, dialog, figcaption, figure, footer, header, hgroup, menu, meter, nav, rz-slider, rzslider, section, spinner, summary, ui-view, wizard, wz-step
+new-blocklevel-tags: ang-select-usstates, article, aside, canvas, command, details, dialog, figcaption, figure, footer, header, hgroup, menu, meter, nav, rz-slider, rzslider, section, spinner, summary, ui-view, wizard, wz-step, yxt-comma
 new-inline-tags: alert, audio, canvas, datalist, keygen, mark, meter, output, progress, rp, rt, ruby, source, time, video, wbr
 // new-pre-tags:
 // new-empty-tags:
