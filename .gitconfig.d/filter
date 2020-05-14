@@ -1,12 +1,17 @@
-[filter "tabspace"]
+[filter "2-spaces-1-tab"]
+	clean  = "unexpand --tabs=2 --first-only"
+	smudge = "expand   --tabs=2 --initial"
+
+[filter "4-spaces-1-tab"]
+	clean  = "unexpand --tabs=4 --first-only"
+	smudge = "expand   --tabs=4 --initial"
+
+
+[filter "1-tab-2-spaces"]
 	clean  = "expand   --tabs=2 --initial"
 	smudge = "unexpand --tabs=2 --first-only"
 
-[filter "tabspace2"]
-	clean  = "expand   --tabs=2 --initial"
-	smudge = "unexpand --tabs=2 --first-only"
-
-[filter "tabspace4"]
+[filter "1-tab-4-spaces"]
 	clean  = "expand   --tabs=4 --initial"
 	smudge = "unexpand --tabs=4 --first-only"
 
