@@ -48,7 +48,7 @@ _show_clock() {
 	local DATE_FMT PF_FMT
 
 	# Date command format
-	DATE_FMT="+%a %b %d %Y %r | %F %R:%S | %:z (%Z)"
+	DATE_FMT="+%F %R:%S %:z (%a %b %d %Y %r %Z)"
 
 	# Show a continuous clock if 1st arg is '-l'
 	if [[ "${1}" != "-l" ]]; then
