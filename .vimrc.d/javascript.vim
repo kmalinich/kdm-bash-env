@@ -1,5 +1,6 @@
 scriptencoding utf-8
 
+
 " Don't make JSX files require a .jsx extension
 let g:jsx_ext_required = 0
 
@@ -26,3 +27,6 @@ let g:javascript_conceal_underscore_arrow_function = '⇒'
 
 " javascript-libraries-syntax config
 let g:used_javascript_libs = 'jquery,react,d3'
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

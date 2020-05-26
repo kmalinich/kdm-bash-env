@@ -1,3 +1,7 @@
+scriptencoding utf-8
+
+
+" Enable secure modelines
 set secure
 
 

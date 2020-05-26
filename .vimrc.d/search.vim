@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Blink search highlight for 5 seconds
 set matchtime=5
 
@@ -19,3 +22,6 @@ nnoremap N Nzzzv
 
 " Show matching brackets
 set showmatch
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

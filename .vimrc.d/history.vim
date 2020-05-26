@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Keep 1000 lines of command history
 set history=1000
 
@@ -18,3 +21,6 @@ else
 	" Remember certain things when we exit (like cursor position)
 	set viminfo='10,\"100,:20,%,n~/.vim/viminfo
 endif
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

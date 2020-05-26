@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Automatically reload .vimrc on changes
 command! ReloadVimrc source ~/.vimrc
 augroup vimrc_reload
@@ -16,3 +19,6 @@ augroup vimrc_sync_fromstart
 	au!
 	au BufEnter * :syntax sync maxlines=200
 augroup END
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

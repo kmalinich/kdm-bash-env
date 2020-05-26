@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Color scheme
 colorscheme brogrammer
 
@@ -84,3 +87,6 @@ endif
 
 " F10 : Show highlight group for text under cursor
 map <F10> :echo synIDattr(synID(line("."), col("."), 1), "name")<CR>
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

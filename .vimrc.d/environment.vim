@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Pull in some environment variables
 let g:color_16m = $COLOR_16M
 
@@ -30,3 +33,6 @@ let g:make = 'gmake'
 if exists('make')
 	let g:make = 'make'
 endif
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

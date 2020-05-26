@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Shortcut key maps
 
 " Oops-Caps-Lock abbreviations
@@ -50,3 +53,6 @@ nnoremap <C-t>     :tabnew<CR>
 inoremap <C-S-tab> <Esc>:tabprevious<CR>i
 inoremap <C-tab>   <Esc>:tabnext<CR>i
 inoremap <C-t>     <Esc>:tabnew<CR>
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

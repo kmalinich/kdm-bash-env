@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
@@ -209,3 +212,6 @@ augroup ft_yaml
 	au BufRead */salt*/roster set filetype=yaml
 	au BufRead */salt*/roster call matchdelete(g:w3)
 augroup END
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

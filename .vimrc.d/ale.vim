@@ -1,5 +1,6 @@
 scriptencoding utf-8
 
+
 " ale (Asynchronous Lint Engine) configuration
 
 
@@ -114,3 +115,6 @@ let g:ale_sh_shellcheck_options = '-e SC1090 -e SC1117 -e SC2059 -s bash -x'
 
 " pylint options
 let g:ale_python_pylint_options = '-d line-too-long'
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

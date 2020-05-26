@@ -1,9 +1,5 @@
-" if hidden is not set, TextEdit might fail
-set hidden
+scriptencoding utf-8
 
-" Some servers have issues with backup files, see #649
-set nobackup
-set nowritebackup
 
 " Better display for messages
 set cmdheight=2
@@ -29,16 +25,16 @@ function! s:check_back_space() abort
 endfunction
 
 
-" Use <c-space> to trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
+" Use Ctrl-space to trigger completion
+inoremap <silent><expr> <C-space> coc#refresh()
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position
 inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
-" Shift-j/Shift-k : Navigate diagnostics
-nmap <silent> <S-j> <Plug>(coc-diagnostic-prev)
-nmap <silent> <S-k> <Plug>(coc-diagnostic-next)
+" Ctrl-j/Ctrl-k : Navigate diagnostics
+nmap <silent> <C-j> <Plug>(coc-diagnostic-prev)
+nmap <silent> <C-k> <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 " nmap <silent> gd <Plug>(coc-definition)
@@ -92,6 +88,10 @@ augroup end
 " nmap <leader>qf <Plug>(coc-fix-current)
 
 
+" Ctrl-f : Run fixer
+nmap <silent> <C-f> <Plug>(coc-fix)
+
+
 " Create mappings for function text object, requires document symbols feature of languageserver
 " xmap if <Plug>(coc-funcobj-i)
 " xmap af <Plug>(coc-funcobj-a)
@@ -119,33 +119,53 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Using CocList
 
-" Show all diagnostics
+" Spacebar-a : Show all diagnostics
 nnoremap <silent> <space>a :<C-u>CocList diagnostics<cr>
 
-" Manage extensions
+" Spacebar-e : Manage extensions
 nnoremap <silent> <space>e :<C-u>CocList extensions<cr>
 
-" Show commands
+" Spacebar-c : Show commands
 nnoremap <silent> <space>c :<C-u>CocList commands<cr>
 
-" Find symbol of current document
+
+" Spacebar-o : Find symbol of current document
 nnoremap <silent> <space>o :<C-u>CocList outline<cr>
 
-
-" Search workspace symbols
+" Spacebar-s : Search workspace symbols
 nnoremap <silent> <space>s :<C-u>CocList -I symbols<cr>
 
 
-" Do default action for next item
+" Spacebar-j : Do default action for next item
 nnoremap <silent> <space>j :<C-u>CocNext<CR>
 
-" Do default action for previous item
+" Spacebar-k : Do default action for previous item
 nnoremap <silent> <space>k :<C-u>CocPrev<CR>
 
-" Resume latest coc list
+" Spacebar-p : Resume latest coc list
 nnoremap <silent> <space>p :<C-u>CocListResume<CR>
 
 
 
 " Global extensions (auto-install)
-let g:coc_global_extensions = [ 'coc-clangd', 'coc-css', 'coc-eslint', 'coc-highlight', 'coc-html', 'coc-json', 'coc-markdownlint', 'coc-omnisharp', 'coc-phpls', 'coc-powershell', 'coc-python', 'coc-stylelintplus', 'coc-svg', 'coc-tsserver', 'coc-xml', 'coc-yaml' ]
+let g:coc_global_extensions = [
+	\ 'coc-clangd',
+	\ 'coc-css',
+	\ 'coc-eslint',
+	\ 'coc-highlight',
+	\ 'coc-html',
+	\ 'coc-json',
+	\ 'coc-markdownlint',
+	\ 'coc-omnisharp',
+	\ 'coc-phpls',
+	\ 'coc-powershell',
+	\ 'coc-python',
+	\ 'coc-stylelintplus',
+	\ 'coc-svg',
+	\ 'coc-tsserver',
+	\ 'coc-xml',
+	\ 'coc-yaml'
+\ ]
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

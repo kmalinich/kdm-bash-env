@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Extend vim-illuminate delay
 let g:Illuminate_delay = 500
 
@@ -17,3 +20,6 @@ let g:Illuminate_ftHighlightGroups = {
 		\ 'jsVariableDef'
 	\ ]
 \ }
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

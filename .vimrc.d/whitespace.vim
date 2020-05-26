@@ -1,5 +1,6 @@
 scriptencoding utf-8
 
+
 " Remove trailing spaces
 command! RemoveTrailingSpaces %s/\s\+$//e
 " Remove trailing tabs
@@ -55,3 +56,6 @@ let g:w3 = matchadd('whitespace_ugly', '^\t*\zs \+')
 " Set to two bars instead of UTF-8 arrow until iTerm2 GPU accelerated Metal
 " renderer on macOS renders it properly
 set listchars=tab:\|\|,trail:,nbsp:+
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

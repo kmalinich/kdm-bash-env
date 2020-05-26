@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " UTF-16 fix
 if has("multi_byte")
 	if &termencoding == ""
@@ -9,3 +12,6 @@ if has("multi_byte")
 	setglobal fileencoding=utf-8
 	set       fileencodings=ucs-bom,utf-8,latin1
 endif
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

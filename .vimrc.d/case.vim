@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " http://vim.wikia.com/wiki/Capitalize_words_and_regions_easily
 
 " gcw        - Capitalize word (from cursor position to end of word)
@@ -41,3 +44,6 @@ endif
 " Ctrl-c : toggle word case
 inoremap <C-c> <Esc>g~iwea
 nnoremap <C-c> <Esc>g~iwea<Esc>
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :

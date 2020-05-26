@@ -1,3 +1,6 @@
+scriptencoding utf-8
+
+
 " Automatically change into the directory the current file is in
 " set autochdir
 
@@ -16,3 +19,6 @@ set shortmess=atI
 
 " Disable line wrapping
 set wrap!
+
+
+" vim: set filetype=vim ts=2 sw=2 tw=0 noet :
