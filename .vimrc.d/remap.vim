@@ -47,8 +47,6 @@ nnoremap j <Nop>
 nnoremap k <Nop>
 nnoremap r <Nop>
 nnoremap s <Nop>
-nnoremap d <Nop>
-nnoremap g <Nop>
 nnoremap h <Nop>
 nnoremap l <Nop>
 nnoremap c <Nop>
