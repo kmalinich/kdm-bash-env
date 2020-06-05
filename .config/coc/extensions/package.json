@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "coc-clangd": ">=0.4.4",
+    "coc-clangd": ">=0.4.7",
     "coc-css": ">=1.2.3",
     "coc-diagnostic": ">=0.2.8",
     "coc-eslint": ">=1.2.7",
@@ -10,7 +10,7 @@
     "coc-markdownlint": ">=1.4.0",
     "coc-omnisharp": ">=0.0.26",
     "coc-phpls": ">=2.1.8",
-    "coc-powershell": ">=0.1.1",
+    "coc-powershell": ">=0.1.2",
     "coc-python": ">=1.2.12",
     "coc-stylelintplus": ">=1.0.4",
     "coc-svg": ">=0.0.13",
