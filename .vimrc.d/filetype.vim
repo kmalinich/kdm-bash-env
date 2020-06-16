@@ -99,7 +99,7 @@ augroup ft_json
 	au BufRead composer.lock set noexpandtab
 augroup END
 
-" jsonc support
+" jsonc comment highlighting support
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
 

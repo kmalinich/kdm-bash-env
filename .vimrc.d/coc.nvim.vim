@@ -157,7 +157,6 @@ let g:coc_global_extensions = [
 	\ 'coc-json',
 	\ 'coc-markdownlint',
 	\ 'coc-omnisharp',
-	\ 'coc-phpls',
 	\ 'coc-powershell',
 	\ 'coc-python',
 	\ 'coc-stylelintplus',
