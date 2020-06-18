@@ -44,11 +44,16 @@ ARRAY_EDITOR_ALIASES=(v vi vim nvim)
 ARRAY_EDITOR_NAMES=(nvim vim vi)
 
 
+# Dir shortcuts
+UL="/usr/local"
+ULO="${UL}/opt"
+ULR="${UL}/rvm"
+
 # Entries at the end       of this array will end up at the beginning of MANPATH
 # Entries at the beginning of this array will end up at the end       of MANPATH
 ARRAY_MANPATH=(
 "${HOME}/perl5/man"
-/usr/local/share/man
+"${UL}/share/man"
 /usr/pgsql-9.5/share/man
 /usr/share/man/overrides
 /usr/share/man/en
@@ -75,7 +80,7 @@ ARRAY_MKDIR=(
 ARRAY_NODE_PATH=(
 /usr/lib/nodejs
 /usr/lib/node_modules
-/usr/local/lib/node_modules
+"${UL}/lib/node_modules"
 )
 
 ARRAY_PACKAGE_MANAGERS=(
@@ -92,6 +97,7 @@ zypper
 # Entries at the end       of this array will end up at the beginning of PATH
 # Entries at the beginning of this array will end up at the end       of PATH
 mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
+
 ARRAY_PATH=(
 "${ARRAY_PATH[@]}"
 '/usr/lib/mit/sbin'
@@ -105,40 +111,40 @@ ARRAY_PATH=(
 '/bin'
 '/sbin'
 '/usr/libexec'
-'/usr/pgsql-9.4/bin'
-'/usr/pgsql-9.5/bin'
-'/usr/pgsql-9.6/bin'
 '/usr/pgsql-10/bin'
-'/usr/lib/nvidia-375/bin'
+'/usr/pgsql-11/bin'
+'/usr/pgsql-12/bin'
 '/System/Library/Filesystems/apfs.fs/Contents/Resources'
-'/usr/local/bin'
-'/usr/local/sbin'
+"${UL}/bin"
+"${UL}/sbin"
 '/opt/puppetlabs/bin'
 '/opt/local/bin'
 '/opt/local/sbin'
-'/usr/local/opt/ruby/bin'
-'/usr/local/opt/openssl/bin'
-'/usr/local/opt/openssl@1.1/bin'
-'/usr/local/opt/libxslt/bin'
-'/usr/local/opt/libxml2/bin'
-'/usr/local/opt/python/libexec/bin'
-'/usr/local/opt/gnu-which/bin'
-'/usr/local/opt/gnu-getopt/bin'
-'/usr/local/opt/curl/bin'
-'/usr/local/opt/curl-openssl/bin'
-'/usr/local/opt/grep/libexec/gnubin'
-'/usr/local/opt/gnu-tar/libexec/gnubin'
-'/usr/local/opt/gnu-sed/libexec/gnubin'
-'/usr/local/opt/gnu-indent/libexec/gnubin'
-'/usr/local/opt/gawk/libexec/gnubin'
-'/usr/local/opt/findutils/libexec/gnubin'
-'/usr/local/opt/ed/libexec/gnubin'
-'/usr/local/opt/coreutils/libexec/gnubin'
-'/usr/local/opt/go/libexec/bin'
-'/usr/local/rvm/bin'
-'/usr/local/rvm/rubies/ruby-2.4.0/bin'
-'/usr/local/rvm/gems/ruby-2.4.0@global/bin'
-'/usr/local/rvm/gems/ruby-2.4.0/bin'
+"${ULO}/ruby/bin"
+"${ULO}/openssl/bin"
+"${ULO}/openssl@1.1/bin"
+"${ULO}/libxslt/bin"
+"${ULO}/libxml2/bin"
+"${ULO}/python/libexec/bin"
+"${ULO}/python3/libexec/bin"
+"${ULO}/python@3.8/libexec/bin"
+"${ULO}/gnu-which/bin"
+"${ULO}/gnu-getopt/bin"
+"${ULO}/curl/bin"
+"${ULO}/curl-openssl/bin"
+"${ULO}/grep/libexec/gnubin"
+"${ULO}/gnu-tar/libexec/gnubin"
+"${ULO}/gnu-sed/libexec/gnubin"
+"${ULO}/gnu-indent/libexec/gnubin"
+"${ULO}/gawk/libexec/gnubin"
+"${ULO}/findutils/libexec/gnubin"
+"${ULO}/ed/libexec/gnubin"
+"${ULO}/coreutils/libexec/gnubin"
+"${ULO}/go/libexec/bin"
+"${ULR}/bin"
+"${ULR}/rubies/ruby-2.4.0/bin"
+"${ULR}/gems/ruby-2.4.0@global/bin"
+"${ULR}/gems/ruby-2.4.0/bin"
 '/Applications/VMware Fusion.app/Contents/Library'
 '/data/data/com.termux/files/usr/bin'
 '/data/data/com.termux/files/usr/bin/applets'
@@ -171,7 +177,7 @@ dirspell
 
 ARRAY_SOURCE=(
 /etc/profile.d/bash_completion.sh
-/usr/local/etc/profile.d/bash_completion.sh
+"${UL}/etc/profile.d/bash_completion.sh"
 "${BASH_ENV_FILE_RC}"
 )
 
