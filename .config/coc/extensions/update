@@ -34,7 +34,7 @@ rm -rf ./node_modules/ ./package-lock.json
 echo "Formatting/sorting package.json"
 FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
-mv ---force --verbose "${FILE_TEMP}" ./package.json
+mv --force --verbose "${FILE_TEMP}" ./package.json
 
 echo "Executing 'npm i'"
 npm i

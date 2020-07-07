@@ -1,21 +1,21 @@
 {
-  "dependencies": {
-    "coc-clangd": ">=0.4.10",
-    "coc-css": ">=1.2.3",
-    "coc-diagnostic": ">=0.2.8",
-    "coc-eslint": ">=1.2.7",
-    "coc-highlight": ">=1.2.5",
-    "coc-html": ">=1.2.4",
-    "coc-json": ">=1.2.6",
-    "coc-markdownlint": ">=1.4.0",
-    "coc-omnisharp": ">=0.0.26",
-    "coc-phpactor": ">=1.0.2",
-    "coc-powershell": ">=0.1.2",
-    "coc-python": ">=1.2.12",
-    "coc-stylelintplus": ">=1.0.4",
-    "coc-svg": ">=0.0.13",
-    "coc-tsserver": ">=1.5.1",
-    "coc-xml": ">=1.11.1",
-    "coc-yaml": ">=1.0.4"
-  }
+	"dependencies": {
+		"coc-clangd": ">=0.4.11",
+		"coc-css": ">=1.2.4",
+		"coc-diagnostic": ">=0.2.8",
+		"coc-eslint": ">=1.2.7",
+		"coc-highlight": ">=1.2.5",
+		"coc-html": ">=1.2.4",
+		"coc-json": ">=1.2.6",
+		"coc-markdownlint": ">=1.5.0",
+		"coc-omnisharp": ">=0.0.26",
+		"coc-phpactor": ">=1.0.3",
+		"coc-powershell": ">=0.1.2",
+		"coc-python": ">=1.2.12",
+		"coc-stylelintplus": ">=1.0.4",
+		"coc-svg": ">=0.0.13",
+		"coc-tsserver": ">=1.5.2",
+		"coc-xml": ">=1.11.1",
+		"coc-yaml": ">=1.0.4"
+	}
 }
