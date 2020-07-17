@@ -17,7 +17,6 @@ call LoadFile('environment')
 call LoadFile('indent')
 call LoadFile('spell')
 call LoadFile('buffers')
-call LoadFile('coc.nvim')
 call LoadFile('polyglot')
 call LoadFile('encoding')
 call LoadFile('syntax')
@@ -43,6 +42,8 @@ call LoadFile('airline')
 call LoadFile('modeline')
 call LoadFile('fileformat')
 call LoadFile('case')
+" call LoadFile('coc.nvim.dist')
+call LoadFile('coc.nvim')
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :

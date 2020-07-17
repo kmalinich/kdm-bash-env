@@ -1,6 +1,8 @@
 scriptencoding utf-8
 
 
+let g:coc_force_debug = 1
+
 " Better display for messages
 set cmdheight=2
 
@@ -16,8 +18,8 @@ set shortmess+=c
 
 " Use tab for trigger completion with characters ahead and navigate
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin
-inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" inoremap <silent><expr> <TAB> pumvisible() ? "\<C-n>" : <SID>check_back_space() ? "\<TAB>" : coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
 	let col = col('.') - 1
@@ -33,8 +35,10 @@ inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<
 
 
 " Ctrl-j/Ctrl-k : Navigate diagnostics
-nmap <silent> <C-j> <Plug>(coc-diagnostic-prev)
-nmap <silent> <C-k> <Plug>(coc-diagnostic-next)
+" nmap <silent> <C-j> <Plug>(coc-diagnostic-prev)
+" nmap <silent> <C-k> <Plug>(coc-diagnostic-next)
+nmap <C-j> <Plug>(coc-diagnostic-prev)
+nmap <C-k> <Plug>(coc-diagnostic-next)
 
 " Remap keys for gotos
 " nmap <silent> gd <Plug>(coc-definition)
@@ -56,7 +60,7 @@ nmap <silent> <C-k> <Plug>(coc-diagnostic-next)
 
 
 " Highlight symbol under cursor on CursorHold
-" autocmd CursorHold * silent call CocActionAsync('highlight')
+autocmd CursorHold * silent call CocActionAsync('highlight')
 
 
 " Remap for rename current word
@@ -89,7 +93,7 @@ augroup end
 
 
 " Ctrl-f : Run fixer
-nmap <silent> <C-f> <Plug>(coc-fix)
+nmap <C-f> <Plug>(coc-fix)
 
 
 " Create mappings for function text object, requires document symbols feature of languageserver

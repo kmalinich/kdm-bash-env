@@ -1,60 +1,80 @@
 [submodule ".vim/pack/kdm/airline"]
 	path = .vim/pack/kdm/airline
 	url  = https://github.com/vim-airline/vim-airline
+	branch = master
 [submodule ".vim/pack/kdm/airlineish"]
 	path = .vim/pack/kdm/airlineish
 	url  = https://github.com/paranoida/vim-airlineish
+	branch = master
 [submodule ".vim/pack/kdm/align"]
 	path = .vim/pack/kdm/align
 	url  = https://github.com/kmalinich/Align
+	branch = master
 [submodule ".vim/pack/kdm/brogrammer-theme"]
 	path = .vim/pack/kdm/brogrammer-theme
 	url  = https://github.com/kmalinich/vim-brogrammer-theme
+	branch = master
 [submodule ".vim/pack/kdm/css-color"]
 	path = .vim/pack/kdm/css-color
 	url  = https://github.com/ap/vim-css-color
+	branch = master
 [submodule ".vim/pack/kdm/coc.nvim"]
 	path = .vim/pack/kdm/coc.nvim
 	url = https://github.com/neoclide/coc.nvim
+	branch = master
 [submodule ".vim/pack/kdm/fugitive"]
 	path = .vim/pack/kdm/fugitive
 	url  = https://github.com/tpope/vim-fugitive
+	branch = master
 [submodule ".vim/pack/kdm/haproxy"]
 	path = .vim/pack/kdm/haproxy
 	url  = https://github.com/zimbatm/haproxy.vim
+	branch = master
 [submodule ".vim/pack/kdm/hexmode"]
 	path = .vim/pack/kdm/hexmode
 	url  = https://github.com/fidian/hexmode
+	branch = master
 [submodule ".vim/pack/kdm/illuminate"]
 	path = .vim/pack/kdm/illuminate
 	url  = https://github.com/RRethy/vim-illuminate
+	branch = master
 [submodule ".vim/pack/kdm/interfaces"]
 	path = .vim/pack/kdm/interfaces
 	url  = https://github.com/vim-scripts/interfaces
+	branch = master
 [submodule ".vim/pack/kdm/javascript"]
 	path = .vim/pack/kdm/javascript
 	url  = https://github.com/pangloss/vim-javascript
+	branch = master
 [submodule ".vim/pack/kdm/javascript-libraries-syntax"]
 	path = .vim/pack/kdm/javascript-libraries-syntax
 	url  = https://github.com/othree/javascript-libraries-syntax.vim
+	branch = master
 [submodule ".vim/pack/kdm/kickstart"]
 	path = .vim/pack/kdm/kickstart
 	url  = https://github.com/tangledhelix/vim-kickstart
+	branch = master
 [submodule ".vim/pack/kdm/local-vimrc"]
 	path = .vim/pack/kdm/local-vimrc
 	url  = https://github.com/MarcWeber/vim-addon-local-vimrc
+	branch = master
 [submodule ".vim/pack/kdm/logrotate"]
 	path = .vim/pack/kdm/logrotate
 	url  = https://github.com/moon-musick/vim-logrotate
+	branch = master
 [submodule ".vim/pack/kdm/polyglot"]
 	path = .vim/pack/kdm/polyglot
 	url  = https://github.com/sheerun/vim-polyglot
+	branch = master
 [submodule ".vim/pack/kdm/salt"]
 	path = .vim/pack/kdm/salt
 	url  = https://github.com/saltstack/salt-vim
+	branch = master
 [submodule ".vim/pack/kdm/salt-jinja"]
 	path = .vim/pack/kdm/salt-jinja
 	url  = https://github.com/kmalinich/salt-jinja-vim
+	branch = master
 [submodule ".vim/pack/kdm/securemodelines"]
 	path = .vim/pack/kdm/securemodelines
 	url  = https://github.com/ciaranm/securemodelines
+	branch = master
