@@ -50,7 +50,6 @@
 	"diagnostic.virtualText": true,
 	"diagnostic.virtualTextCurrentLineOnly": true,
 	"diagnostic.warningSign": "⚠",
-	"javascript.suggestionActions.enabled": false,
 	"less.validate": false,
 	"scss.validate": false,
 	"suggest.autoTrigger": "trigger",
