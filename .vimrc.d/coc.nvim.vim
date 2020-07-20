@@ -153,15 +153,12 @@ nnoremap <silent> <space>p :<C-u>CocListResume<CR>
 
 " Global extensions (auto-install)
 let g:coc_global_extensions = [
-	\ 'coc-clangd',
 	\ 'coc-css',
 	\ 'coc-eslint',
 	\ 'coc-highlight',
 	\ 'coc-html',
 	\ 'coc-json',
 	\ 'coc-markdownlint',
-	\ 'coc-omnisharp',
-	\ 'coc-powershell',
 	\ 'coc-python',
 	\ 'coc-stylelintplus',
 	\ 'coc-svg',
@@ -169,6 +166,9 @@ let g:coc_global_extensions = [
 	\ 'coc-xml',
 	\ 'coc-yaml'
 \ ]
+" \ 'coc-clangd',
+" \ 'coc-omnisharp',
+" \ 'coc-powershell',
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
