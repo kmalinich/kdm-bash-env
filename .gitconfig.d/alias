@@ -1,38 +1,38 @@
 [alias]
 	a  = add
-	af = add -f
+	af = add --force
 
 	b   = branch
-	ba  = branch -a
-	bd  = branch -d
-	bdd = branch -D
+	ba  = branch --all
+	bd  = branch --delete
+	bdd = branch --delete --force
 	bm  = branch --merged
 	bnm = branch --no-merged
 
-	cl  = clone -j8 --recursive --depth 1 --shallow-submodules
-	cld = clone -j8 --recursive
+	cl  = "!_git_cl()  { git clone --jobs \"$(nproc)\" --recursive;                                }; _git_cl"
+	cls = "!_git_cls() { git clone --jobs \"$(nproc)\" --recursive --depth 1 --shallow-submodules; }; _git_cls"
 
 	co  = checkout
 	cob = checkout -b
 	com = checkout master
 
 	c   = commit
-	ca  = commit -a
-	cam = commit -a -m
+	ca  = commit --all
+	cam = commit --all -m
 
-	cp = "!cp() { git cam 'Update'; }; cp"
+	cp = "!_git_cp() { git commit --all \"--message=${1-Update}\"; }; _git_cp"
 
 	d  = diff --color=auto --ignore-space-change --ignore-blank-lines --color-moved-ws=ignore-all-space --ws-error-highlight=all
 	ds = describe
 
 	# Delete any branches that have been merged into master
 	# See also: https://gist.github.com/robmiller/5133264
-	dm = "!dm() { git up && git bm | grep -v '\\*' | xargs -n 1 git bd 2> /dev/null; }; dm"
+	dm = "!_git_dm() { git pull --rebase --prune && git branch --merged | grep -v '\\*' | xargs -n 1 git branch --delete 2> /dev/null; }; _git_dm"
 
 	f = fetch --all --prune
 
 	# Fix upstream
-	fu = "!fu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git b \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; fu"
+	fu = "!_git_fu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git branch \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; _git_fu"
 
 	get-branch  = symbolic-ref --short HEAD
 	get-commit  = rev-parse HEAD
@@ -41,27 +41,32 @@
 	get-tags    = describe --tags
 	get-url     = config remote.origin.url
 
-	l  = log
+	l = "!_git_l() { git log \"--max-count=${1-25}\" --graph --oneline; }; _git_l"
 
-	# Maybe add commit URL, example: https://github.com/kmalinich/node-bmw-client/commit/ab657ff5cfb3cf190ab3fd9699ff30fd365c5b4f
-	ll = log --pretty='tformat:[ %C(yellow)%h%C(reset) ] [ %C(blue)%aI%C(reset) ] [ %C(red)%><(15)%an%C(reset) ] %C(cyan)%s%C(reset)'
+	ll = "!_git_ll() { git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=tformat:[%C(yellow)%h%C(reset)] [%C(blue)%><(13)%ar%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_ll"
+
+	# Requires GitHub CLI (https://hub.github.com/)
+	llu = "!_git_llu() { COMMIT_URL=\"$(hub browse --url)/commit\"; git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=tformat:[%C(yellow)${COMMIT_URL}/%h%C(reset)] [%C(blue)%><(13)%ar%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_llu"
 
 	m = merge
 
 	# Requires GitHub CLI (https://hub.github.com/)
 	o = browse
 
-	pl  = pull
-	plm = "!plm() { git f; git com; git plp; git s; }; plm"
-	plp = pull --prune
-	plu = "!plu() { git f; git com; git up; }; plu"
+	p  = pull
+	pl = pull
+	pp = pull --prune
+
+	plm = "!_git_plm() { git f; git co master; git pp; git s; }; _git_plm"
+	plu = "!_git_plu() { git f; git co master; git up; git s; }; _git_plu"
 
 	ps   = push
+	pso  = push           origin
 	psvo = push --verbose origin
 
 	# Requires GitHub CLI (https://hub.github.com/)
 	pr = !bash -c 'hub pull-request $0 $@'
-	# pr = "!pr() { hub pull-request $0 $@; }; pr"
+	# pr = "!_git_pr() { hub pull-request $0 $@; }; _git_pr"
 
 	prune = fetch --all --prune
 
@@ -73,7 +78,7 @@
 	sm   = submodule
 	smf  = submodule foreach --recursive
 	smi  = submodule update  --recursive --init
-	smup = "!smup() { git f; git up; git smf 'BAR=\"=---------------------------------------------=\"; echo \"${BAR}\"; git plu; echo \"${BAR}\\n\\n\"'; }; smup"
+	smup = "!_git_smup() { git f; git up; git smf 'BAR=\"=---------------------------------------------=\"; echo \"${BAR}\"; git plu; echo \"${BAR}\\n\\n\"'; }; _git_smup"
 
 	undo = checkout --
 
