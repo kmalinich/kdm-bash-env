@@ -1,5 +1,8 @@
 scriptencoding utf-8
 
+" Disable vim-polyglot loading specific types
+let g:polyglot_disabled = ['csv']
+
 
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
