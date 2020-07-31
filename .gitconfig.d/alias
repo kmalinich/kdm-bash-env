@@ -9,8 +9,8 @@
 	bm  = branch --merged
 	bnm = branch --no-merged
 
-	cl  = "!_git_cl()  { git clone --jobs \"$(nproc)\" --recursive;                                }; _git_cl"
-	cls = "!_git_cls() { git clone --jobs \"$(nproc)\" --recursive --depth 1 --shallow-submodules; }; _git_cls"
+	cl  = "!_git_cl()  { git clone --jobs \"$(nproc)\" --recursive                                \"${1}\"; }; _git_cl"
+	cls = "!_git_cls() { git clone --jobs \"$(nproc)\" --recursive --depth 1 --shallow-submodules \"${1}\"; }; _git_cls"
 
 	co  = checkout
 	cob = checkout -b
