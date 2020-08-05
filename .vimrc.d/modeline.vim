@@ -28,6 +28,10 @@ set modelines=2
 let g:secure_modelines_modelines = 2
 
 
+" Map \ml to append modeline
+nnoremap ml :call ModelineAppend()<CR>
+
+
 " Append modeline after last line in buffer
 function! ModelineAppend()
 	let l:modeline = printf(' vim: set filetype=%s ts=%d sw=%d tw=%d %set :', &filetype, &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')

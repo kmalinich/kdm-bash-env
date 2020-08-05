@@ -58,9 +58,6 @@ nnoremap b <Nop>
 inoremap <C-d> <Esc>ddi
 nnoremap <C-d> <Esc>dd
 
-" Map \ml to append modeline
-nnoremap ml :call ModelineAppend()<CR>
-
 " Ctrl-h : Enable/disable code concealing
 map <C-h> :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
 
