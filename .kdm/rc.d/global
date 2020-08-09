@@ -67,8 +67,8 @@ alias pign='ping'
 alias tial='tail'
 
 # Application-specific aliases
-_alias_applications
-_alias_applications "/usr/local"
+# _alias_applications
+# _alias_applications "/usr/local"
 
 # E-Z nmap commands
 _alias_nmap

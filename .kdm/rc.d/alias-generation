@@ -53,6 +53,7 @@ _alias_applications() {
 	[[ -e "${FILE_YUM_LOG}"  ]] && export FILE_YUM_LOG  && alias log-yum="        cd /var/log;         ll yum.log"
 }
 
+
 # shellcheck disable=SC2139
 _alias_linux_macos_setup() {
 	# Bounce if not on GNU-converted macOS and not on Linux
@@ -104,6 +105,7 @@ _alias_linux_macos_setup() {
 	# Sort by IP address octets
 	alias sort-ip='sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n'
 }
+
 
 # E-Z nmap commands
 _alias_nmap() {
@@ -201,8 +203,8 @@ _alias_ping() {
 	alias ping-slow="${PING} -i 1.0"
 
 	# Generate noping and oping aliases, too
-	_alias_noping
-	_alias_oping
+	# _alias_noping
+	# _alias_oping
 }
 
 

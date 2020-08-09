@@ -35,6 +35,44 @@ _prompt_tst() {
 }
 
 
+# Generate (and don't re-generate) PS1 prompt prefix
+_prompt_prefix() {
+	# Return if prompt prefix has already been generated
+	[[ "${PROMPT_PREFIX}" ]] && return
+
+	# Load data from environment.. hopefully.. this time..
+	if [[ -z "${COLOR_16M+x}" ]]; then
+		COLOR_16M="false"
+
+		[[ "${COLORTERM}" == "truecolor" && "${TERM_COLOR}" == "16m" ]] && COLOR_16M="true"
+	fi
+
+	export COLOR_16M
+
+
+	# If ${PROMPT_HOSTNAME} is set, display prompt hostname
+	if [[ -z "${PROMPT_HOSTNAME+x}" ]]; then
+		PROMPT_HOSTNAME="false"
+
+		[[ -z "${SSH_CLIENT+x}"     ]] || PROMPT_HOSTNAME="true"
+		[[ -z "${SSH_CONNECTION+x}" ]] || PROMPT_HOSTNAME="true"
+		[[ -z "${SSH_TTY+x}"        ]] || PROMPT_HOSTNAME="true"
+	fi
+
+	export PROMPT_HOSTNAME
+
+
+	PROMPT_PREFIX="\\[\\e[G\\]\\[${C_ENV}\\]"
+
+	# If ${COLOR_16M} is not true or ${PROMPT_HOSTNAME} is not false, render 256 color prompt prefix
+	if [[ "${COLOR_16M}" != "true" || "${PROMPT_HOSTNAME}" != "false" ]]; then
+		PROMPT_PREFIX="${PROMPT_PREFIX}\${HOST_SHORT}\\[${C_RST}\\]:"
+	fi
+
+	export PROMPT_PREFIX
+}
+
+
 # Generate / export PS1 prompt with color specfied by C_ENV
 _prompt_generate() {
 	# _prompt_log "${FUNCNAME[0]}" "START"
@@ -42,54 +80,18 @@ _prompt_generate() {
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
 
-	# Load data from environment.. hopefully.. this time..
-	if [[ -z "${COLOR_16M}" ]]; then
-		COLOR_16M="false"
-
-		[[ "${COLORTERM}"  == "truecolor" ]] && COLOR_16M="true"
-		[[ "${TERM_COLOR}" == "16m"       ]] && COLOR_16M="true"
-
-		export COLOR_16M
-	fi
-
-	# If connected via SSH, display prompt hostname
-	if [[ -z "${PROMPT_HOSTNAME}" ]]; then
-		PROMPT_HOSTNAME="false"
-
-		[[ -z "${SSH_CLIENT+x}"     ]] || PROMPT_HOSTNAME="true"
-		[[ -z "${SSH_CONNECTION+x}" ]] || PROMPT_HOSTNAME="true"
-		[[ -z "${SSH_TTY+x}"        ]] || PROMPT_HOSTNAME="true"
-
-		export PROMPT_HOSTNAME
-	fi
 
 	# Kick _prompt_pwd again with no output to export environment variables
 	_prompt_pwd > /dev/null 2>&1
 
-	# If $BASH_ENV_COLOR_16M is not true, render PS1 without multicolor
-	if [[ "${COLOR_16M}" != "true" ]]; then
-		PS1="\\[\\e[G\\]\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]${PWD_FINAL} \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
-		export PS1
-		return
-	fi
-
-	# Re-render truecolor PS1 prompt if PWD has changed
+	# Re-render true color PS1 PWD component if PWD has changed
 	[[ "${PWD_UPDATED}" == "true" ]] && _prompt_pwd_color_render "${PWD_FINAL}"
 
-	# If PROMPT_HOSTNAME is false, render PS1 without hostname
-	if [[ "${PROMPT_HOSTNAME}" == "false" ]]; then
-		PS1="\\[\\e[G\\]\\[${C_BLU}\\]${PS1_COLOR} \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
-		export PS1
+	# Render prompt prefix
+	_prompt_prefix
 
-		# _prompt_log "${FUNCNAME[0]}" "END"
-		return
-	fi
-
-	# Normal PS1 prompt (with hostname)
-	PS1="\\[\\e[G\\]\\[${C_ENV}\\]\${HOST_SHORT}\\[${C_RST}\\]:\\[${C_BLU}\\]${PS1_COLOR} \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
-	export PS1
-
-	# It would be neat to do a color-responsive system load monitor... but not today
+	# Render full prompt PS1
+	export PS1="${PROMPT_PREFIX}${PWD_FINAL_COLOR} \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_generate()
@@ -228,6 +230,12 @@ _prompt_pwd() {
 # Render color-separated formatted pwd
 # shellcheck disable=SC2206
 _prompt_pwd_color_render() {
+	# Return here if true color is not enabled
+	if [[ "${COLOR_16M}" != "true" ]]; then
+		export PWD_FINAL_COLOR="\\e[34m${*}"
+		return
+	fi
+
 	# _prompt_log "${FUNCNAME[0]}" "START"
 
 	# Declare vars as local
@@ -295,9 +303,9 @@ _prompt_pwd_color_render() {
 	# _prompt_log "${FUNCNAME[0]}" "STR=${STR}"
 
 	# Print the color-formatted string
-	PS1_COLOR="$(printf "%s" "${STR}")"
-	export PS1_COLOR
-	# _prompt_log "${FUNCNAME[0]}" "export PS1_COLOR=${PS1_COLOR}"
+	PWD_FINAL_COLOR="$(printf "%s" "${STR}")"
+	export PWD_FINAL_COLOR
+	# _prompt_log "${FUNCNAME[0]}" "export PWD_FINAL_COLOR=${PWD_FINAL_COLOR}"
 
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_pwd_color_render()

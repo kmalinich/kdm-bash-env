@@ -29,7 +29,7 @@ export PATH
 
 
 # Initial plaintext loading message
-[[ -t 0 ]] && echo -en "\\nLoading...\\r"
+[[ "${BASH_INTERACTIVE}" && -t 0 ]] && echo -en "\\nLoading...\\r"
 
 # Source data from ~/.kdm/profile.d
 for FILE in $(find "${BASH_ENV_DIR_PROFILE_D}" -maxdepth 1 -name '[0-9][0-9]-*' -type f | sort); do
@@ -38,10 +38,12 @@ done
 
 if [[ "${BASH_INTERACTIVE}" ]]; then
 	# Show MOTD
-	_show_motd
+	# _show_motd
 
 	# Re-enable echo output
 	stty echo
+
+	[[ -t 0 ]] && echo -en "          \\r"
 fi
 
 

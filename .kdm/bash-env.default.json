@@ -1,11 +1,11 @@
 {
-	"color": {
-		"16m": false
-	},
-	"prompt": {
-		"hostname": true
-	},
-	"warn": {
-		"facter": false
+	"bash-env": {
+		"color": {
+			"16m": false
+		},
+		"package-manager": null,
+		"prompt": {
+			"hostname": true
+		}
 	}
 }
