@@ -2,6 +2,11 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
+# Check color environment variables
+_colorcheck() {
+	echo "COLORTERM : ('truecolor') '${COLORTERM}'"
+	echo "COLOR_16M : ('true')      '${COLOR_16M}'"
+}
 
 # Renders a hex color code in 24bit color output, and generates the corresponding ANSI escape sequence
 hex2color() {

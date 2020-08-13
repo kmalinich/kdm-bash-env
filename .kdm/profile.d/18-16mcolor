@@ -1,27 +1,12 @@
-# Load data from conf file
-COLOR_16M="$(facter bash-env.color.16m 2> /dev/null)"
-
-[[ "${COLOR_16M}"    != "true"      ]] && COLOR_16M="false"
-[[ "${TERM_PROGRAM}" != "iTerm.app" ]] && COLOR_16M="false"
-
-
-if [[ "${COLOR_16M}" == "true" ]]; then
-	# Skip this if on physical console on Linux
-	if ! tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
-		if [[ "${TERM}" == "xterm-16mcolor" || "${COLOR_16M}" == "true" ]]; then
-			COLOR_16M="true"
-		fi
-	fi
-fi
-
 # If dircolors exists, run it
 if hash dircolors; then
 	if [[ "${COLOR_16M}" == "true" ]]; then
+		# Set ${TERM} to 'xterm-16mcolor' for dircolors to utilize separate true color entries properly
 		TERM_OLD="${TERM}"
 		TERM="xterm-16mcolor"
 	fi
 
-	# If ~/.dircolors exists, use it
+	# If ${BASH_ENV_FILE_DIRCOLORS}" exists, use it
 	[[ -s "${BASH_ENV_FILE_DIRCOLORS}" ]] && DIRCOLOR_DATA="$(dircolors "${BASH_ENV_FILE_DIRCOLORS}")" || DIRCOLOR_DATA="$(dircolors)"
 	[[ -n "${DIRCOLOR_DATA}"           ]] && eval "${DIRCOLOR_DATA}" &> /dev/null
 	unset DIRCOLOR_DATA
@@ -32,10 +17,17 @@ if hash dircolors; then
 	fi
 fi
 
+# Default prompt color configuration, override with file in 'extra' dir
+# Root = red, non-root = green
+case "${COLOR_16M}" in
+	"true") [[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_GRN}}" ;;
+	*)      [[ "${UID}" == "0" ]] && C_ENV='\e[31m'   || C_ENV='\e[32m'            ;;
+esac
+
 # Change TERM from xterm-16mcolor to xterm-256color
 [[ "${TERM}" == "xterm-16mcolor" ]] && TERM="xterm-256color"
 
-export COLOR_16M TERM
+export C_ENV C_ENV_BOLD TERM
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

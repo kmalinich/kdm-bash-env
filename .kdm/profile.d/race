@@ -10,6 +10,7 @@ for FILE_NAME in ./*-*; do
 	echo -n "${FILE_NAME//\.\//},"
 
 	export TIMEFORMAT='%3R'
+	# shellcheck disable=SC1090
 	time source "${FILE_NAME}"
 done
 

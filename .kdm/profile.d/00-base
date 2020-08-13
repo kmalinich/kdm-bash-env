@@ -43,4 +43,53 @@ export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
 export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
 
 
+# Try to load config from facter
+_facter_config() {
+	[[ "${COLORTERM}" == "24bit" ]] && COLORTERM="truecolor"
+
+	if hash facter; then
+		[[ "$(facter bash-env.color.16m 2> /dev/null)" == "false" ]] && unset COLORTERM
+	fi
+
+	# Extrapolate ${COLORTERM} into boolean ${COLOR_16M}
+	case "${COLORTERM}" in
+		"truecolor") COLOR_16M="true"  ;;
+		*)           COLOR_16M="false" ;;
+	esac
+
+	if [[ "${COLOR_16M}" == "true" ]]; then
+		# Physical console on Linux:
+		# Disable true color (where as it would be enabled if connecting via SSH or the like)
+		if tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
+			COLOR_16M="false"
+		fi
+	fi
+
+	export COLOR_16M
+
+
+	if ! hash facter; then
+		export PROMPT_HOSTNAME="true"
+		return
+	fi
+
+	PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
+
+	[[ "${PROMPT_HOSTNAME}" != "false" ]] && PROMPT_HOSTNAME="true"
+
+	# Override to always show hostname when connected via SSH
+	[[ -z "${SSH_CLIENT+x}"     ]] || PROMPT_HOSTNAME="true"
+	[[ -z "${SSH_CONNECTION+x}" ]] || PROMPT_HOSTNAME="true"
+	[[ -z "${SSH_TTY+x}"        ]] || PROMPT_HOSTNAME="true"
+
+	export PROMPT_HOSTNAME
+}
+
+
+_facter_config
+
+
+
+
+
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

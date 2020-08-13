@@ -40,33 +40,12 @@ _prompt_prefix() {
 	# Return if prompt prefix has already been generated
 	[[ "${PROMPT_PREFIX}" ]] && return
 
-	# Load data from environment.. hopefully.. this time..
-	if [[ -z "${COLOR_16M+x}" ]]; then
-		COLOR_16M="false"
-
-		[[ "${COLORTERM}" == "truecolor" && "${TERM_COLOR}" == "16m" ]] && COLOR_16M="true"
-	fi
-
-	export COLOR_16M
-
-
-	# If ${PROMPT_HOSTNAME} is set, display prompt hostname
-	if [[ -z "${PROMPT_HOSTNAME+x}" ]]; then
-		PROMPT_HOSTNAME="false"
-
-		[[ -z "${SSH_CLIENT+x}"     ]] || PROMPT_HOSTNAME="true"
-		[[ -z "${SSH_CONNECTION+x}" ]] || PROMPT_HOSTNAME="true"
-		[[ -z "${SSH_TTY+x}"        ]] || PROMPT_HOSTNAME="true"
-	fi
-
-	export PROMPT_HOSTNAME
-
-
 	PROMPT_PREFIX="\\[\\e[G\\]\\[${C_ENV}\\]"
 
-	# If ${COLOR_16M} is not true or ${PROMPT_HOSTNAME} is not false, render 256 color prompt prefix
-	if [[ "${COLOR_16M}" != "true" || "${PROMPT_HOSTNAME}" != "false" ]]; then
-		PROMPT_PREFIX="${PROMPT_PREFIX}\${HOST_SHORT}\\[${C_RST}\\]:"
+	# If ${PROMPT_HOSTNAME} is not false, render hostname portion of prompt prefix
+	if [[ "${PROMPT_HOSTNAME}" != "false" ]]; then
+		#PROMPT_PREFIX="${PROMPT_PREFIX}\${HOST_SHORT}\\[${C_RST}\\]:"
+		PROMPT_PREFIX="${PROMPT_PREFIX}\\h\\[${C_RST}\\]:"
 	fi
 
 	export PROMPT_PREFIX
@@ -79,7 +58,6 @@ _prompt_generate() {
 
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
-
 
 	# Kick _prompt_pwd again with no output to export environment variables
 	_prompt_pwd > /dev/null 2>&1
@@ -216,8 +194,8 @@ _prompt_pwd() {
 	export PWD_FMT_DEPTH
 
 	# If we're LESS than 3 folders deep, pwd for titlebar and prompt is normal
-	# If we're MORE than 3 folders deep, show ../previous_dir/current_dir
-	PWD_CUSTOM=$(printf "${PWD_FMT}" | rev | awk -F '/' '{printf $1"/"$2"/.."}' | rev)
+	# If we're MORE than 3 folders deep, show .../previous_dir/current_dir
+	PWD_CUSTOM=$(printf "${PWD_FMT}" | rev | awk -F '/' '{printf $1"/"$2"/..."}' | rev)
 
 	[[ "${PWD_FMT_DEPTH}" -lt "3" ]] && PWD_FINAL="${PWD_FMT}" || PWD_FINAL="${PWD_CUSTOM}"
 	export PWD_FINAL
@@ -232,7 +210,7 @@ _prompt_pwd() {
 _prompt_pwd_color_render() {
 	# Return here if true color is not enabled
 	if [[ "${COLOR_16M}" != "true" ]]; then
-		export PWD_FINAL_COLOR="\\e[34m${*}"
+		export PWD_FINAL_COLOR="\\[\\e[34m\\]\w"
 		return
 	fi
 
@@ -253,7 +231,7 @@ _prompt_pwd_color_render() {
 	DIRS[0]="${CYN}"
 	DIRS[1]="${BLU}"
 
-	SEPARATORS[0]="${YLW}.."
+	SEPARATORS[0]="${YLW}..."
 	SEPARATORS[1]="${GRY}/"
 	SEPARATORS[2]="${PRP}~"
 
@@ -276,8 +254,8 @@ _prompt_pwd_color_render() {
 
 	# Special color coding for certain leading characters
 	case "${INPUT[0]}" in
-		'..') STR+="${SEPARATORS[0]}" ;;
-		'~')  STR+="${SEPARATORS[2]}" ;;
+		'...') STR+="${SEPARATORS[0]}" ;;
+		'~')   STR+="${SEPARATORS[2]}" ;;
 	esac
 
 	# Add a slash if we're in / directory
@@ -327,10 +305,6 @@ _prompt_titlebar() {
 
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_titlebar()
-
-
-# Configure PS1 prompt
-# _prompt_generate
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

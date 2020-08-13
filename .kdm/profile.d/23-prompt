@@ -3,11 +3,13 @@
 # Trap current and previous commands to access them
 trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
 
+# Check exitcode of previous command
 # Always write lines to history file on each prompt
-export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; _prompt_titlebar; history -a"
-
 # Generate / export PS1 prompt
-export PROMPT_COMMAND="${PROMPT_COMMAND}; _prompt_generate"
+export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; history -a; _prompt_generate; _prompt_titlebar;"
+
+# Trim \w in PS1 to 2 directories (Bash 4+)
+export PROMPT_DIRTRIM="2"
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

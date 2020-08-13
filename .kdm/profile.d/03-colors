@@ -245,7 +245,7 @@ _show_colors_16m() {
 	[[ "${COLUMNS}" -lt 95 ]] && output error "Terminal needs to be at least 95 columns to do show-colors-16m, cannot continue" && return
 
 	# Refresh color palette
-	# shellcheck source=./03-colors
+	# shellcheck disable=SC1090
 	source "${BASH_ENV_FILE_COLORS}"
 
 	_show_colors_16m_work "${@}"
@@ -256,7 +256,7 @@ _show_colors_256() {
 	[[ "${COLUMNS}" -lt 196 ]] && output error "Terminal needs to be at least 196 columns to show-colors-256, cannot continue" && return
 
 	# Refresh color palette
-	# shellcheck source=./03-colors
+	# shellcheck disable=SC1090
 	source "${BASH_ENV_FILE_COLORS}"
 
 	_show_colors_256_work
@@ -425,26 +425,6 @@ alias show-colors-16m='_show_colors_16m'
 alias show-colors-256='_show_colors_256'
 
 #### Color test function aliases ==final ####
-
-
-#### Environment color config ==start ####
-
-# Load data from conf file
-# [[ "${PATH}" != *"/usr/local/bin"* ]] && PATH="/usr/local/bin:${PATH}"
-COLOR_16M="$(facter bash-env.color.16m 2> /dev/null)"
-
-# Default "user color" configuration, overridden by library in 'extra' dir if present
-# Root = red, non-root = green
-if [[ "${COLOR_16M}" == "true" ]]; then
-	[[ "${UID}" == "0" ]] && C_ENV="${C_RED}" || C_ENV="${C_ENV-${C_GRN}}"
-else
-	[[ "${UID}" == "0" ]] && C_ENV='\e[31m' || C_ENV='\e[32m'
-fi
-
-C_ENV_BOLD="${C_BLD}${C_ENV}"
-export C_ENV C_ENV_BOLD
-
-#### Environment color config ==final ####
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
