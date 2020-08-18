@@ -54,7 +54,7 @@ _g_gi() {
 # Git command wrapper for formatted output
 _g_wrapper() {
 	# Declare vars as local
-	local CMD_EXIT GIT_CMD TEMP_FILE
+	local CMD_EXIT GIT_CMD
 
 	[[ -z "${1}" ]] && output error "No command provided to _g_wrapper" && return 254
 	GIT_CMD="${1}"
@@ -64,7 +64,6 @@ _g_wrapper() {
 	CMD_EXIT="${?}"
 	echo
 
-	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
 	return "${CMD_EXIT}"
 }
 

@@ -3,7 +3,7 @@
 # Check if jenv is installed
 if hash jenv; then
 	# Load jenv automatically
-	eval "$(jenv init - --no-rehash)"
+	eval "$(jenv init - --no-rehash | grep -Ev 'export\ PATH')"
 fi
 
 # Init JAVA_HOME variable
