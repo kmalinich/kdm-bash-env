@@ -50,10 +50,12 @@
 	"diagnostic.virtualText": true,
 	"diagnostic.virtualTextCurrentLineOnly": true,
 	"diagnostic.warningSign": "⚠",
+	"javascript.showUnused": false,
 	"less.validate": false,
 	"scss.validate": false,
 	"suggest.autoTrigger": "trigger",
 	"suggest.noselect": false,
+	"tsserver.enable": false,
 	"suggest.timeout": 500,
 	"wxss.validate": false
 }
