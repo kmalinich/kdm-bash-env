@@ -111,6 +111,7 @@ ARRAY_PATH=(
 '/bin'
 '/sbin'
 '/usr/libexec'
+'/System/Library/CoreServices'
 '/usr/pgsql-10/bin'
 '/usr/pgsql-11/bin'
 '/usr/pgsql-12/bin'
@@ -141,6 +142,7 @@ ARRAY_PATH=(
 "${ULO}/ed/libexec/gnubin"
 "${ULO}/coreutils/libexec/gnubin"
 "${ULO}/go/libexec/bin"
+"${ULO}/net-snmp/bin"
 "${ULR}/bin"
 "${ULR}/rubies/ruby-2.4.0/bin"
 "${ULR}/gems/ruby-2.4.0@global/bin"
