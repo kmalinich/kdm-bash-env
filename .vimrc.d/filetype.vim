@@ -17,16 +17,16 @@ au Filetype css let b:comment_leader = '/* '
 au Filetype html let b:comment_leader = '<!-- '
 
 " JS
-au Filetype javascript let b:comment_leader = '// '
+au Filetype javascript let b:comment_leader = '//'
 
 " nginx
-au Filetype nginx let b:comment_leader = '# '
+au Filetype nginx let b:comment_leader = '#'
 
 " PHP
-au Filetype php let b:comment_leader = '// '
+au Filetype php let b:comment_leader = '//'
 
 " Python
-au Filetype python let b:comment_leader = '# '
+au Filetype python let b:comment_leader = '#'
 au Filetype python set autoindent
 au Filetype python set expandtab
 au Filetype python set shiftwidth=4
@@ -39,13 +39,13 @@ augroup ft_python
 augroup END
 
 " sh/bash
-au Filetype sh let b:comment_leader = '# '
+au Filetype sh let b:comment_leader = '#'
 
 
 " Crontab
-au Filetype crontab let b:comment_leader = '# '
+au Filetype crontab let b:comment_leader = '#'
 augroup ft_crontab
-	au BufRead *crontab* let b:comment_leader = '# '
+	au BufRead *crontab* let b:comment_leader = '#'
 	au BufRead *crontab* set filetype=crontab
 	au BufRead *crontab* call matchdelete(g:w3)
 augroup END
@@ -114,44 +114,44 @@ augroup END
 
 " Ruby
 augroup ft_ruby
-	au BufRead *.rb let b:comment_leader = '# '
+	au BufRead *.rb let b:comment_leader = '#'
 	au BufRead *.rb set filetype=ruby
 	au BufRead *.rb call matchdelete(g:w3)
 augroup END
 
 " Salt sls
 augroup ft_sls
-	au BufRead *.sls let b:comment_leader = '# '
+	au BufRead *.sls let b:comment_leader = '#'
 	au BufRead *.sls set filetype=sls
 	au BufRead *.sls call matchdelete(g:w3)
 augroup END
 
 " systemd unit files
-au Filetype systemd let b:comment_leader = '# '
+au Filetype systemd let b:comment_leader = '#'
 augroup ft_systemd
-	au BufRead *.mount let b:comment_leader = '# '
+	au BufRead *.mount let b:comment_leader = '#'
 	au BufRead *.mount set filetype=systemd
 
-	au BufRead *.service let b:comment_leader = '# '
+	au BufRead *.service let b:comment_leader = '#'
 	au BufRead *.service set filetype=systemd
 
-	au BufRead *.socket let b:comment_leader = '# '
+	au BufRead *.socket let b:comment_leader = '#'
 	au BufRead *.socket set filetype=systemd
 
-	au BufRead *.target let b:comment_leader = '# '
+	au BufRead *.target let b:comment_leader = '#'
 	au BufRead *.target set filetype=systemd
 
-	au BufRead *.timer let b:comment_leader = '# '
+	au BufRead *.timer let b:comment_leader = '#'
 	au BufRead *.timer set filetype=systemd
 augroup END
 
 " Varnish vcl
 augroup ft_vcl
-	au BufRead *.vcl* let b:comment_leader = '# '
+	au BufRead *.vcl* let b:comment_leader = '#'
 	au BufRead *.vcl* set filetype=vcl
 	au BufRead *.vcl* set noexpandtab
 
-	au BufRead *.vcl.jinja let b:comment_leader = '# '
+	au BufRead *.vcl.jinja let b:comment_leader = '#'
 	au BufRead *.vcl.jinja set filetype=vcl
 	au BufRead *.vcl.jinja set noexpandtab
 augroup END
@@ -175,43 +175,43 @@ augroup END
 
 " YAML family
 augroup ft_yaml
-	au BufRead *.yaml let b:comment_leader = '# '
+	au BufRead *.yaml let b:comment_leader = '#'
 	au BufRead *.yaml set filetype=yaml
 	au BufRead *.yaml call matchdelete(g:w3)
 
-	au BufRead *.yml let b:comment_leader = '# '
+	au BufRead *.yml let b:comment_leader = '#'
 	au BufRead *.yml set filetype=yaml
 	au BufRead *.yml call matchdelete(g:w3)
 
-	au BufRead *gemrc let b:comment_leader = '# '
+	au BufRead *gemrc let b:comment_leader = '#'
 	au BufRead *gemrc set filetype=yaml
 	au BufRead *gemrc call matchdelete(g:w3)
 
-	au BufRead */salt*/master.d/*.conf let b:comment_leader = '# '
+	au BufRead */salt*/master.d/*.conf let b:comment_leader = '#'
 	au BufRead */salt*/master.d/*.conf set filetype=yaml
 	au BufRead */salt*/master.d/*.conf call matchdelete(g:w3)
 
-	au BufRead */salt*/cloud let b:comment_leader = '# '
+	au BufRead */salt*/cloud let b:comment_leader = '#'
 	au BufRead */salt*/cloud set filetype=yaml
 	au BufRead */salt*/cloud call matchdelete(g:w3)
 
-	au BufRead */salt*/grains let b:comment_leader = '# '
+	au BufRead */salt*/grains let b:comment_leader = '#'
 	au BufRead */salt*/grains set filetype=yaml
 	au BufRead */salt*/grains call matchdelete(g:w3)
 
-	au BufRead */salt*/master let b:comment_leader = '# '
+	au BufRead */salt*/master let b:comment_leader = '#'
 	au BufRead */salt*/master set filetype=yaml
 	au BufRead */salt*/master call matchdelete(g:w3)
 
-	au BufRead */salt*/minion let b:comment_leader = '# '
+	au BufRead */salt*/minion let b:comment_leader = '#'
 	au BufRead */salt*/minion set filetype=yaml
 	au BufRead */salt*/minion call matchdelete(g:w3)
 
-	au BufRead */salt*/proxy let b:comment_leader = '# '
+	au BufRead */salt*/proxy let b:comment_leader = '#'
 	au BufRead */salt*/proxy set filetype=yaml
 	au BufRead */salt*/proxy call matchdelete(g:w3)
 
-	au BufRead */salt*/roster let b:comment_leader = '# '
+	au BufRead */salt*/roster let b:comment_leader = '#'
 	au BufRead */salt*/roster set filetype=yaml
 	au BufRead */salt*/roster call matchdelete(g:w3)
 augroup END
