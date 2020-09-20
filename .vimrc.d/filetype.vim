@@ -34,8 +34,8 @@ au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
 
 augroup ft_python
-	au BufRead *.py  call matchdelete(g:w3)
-	au BufRead *.pyc call matchdelete(g:w3)
+	au BufRead *.py  call matchdelete(w:m3)
+	au BufRead *.pyc call matchdelete(w:m3)
 augroup END
 
 " sh/bash
@@ -47,7 +47,7 @@ au Filetype crontab let b:comment_leader = '#'
 augroup ft_crontab
 	au BufRead *crontab* let b:comment_leader = '#'
 	au BufRead *crontab* set filetype=crontab
-	au BufRead *crontab* call matchdelete(g:w3)
+	au BufRead *crontab* call matchdelete(w:m3)
 augroup END
 
 " Crontab (macOS)
@@ -109,21 +109,21 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 " Markdown
 augroup ft_markdown
 	au BufRead *.md set filetype=markdown
-	au BufRead *.md call matchdelete(g:w3)
+	au BufRead *.md call matchdelete(w:m3)
 augroup END
 
 " Ruby
 augroup ft_ruby
 	au BufRead *.rb let b:comment_leader = '#'
 	au BufRead *.rb set filetype=ruby
-	au BufRead *.rb call matchdelete(g:w3)
+	au BufRead *.rb call matchdelete(w:m3)
 augroup END
 
 " Salt sls
 augroup ft_sls
 	au BufRead *.sls let b:comment_leader = '#'
 	au BufRead *.sls set filetype=sls
-	au BufRead *.sls call matchdelete(g:w3)
+	au BufRead *.sls call matchdelete(w:m3)
 augroup END
 
 " systemd unit files
@@ -177,43 +177,43 @@ augroup END
 augroup ft_yaml
 	au BufRead *.yaml let b:comment_leader = '#'
 	au BufRead *.yaml set filetype=yaml
-	au BufRead *.yaml call matchdelete(g:w3)
+	au BufRead *.yaml call matchdelete(w:m3)
 
 	au BufRead *.yml let b:comment_leader = '#'
 	au BufRead *.yml set filetype=yaml
-	au BufRead *.yml call matchdelete(g:w3)
+	au BufRead *.yml call matchdelete(w:m3)
 
 	au BufRead *gemrc let b:comment_leader = '#'
 	au BufRead *gemrc set filetype=yaml
-	au BufRead *gemrc call matchdelete(g:w3)
+	au BufRead *gemrc call matchdelete(w:m3)
 
 	au BufRead */salt*/master.d/*.conf let b:comment_leader = '#'
 	au BufRead */salt*/master.d/*.conf set filetype=yaml
-	au BufRead */salt*/master.d/*.conf call matchdelete(g:w3)
+	au BufRead */salt*/master.d/*.conf call matchdelete(w:m3)
 
 	au BufRead */salt*/cloud let b:comment_leader = '#'
 	au BufRead */salt*/cloud set filetype=yaml
-	au BufRead */salt*/cloud call matchdelete(g:w3)
+	au BufRead */salt*/cloud call matchdelete(w:m3)
 
 	au BufRead */salt*/grains let b:comment_leader = '#'
 	au BufRead */salt*/grains set filetype=yaml
-	au BufRead */salt*/grains call matchdelete(g:w3)
+	au BufRead */salt*/grains call matchdelete(w:m3)
 
 	au BufRead */salt*/master let b:comment_leader = '#'
 	au BufRead */salt*/master set filetype=yaml
-	au BufRead */salt*/master call matchdelete(g:w3)
+	au BufRead */salt*/master call matchdelete(w:m3)
 
 	au BufRead */salt*/minion let b:comment_leader = '#'
 	au BufRead */salt*/minion set filetype=yaml
-	au BufRead */salt*/minion call matchdelete(g:w3)
+	au BufRead */salt*/minion call matchdelete(w:m3)
 
 	au BufRead */salt*/proxy let b:comment_leader = '#'
 	au BufRead */salt*/proxy set filetype=yaml
-	au BufRead */salt*/proxy call matchdelete(g:w3)
+	au BufRead */salt*/proxy call matchdelete(w:m3)
 
 	au BufRead */salt*/roster let b:comment_leader = '#'
 	au BufRead */salt*/roster set filetype=yaml
-	au BufRead */salt*/roster call matchdelete(g:w3)
+	au BufRead */salt*/roster call matchdelete(w:m3)
 augroup END
 
 

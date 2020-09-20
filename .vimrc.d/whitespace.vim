@@ -42,20 +42,20 @@ highlight whitespace_odd  guibg=#3498db guifg=#2f2f2f
 highlight whitespace_ugly guibg=#e74c3c guifg=#2f2f2f
 
 " Spaces before a tab
-let g:w0 = matchadd('whitespace_odd', ' \+\ze\t')
+let w:m0 = matchadd('whitespace_odd', ' \+\ze\t')
 " Tabs that are not at the start of a line
-let g:w1 = matchadd('whitespace_bad', '[^\t][^\/\/ ][^# ]\zs\t\+')
+let w:m1 = matchadd('whitespace_bad', '[^\t][^\/\/ ][^# ]\zs\t\+')
 " Trailing whitespace
-let g:w2 = matchadd('whitespace_ugly', '\s\+$')
+let w:m2 = matchadd('whitespace_ugly', '\s\+$')
 " Spaces used for indenting
-let g:w3 = matchadd('whitespace_ugly', '^\t*\zs \+')
+let w:m3 = matchadd('whitespace_ugly', '^\t*\zs \+')
 
 " Custom whitespace list characters
-" set listchars=tab:\|,trail:,nbsp:+
+set listchars=tab:\|,trail:,nbsp:+
 
-" Set to two bars instead of UTF-8 arrow until iTerm2 GPU accelerated Metal
-" renderer on macOS renders it properly
-set listchars=tab:\|\|,trail:,nbsp:+
+" Set to two bars instead of UTF-8 arrow,
+" if iTerm2 GPU accelerated Metal renderer on macOS renders it improperly
+" set listchars=tab:\|\|,trail:,nbsp:+
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
