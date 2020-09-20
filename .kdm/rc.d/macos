@@ -96,7 +96,64 @@ _macos_itunes() {
 
 # Fake lsusb function
 _macos_lsusb() {
-	_macos_system_profiler 'USB'
+	# Check dependencies
+	if ! hash jq; then
+		output error "Could not detect jq binary, try 'brew install jq'"
+		return
+	fi
+
+	if ! hash plist-to-json; then
+		output error "Could not detect plist-to-json binary, try 'npm -g i plist-to-json'"
+		return
+	fi
+
+	if ! hash system_profiler; then
+		output error "Could not detect system_profiler binary, try running macOS"
+		return
+	fi
+
+	# "bsd_name"
+	# "file_system"
+	# "free_space"
+	# "free_space_in_bytes"
+	# "mount_point"
+	# "partition_map_type"
+	# "removable_media"
+	# "size_in_bytes"
+	# "smart_status"
+	# "volume_uuid"
+
+	jq --tab '.[0][0].items[0].items' <(
+		plist-to-json <(
+			sudo system_profiler -xml 'SPUSBDataType' 2> /dev/null | sed -E -e 's/\s{1,}<\//<\//g' -e 's/\ \ /\ /g'
+		) | sed \
+			-e 's/"_items"/"items"/g'                        \
+			-e 's/"_name"/"name"/g'                          \
+			-e 's/"full_speed"/"full"/g'                     \
+			-e 's/"low_speed"/"low"/g'                       \
+			-e 's/"high_speed"/"high"/g'                     \
+			-e 's/"super_speed"/"super"/g'                   \
+			-e 's/"attrib_No"/false/g'                       \
+			-e 's/"attrib_Off"/false/g'                      \
+			-e 's/"attrib_On"/true/g'                        \
+			-e 's/"attrib_Yes"/true/g'                       \
+			-e 's/"bcd_device"/"bcdDevice"/g'                \
+			-e 's/"Built-in_Device"/"builtIn"/g'             \
+			-e 's/"bus_power"/"busPower"/g'                  \
+			-e 's/"bus_power_used"/"busPowerUsed"/g'         \
+			-e 's/"device_speed"/"deviceSpeed"/g'            \
+			-e 's/"extra_current_used"/"extraCurrentUsed"/g' \
+			-e 's/"host_controller"/"hostController"/g'      \
+			-e 's/"location_id"/"locationId"/g'              \
+			-e 's/"pci_device"/"pciDevice"/g'                \
+			-e 's/"pci_revision"/"pciRevision"/g'            \
+			-e 's/"pci_vendor"/"pciVendor"/g'                \
+			-e 's/"product_id"/"productId"/g'                \
+			-e 's/"serial_num"/"serialNumber"/g'             \
+			-e 's/"vendor_id"/"vendorId"/g'                  \
+			-e 's/"No"/false/g' -e 's/"no"/false/g'          \
+			-e 's/"yes"/true/g' -e 's/"Yes"/true/g'
+	)
 }
 
 
