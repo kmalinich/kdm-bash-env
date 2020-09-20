@@ -4,6 +4,28 @@ scriptencoding utf-8
 let g:polyglot_disabled = ['csv']
 
 
+
+" workaround for whatever weird bug is present in some combination of at least these versions:
+" - neovim v0.5.0-705-g9f704c88a
+" - vim-polyglot 06548fe61765d8a68a289741ce8d30f04a037e60
+"
+" only on Linux x64, oddly
+"
+" it throws some error when opening (at least) yaml files, failing to call matchdelete(w:m3)
+" this workaround calls clearmatches() and then adds back match 0, 1, and 2
+function! DisableSpaceIndentHighlight()
+	call clearmatches()
+
+	" Spaces before a tab
+	let w:m0 = matchadd('whitespace_odd', ' \+\ze\t')
+	" Tabs that are not at the start of a line
+	let w:m1 = matchadd('whitespace_bad', '[^\t][^\/\/ ][^# ]\zs\t\+')
+	" Trailing whitespace
+	let w:m2 = matchadd('whitespace_ugly', '\s\+$')
+endfunction
+
+
+
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
@@ -177,43 +199,43 @@ augroup END
 augroup ft_yaml
 	au BufRead *.yaml let b:comment_leader = '#'
 	au BufRead *.yaml set filetype=yaml
-	au BufRead *.yaml call matchdelete(w:m3)
+	au BufRead *.yaml call DisableSpaceIndentHighlight()
 
 	au BufRead *.yml let b:comment_leader = '#'
 	au BufRead *.yml set filetype=yaml
-	au BufRead *.yml call matchdelete(w:m3)
+	au BufRead *.yml call DisableSpaceIndentHighlight()
 
 	au BufRead *gemrc let b:comment_leader = '#'
 	au BufRead *gemrc set filetype=yaml
-	au BufRead *gemrc call matchdelete(w:m3)
+	au BufRead *gemrc call DisableSpaceIndentHighlight()
 
 	au BufRead */salt*/master.d/*.conf let b:comment_leader = '#'
 	au BufRead */salt*/master.d/*.conf set filetype=yaml
-	au BufRead */salt*/master.d/*.conf call matchdelete(w:m3)
+	au BufRead */salt*/master.d/*.conf call DisableSpaceIndentHighlight()
 
 	au BufRead */salt*/cloud let b:comment_leader = '#'
 	au BufRead */salt*/cloud set filetype=yaml
-	au BufRead */salt*/cloud call matchdelete(w:m3)
+	au BufRead */salt*/cloud call DisableSpaceIndentHighlight()
 
 	au BufRead */salt*/grains let b:comment_leader = '#'
 	au BufRead */salt*/grains set filetype=yaml
-	au BufRead */salt*/grains call matchdelete(w:m3)
+	au BufRead */salt*/grains call DisableSpaceIndentHighlight()
 
 	au BufRead */salt*/master let b:comment_leader = '#'
 	au BufRead */salt*/master set filetype=yaml
-	au BufRead */salt*/master call matchdelete(w:m3)
+	au BufRead */salt*/master call DisableSpaceIndentHighlight()
 
 	au BufRead */salt*/minion let b:comment_leader = '#'
 	au BufRead */salt*/minion set filetype=yaml
-	au BufRead */salt*/minion call matchdelete(w:m3)
+	au BufRead */salt*/minion call DisableSpaceIndentHighlight()
 
 	au BufRead */salt*/proxy let b:comment_leader = '#'
 	au BufRead */salt*/proxy set filetype=yaml
-	au BufRead */salt*/proxy call matchdelete(w:m3)
+	au BufRead */salt*/proxy call DisableSpaceIndentHighlight()
 
 	au BufRead */salt*/roster let b:comment_leader = '#'
 	au BufRead */salt*/roster set filetype=yaml
-	au BufRead */salt*/roster call matchdelete(w:m3)
+	au BufRead */salt*/roster call DisableSpaceIndentHighlight()
 augroup END
 
 
