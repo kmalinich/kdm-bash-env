@@ -54,10 +54,6 @@
 	path = .vim/pack/kdm/kickstart
 	url  = https://github.com/tangledhelix/vim-kickstart
 	branch = master
-[submodule ".vim/pack/kdm/local-vimrc"]
-	path = .vim/pack/kdm/local-vimrc
-	url  = https://github.com/MarcWeber/vim-addon-local-vimrc
-	branch = master
 [submodule ".vim/pack/kdm/logrotate"]
 	path = .vim/pack/kdm/logrotate
 	url  = https://github.com/moon-musick/vim-logrotate
