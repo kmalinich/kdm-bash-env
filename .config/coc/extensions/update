@@ -23,7 +23,7 @@ fi
 
 
 echo "Checking for updates"
-if ncu --error-level 2 --loglevel silent --upgrade; then
+if ncu --errorLevel 2 --loglevel silent --upgrade; then
 	echo "No update needed"
 	exit 0
 fi

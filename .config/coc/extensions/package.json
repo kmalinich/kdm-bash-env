@@ -1,18 +1,18 @@
 {
 	"dependencies": {
-		"coc-css": ">=1.2.4",
-		"coc-diagnostic": ">=0.7.0",
-		"coc-eslint": ">=1.2.7",
-		"coc-highlight": ">=1.2.5",
+		"coc-css": ">=1.2.5",
+		"coc-diagnostic": ">=0.8.3",
+		"coc-eslint": ">=1.3.1",
+		"coc-highlight": ">=1.2.6",
 		"coc-html": ">=1.2.4",
-		"coc-json": ">=1.2.6",
+		"coc-json": ">=1.3.1",
 		"coc-markdownlint": ">=1.5.0",
 		"coc-phpactor": ">=1.0.3",
 		"coc-python": ">=1.2.12",
 		"coc-stylelintplus": ">=1.2.0",
 		"coc-svg": ">=0.0.13",
-		"coc-tsserver": ">=1.5.4",
-		"coc-xml": ">=1.12.0",
-		"coc-yaml": ">=1.0.4"
+		"coc-tsserver": ">=1.5.7",
+		"coc-xml": ">=1.12.3",
+		"coc-yaml": ">=1.1.0"
 	}
 }
