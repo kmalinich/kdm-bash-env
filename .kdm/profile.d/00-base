@@ -47,7 +47,7 @@ export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
 _facter_config() {
 	[[ "${COLORTERM}" == "24bit" ]] && COLORTERM="truecolor"
 
-	if hash facter; then
+	if hash facter > /dev/null 2>&1; then
 		[[ "$(facter bash-env.color.16m 2> /dev/null)" == "false" ]] && unset COLORTERM
 	fi
 
@@ -68,7 +68,7 @@ _facter_config() {
 	export COLOR_16M
 
 
-	if ! hash facter; then
+	if hash facter > /dev/null 2>&1; then
 		export PROMPT_HOSTNAME="true"
 		return
 	fi

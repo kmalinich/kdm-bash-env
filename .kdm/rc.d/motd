@@ -31,7 +31,7 @@ _show_motd() {
 	HASH="#$(_kdm_hash)"
 
 	# Check for jq binary
-	if ! hash jq; then
+	if ! hash jq > /dev/null 2>&1; then
 		# Output warning message about jq being missing
 		echo -e "jq not available; dynamic MOTD not possible\\n"
 
@@ -46,7 +46,7 @@ _show_motd() {
 	fi
 
 	# Use facter if possible, if not, too bad..
-	if ! hash facter; then
+	if ! hash facter > /dev/null 2>&1; then
 		# Output warning message about facter being missing
 		echo -e "facter not available; dynamic MOTD not possible\\n"
 
