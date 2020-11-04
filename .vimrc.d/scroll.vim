@@ -7,6 +7,8 @@ if !has('nvim')
 	set ttyfast
 endif
 
+set ttimeoutlen=40
+
 " Keep at least 3 lines above/below
 set scrolloff=3
 
