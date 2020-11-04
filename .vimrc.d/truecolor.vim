@@ -4,6 +4,8 @@ scriptencoding utf-8
 " Color scheme
 colorscheme brogrammer
 
+set cursorline
+
 " True (24-bit) color support (requires supporting terminal emulator)
 if has('termguicolors') && g:color_16m ==# 'true'
 	let &t_8f = "\e[38;2;%lu;%lu;%lum"

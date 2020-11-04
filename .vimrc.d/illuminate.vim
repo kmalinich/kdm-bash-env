@@ -2,10 +2,12 @@ scriptencoding utf-8
 
 
 " Extend vim-illuminate delay
-let g:Illuminate_delay = 500
+let g:Illuminate_delay = 400
 
 " Highlight word under cursor
 let g:Illuminate_highlightUnderCursor = 1
+
+let g:Illuminate_ftwhitelist = ['vim', 'sh', 'python']
 
 
 " Only highlight specific groups
