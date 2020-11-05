@@ -14,7 +14,7 @@
 				"-"
 			],
 			"command": "shellcheck",
-			"debounce": 100,
+			"debounce": 1000,
 			"formatLines": 1,
 			"formatPattern": [
 				"^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",
