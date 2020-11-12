@@ -11,8 +11,8 @@ if ! hash ncu > /dev/null 2>&1; then
 	exit 2
 fi
 
-if ! hash npm > /dev/null 2>&1; then
-	echo "Command unavailable : 'npm', cannot continue"
+if ! hash yarn > /dev/null 2>&1; then
+	echo "Command unavailable : 'yarn', cannot continue"
 	exit 3
 fi
 
@@ -23,7 +23,7 @@ fi
 
 
 echo "Checking for updates"
-if ncu --errorLevel 2 --loglevel silent --upgrade; then
+if ncu --errorLevel 2 --loglevel silent --packageManager yarn --upgrade; then
 	echo "No update needed"
 	exit 0
 fi
@@ -36,8 +36,8 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
-echo "Executing 'npm i'"
-npm i
+echo "Executing 'yarn'"
+yarn
 echo; echo
 
 echo "Performing nvim CocUpdateSync"

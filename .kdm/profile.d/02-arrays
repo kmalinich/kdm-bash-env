@@ -98,6 +98,7 @@ ARRAY_PATH=(
 "${ULR}/gems/ruby-2.4.0@global/bin"
 "${ULR}/rubies/ruby-2.4.0/bin"
 "${ULR}/bin"
+"${ULO}/perl/bin"
 "${ULO}/net-snmp/bin"
 "${ULO}/go/libexec/bin"
 "${ULO}/coreutils/libexec/gnubin"
