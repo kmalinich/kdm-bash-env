@@ -2,7 +2,8 @@ scriptencoding utf-8
 
 
 " Make scrolling and highlighters fast
-" set lazyredraw
+set lazyredraw
+
 if !has('nvim')
 	set ttyfast
 endif

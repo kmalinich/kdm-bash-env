@@ -4,7 +4,8 @@ scriptencoding utf-8
 " Color scheme
 colorscheme brogrammer
 
-set cursorline
+" Enable cursorline
+" set cursorline
 
 " True (24-bit) color support (requires supporting terminal emulator)
 if has('termguicolors') && g:color_16m ==# 'true'
