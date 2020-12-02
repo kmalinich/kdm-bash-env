@@ -132,7 +132,6 @@ ARRAY_PATH=(
 "${ULO}/ruby/bin"
 '/opt/local/sbin'
 '/opt/local/bin'
-'/opt/cuda/bin'
 '/opt/puppetlabs/bin'
 "${UL}/sbin"
 "${UL}/bin"
@@ -157,6 +156,7 @@ ARRAY_PATH=(
 '/bin'
 '/usr/sbin'
 '/sbin'
+'/opt/cuda/bin'
 )
 
 
