@@ -15,7 +15,7 @@ endfunction
 " These are in a specific order
 call LoadFile('environment')
 call LoadFile('indent')
-call LoadFile('spell')
+" call LoadFile('spell')
 call LoadFile('buffers')
 call LoadFile('polyglot')
 call LoadFile('encoding')
@@ -38,12 +38,9 @@ call LoadFile('neovim')
 call LoadFile('python')
 call LoadFile('ruby')
 call LoadFile('javascript')
-" call LoadFile('ale')
-" call LoadFile('airline')
 call LoadFile('modeline')
 call LoadFile('fileformat')
 call LoadFile('case')
-" call LoadFile('coc.nvim.dist')
 call LoadFile('coc.nvim')
 
 
