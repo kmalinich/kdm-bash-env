@@ -395,28 +395,9 @@ _macos_pb_copy() {
 	output keyval-t "Pasteboard filled with contents of" "${1}"
 }
 
-# Change wallpaper
-_macos_wallpaper() {
-	local WP_DB="${HOME}/Library/Application Support/Dock/desktoppicture.db"
-
-	if [[ ! -s "${WP_DB}" ]]; then
-		output error "'${WP_DB}' is not present or is empty"
-		return 1
-	fi
-
-	if [[ ! -s "${1}" ]]; then
-		output error "'${1}' is not present or is empty"
-		return 2
-	fi
-
-	sqlite3 "${WP_DB}" "update data set value = '${1}'"
-	killall Dock
-}
-
-
 
 # EFI partition mount for disk0, disk1, and disk2
-for NUM in {0..3}; do
+for NUM in {0..5}; do
 	DSK="disk${NUM}s1"
 	PATH_DSK="/dev/${DSK}"
 	PATH_MNT="/Volumes/${DSK}"
@@ -504,8 +485,6 @@ alias system-profiler='     _macos_system_profiler'
 alias system-profiler-list='_macos_system_profiler_list'
 
 alias volume='_macos_volume'
-
-alias wallpaper='_macos_wallpaper'
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
