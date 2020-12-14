@@ -63,9 +63,10 @@ _show_motd() {
 
 	# Generate the OS info string differently, based on OS
 	case "$(echo "${FACTER_JSON}" | jq -Mcr .os.family)" in
+		Arch) ;&
 		Archlinux)
 			DST="$(echo "${FACTER_JSON}" | jq -Mcr .os.name)"
-			VER="$(echo "${FACTER_JSON}" | jq -Mcr .os.release.major).$(echo "${FACTER_JSON}" | jq -Mcr .os.release.minor)"
+			VER="$(echo "${FACTER_JSON}" | jq -Mcr .kernelversion)"
 			;;
 
 		Darwin)
