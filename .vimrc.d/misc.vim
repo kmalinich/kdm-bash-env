@@ -20,5 +20,8 @@ set shortmess=atI
 " Disable line wrapping
 set wrap!
 
+" .. enlarge memory usage?
+set maxmempattern=1150
+
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :

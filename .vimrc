@@ -13,6 +13,7 @@ endfunction
 
 
 " These are in a specific order
+call LoadFile('misc')
 call LoadFile('environment')
 call LoadFile('indent')
 " call LoadFile('spell')
@@ -26,7 +27,6 @@ call LoadFile('truecolor')
 call LoadFile('search')
 call LoadFile('scroll')
 call LoadFile('titlebar')
-call LoadFile('misc')
 call LoadFile('mouse')
 call LoadFile('history')
 call LoadFile('illuminate')
