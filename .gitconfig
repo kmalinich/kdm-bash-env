@@ -6,6 +6,7 @@
 	path = ~/.gitconfig.d/core
 	path = ~/.gitconfig.d/filter
 	path = ~/.gitconfig.d/grep
+	path = ~/.gitconfig.d/init
 	path = ~/.gitconfig.d/merge
 	path = ~/.gitconfig.d/pull
 	path = ~/.gitconfig.d/push
@@ -16,11 +17,3 @@
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-[user]
-	name = Ken Malinich
-	email = kmalinich@users.noreply.github.com

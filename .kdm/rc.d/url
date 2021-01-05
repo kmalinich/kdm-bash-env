@@ -37,15 +37,4 @@ urlencode() {
 }
 
 
-# Function aliases
-alias urldec='urldecode'
-alias urlenc='urlencode'
-
-alias udec='urldecode'
-alias uenc='urlencode'
-
-alias urld='urldecode'
-alias urle='urlencode'
-
-
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
