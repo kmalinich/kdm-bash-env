@@ -261,6 +261,7 @@ zypper
 
 # Array of automatic sudo-ing commands (macOS-only)
 ARRAY_SUDO_MACOS=(
+apfs.util
 atsutil
 chflags
 cupsctl
@@ -272,12 +273,14 @@ fs_usage
 gpt
 installer
 ioreg
+iostat
 kextcache
 kextload
 kextstat
-kextutil
 kextunload
+kextutil
 keytool
+kmutil
 launchctl
 log
 mdutil
@@ -287,17 +290,23 @@ newfs_hfs
 newfs_msdos
 newfs_udf
 nvram
+pfctl
 pmset
+powermetrics
 productutil
 puppet
 reboot
 repair_packages
+rtcread
 scutil
 security
 shutdown
+smc
+smcread
 softwareupdate
 spctl
 ssdtprgen
+sysctl
 system_profiler
 systemsetup
 systemstats
