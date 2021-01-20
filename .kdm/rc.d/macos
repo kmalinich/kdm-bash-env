@@ -123,7 +123,7 @@ _macos_lsusb() {
 	# "smart_status"
 	# "volume_uuid"
 
-	jq --tab '.[0][0].items[0].items' <(
+	jq '.[0][0].items[0].items' <(
 		plist-to-json <(
 			sudo system_profiler -xml 'SPUSBDataType' 2> /dev/null | sed -E -e 's/\s{1,}<\//<\//g' -e 's/\ \ /\ /g'
 		) | sed \
@@ -447,7 +447,7 @@ esac
 case "${UNAME_KERNEL_RELEASE%%.*}" in
 	1[1-4])
 		# Flush DNS cache
-		alias fix-dns='sudo killall -HUP mDNSResponder'
+		alias fix-dns="sudo killall -HUP mDNSResponder; echo | sudo tee -a /etc/hosts; sudo sed -i '$ d' /etc/hosts"
 		alias fix-diskperms="sudo diskutil repairPermissions /; sudo chown -R \${USER} /usr/local"
 		;;
 
@@ -458,7 +458,7 @@ case "${UNAME_KERNEL_RELEASE%%.*}" in
 		alias indexing-disable='sudo mdutil -a -i off'
 
 		# Flush DNS cache
-		alias fix-dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
+		alias fix-dns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder; echo | sudo tee -a /etc/hosts > /dev/null; sudo sed -i '$ d' /etc/hosts"
 	;;
 esac
 
