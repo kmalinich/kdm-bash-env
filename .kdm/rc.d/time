@@ -9,7 +9,11 @@
 # Arg1: end time in seconds
 _time_elapsed_chrono() {
 	# Declare vars as local
-	local CLK CLK_UNIT_COUNT CLK_UNIT_OUT OUTPUT_STRING TIME_END TIME_START TOT USAGE_OPTIONS_STRING
+	local CLK CLK_UNIT_COUNT CLK_UNIT_OUT
+	local OUTPUT_STRING
+	local TIME_END TIME_START
+	local TOT
+	local USAGE_OPTIONS_STRING
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(current end)
@@ -20,70 +24,72 @@ _time_elapsed_chrono() {
 	if [[ -z "${1}" || -z "${2}" ]]; then
 		output usage "time-elapsed-chrono <start> <${USAGE_OPTIONS_STRING}>"
 		output usage "If using 'current' as end time, start time must be in sec sinch epoch (date +%s)"
-	else
-		# Case statement to setup current time as end time if specified
-		case "${2}" in
-			current)
-				# Get current time (sec since epoch)
-				TIME_END="$(date +%s)"
-				;;
-			*)
-				TIME_END="${2}"
-				;;
-		esac
-
-		# Variable setup
-		# Get start time from argument, then compare the two variables to get elapsed time
-		# Math commands below are scale=0 because we only want integers
-		TIME_START="${1}"
-
-		# Math for TOTAL timer
-		TOT[0]=$((TIME_END-TIME_START))
-		TOT[1]=$(echo "scale=0; ${TOT[0]}/60"       | bc)
-		TOT[2]=$(echo "scale=0; ${TOT[0]}/3600"     | bc)
-		TOT[3]=$(echo "scale=0; ${TOT[0]}/86400"    | bc)
-		TOT[4]=$(echo "scale=0; ${TOT[0]}/604800"   | bc)
-		TOT[5]=$(echo "scale=0; ${TOT[0]}/2419200"  | bc)
-		TOT[6]=$(echo "scale=0; ${TOT[0]}/29030400" | bc)
-
-		# Math for clock timer
-		# This outputs an actual working counter/clock/stopwatch type display i.e 12:34:33
-		# This works because of PEMDAS (order of operations)
-		CLK[0]=$(echo "scale=0; ${TOT[0]}-${TOT[1]}*60" | bc)
-		CLK[1]=$(echo "scale=0; ${TOT[1]}-${TOT[2]}*60" | bc)
-		CLK[2]=$(echo "scale=0; ${TOT[2]}-${TOT[3]}*24" | bc)
-		CLK[3]=$(echo "scale=0; ${TOT[3]}-${TOT[4]}*7"  | bc)
-		CLK[4]=$(echo "scale=0; ${TOT[4]}-${TOT[5]}*4"  | bc)
-		CLK[5]=$(echo "scale=0; ${TOT[5]}-${TOT[6]}*12" | bc)
-		CLK[6]="${TOT[6]}"
-
-		# Find how many units
-		CLK_UNIT_COUNT="6"
-		CLK_UNIT_OUT="6"
-
-		# This basically finds the first non-zero digit in the array,
-		# Starting from the top and working backwards
-		while [[ "${CLK_UNIT_COUNT}" -gt "0" ]]; do
-			[[ "${CLK[$CLK_UNIT_COUNT]}" != "0" ]] && break
-
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-			CLK_UNIT_COUNT=$((CLK_UNIT_COUNT-1))
-		done
-
-		while [[ "${CLK_UNIT_OUT}" -ge "0" ]]; do
-			if [[ "${OUTPUT_STRING}" ]]; then
-				OUTPUT_STRING="${OUTPUT_STRING}:$(printf %02d "${CLK[$CLK_UNIT_OUT]}")"
-			else
-				OUTPUT_STRING="$(printf %02d "${CLK[$CLK_UNIT_OUT]}")"
-			fi
-
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-		done
-
-		# If the total is less than 60 seconds, Append 00: and just output seconds
-		[[ "${TOT[0]}" -lt "60" ]] && OUTPUT_STRING="00:${OUTPUT_STRING}"
-		echo "${OUTPUT_STRING}"
+		return 0
 	fi
+
+	# Case statement to setup current time as end time if specified
+	case "${2}" in
+		current)
+			# Get current time (sec since epoch)
+			TIME_END="$(date +%s)"
+			;;
+		*)
+			TIME_END="${2}"
+			;;
+	esac
+
+	# Variable setup
+	# Get start time from argument, then compare the two variables to get elapsed time
+	# Math commands below are scale=0 because we only want integers
+	TIME_START="${1}"
+
+	# Math for TOTAL timer
+	TOT[0]=$((TIME_END-TIME_START))
+	TOT[1]=$(echo "scale=0; ${TOT[0]}/60"       | bc)
+	TOT[2]=$(echo "scale=0; ${TOT[0]}/3600"     | bc)
+	TOT[3]=$(echo "scale=0; ${TOT[0]}/86400"    | bc)
+	TOT[4]=$(echo "scale=0; ${TOT[0]}/604800"   | bc)
+	TOT[5]=$(echo "scale=0; ${TOT[0]}/2419200"  | bc)
+	TOT[6]=$(echo "scale=0; ${TOT[0]}/29030400" | bc)
+
+	# Math for clock timer
+	# This outputs an actual working counter/clock/stopwatch type display i.e 12:34:33
+	# This works because of PEMDAS (order of operations)
+	CLK[0]=$(echo "scale=0; ${TOT[0]}-${TOT[1]}*60" | bc)
+	CLK[1]=$(echo "scale=0; ${TOT[1]}-${TOT[2]}*60" | bc)
+	CLK[2]=$(echo "scale=0; ${TOT[2]}-${TOT[3]}*24" | bc)
+	CLK[3]=$(echo "scale=0; ${TOT[3]}-${TOT[4]}*7"  | bc)
+	CLK[4]=$(echo "scale=0; ${TOT[4]}-${TOT[5]}*4"  | bc)
+	CLK[5]=$(echo "scale=0; ${TOT[5]}-${TOT[6]}*12" | bc)
+	CLK[6]="${TOT[6]}"
+
+	# Find how many units
+	CLK_UNIT_COUNT="6"
+	CLK_UNIT_OUT="6"
+
+	# This basically finds the first non-zero digit in the array,
+	# Starting from the top and working backwards
+	while [[ "${CLK_UNIT_COUNT}" -gt "0" ]]; do
+		[[ "${CLK[$CLK_UNIT_COUNT]}" != "0" ]] && break
+
+		CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
+		CLK_UNIT_COUNT=$((CLK_UNIT_COUNT-1))
+	done
+
+	while [[ "${CLK_UNIT_OUT}" -ge "0" ]]; do
+		if [[ "${OUTPUT_STRING}" ]]; then
+			OUTPUT_STRING="${OUTPUT_STRING}:$(printf %02d "${CLK[$CLK_UNIT_OUT]}")"
+		else
+			OUTPUT_STRING="$(printf %02d "${CLK[$CLK_UNIT_OUT]}")"
+		fi
+
+		CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
+	done
+
+	# If the total is less than 60 seconds, Append 00: and just output seconds
+	[[ "${TOT[0]}" -lt "60" ]] && OUTPUT_STRING="00:${OUTPUT_STRING}"
+
+	echo "${OUTPUT_STRING}"
 }
 
 # Elapsed time function
@@ -92,7 +98,12 @@ _time_elapsed_chrono() {
 # Arg1: end time in seconds
 _time_elapsed_text() {
 	# Declare vars as local
-	local ARRAY_UNIT ARRAY_USAGE_OPTIONS CLK CLK_UNIT_COUNT CLK_UNIT_OUT OUTPUT_STRING TIME_END TIME_START TIME_UNIT_CURRENT TOT USAGE_OPTIONS_STRING
+	local ARRAY_UNIT ARRAY_USAGE_OPTIONS
+	local CLK CLK_UNIT_COUNT CLK_UNIT_OUT
+	local OUTPUT_STRING
+	local TIME_END TIME_START TIME_UNIT_CURRENT
+	local TOT
+	local USAGE_OPTIONS_STRING
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(current end)
@@ -103,76 +114,78 @@ _time_elapsed_text() {
 	if [[ -z "${1}" || -z "${2}" ]]; then
 		output usage "time-elapsed-text <start> <${USAGE_OPTIONS_STRING}>"
 		output usage "If using 'current' as end time, start time must be in 'seconds since epoch' (date +%s)"
-	else
-		# Case statement to setup current time as end time if specified
-		case "${2}" in
-			current) TIME_END="$(date +%s)" ;; # Get current time (sec since epoch)
-			*)       TIME_END="${2}"        ;;
-		esac
-
-		# Variable setup
-		# Get start time from argument, then compare the two variables to get elapsed time
-		# Math commands below are scale=0 because we only want integers
-		TIME_START="${1}"
-
-		# Math for TOTAL timer
-		TOT[0]=$((TIME_END-TIME_START))
-		TOT[1]=$(echo "scale=0; ${TOT[0]}/60"       | bc)
-		TOT[2]=$(echo "scale=0; ${TOT[0]}/3600"     | bc)
-		TOT[3]=$(echo "scale=0; ${TOT[0]}/86400"    | bc)
-		TOT[4]=$(echo "scale=0; ${TOT[0]}/604800"   | bc)
-		TOT[5]=$(echo "scale=0; ${TOT[0]}/2419200"  | bc)
-		TOT[6]=$(echo "scale=0; ${TOT[0]}/29030400" | bc)
-
-		# Math for clock timer
-		# This outputs an actual working COUNTER/clock/stopwatch type display i.e 12:34:33
-		# This works because of PEMDAS (order of operations)
-		CLK[0]=$(echo "scale=0; ${TOT[0]}-${TOT[1]}*60" | bc)
-		CLK[1]=$(echo "scale=0; ${TOT[1]}-${TOT[2]}*60" | bc)
-		CLK[2]=$(echo "scale=0; ${TOT[2]}-${TOT[3]}*24" | bc)
-		CLK[3]=$(echo "scale=0; ${TOT[3]}-${TOT[4]}*7"  | bc)
-		CLK[4]=$(echo "scale=0; ${TOT[4]}-${TOT[5]}*4"  | bc)
-		CLK[5]=$(echo "scale=0; ${TOT[5]}-${TOT[6]}*12" | bc)
-		CLK[6]="${TOT[6]}"
-
-		# Find how many units
-		CLK_UNIT_COUNT="6"
-		CLK_UNIT_OUT="6"
-		# This basically finds the first non-zero digit in the array,
-
-		# Starting from the top and working backwards
-		while [[ "${CLK_UNIT_COUNT}" -gt "0" ]]; do
-			[[ "${CLK[$CLK_UNIT_COUNT]}" != "0" ]] && break
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-			CLK_UNIT_COUNT=$((CLK_UNIT_COUNT-1))
-		done
-
-		ARRAY_UNIT=(second minute hour day week month year)
-
-		while [[ "${CLK_UNIT_OUT}" -ge "0" ]]; do
-			TIME_UNIT_CURRENT="${ARRAY_UNIT[$CLK_UNIT_OUT]}"
-
-			# Find if unit is plural or singular
-			# i.e. not 1 of whatever time unit
-			# Add the 's' at the end (plural)
-			[[ "${CLK[$CLK_UNIT_OUT]}" != "1" ]] && TIME_UNIT_CURRENT="${TIME_UNIT_CURRENT}s"
-
-			# Append the value and unit to the string
-			if [[ "${OUTPUT_STRING}" ]]; then
-				OUTPUT_STRING="${OUTPUT_STRING}, ${CLK[$CLK_UNIT_OUT]} ${TIME_UNIT_CURRENT}"
-			else
-				OUTPUT_STRING="${CLK[$CLK_UNIT_OUT]} ${TIME_UNIT_CURRENT}"
-			fi
-
-			# Find out if it's the last one in the array
-			# If not, add a comma to the end
-			[[ "${CLK_UNIT_OUT}" != "0" ]] && TIME_UNIT_CURRENT="${TIME_UNIT_CURRENT}, "
-
-			# Decrement counter
-			CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
-		done
-		echo "${OUTPUT_STRING}"
+		return 0
 	fi
+
+	# Case statement to setup current time as end time if specified
+	case "${2}" in
+		current) TIME_END="$(date +%s)" ;; # Get current time (sec since epoch)
+		*)       TIME_END="${2}"        ;;
+	esac
+
+	# Variable setup
+	# Get start time from argument, then compare the two variables to get elapsed time
+	# Math commands below are scale=0 because we only want integers
+	TIME_START="${1}"
+
+	# Math for TOTAL timer
+	TOT[0]=$((TIME_END-TIME_START))
+	TOT[1]=$(echo "scale=0; ${TOT[0]}/60"       | bc)
+	TOT[2]=$(echo "scale=0; ${TOT[0]}/3600"     | bc)
+	TOT[3]=$(echo "scale=0; ${TOT[0]}/86400"    | bc)
+	TOT[4]=$(echo "scale=0; ${TOT[0]}/604800"   | bc)
+	TOT[5]=$(echo "scale=0; ${TOT[0]}/2419200"  | bc)
+	TOT[6]=$(echo "scale=0; ${TOT[0]}/29030400" | bc)
+
+	# Math for clock timer
+	# This outputs an actual working COUNTER/clock/stopwatch type display i.e 12:34:33
+	# This works because of PEMDAS (order of operations)
+	CLK[0]=$(echo "scale=0; ${TOT[0]}-${TOT[1]}*60" | bc)
+	CLK[1]=$(echo "scale=0; ${TOT[1]}-${TOT[2]}*60" | bc)
+	CLK[2]=$(echo "scale=0; ${TOT[2]}-${TOT[3]}*24" | bc)
+	CLK[3]=$(echo "scale=0; ${TOT[3]}-${TOT[4]}*7"  | bc)
+	CLK[4]=$(echo "scale=0; ${TOT[4]}-${TOT[5]}*4"  | bc)
+	CLK[5]=$(echo "scale=0; ${TOT[5]}-${TOT[6]}*12" | bc)
+	CLK[6]="${TOT[6]}"
+
+	# Find how many units
+	CLK_UNIT_COUNT="6"
+	CLK_UNIT_OUT="6"
+	# This basically finds the first non-zero digit in the array,
+
+	# Starting from the top and working backwards
+	while [[ "${CLK_UNIT_COUNT}" -gt "0" ]]; do
+		[[ "${CLK[$CLK_UNIT_COUNT]}" != "0" ]] && break
+		CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
+		CLK_UNIT_COUNT=$((CLK_UNIT_COUNT-1))
+	done
+
+	ARRAY_UNIT=(second minute hour day week month year)
+
+	while [[ "${CLK_UNIT_OUT}" -ge "0" ]]; do
+		TIME_UNIT_CURRENT="${ARRAY_UNIT[$CLK_UNIT_OUT]}"
+
+		# Find if unit is plural or singular
+		# i.e. not 1 of whatever time unit
+		# Add the 's' at the end (plural)
+		[[ "${CLK[$CLK_UNIT_OUT]}" != "1" ]] && TIME_UNIT_CURRENT="${TIME_UNIT_CURRENT}s"
+
+		# Append the value and unit to the string
+		if [[ "${OUTPUT_STRING}" ]]; then
+			OUTPUT_STRING="${OUTPUT_STRING}, ${CLK[$CLK_UNIT_OUT]} ${TIME_UNIT_CURRENT}"
+		else
+			OUTPUT_STRING="${CLK[$CLK_UNIT_OUT]} ${TIME_UNIT_CURRENT}"
+		fi
+
+		# Find out if it's the last one in the array
+		# If not, add a comma to the end
+		[[ "${CLK_UNIT_OUT}" != "0" ]] && TIME_UNIT_CURRENT="${TIME_UNIT_CURRENT}, "
+
+		# Decrement counter
+		CLK_UNIT_OUT=$((CLK_UNIT_OUT-1))
+	done
+
+	echo "${OUTPUT_STRING}"
 }
 
 
