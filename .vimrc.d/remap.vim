@@ -42,14 +42,14 @@ nnoremap w b
 
 " Training wheels
 nnoremap q <Nop>
-nnoremap a <Nop>
+"nnoremap a <Nop>
 nnoremap j <Nop>
 nnoremap k <Nop>
 nnoremap r <Nop>
 nnoremap s <Nop>
 nnoremap h <Nop>
 nnoremap l <Nop>
-nnoremap c <Nop>
+"nnoremap c <Nop>
 nnoremap v <Nop>
 nnoremap b <Nop>
 
