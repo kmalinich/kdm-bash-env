@@ -380,19 +380,42 @@ _macos_system_profiler_list() {
 
 # E-Z copy file into pasteboard (clipboard)
 _macos_pb_copy() {
+	# Declare vars as local
+	local FILE_TEMP
+
 	if [[ ! -s "${1}" ]]; then
 		output error "'${1}' is not present or is empty"
 		return 1
 	fi
 
-	set -o pipefail
-	if ! pbcopy < "${1}"; then
-		output error "Failed to copy contents of '${1}' to pasteboard"
-		return 2
+	FILE_TEMP="$(mktemp)"
+
+	# Remove empty or whitespace-only leading and trailing lines
+	sed -e ':a' -e '/[^[:blank:]]/,$!d; /^[[:space:]]*$/{ $d; N; ba' -e '}' "${1}" > "${FILE_TEMP}"
+
+	# If EOL is not present, good to go (pbcopy adds it back)
+	if ! tail -n 1 "${FILE_TEMP}" | read -r _; then
+		if ! pbcopy < "${1}"; then
+			output error "Failed to copy contents of '${1}' to pasteboard"
+			rm -f "${FILE_TEMP}"
+			return 2
+		fi
+
+		output keyval-t "Pasteboard filled with contents of" "${1}"
+		rm -f "${FILE_TEMP}"
+		return 0
 	fi
-	set +o pipefail
+
+	# If EOL is present, remove it (pbcopy adds it back)
+	if ! head -c -1 "${FILE_TEMP}" | pbcopy; then
+		output error "Failed to copy contents of '${1}' to pasteboard"
+		rm -f "${FILE_TEMP}"
+		return 3
+	fi
 
 	output keyval-t "Pasteboard filled with contents of" "${1}"
+	rm -f "${FILE_TEMP}"
+	return 0
 }
 
 
