@@ -310,6 +310,7 @@ sysctl
 system_profiler
 systemsetup
 systemstats
+tmutil
 trimforce
 xcode-select
 xcodebuild

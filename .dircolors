@@ -220,12 +220,12 @@ FILE   38;2;150;150;150
 .p12   38;2;252;106;8
 .pem   38;2;252;106;8
 .PID   38;2;252;106;8
-.XDF   38;2;252;106;8
 .pid   38;2;252;106;8
 .plist 38;2;252;106;8
 .sls   38;2;252;106;8
 .sql   38;2;252;106;8
 .wsdl  38;2;252;106;8
+.XDF   38;2;252;106;8
 .xdf   38;2;252;106;8
 .xml   38;2;252;106;8
 .xsd   38;2;252;106;8
@@ -646,10 +646,10 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .plist 33
 .sls   33
 .sql   33
+.wsdl  33
 .XDF   33
 .xdf   33
 .xml   33
-.wsdl  33
 .xsd   33
 .xsl   33
 .xsls  33
