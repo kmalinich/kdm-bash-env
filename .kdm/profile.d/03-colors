@@ -246,7 +246,7 @@ _show_colors_16m() {
 
 	# Refresh color palette
 	# shellcheck disable=SC1090
-	source "${BASH_ENV_FILE_COLORS}"
+	. "${BASH_ENV_FILE_COLORS}"
 
 	_show_colors_16m_work "${@}"
 }
@@ -257,7 +257,7 @@ _show_colors_256() {
 
 	# Refresh color palette
 	# shellcheck disable=SC1090
-	source "${BASH_ENV_FILE_COLORS}"
+	. "${BASH_ENV_FILE_COLORS}"
 
 	_show_colors_256_work
 }

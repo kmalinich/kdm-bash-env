@@ -46,7 +46,6 @@ _auto_sudo_setup() {
 	[[ "${SUDOCACHE_AGE}" -ge "86400" ]] && _auto_sudo_generate
 
 	# Source sudocache file
-	# shellcheck source=../sudocache
 	. "${BASH_ENV_FILE_SUDOCACHE}"
 }
 

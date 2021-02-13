@@ -11,7 +11,7 @@ for FILE_NAME in ./*-*; do
 
 	export TIMEFORMAT='%3R'
 	# shellcheck disable=SC1090
-	time source "${FILE_NAME}"
+	time . "${FILE_NAME}"
 done
 
 export TIMEFORMAT="${TIMEFORMAT_OLD}"

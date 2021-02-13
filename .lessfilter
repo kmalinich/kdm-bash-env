@@ -4,7 +4,7 @@
 [[ -z "${1}" ]] && exit 1
 
 # Source clean-hash function from kdm-bash-env, or exit 2
-source "${HOME}/.kdm/rc.d/00-base" || exit 2
+. "${HOME}/.kdm/rc.d/00-base" || exit 2
 
 # exit 3 if pygmentize is not present
 hash pygmentize || exit 3
