@@ -37,7 +37,6 @@ jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
 echo "Executing 'yarn install'"
-yarn
 yarn install --ignore-engines --emoji true --ignore-scripts
 echo; echo
 
