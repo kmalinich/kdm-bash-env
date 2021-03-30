@@ -37,7 +37,7 @@ jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
 echo "Executing 'yarn install'"
-yarn install --ignore-engines --emoji true --ignore-scripts
+yarn install --ignore-engines --emoji true
 echo; echo
 
 cd ./node_modules/coc-yaml || exit 5
