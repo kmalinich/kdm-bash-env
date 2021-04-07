@@ -95,8 +95,6 @@ ARRAY_PATH=(
 "${HOME}/.jenv/shims"
 '/data/data/com.termux/files/usr/bin/applets'
 '/data/data/com.termux/files/usr/bin'
-'/Applications/VMware Fusion.app/Contents/Library'
-'/Applications/VMware Fusion.app/Contents/Public'
 "${ULR}/gems/ruby-2.4.0/bin"
 "${ULR}/gems/ruby-2.4.0@global/bin"
 "${ULR}/rubies/ruby-2.4.0/bin"
@@ -158,6 +156,8 @@ ARRAY_PATH=(
 '/sbin'
 '/opt/cuda/bin'
 )
+# '/Applications/VMware Fusion.app/Contents/Library'
+# '/Applications/VMware Fusion.app/Contents/Public'
 
 
 ARRAY_MKDIR=(
