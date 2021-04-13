@@ -11,8 +11,8 @@ if ! hash ncu > /dev/null 2>&1; then
 	exit 2
 fi
 
-if ! hash yarn > /dev/null 2>&1; then
-	echo "Command unavailable : 'yarn', cannot continue"
+if ! hash npm > /dev/null 2>&1; then
+	echo "Command unavailable : 'npm', cannot continue"
 	exit 3
 fi
 
@@ -23,7 +23,7 @@ fi
 
 
 echo "Checking for updates"
-if ncu --errorLevel 2 --loglevel silent --packageManager yarn --upgrade; then
+if ncu --errorLevel 2 --loglevel silent --packageManager npm --upgrade; then
 	echo "No update needed"
 	# exit 0
 fi
@@ -36,12 +36,12 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
-echo "Executing 'yarn install'"
-yarn install --ignore-engines --emoji true
+echo "Executing 'npm install'"
+npm install --quiet --no-audit --no-fund --ignore-engines
 echo; echo
 
 cd ./node_modules/coc-yaml || exit 5
-yarn install --ignore-engines --emoji true --ignore-scripts --no-lockfile
+npm install --quiet --no-audit --no-fund --ignore-scripts --no-lockfile
 cd ../../ || exit 6
 
 
