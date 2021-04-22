@@ -61,6 +61,6 @@
 	"yaml.format.enable": true,
 	"yaml.format.singleQuote": true,
 	"yaml.customTags": [
-    "!lambda scalar"
+		"!lambda scalar"
 	]
 }

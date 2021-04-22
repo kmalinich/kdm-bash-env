@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 
-let g:coc_force_debug = 1
+" let g:coc_force_debug = 1
 
 " Better display for messages
 set cmdheight=2

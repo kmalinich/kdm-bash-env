@@ -34,10 +34,6 @@ call LoadFile('titlebar')
 call LoadFile('mouse')
 call LoadFile('history')
 
-if g:uname_machine ==# 'x86_64'
-	call LoadFile('illuminate')
-endif
-
 call LoadFile('functions')
 call LoadFile('remap')
 call LoadFile('whitespace') " whitespace must come before filetype
