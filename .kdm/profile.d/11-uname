@@ -1,13 +1,14 @@
 # Machine uname variables
 UNAME_KERNEL_NAME="$(   uname -s)"
 UNAME_KERNEL_RELEASE="$(uname -r)"
-export UNAME_KERNEL_NAME UNAME_KERNEL_RELEASE
+UNAME_MACHINE="$(       uname -m)"
+
+export UNAME_KERNEL_NAME UNAME_KERNEL_RELEASE UNAME_MACHINE
 
 # Commented these out as they are unused (for now)
 # UNAME="$(               uname)"
 # UNAME_ALL="$(           uname -a)"
 # UNAME_KERNEL_VERSION="$(uname -v)"
-# UNAME_MACHINE="$(       uname -m)"
 # UNAME_NODE="$(          uname -n)"
 # UNAME_PROCESSOR="$(     uname -p)"
 # export UNAME UNAME_ALL UNAME_KERNEL_VERSION UNAME_MACHINE UNAME_NODE UNAME_PROCESSOR

@@ -14,46 +14,6 @@ _convert_squid_timestamp() {
 	echo "${1}" | perl -p -e 's/^([0-9]*)/"[".localtime($1)."]"/e'
 }
 
-# Convert temperatures to other formats
-_convert_temperature() {
-	# Declare vars as local
-	local SCALE TEMP_C TEMP_F TEMP_K TEMP_R PF_FMT USAGE_STRING
-
-	USAGE_STRING="temp-conv <temperature[c|f|k|r]>"
-	[[ "${1}" != *[0-9][CcFfKkRr]* ]] && o u "${USAGE_STRING}" && return
-
-	# Set calculation scale
-	SCALE="2"
-
-	# Detect input format (the ghetto way) and convert to Kelvin
-	if [[ "${1}" == *[Cc]* ]]; then
-		TEMP_C=${1//[!0-9]/}
-		TEMP_K=$(echo "scale=${SCALE}; ${TEMP_C}+273.15" | bc)
-	elif [[ "${1}" == *[Ff]* ]]; then
-		TEMP_F=${1//[!0-9]/}
-		TEMP_K=$(echo "scale=${SCALE}; ((${TEMP_F}-32)*(5/9))+273.15" | bc)
-	elif [[ "${1}" == *[Kk]* ]]; then
-		TEMP_K=${1//[!0-9]/}
-	elif [[ "${1}" == *[Rr]* ]]; then
-		TEMP_R=${1//[!0-9]/}
-		TEMP_K=$(echo "scale=${SCALE}; ${TEMP_R}*(5/9)" | bc)
-	fi
-
-	# Calculate missing values (yes, I shave off a single CPU cycle not computing, only to spend it evaluating)
-	[[ -z "${TEMP_C}" ]] && TEMP_C=$(echo "scale=${SCALE}; ${TEMP_K}-273.15"           | bc)
-	[[ -z "${TEMP_F}" ]] && TEMP_F=$(echo "scale=${SCALE}; ((${TEMP_K}-273)*(9/5))+32" | bc)
-	[[ -z "${TEMP_R}" ]] && TEMP_R=$(echo "scale=${SCALE}; ${TEMP_K}*(9/5)"            | bc)
-
-	# Set margin for printf commands
-	PF_FMT="%-8s${C_PRP}%s${C_RST}\\n"
-
-	# Output temperatures in various formats! yay!
-	printf "${PF_FMT}" "${TEMP_C}" "C"
-	printf "${PF_FMT}" "${TEMP_F}" "F"
-	printf "${PF_FMT}" "${TEMP_K}" "K"
-	printf "${PF_FMT}" "${TEMP_R}" "R"
-}
-
 # Convert hexadecimal<->decimal
 dechex() {
 	# Declare vars as local
@@ -131,7 +91,6 @@ dechex() {
 
 # Function aliases
 alias convert-squid-timestamp='_convert_squid_timestamp'
-alias convert-temperature='    _convert_temperature'
 
 alias hexdec='dechex'
 

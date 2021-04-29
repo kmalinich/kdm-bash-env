@@ -35,6 +35,7 @@
 			"sourceName": "shellcheck"
 		}
 	},
+
 	"diagnostic.checkCurrentLine": true,
 	"diagnostic.enable": true,
 	"diagnostic.enableMessage": "jump",
@@ -45,7 +46,6 @@
 	"diagnostic.maxWindowWidth": 120,
 	"diagnostic.messageDelay": 100,
 	"diagnostic.messageTarget": "float",
-	"diagnostic.refreshAfterSave": true,
 	"diagnostic.refreshOnInsertMode": true,
 	"diagnostic.virtualText": true,
 	"diagnostic.virtualTextCurrentLineOnly": true,
@@ -57,5 +57,10 @@
 	"suggest.noselect": false,
 	"tsserver.enable": false,
 	"suggest.timeout": 500,
-	"wxss.validate": false
+	"wxss.validate": false,
+	"yaml.format.enable": true,
+	"yaml.format.singleQuote": true,
+	"yaml.customTags": [
+		"!lambda scalar"
+	]
 }

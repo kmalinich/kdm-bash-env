@@ -6,6 +6,9 @@ trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
 # Check exitcode of previous command
 # Always write lines to history file on each prompt
 # Generate / export PS1 prompt
+# https://unix.stackexchange.com/a/18443
+# export PROMPT_COMMAND="_prompt_generate; _prompt_titlebar;"
+# export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; history -n; history -w; history -c; history -r; _prompt_generate; _prompt_titlebar;"
 export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; history -a; _prompt_generate; _prompt_titlebar;"
 
 # Trim \w in PS1 to 2 directories (Bash 4+)
