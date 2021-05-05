@@ -25,9 +25,9 @@
 	d  = diff --color=auto --ignore-space-change --ignore-blank-lines --color-moved-ws=ignore-all-space --ws-error-highlight=all
 	ds = describe
 
-	# Delete any branches that have been merged into master
+	# Delete any branches that have been merged into the current branch
 	# See also: https://gist.github.com/robmiller/5133264
-	dm = "!_git_dm() { git pull --rebase --prune && git branch --merged | grep -v '\\*' | xargs -n 1 git branch --delete 2> /dev/null; }; _git_dm"
+	dm = "!_git_dm() { git up && git branch --color=never --format '%(refname:lstrip=2)' --merged | grep -v \"^$(git symbolic-ref --short HEAD)$\" | xargs -n 1 git branch --delete 2> /dev/null; }; _git_dm"
 
 	f = fetch --all --prune
 
@@ -55,9 +55,7 @@
 	# Requires GitHub CLI (https://hub.github.com/)
 	o = browse
 
-	p  = pull
-	pl = pull
-	pp = pull --prune
+	p = pull --prune
 
 	plm = "!_git_plm() { git f; git co master; git pp; git s; }; _git_plm"
 	plu = "!_git_plu() { git f; git co master; git up; git s; }; _git_plu"
@@ -84,7 +82,7 @@
 
 	undo = checkout --
 
-	up = pull --rebase --prune
+	up = p --rebase
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :
