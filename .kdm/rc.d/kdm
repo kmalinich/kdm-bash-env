@@ -11,7 +11,7 @@ _kdm_hash() {
 	OLD_PWD="${PWD}"
 	cd "${HOME}" || return
 
-	git log --pretty=format:'%h' -n 1
+	git log --pretty=format:'%h%n' -n 1
 	cd "${OLD_PWD}" || return
 }
 
