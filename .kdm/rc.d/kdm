@@ -18,25 +18,25 @@ _kdm_hash() {
 # Help with/list bashrc functions
 _kdm_help() {
 	# Declare vars as local
-	local BAR="${C_PRP}============${C_RST}"
+	local BAR="${C_PRP}====================================${C_RST}"
 
 	local ENV_CMD ENV_CMDS
 	local ENV_CMD_GROUP_FMT ENV_CMD_GROUP_NEW ENV_CMD_GROUP_OLD
 
-	mapfile -t ENV_CMDS < <(alias | grep -Ev 'CMD|ehco|grep|grpe|ls\ .*.\-\-|lsusb|md5sum|namp|pign|ping=|kk|vim|\.\.|showbin|ssh|sudo|tial|\-format=' | awk -F '[ =]' '{print $2}' | sed -r '/^.{,2}$/d')
+	mapfile -t ENV_CMDS < <(alias | grep -Ev '^alias\ g\-|ccd|cdc|clear|CMD|ehco|grep|grpe|it2|ls\ .*.\-\-|lsusb|markdown|md5sum|namp|pign|ping=|kk|vim|\.\.|showbin|ssh|sudo|tial|\-format=' | awk -F '[ =]' '{print $2}' | sed -r '/^.{,2}$/d')
 
 	ENV_CMD_GROUP_OLD=""
 	for ENV_CMD in "${ENV_CMDS[@]}"; do
-		# Get 1st 3 letters of command
-		ENV_CMD_GROUP_NEW="${ENV_CMD:0:3}"
+		# Get 1st 4 letters of command
+		ENV_CMD_GROUP_NEW="${ENV_CMD:0:4}"
 
 		# If we've moved to a new group, add an extra newline
 		if [[ "${ENV_CMD_GROUP_NEW}" != "${ENV_CMD_GROUP_OLD}" ]]; then
-			ENV_CMD_GROUP_FMT="$(echo "${ENV_CMD:0:4}" | awk -F '-' '{printf $1}')"
-			echo -e "\n\n${C_WHT_BRT}-${C_RST}${BAR}${BAR}${BAR} ${C_GRN_BRT}${ENV_CMD_GROUP_FMT}${C_RST} ${C_WHT_BRT}-${C_RST}"
+			ENV_CMD_GROUP_FMT="$(echo "${ENV_CMD:0:7}" | awk -F '-' '{printf $1}')"
+			echo -e "\n ${BAR} ${C_GRY}'${C_GRN_BRT}${ENV_CMD_GROUP_FMT}${C_GRY}'${C_RST}"
 		fi
 
-		output keyval-o "Command" "${ENV_CMD}"
+		printf "${C_GRY}'${C_ORN}%s${C_GRY}'${C_RST}\n" "${ENV_CMD}"
 
 		ENV_CMD_GROUP_OLD="${ENV_CMD_GROUP_NEW}"
 	done

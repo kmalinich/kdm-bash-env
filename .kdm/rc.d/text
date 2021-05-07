@@ -9,26 +9,40 @@
 # https://stackoverflow.com/a/25845393
 _flash_term() {
 	# Declare vars as local
-	local FLASH_INTERVAL="${1-0.5}"
+	local FLASH_COUNT="0" FLASH_COUNT_LIMIT="${2-5}" FLASH_INTERVAL="${1-0.5}"
 
 	# Some sanity checking
 	[[ "$(awk "BEGIN { print (${FLASH_INTERVAL} < .05) ? \"Y\" : \"N\" }")" == "Y" ]] && FLASH_INTERVAL=".05"
 	[[ "$(awk "BEGIN { print (${FLASH_INTERVAL} >   1) ? \"Y\" : \"N\" }")" == "Y" ]] && FLASH_INTERVAL="1"
 
+	# There are two waits during the loop, so we need to halve the provided flash interval time
+	FLASH_INTERVAL="$(echo "scale=4; ${FLASH_INTERVAL}/2" | bc)"
+
 	while true; do
+		if [[ "${FLASH_COUNT}" -ge "${FLASH_COUNT_LIMIT}" ]]; then
+			# Reset video
+			printf '\e[?5l'
+			return
+		fi
+
 		# Reverse video
 		printf '\e[?5h'
 
-		sleep "${FLASH_INTERVAL}"
+		# Wait for ${FLASH_INTERVAL} time, and break if a key is pressed
+		read -n 1 -r -s -t "${FLASH_INTERVAL}" && break
 
 		# Reset video
 		printf '\e[?5l'
 
-		# Break if a key is pressed
+		# Wait for ${FLASH_INTERVAL} time, and break if a key is pressed
 		read -n 1 -r -s -t "${FLASH_INTERVAL}" && break
 
-		sleep 0.1
+		((FLASH_COUNT++))
 	done
+
+	# Reset video
+	printf '\e[?5l'
+	return
 }
 
 
