@@ -6,7 +6,9 @@ export TIMEFORMAT_RACE="true"
 
 echo "File name,Time elapsed"
 
-for FILE_NAME in ./*-*; do
+mapfile -t ARRAY_FILES < <(find . -maxdepth 1 -type f -executable | sort)
+
+for FILE_NAME in "${ARRAY_FILES[@]}"; do
 	echo -n "${FILE_NAME//\.\//},"
 
 	export TIMEFORMAT='%3R'
@@ -17,3 +19,6 @@ done
 export TIMEFORMAT="${TIMEFORMAT_OLD}"
 
 unset TIMEFORMAT_RACE
+
+
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

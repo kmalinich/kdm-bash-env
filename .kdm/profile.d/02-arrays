@@ -195,9 +195,11 @@ autocd
 dirspell
 )
 
+# Sourcing entire bash_completion library is slow,
+# about 0.5s on i7-9700k@5.2GHz, 3200MHz DDR4, and NVME flash
 ARRAY_SOURCE=(
-/etc/profile.d/bash_completion.sh
-"${UL}/etc/profile.d/bash_completion.sh"
+# /etc/profile.d/bash_completion.sh
+# "${UL}/etc/profile.d/bash_completion.sh"
 "${BASH_ENV_FILE_RC}"
 )
 

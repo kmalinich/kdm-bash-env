@@ -162,7 +162,7 @@ _volume_cmd() {
 }
 
 _volume_set() {
-	_volume_set "set volume output volume ${1}"
+	_volume_cmd "output volume ${1}"
 }
 
 # Volume config function
@@ -419,7 +419,7 @@ _macos_pb_copy() {
 }
 
 
-# EFI partition mount for disk0, disk1, and disk2
+# EFI partition mount for disk0 - disk5
 for NUM in {0..5}; do
 	DSK="disk${NUM}s1"
 	PATH_DSK="/dev/${DSK}"

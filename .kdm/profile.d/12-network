@@ -1,13 +1,13 @@
 # Get IP, TTY, and hostname so the binaries doesn't have to be run again
 # First try with facter+jq
-if hash facter > /dev/null 2>&1 && hash jq > /dev/null 2>&1; then
-	FACTER_NET_JSON="$(facter -j 2> /dev/null)"
-
-	DEFROUTE_NIC="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.primary" 2> /dev/null)"
-	[[ "${DEFROUTE_NIC}" ]] && HOST_IP="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.interfaces.${DEFROUTE_NIC}.ip" 2> /dev/null)"
-
-	unset FACTER_NET_JSON
-fi
+# if hash facter > /dev/null 2>&1 && hash jq > /dev/null 2>&1; then
+# 	FACTER_NET_JSON="$(facter -j 2> /dev/null)"
+#
+# 	DEFROUTE_NIC="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.primary" 2> /dev/null)"
+# 	[[ "${DEFROUTE_NIC}" ]] && HOST_IP="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.interfaces.${DEFROUTE_NIC}.ip" 2> /dev/null)"
+#
+# 	unset FACTER_NET_JSON
+# fi
 
 # If facter+jq was a no-go, get it the old fashioned way
 if [[ -z "${DEFROUTE_NIC}" || -z "${HOST_IP}" ]]; then

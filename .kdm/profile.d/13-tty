@@ -3,4 +3,5 @@ GPG_TTY="$(tty)"
 
 export CURRENT_TTY GPG_TTY
 
+
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
