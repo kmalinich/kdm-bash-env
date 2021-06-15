@@ -198,10 +198,16 @@ _kdm_update() {
 	git status
 	echo
 
+	# Run coc extension update/rebuild/reinstall if coc.nvim submodule was updated
+	if git status --no-renames --untracked-files=no --porcelain 2> /dev/null | grep -Eq 'coc\.nvim$'; then
+		COC_UPDATE="${HOME}/.config/coc/extensions/update"
+		[[ -s "${COC_UPDATE}" && -x "${COC_UPDATE}" ]] && "${COC_UPDATE}"
+	fi
+
 	# Change back to original pwd
 	if ! cd "${OLD_PWD}"; then
 		output error "Unable to change back to old pwd '${OLD_PWD}'"
-		return 9
+		return 10
 	fi
 
 	output keyval-g "[kdm-update][main]" "Complete"
