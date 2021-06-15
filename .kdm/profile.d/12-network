@@ -1,55 +1,104 @@
-# Get IP, TTY, and hostname so the binaries doesn't have to be run again
-# First try with facter+jq
-# if hash facter > /dev/null 2>&1 && hash jq > /dev/null 2>&1; then
-# 	FACTER_NET_JSON="$(facter -j 2> /dev/null)"
-#
-# 	DEFROUTE_NIC="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.primary" 2> /dev/null)"
-# 	[[ "${DEFROUTE_NIC}" ]] && HOST_IP="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.interfaces.${DEFROUTE_NIC}.ip" 2> /dev/null)"
-#
-# 	unset FACTER_NET_JSON
-# fi
-
-# If facter+jq was a no-go, get it the old fashioned way
-if [[ -z "${DEFROUTE_NIC}" || -z "${HOST_IP}" ]]; then
-	DEFROUTE_NIC="$(ip route | grep -Po '(?<=dev\ )(e(n|th|ns|np[1-9]s)|br|wlan)[0-9]{1,3}(?=(\s\sproto\ static)?(\s\smetric\ [1-9][0-9]{0,3})?\s$)?' | head -n 1)"
-	[[ "${DEFROUTE_NIC}" ]] && HOST_IP=$(ip addr | grep -Po "(?<=inet\\ )([1-9]([0-9]{1,2})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})(?=.*.[^vir]${DEFROUTE_NIC}$))")
-fi
-
-# Export variables
-export DEFROUTE_NIC HOST_IP
+export BASH_ENV_FILE_INITIAL_NETWORK="${BASH_ENV_DIR_KDM}/initial-network"
 
 
-# If we have a hostname file, use it; otherwise call the hostname binary
-[[ -s /etc/hostname ]] && HOSTNAME_DATA="$(cat /etc/hostname)" || HOSTNAME_DATA="$(hostname -f)"
+_initialNetworkGenerate() {
+	# Get IP, TTY, and hostname so the binaries doesn't have to be run again
+	# First try with facter+jq
+	# if hash facter > /dev/null 2>&1 && hash jq > /dev/null 2>&1; then
+	# 	FACTER_NET_JSON="$(facter -j 2> /dev/null)"
+	#
+	# 	DEFROUTE_NIC="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.primary" 2> /dev/null)"
+	# 	[[ "${DEFROUTE_NIC}" ]] && HOST_IP="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.interfaces.${DEFROUTE_NIC}.ip" 2> /dev/null)"
+	#
+	# 	unset FACTER_NET_JSON
+	# fi
 
-# Failsafe
-if [[ -z "${HOSTNAME_DATA}" ]]; then
-	HOSTNAME_DATA="$(hostname -f)"
+	# If facter+jq was a no-go, get it the old fashioned way
+	if [[ -z "${DEFROUTE_NIC}" || -z "${HOST_IP}" ]]; then
+		DEFROUTE_NIC="$(ip route | grep -Po '(?<=dev\ )(e(n|th|ns|np[1-9]s)|br|wlan)[0-9]{1,3}(?=(\s\sproto\ static)?(\s\smetric\ [1-9][0-9]{0,3})?\s$)?' | head -n 1)"
+		[[ "${DEFROUTE_NIC}" ]] && HOST_IP=$(ip addr | grep -Po "(?<=inet\\ )([1-9]([0-9]{1,2})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})(?=.*.[^vir]${DEFROUTE_NIC}$))")
+	fi
 
-	echo -e "\nWARNING : /etc/hostname may be invalid\n"
-fi
+	# Export variables
+	export DEFROUTE_NIC HOST_IP
 
-# Determine subdomain count
-DOMAIN_COUNT="${HOSTNAME_DATA//[^.]}"
-DOMAIN_COUNT="${#DOMAIN_COUNT}"
 
-# Parse for domain
-[[ "${DOMAIN_COUNT}" -ge "1" ]] && DOMAIN_FULL="$(echo "${HOSTNAME_DATA}" | cut -d '.' -f 2-)"
-export DOMAIN_FULL="${DOMAIN_FULL-local}"
+	# If we have a hostname file, use it; otherwise call the hostname binary
+	[[ -s /etc/hostname ]] && HOSTNAME_DATA="$(cat /etc/hostname)" || HOSTNAME_DATA="$(hostname -f)"
 
-# Parse for hostname
-export HOST_SHORT="${HOSTNAME_DATA%%.*}"
-if [[ "${DOMAIN_COUNT}" -ge "3" ]]; then
-	DOMAIN=$(echo "${HOSTNAME_DATA}" | cut -d '.' -f "${DOMAIN_COUNT}-")
-	HOST_SUB="${HOST_SHORT}.${DOMAIN_FULL/\.${DOMAIN}/}"
-fi
+	# Failsafe
+	if [[ -z "${HOSTNAME_DATA}" ]]; then
+		HOSTNAME_DATA="$(hostname -f)"
 
-# Failstate catch
-export HOST_SUB="${HOST_SUB-${HOST_SHORT}}"
-export DOMAIN="${DOMAIN-local}"
+		echo -e "\nWARNING : /etc/hostname may be invalid\n"
+	fi
 
-# Populate ${HOSTNAME} environment variable if missing
-export HOSTNAME="${HOSTNAME-${HOSTNAME_DATA}}"
+	# Determine subdomain count
+	DOMAIN_COUNT="${HOSTNAME_DATA//[^.]}"
+	DOMAIN_COUNT="${#DOMAIN_COUNT}"
+
+	# Parse for domain
+	[[ "${DOMAIN_COUNT}" -ge "1" ]] && DOMAIN_FULL="$(echo "${HOSTNAME_DATA}" | cut -d '.' -f 2-)"
+	export DOMAIN_FULL="${DOMAIN_FULL-local}"
+
+	# Parse for hostname
+	export HOST_SHORT="${HOSTNAME_DATA%%.*}"
+	if [[ "${DOMAIN_COUNT}" -ge "3" ]]; then
+		DOMAIN=$(echo "${HOSTNAME_DATA}" | cut -d '.' -f "${DOMAIN_COUNT}-")
+		HOST_SUB="${HOST_SHORT}.${DOMAIN_FULL/\.${DOMAIN}/}"
+	fi
+
+	# Failstate catch
+	export HOST_SUB="${HOST_SUB-${HOST_SHORT}}"
+	export DOMAIN="${DOMAIN-local}"
+
+	# Populate ${HOSTNAME} environment variable if missing
+	export HOSTNAME="${HOSTNAME-${HOSTNAME_DATA}}"
+
+	cat <<- EOF > "${BASH_ENV_FILE_INITIAL_NETWORK}"
+	export DEFROUTE_NIC="${DEFROUTE_NIC}"
+	export DOMAIN="${DOMAIN}"
+	export DOMAIN_FULL="${DOMAIN_FULL}"
+	export HOSTNAME="${HOSTNAME}"
+	export HOST_IP="${HOST_IP}"
+	export HOST_SHORT="${HOST_SHORT}"
+	export HOST_SUB="${HOST_SUB}"
+	EOF
+}
+
+_initialNetworkSetup() {
+	# Generate network information file if empty
+	if [[ ! -s "${BASH_ENV_FILE_INITIAL_NETWORK}" ]]; then
+		_initialNetworkGenerate
+		# If generation required, we're done here
+		return 0
+	fi
+
+	# Declare vars as local
+	local INITIAL_NETWORK_AGE INITIAL_NETWORK_TIME
+
+	# Determine age of SSH alias cache file
+	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		INITIAL_NETWORK_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_INITIAL_NETWORK}")
+	else
+		INITIAL_NETWORK_TIME=$(stat -f '%m' "${BASH_ENV_FILE_INITIAL_NETWORK}")
+	fi
+
+	INITIAL_NETWORK_AGE=$(($(date +%s)-INITIAL_NETWORK_TIME))
+
+	# Regenerate network information file if older than 1 day
+	if [[ "${INITIAL_NETWORK_AGE}" -ge "86400" ]]; then
+		_initialNetworkGenerate
+		return 0
+	fi
+
+	# Source network information file
+	# shellcheck source=/dev/null
+	. "${BASH_ENV_FILE_INITIAL_NETWORK}"
+}
+
+
+_initialNetworkSetup
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

@@ -11,21 +11,44 @@
 # kdm bash-env variables
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
+export BASH_ENV_FILE_INITIAL_PATH="${BASH_ENV_DIR_KDM}/initial-path"
 
 
-# Set initial PATH
-PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+_initialPathGenerate() {
+	PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
-# Add GNU coreutils, findutils, and grep to PATH if macOS brew-installed package present
-DIR_COREUTILS="/usr/local/opt/coreutils/libexec/gnubin"
-DIR_FINDUTILS="/usr/local/opt/findutils/libexec/gnubin"
-DIR_GREP="/usr/local/opt/grep/libexec/gnubin"
+	# Add GNU coreutils, findutils, and grep to PATH if macOS brew-installed package present
+	ARRAY_DIR_GNU_UTILS=(
+	"/usr/local/opt/coreutils/libexec/gnubin"
+	"/usr/local/opt/findutils/libexec/gnubin"
+	"/usr/local/opt/grep/libexec/gnubin"
+	)
 
-[[ -d "${DIR_FINDUTILS}" ]] && PATH="${DIR_FINDUTILS}:${PATH}"
-[[ -d "${DIR_GREP}"      ]] && PATH="${DIR_GREP}:${PATH}"
-[[ -d "${DIR_COREUTILS}" ]] && PATH="${DIR_COREUTILS}:${PATH}"
+	for DIR_GNU_UTIL in "${ARRAY_DIR_GNU_UTILS[@]}"; do
+		[[ ! -d "${DIR_GNU_UTIL}" ]] && continue
+		PATH="${DIR_GNU_UTIL}:${PATH}"
+	done
 
-export PATH
+	echo "export PATH=\"${PATH}\"" > "${BASH_ENV_FILE_INITIAL_PATH}"
+
+	export PATH
+}
+
+_initialPathSetup() {
+	# Generate initial path file if empty
+	if [[ ! -s "${BASH_ENV_FILE_INITIAL_PATH}" ]]; then
+		_initialPathGenerate
+		# If generation required, we're done here
+		return 0
+	fi
+
+	# Source initial path file
+	# shellcheck source=/dev/null
+	. "${BASH_ENV_FILE_INITIAL_PATH}"
+}
+
+
+_initialPathSetup
 
 
 # Initial plaintext loading message
@@ -34,10 +57,15 @@ export PATH
 # Source data from ~/.kdm/profile.d
 for FILE in $(find "${BASH_ENV_DIR_PROFILE_D}" -maxdepth 1 -name '[0-9][0-9]-*' -type f | sort); do
 	. "${FILE}"
+
+	# For performance debugging
+	# echo -n "${FILE},"
+	# export TIMEFORMAT=$'%3R'
+	# time . "${FILE}"
+	# export TIMEFORMAT=$'%3R'
 done
 
 if [[ "${BASH_INTERACTIVE}" ]]; then
-	# Show MOTD
 	# _show_motd
 
 	# Re-enable echo output

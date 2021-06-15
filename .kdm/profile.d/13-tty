@@ -1,6 +1,9 @@
-CURRENT_TTY="$(ps ax | awk '/'"${$}"'/ {printf $2; exit}')"
-GPG_TTY="$(tty)"
+THIS_TTY="$(tty)"
 
+CURRENT_TTY="${THIS_TTY//\/dev\/tty}"
+GPG_TTY="${THIS_TTY}"
+
+unset THIS_TTY
 export CURRENT_TTY GPG_TTY
 
 

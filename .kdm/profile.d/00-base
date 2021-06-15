@@ -12,7 +12,9 @@ export BASH_ENV_DIR_SSH_SESSIONS="${HOME}/.ssh-sessions"
 export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
 export BASH_ENV_DIR_EXTRA_LOGOUT="${BASH_ENV_DIR_KDM}/extra-logout"
 export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
+
 export BASH_ENV_FILE_HISTORY="${BASH_ENV_DIR_KDM}/history"
+
 
 export BASH_ENV_FILE_LESSFILTER="${HOME}/.lessfilter"
 export BASH_ENV_FILE_LOGOUT="${HOME}/.bash_logout"
@@ -20,6 +22,7 @@ export BASH_ENV_FILE_PROFILE="${BASH_ENV_DIR_KDM}/profile"
 export BASH_ENV_FILE_RC="${BASH_ENV_DIR_KDM}/rc"
 export BASH_ENV_FILE_COLORS="${BASH_ENV_DIR_PROFILE_D}/03-colors"
 export BASH_ENV_FILE_CONFIG="${BASH_ENV_DIR_KDM}/bash-env.conf"
+export BASH_ENV_FILE_DISABLE_TRUECOLOR="${BASH_ENV_DIR_KDM}/disable-truecolor"
 export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
 export BASH_ENV_FILE_GEMRC="${HOME}/.gemrc"
 export BASH_ENV_FILE_GITCONFIG="${HOME}/.gitconfig"
@@ -36,6 +39,7 @@ export BASH_ENV_FILE_TIDY="${HOME}/.tidyrc"
 export BASH_ENV_FILE_TOPRC="${HOME}/.toprc"
 export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
 
+
 # Custom pip config file path
 export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
 
@@ -47,9 +51,7 @@ export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
 _facter_config() {
 	[[ "${COLORTERM}" == "24bit" ]] && COLORTERM="truecolor"
 
-	if hash facter > /dev/null 2>&1; then
-		[[ "$(facter bash-env.color.16m 2> /dev/null)" == "false" ]] && unset COLORTERM
-	fi
+	[[ -e "${BASH_ENV_FILE_DISABLE_TRUECOLOR}" ]] && unset COLORTERM
 
 	# Extrapolate ${COLORTERM} into boolean ${COLOR_16M}
 	case "${COLORTERM}" in
@@ -57,23 +59,23 @@ _facter_config() {
 		*)           COLOR_16M="false" ;;
 	esac
 
-	if [[ "${COLOR_16M}" == "true" ]]; then
-		# Physical console on Linux:
-		# Disable true color (where as it would be enabled if connecting via SSH or the like)
-		if tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
-			COLOR_16M="false"
-		fi
-	fi
+	# if [[ "${COLOR_16M}" == "true" ]]; then
+	# 	# Physical console on Linux:
+	# 	# Disable true color (where as it would be enabled if connecting via SSH or the like)
+	# 	if tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
+	# 		COLOR_16M="false"
+	# 	fi
+	# fi
 
 	export COLOR_16M
 
 
-	if hash facter > /dev/null 2>&1; then
+	if ! hash facter > /dev/null 2>&1; then
 		export PROMPT_HOSTNAME="true"
 		return
 	fi
 
-	PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
+	# PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
 
 	[[ "${PROMPT_HOSTNAME}" != "false" ]] && PROMPT_HOSTNAME="true"
 
@@ -87,9 +89,6 @@ _facter_config() {
 
 
 _facter_config
-
-
-
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

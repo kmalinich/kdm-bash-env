@@ -21,7 +21,7 @@ endif
 
 
 set backupdir=~/.vim/backup
-set directory=~/.vim/tmp
+" set directory=~/.vim/tmp
 set undodir=~/.vim/undo
 
 " Save undo data
