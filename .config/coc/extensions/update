@@ -16,9 +16,14 @@ if ! hash npm > /dev/null 2>&1; then
 	exit 3
 fi
 
+if ! hash yarn > /dev/null 2>&1; then
+	echo "Command unavailable : 'yarn', cannot continue"
+	exit 4
+fi
+
 if ! hash jq > /dev/null 2>&1; then
 	echo "Command unavailable : 'jq', cannot continue"
-	exit 4
+	exit 5
 fi
 
 
@@ -36,14 +41,20 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
-echo "Executing 'npm install'"
+echo "Executing 'npm install' in .config/coc/extensions"
 npm install --quiet --no-audit --no-fund --ignore-engines
 echo; echo
 
-cd ./node_modules/coc-yaml || exit 5
+cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 6
+echo "Executing 'npm install' in .config/coc/extensions/node_modules/coc-yaml"
 npm install --quiet --no-audit --no-fund --ignore-scripts --no-lockfile
-cd ../../ || exit 6
+echo; echo
 
+cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 7
+echo "Executing 'yarn install' in .vim/pack/kdm/coc.nvim"
+yarn install --frozen-lockfile --production --network-concurrency "$(nproc)" --non-interactive
+echo; echo
 
+cd || exit 8
 echo "Performing nvim CocUpdateSync"
 nvim -c 'CocUpdateSync|q'

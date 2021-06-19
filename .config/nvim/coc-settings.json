@@ -1,5 +1,7 @@
 {
-	"css.validate": false,
+	"coc.preferences.extensionUpdateCheck": "daily",
+	"coc.preferences.useQuickfixForLocations": true,
+	"css.validate": true,
 	"diagnostic-languageserver.filetypes": {
 		"sh": "shellcheck"
 	},
@@ -35,7 +37,6 @@
 			"sourceName": "shellcheck"
 		}
 	},
-
 	"diagnostic.checkCurrentLine": true,
 	"diagnostic.enable": true,
 	"diagnostic.enableMessage": "jump",
@@ -54,13 +55,15 @@
 	"less.validate": false,
 	"scss.validate": false,
 	"suggest.autoTrigger": "trigger",
+	"suggest.disableMenu": true,
 	"suggest.noselect": false,
-	"tsserver.enable": false,
+	"suggest.snippetIndicator": "",
 	"suggest.timeout": 500,
+	"tsserver.enable": true,
 	"wxss.validate": false,
-	"yaml.format.enable": true,
-	"yaml.format.singleQuote": true,
 	"yaml.customTags": [
 		"!lambda scalar"
-	]
+	],
+	"yaml.format.enable": true,
+	"yaml.format.singleQuote": true
 }
