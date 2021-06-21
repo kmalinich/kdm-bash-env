@@ -4,13 +4,22 @@
 [[ -z "${1}" ]] && exit 1
 
 # Source clean-hash function from kdm-bash-env, or exit 2
+# shellcheck disable=SC1091
 . "${HOME}/.kdm/rc.d/00-base" || exit 2
 
-# exit 3 if pygmentize is not present
-hash pygmentize || exit 3
+# if pygmentize is not present, exit now
+hash pygmentize || exit 0
 
-# Default return code
-PYGMENTIZE_RETURN="5"
+
+_debugLog() {
+	echo "1                : '${1}'"
+	echo "FILE_NAME        : '${FILE_NAME}'"
+	echo "FILE_MIME_TYPE   : '${FILE_MIME_TYPE}'"
+	echo "EXTENSION_DETECT : '${EXTENSION_DETECT}'"
+	echo "LEXER_OVERRIDE   : '${LEXER_OVERRIDE}'"
+	echo
+}
+
 
 # Pygments formatter and style
 PYG_FMT="terminal16m"
@@ -23,60 +32,83 @@ FILE_NAME="$(basename "${1}")"
 FILE_NAME="${FILE_NAME,,}"
 
 
+LEXER_OVERRIDE=""
+
+# If file type was detected based on file extension
+EXTENSION_DETECT="false"
 
 
-
+# Try to detect file type purely based on file name extension
 case "${FILE_NAME}" in
 	# Fairly common file types normally supported by pygmentize
-	*.[ch]|*.[ch]pp|*.[ch]xx|*.ad[asb]|*.asm|*.awk|*.axp|*.bat|*.c|*.cc|*.cmd|*.cnf|*.conf|*.config|*.cpp|*.css|*.diff|*.ebuild|*.eclass|*.groff|*.h|*.hh|*.htm|*.html|*.inc|*.ino|*.java|*.js|*.l|*.lsp|*.m4|*.md|*.p|*.pas|*.patch|*.php|*.pl|*.pm|*.pod|*.pov|*.ppd|*.py|*.rb|*.sass|*.scss|*.sh|*.sls|*.sql|*.svg|*.xml|*.xps|*.xsd|*.xsl|*.yml)
-		# Not setting a lexer here, let it attempt to autodetect
-		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"
-		PYGMENTIZE_RETURN="${?}"
-		;;
-
-	# JSON, sorted by jq, with default spaces (no tabs) output
-	*.json)
-		if ! hash jq; then
-			pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l json "${1}"
-		fi
-
-		# Not setting a lexer here, let it attempt to autodetect
-		jq -S . "${1}" | pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l json
-		PYGMENTIZE_RETURN="${?}"
-		;;
+	*.[ch]|*.[ch]pp|*.[ch]xx|*.ad[asb]|*.asm|*.awk|*.axp|*.bat|*.c|*.cc|*.cmd|*.cnf|*.conf|*.config|*.cpp|*.css|*.diff|*.ebuild|*.eclass|*.groff|*.h|*.hh|*.htm|*.html|*.inc|*.java|*.l|*.lsp|*.m4|*.md|*.p|*.pas|*.patch|*.pl|*.pm|*.pod|*.pov|*.ppd|*.rb|*.sass|*.scss|*.sh|*.sls|*.sql|*.svg|*.xml|*.xps|*.xsd|*.xsl|*.yaml|*.yml)
+		EXTENSION_DETECT="true"
+	;;
 
 	# .bash_logout, .bash_profile, .bashrc, .profile, etc
-	.bash*|.profile)
-		# Manually set the 'sh' lexer
-		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l sh "${1}"
-		PYGMENTIZE_RETURN="${?}"
-		;;
+	.bash*|.profile) LEXER_OVERRIDE="sh" ;;
 
 	# systemd files
-	*.mount|*.service|*.socket|*.target|*.timer)
-		# Manually set the 'dosini' lexer
-		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l dosini "${1}"
-		PYGMENTIZE_RETURN="${?}"
-		;;
+	*.mount|*.service|*.socket|*.target|*.timer) LEXER_OVERRIDE="dosini" ;;
 
-	# TunerPro xdf
-	*.xdf)
-		# Manually set the 'xml' lexer
-		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l xml "${1}"
-		PYGMENTIZE_RETURN="${?}"
-		;;
-
-	# Catch any other filetype here, but first grep for sh-like shebang
-	# If it passes, treat it as sh-like
-	*)
-		grep -Eq '#!.*.\/bin.*.sh' "${1}" || exit 4
-
-		# Manually set the 'sh' lexer
-		pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l sh "${1}"
-		PYGMENTIZE_RETURN="${?}"
-		;;
+	*.ino)   LEXER_OVERRIDE="c"      ;;
+	*.json)  LEXER_OVERRIDE="json"   ;;
+	*.php)   LEXER_OVERRIDE="php"    ;;
+	*.plist) LEXER_OVERRIDE="xml"    ;;
+	*.py)    LEXER_OVERRIDE="python" ;;
+	*.xdf)   LEXER_OVERRIDE="xml"    ;;
 esac
 
 
-# exit with captured or default return code
-exit "${PYGMENTIZE_RETURN}"
+# Call pygmentize without lexer set, to attempt auto-detection
+if [[ "${EXTENSION_DETECT}" == "true" ]]; then
+	pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"
+	exit "${?}"
+fi
+
+
+# grep for node shebang, if it passes, set lexer to javascript
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.node' "${1}" && LEXER_OVERRIDE="javascript"
+
+# grep for php shebang, if it passes, set lexer to php
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.php.*' "${1}" && LEXER_OVERRIDE="php"
+
+# grep for python shebang, if it passes, set lexer to python
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.python.*' "${1}" && LEXER_OVERRIDE="python"
+
+# grep for sh-like shebang, if it passes, set lexer to sh
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.sh' "${1}" && LEXER_OVERRIDE="sh"
+
+
+# Shebang grep failed, try detecting based on mime type
+if [[ -z "${LEXER_OVERRIDE}" ]]; then
+	FILE_MIME_TYPE="$(file --brief --mime-type "${1}")"
+
+	case "${FILE_MIME_TYPE}" in
+		application/javascript) LEXER_OVERRIDE="javascript" ;;
+		application/json)       LEXER_OVERRIDE="json"       ;;
+		text/html)              LEXER_OVERRIDE="html"       ;;
+		text/x-c)               LEXER_OVERRIDE="c"          ;;
+		text/x-php)             LEXER_OVERRIDE="php"        ;;
+		text/x-script.python)   LEXER_OVERRIDE="python"     ;;
+		text/x-shellscript)     LEXER_OVERRIDE="sh"         ;;
+		text/xml)               LEXER_OVERRIDE="xml"        ;;
+	esac
+fi
+
+# _debugLog "${1}"
+
+if [[ -n "${LEXER_OVERRIDE}" ]]; then
+	if [[ "${LEXER_OVERRIDE}" == "json" ]] && hash jq; then
+		# Format with jq, sort output, use tab indendation
+		jq -S --tab '.' "${1}" | pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l "${LEXER_OVERRIDE}"
+		exit "${?}"
+	fi
+
+	pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l "${LEXER_OVERRIDE}" "${1}"
+	exit "${?}"
+fi
+
+
+# Last-ditch effort, I guess
+pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"

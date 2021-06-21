@@ -1,5 +1,7 @@
 # less environment variables to enable color escape sequences and use ${HOME}/.lessfilter
-LESS="-R"
+LESS="--raw-control-chars --tilde --shift=10 --quit-on-intr --squeeze-blank-lines --tabs=2"
+# --quit-if-one-screen
+
 LESSOPEN="|${BASH_ENV_FILE_LESSFILTER} %s"
 export LESS LESSOPEN
 
