@@ -59,7 +59,7 @@
 	"suggest.noselect": false,
 	"suggest.snippetIndicator": "",
 	"suggest.timeout": 500,
-	"tsserver.enable": true,
+	"tsserver.enable": false,
 	"wxss.validate": false,
 	"yaml.customTags": [
 		"!lambda scalar"
