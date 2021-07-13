@@ -41,8 +41,8 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
-echo "Executing 'yarn install' in .config/coc/extensions"
-yarn install --ignore-engines --production --network-concurrency "$(nproc)" --non-interactive
+echo "Executing 'npm install' in .config/coc/extensions"
+npm install --quiet --no-audit --no-fund --ignore-engines --legacy-bundling
 echo; echo
 
 cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 6
