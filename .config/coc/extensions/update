@@ -41,13 +41,13 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
-echo "Executing 'npm install' in .config/coc/extensions"
-npm install --quiet --no-audit --no-fund --ignore-engines
+echo "Executing 'yarn install' in .config/coc/extensions"
+yarn install --ignore-engines --production --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
 cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 6
-echo "Executing 'npm install' in .config/coc/extensions/node_modules/coc-yaml"
-npm install --quiet --no-audit --no-fund --ignore-scripts --no-lockfile
+echo "Executing 'yarn install' in .config/coc/extensions/node_modules/coc-yaml"
+yarn install --ignore-scripts --ignore-engines --production --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
 cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 7
