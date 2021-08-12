@@ -52,11 +52,23 @@ ULR="${UL}/rvm"
 # Entries at the beginning of this array will end up at the beginning of MANPATH
 # Entries at the end       of this array will end up at the end       of MANPATH
 ARRAY_MANPATH=(
-"${HOME}/perl5/man"
+"${ULO}/coreutils/libexec/man"
+"${ULO}/curl/share/man"
+"${ULO}/diffutils/share/man"
+"${ULO}/findutils/libexec/man"
+"${ULO}/gawk/share/man"
+"${ULO}/gcc/share/man"
+"${ULO}/gnu-sed/libexec/man"
+"${ULO}/gnu-tar/libexec/man"
+"${ULO}/gnu-which/libexec/man"
+"${ULO}/grep/libexec/man"
+"${ULO}/libtool/libexec/man"
+"${ULO}/make/libexec/man"
+"${ULO}/openssh/share/man"
+"${ULO}/openssl@1.1/share/man"
+"${ULO}/openssl/share/man"
 "${UL}/share/man"
 /usr/pgsql-12/share/man
-/usr/pgsql-11/share/man
-/usr/pgsql-10/share/man
 /usr/share/man/overrides
 /usr/share/man/en
 /usr/share/man
