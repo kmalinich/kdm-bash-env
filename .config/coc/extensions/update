@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
 
-mkdir -p "${HOME}/.config/coc/extensions"
-
 cd "${HOME}/.config/coc/extensions" || exit 1
 
 
@@ -30,7 +28,6 @@ fi
 echo "Checking for updates"
 if ncu --errorLevel 2 --loglevel silent --packageManager npm --upgrade; then
 	echo "No update needed"
-	# exit 0
 fi
 
 echo "Cleaning up old modules"
