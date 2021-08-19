@@ -30,8 +30,8 @@ if ncu --errorLevel 2 --loglevel silent --packageManager npm --upgrade; then
 	echo "No update needed"
 fi
 
-echo "Cleaning up old modules"
-rm -rf ./node_modules/ ./package-lock.json ./yarn.lock
+#echo "Cleaning up old modules"
+#rm -rf ./node_modules/ ./package-lock.json ./yarn.lock
 
 echo "Formatting/sorting package.json"
 FILE_TEMP="$(mktemp)"
@@ -44,11 +44,13 @@ echo; echo
 
 cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 6
 echo "Executing 'yarn install' in .config/coc/extensions/node_modules/coc-yaml"
+rm -f ./package-lock.json > /dev/null 2>&1
 yarn install --ignore-scripts --ignore-engines --production --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
 cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 7
 echo "Executing 'yarn install' in .vim/pack/kdm/coc.nvim"
+rm -f ./package-lock.json > /dev/null 2>&1
 yarn install --frozen-lockfile --production --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
