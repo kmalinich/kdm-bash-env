@@ -38,18 +38,18 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
-echo "Executing 'npm install' in .config/coc/extensions"
+echo "Executing 'npm install' in ~/.config/coc/extensions"
 npm install --quiet --no-audit --no-fund --ignore-engines --legacy-bundling
 echo; echo
 
 cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 6
-echo "Executing 'yarn install' in .config/coc/extensions/node_modules/coc-yaml"
+echo "Executing 'yarn install' in ~/.config/coc/extensions/node_modules/coc-yaml"
 rm -f ./package-lock.json > /dev/null 2>&1
 yarn install --ignore-scripts --ignore-engines --production --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
 cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 7
-echo "Executing 'yarn install' in .vim/pack/kdm/coc.nvim"
+echo "Executing 'yarn install' in ~/.vim/pack/kdm/coc.nvim"
 rm -f ./package-lock.json > /dev/null 2>&1
 yarn install --frozen-lockfile --production --network-concurrency "$(nproc)" --non-interactive
 echo; echo
