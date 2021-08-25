@@ -6,6 +6,12 @@
 		"sh": "shellcheck"
 	},
 	"diagnostic-languageserver.linters": {
+		"eslint": {
+			"alwaysShowStatus": true,
+			"format" : {
+				"enable" : true
+			}
+		},
 		"shellcheck": {
 			"args": [
 				"--shell=bash",
