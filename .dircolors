@@ -2,16 +2,10 @@
 # .dircolors
 
 
-# This section is 24bit/16 million colors - may very likely not work in your terminal emulator
+# This section is 24bit/16 million colors - depends on a hack specific to this repo, and might not work in your terminal emulator
+# See this for more info: https://gist.github.com/XVilka/8346728
 
-TERM gnome-16mcolor
-TERM putty-16mcolor
-TERM rxvt-16mcolor
-TERM rxvt-unicode-16mcolor
-TERM rxvt-unicode16m
-TERM screen-16mcolor
-TERM st-16mcolor
-TERM xterm-16mcolor
+TERM *-16mcolor
 
 # Attribute codes:
 # 0 : none
@@ -26,8 +20,15 @@ TERM xterm-16mcolor
 # Foreground : 38;2;R;G;B;<Attributes>
 # Background : 48;2;R;G;B;<Attributes>
 
+# 256 color text color codes:
+# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+
+# 256 color background color codes:
+# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+
+
 # Basic file type colors
-DIR    38;2;52;152;219    # Directory (sky blue)
+DIR    38;2;32;142;229    # Directory (sky blue)
 EXEC   38;2;0;255;0;1;3   # File with execute permission (bright green, bold, italic)
 LINK   38;2;0;246;248     # Symlink (cyan)
 ORPHAN 38;2;255;0;0;1;5;7 # Bad symlink (red, invert, bold, blink)
@@ -39,18 +40,21 @@ MISSING       0 # Symlink pointing to a nonexistent file
 MULTIHARDLINK 0 # Regular file with more than one link
 RESET         0 # Reset to "normal" color
 
-CAPABILITY            30;41 # File with capability
-DOOR                  01;35 # Door
-FIFO                  40;33 # Pipe
-OTHER_WRITABLE        34;42 # Dir that is other-writable (o+w) and not sticky
-SETGID                30;43 # File that is setgid (g+s)
-SETUID                37;41 # File that is setuid (u+s)
-SOCK                  01;35 # Socket
-STICKY                37;44 # Dir with sticky bit set (+t) and NOT other-writable
-STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+w)
+CAPABILITY 30;41 # File with capability
+DOOR       01;35 # Door
+FIFO       40;33 # Pipe
+SOCK       01;35 # Socket
+
+SETGID 30;43 # File that is setgid (g+s)
+SETUID 37;41 # File that is setuid (u+s)
+
+STICKY                38;2;32;142;229;3   # Dir WITH    sticky bit set (+t) and IS NOT other-writable (o+w)
+STICKY_OTHER_WRITABLE 38;2;32;142;229;3;1 # Dir WITH    sticky bit set (+t) and IS     other-writable (o+w)
+OTHER_WRITABLE        38;2;32;142;229;1   # Dir WITHOUT sticky bit set (+t) and IS     other-writable (o+w)
 
 NORMAL 38;2;210;210;210
 FILE   38;2;150;150;150
+
 
 # Bash profile (dark green, italic)
 .bash_logout  38;2;63;183;58;3
@@ -428,15 +432,8 @@ FILE   38;2;150;150;150
 
 # Below is 256color
 
-TERM gnome-256color
+TERM *-256color
 TERM linux
-TERM putty-256color
-TERM rxvt-256color
-TERM rxvt-unicode-256color
-TERM rxvt-unicode16m
-TERM screen-256color
-TERM st-256color
-TERM xterm-256color
 
 # Attribute codes:
 # 0 : none
@@ -450,7 +447,7 @@ TERM xterm-256color
 
 # Basic file type colors
 DIR    34       # Directory (blue)
-EXEC   32;1;3     # File with execute permission (green, bold, italic)
+EXEC   32;1;3   # File with execute permission (green, bold, italic)
 LINK   36       # Symlink (cyan)
 ORPHAN 31;1;5;7 # Bad symlink (red, invert, bold, blink)
 
@@ -463,15 +460,18 @@ MULTIHARDLINK 0 # Regular file with more than one link
 NORMAL        0
 RESET         0 # Reset to "normal" color
 
-CAPABILITY            30;41 # File with capability
-DOOR                  01;35 # Door
-FIFO                  40;33 # Pipe
-OTHER_WRITABLE        34;42 # Dir that is other-writable (o+w) and not sticky
-SETGID                30;43 # File that is setgid (g+s)
-SETUID                37;41 # File that is setuid (u+s)
-SOCK                  01;35 # Socket
-STICKY                37;44 # Dir with sticky bit set (+t) and NOT other-writable
-STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+w)
+
+CAPABILITY 30;41 # File with capability
+DOOR       01;35 # Door
+FIFO       40;33 # Pipe
+SOCK       01;35 # Socket
+
+SETGID 30;43 # File that is setgid (g+s)
+SETUID 37;41 # File that is setuid (u+s)
+
+STICKY                34;3   # Dir WITH    sticky bit set (+t) and IS NOT other-writable (o+w)
+STICKY_OTHER_WRITABLE 34;3;1 # Dir WITH    sticky bit set (+t) and IS     other-writable (o+w)
+OTHER_WRITABLE        34;1   # Dir WITHOUT sticky bit set (+t) and IS     other-writable (o+w)
 
 
 # Bash profile (green)
@@ -842,3 +842,6 @@ STICKY_OTHER_WRITABLE 30;42 # Dir with sticky bit set (+t) other-writable (+t,o+
 .wpd      33
 .xls      33
 .xlsx     33
+
+
+# vim: set filetype=dircolors ts=2 sw=2 tw=0 noet :
