@@ -36,10 +36,3 @@ _validate_before_source
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
-
-### Bashhub.com Installation.
-### This Should be at the EOF. https://bashhub.com/docs
-if [ -f ~/.bashhub/bashhub.sh ]; then
-    source ~/.bashhub/bashhub.sh
-fi
-
