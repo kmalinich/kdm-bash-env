@@ -103,7 +103,8 @@ _alias_linux_macos_setup() {
 	alias ncls="ls --color=never  --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null" # Force disable color
 
 	# Sort by IP address octets
-	alias sort-ip='sort -t . -k 1,1n -k 2,2n -k 3,3n -k 4,4n'
+	# .. fought to find this one for a long, long time
+	alias sort-ip='sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"'
 }
 
 
