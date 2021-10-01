@@ -31,21 +31,27 @@ au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
 au Filetype c,cpp set expandtab
 au Filetype c,cpp set softtabstop=2
+au Filetype c,cpp set noexpandtab
 
 " CSS
 au Filetype css let b:comment_leader = '/* '
+au Filetype css set noexpandtab
 
 " HTML
 au Filetype html let b:comment_leader = '<!-- '
+au Filetype html set noexpandtab
 
 " JS
 au Filetype javascript let b:comment_leader = '//'
+au Filetype javascript set noexpandtab
 
 " nginx
 au Filetype nginx let b:comment_leader = '#'
+au Filetype nginx set noexpandtab
 
 " PHP
 au Filetype php let b:comment_leader = '//'
+au Filetype php set noexpandtab
 
 " Python
 au Filetype python let b:comment_leader = '#'
@@ -62,6 +68,7 @@ augroup END
 
 " sh/bash
 au Filetype sh let b:comment_leader = '#'
+au Filetype sh set noexpandtab
 
 
 " Crontab
