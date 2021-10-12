@@ -1,17 +1,54 @@
 {
 	"coc.preferences.extensionUpdateCheck": "daily",
 	"coc.preferences.useQuickfixForLocations": true,
+
 	"css.validate": true,
+
+	"diagnostic.checkCurrentLine": true,
+	"diagnostic.enable": true,
+	"diagnostic.enableMessage": "jump",
+	"diagnostic.errorSign": "✗",
+	"diagnostic.hintSign": ">",
+	"diagnostic.infoSign": ">",
+	"diagnostic.messageDelay": 100,
+	"diagnostic.messageTarget": "float",
+	"diagnostic.refreshOnInsertMode": true,
+	"diagnostic.virtualText": true,
+	"diagnostic.virtualTextCurrentLineOnly": true,
+	"diagnostic.warningSign": "⚠",
+
+	"eslint.alwaysShowStatus": true,
+	"eslint.autoFixOnSave": true,
+	"eslint.format.enable": true,
+	"eslint.onIgnoredFiles": "warn",
+
+	"javascript.showUnused": false,
+
+	"less.validate": false,
+	"scss.validate": false,
+
+	"suggest.autoTrigger": "trigger",
+	"suggest.disableMenu": true,
+	"suggest.noselect": false,
+	"suggest.snippetIndicator": "",
+	"suggest.timeout": 500,
+
+	"tsserver.enable": false,
+
+	"wxss.validate": false,
+
+	"yaml.customTags": [
+		"!lambda scalar"
+	],
+	"yaml.format.enable": true,
+	"yaml.format.singleQuote": true,
+
+
 	"diagnostic-languageserver.filetypes": {
 		"sh": "shellcheck"
 	},
+
 	"diagnostic-languageserver.linters": {
-		"eslint": {
-			"alwaysShowStatus": true,
-			"format" : {
-				"enable" : true
-			}
-		},
 		"shellcheck": {
 			"args": [
 				"--shell=bash",
@@ -42,34 +79,5 @@
 			},
 			"sourceName": "shellcheck"
 		}
-	},
-	"diagnostic.checkCurrentLine": true,
-	"diagnostic.enable": true,
-	"diagnostic.enableMessage": "jump",
-	"diagnostic.errorSign": "✗",
-	"diagnostic.hintSign": ">",
-	"diagnostic.infoSign": ">",
-	"diagnostic.maxWindowHeight": 10,
-	"diagnostic.maxWindowWidth": 120,
-	"diagnostic.messageDelay": 100,
-	"diagnostic.messageTarget": "float",
-	"diagnostic.refreshOnInsertMode": true,
-	"diagnostic.virtualText": true,
-	"diagnostic.virtualTextCurrentLineOnly": true,
-	"diagnostic.warningSign": "⚠",
-	"javascript.showUnused": false,
-	"less.validate": false,
-	"scss.validate": false,
-	"suggest.autoTrigger": "trigger",
-	"suggest.disableMenu": true,
-	"suggest.noselect": false,
-	"suggest.snippetIndicator": "",
-	"suggest.timeout": 500,
-	"tsserver.enable": false,
-	"wxss.validate": false,
-	"yaml.customTags": [
-		"!lambda scalar"
-	],
-	"yaml.format.enable": true,
-	"yaml.format.singleQuote": true
+	}
 }
