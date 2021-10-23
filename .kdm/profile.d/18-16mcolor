@@ -6,10 +6,17 @@ if hash dircolors; then
 		TERM="xterm-16mcolor"
 	fi
 
+
 	# If ${BASH_ENV_FILE_DIRCOLORS}" exists, use it
-	[[ -s "${BASH_ENV_FILE_DIRCOLORS}" ]] && DIRCOLOR_DATA="$(dircolors "${BASH_ENV_FILE_DIRCOLORS}")" || DIRCOLOR_DATA="$(dircolors)"
-	[[ -n "${DIRCOLOR_DATA}"           ]] && eval "${DIRCOLOR_DATA}" &> /dev/null
+	if [[ -s "${BASH_ENV_FILE_DIRCOLORS}" ]]; then
+		DIRCOLOR_DATA="$(dircolors --bourne-shell "${BASH_ENV_FILE_DIRCOLORS}")"
+	else
+		DIRCOLOR_DATA="$(dircolors --bourne-shell)"
+	fi
+
+	[[ -n "${DIRCOLOR_DATA}" ]] && eval "${DIRCOLOR_DATA}" &> /dev/null
 	unset DIRCOLOR_DATA
+
 
 	if [[ "${TERM_OLD}" ]]; then
 		TERM="${TERM_OLD}"
