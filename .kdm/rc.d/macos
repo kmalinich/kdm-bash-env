@@ -307,19 +307,60 @@ _macos_fix_office_2011() {
 
 # Show listening ports a bit easier
 _macos_net_listening() {
+	# Declare vars as local
 	local FILE_TEMP
 
 	FILE_TEMP="$(mktemp)"
 
-	sudo netstat -an | grep -E "^tcp4.*.LISTEN" | awk '{print $4}' | sort > "${FILE_TEMP}"
+	echo "Protocol,Port,PID" >> "${FILE_TEMP}"
 
-	for IP_VER in 4 6; do
-		output keyval "Listening ports" "IPv${IP_VER}"
-		netstat -an | grep -E "^..p${IP_VER}.*.LISTEN" | awk '{print $4}' | sort
-		[[ "${IP_VER}" == "4" ]] && echo
+	for PROTOCOL in tcp udp; do
+		for ADDR_FAMILY in inet inet6; do
+			# output keyval "Listening ports" "${PROTOCOL}/${ADDR_FAMILY}"
+			# sudo netstat -anv -f "${ADDR_FAMILY}" -p "${PROTOCOL}" | awk '/^(tc|ud)p(4|6).*.LISTEN/{print $4}' | sort
+			sudo netstat -anv -f "${ADDR_FAMILY}" -p "${PROTOCOL}" | awk '/^(tcp(4|6|46).*.LISTEN)|(udp(4|6|46))/ {print $4 "," $1 "," $9}' | sed -r -e 's/^(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'// -e 's/^\.//g' -e 's/^\*\.//g' -e 's/^\:\:1\.//g' -e 's/^fe80\:\:.*.\.//g' | awk -F ',' '{print $2 "," $1 "," $3}' | sort --field-separator="," --key="1,1g" --key="2,2g" --key="3,3g" >> "${FILE_TEMP}"
+
+		done
 	done
 
+	tty-table --options-compact=true < "${FILE_TEMP}"
+
 	rm -f "${FILE_TEMP}"
+
+	# TODO
+	# Do something with this:
+	#
+	# mapfile -t ARRAY_IPV4_TCP_PORTS < <(sudo netstat -anv -f inet  -p tcp | awk '/^(tcp(4|6|46).*.LISTEN)|(udp(4|6|46))/ {print $4}' | sed -r -e 's/^(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'// -e 's/^\.//g' -e 's/^\*\.//g' -e 's/^\:\:1\.//g' -e 's/^fe80\:\:.*.\.//g' | sort -g)
+	# mapfile -t ARRAY_IPv6_TCP_PORTS < <(sudo netstat -anv -f inet6 -p tcp | awk '/^(tcp(4|6|46).*.LISTEN)|(udp(4|6|46))/ {print $4}' | sed -r -e 's/^(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'// -e 's/^\.//g' -e 's/^\*\.//g' -e 's/^\:\:1\.//g' -e 's/^fe80\:\:.*.\.//g' | sort -g)
+	# mapfile -t ARRAY_IPV4_UDP_PORTS < <(sudo netstat -anv -f inet  -p udp | awk '/^(tcp(4|6|46).*.LISTEN)|(udp(4|6|46))/ {print $4}' | sed -r -e 's/^(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'// -e 's/^\.//g' -e 's/^\*\.//g' -e 's/^\:\:1\.//g' -e 's/^fe80\:\:.*.\.//g' | sort -g)
+	# mapfile -t ARRAY_IPv6_UDP_PORTS < <(sudo netstat -anv -f inet6 -p udp | awk '/^(tcp(4|6|46).*.LISTEN)|(udp(4|6|46))/ {print $4}' | sed -r -e 's/^(\b[0-9]{1,3}\.){3}[0-9]{1,3}\b'// -e 's/^\.//g' -e 's/^\*\.//g' -e 's/^\:\:1\.//g' -e 's/^fe80\:\:.*.\.//g' | sort -g)
+	#
+	# for IPV4_TCP_PORT in "${ARRAY_IPV4_TCP_PORTS[@]}"; do
+	# sudo lsof +c 500 -i "4TCP:${PORT}"
+	# echo
+	# done
+	#
+	# for IPV6_TCP_PORT in "${ARRAY_IPV6_TCP_PORTS[@]}"; do
+	# sudo lsof +c 500 -i "6TCP:${PORT}"
+	# echo
+	# done
+	#
+	# for IPV4_UDP_PORT in "${ARRAY_IPV4_UDP_PORTS[@]}"; do
+	# sudo lsof +c 500 -i "4UDP:${PORT}"
+	# echo
+	# done
+	#
+	# for IPV6_UDP_PORT in "${ARRAY_IPV6_UDP_PORTS[@]}"; do
+	# sudo lsof +c 500 -i "6UDP:${PORT}"
+	# echo
+	# done
+
+	# Example:
+	#
+	# $ sudo lsof +c 500 -n -i 6TCP:22
+	# COMMAND PID USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+	# launchd   1 root    7u  IPv6 0x8d41eb06a0b68403      0t0  TCP *:ssh (LISTEN)
+	# launchd   1 root   10u  IPv6 0x8d41eb06a0b68403      0t0  TCP *:ssh (LISTEN)
 }
 
 _macos_notify() {
