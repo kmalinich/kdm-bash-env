@@ -227,7 +227,7 @@ _kdm_update() {
 
 	# Push changes if kdm-edit is present
 	if [[ -s "${HOME}/.kdm/extra/kdm-edit" ]]; then
-		read -r -p "Execute kdm-push [Y/n] " KDM_PUSH_YN
+		read -r -p "Execute kdm-push? [Y/n] " KDM_PUSH_YN
 
 		if [[ "${KDM_PUSH_YN}" != [Nn] ]]; then
 			output keyval-y "[kdm-update][main]" "Begin kdm-push"
