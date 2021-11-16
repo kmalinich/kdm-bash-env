@@ -151,6 +151,7 @@ _kdm_update_submodule() {
 _kdm_update() {
 	# Declare vars as local
 	local ARRAY_SUBMODULES DIR_SUBMODULE SUBMODULE OLD_PWD WAIT_COUNT
+	local PERFORM_COC_UPDATE KDM_PUSH_YN
 
 	OLD_PWD="${PWD}"
 
@@ -204,17 +205,40 @@ _kdm_update() {
 	echo
 
 
-	# Run coc extension update/rebuild/reinstall if coc.nvim submodule was updated
+	# Run coc extension update/rebuild/reinstall if coc.nvim submodule was updated, or if --force argument is provided
+	PERFORM_COC_UPDATE="false"
 	if git status --no-renames --untracked-files=no --porcelain 2> /dev/null | grep -Eq 'coc\.nvim$'; then
+		PERFORM_COC_UPDATE="true"
+	fi
+
+	if [[ "${1}" == "--force" ]]; then
+		PERFORM_COC_UPDATE="true"
+	fi
+
+	if [[ "${PERFORM_COC_UPDATE}" == "true" ]]; then
+		output keyval-y "[kdm-update][main]" "Begin coc update script"
+
 		COC_UPDATE="${HOME}/.config/coc/extensions/update"
 		[[ -s "${COC_UPDATE}" && -x "${COC_UPDATE}" ]] && "${COC_UPDATE}"
+
+		output keyval-g "[kdm-update][main]" "coc update script complete"
 	fi
+
 
 	# Push changes if kdm-edit is present
 	if [[ -s "${HOME}/.kdm/extra/kdm-edit" ]]; then
+		read -r -p "Execute kdm-push [Y/n] " KDM_PUSH_YN
+
+		if [[ "${KDM_PUSH_YN}" != [Nn] ]]; then
+			output keyval-y "[kdm-update][main]" "Begin kdm-push"
+			sleep 1
+
 		# shellcheck disable=SC1091
 		. "${HOME}/.kdm/extra/kdm-edit"
 		_kdm_push
+
+		output keyval-g "[kdm-update][main]" "kdm-push complete"
+		fi
 	fi
 
 
