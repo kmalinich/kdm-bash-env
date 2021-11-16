@@ -129,16 +129,22 @@ _kdm_update_submodule() {
 	DIR_SUBMODULE="${HOME}/${SUBMODULE}"
 	cd "${DIR_SUBMODULE}" || return 2
 
-	{
-		git fetch --all --prune
-		git checkout master
-		git pull --prune
-	} > /dev/null 2>&1
+	case "${2}" in
+		pull)
+			{
+				git fetch --all --prune
+				git checkout master
+				git pull --prune
+			} > /dev/null 2>&1
 
-	output keyval-y "[kdm-update][subm][${SUBMODULE}]" "pull"
+			output keyval-y "[kdm-update][subm][${SUBMODULE}]" "pull"
+			;;
 
-	git gc --aggressive --prune > /dev/null 2>&1
-	output keyval-y "[kdm-update][subm][${SUBMODULE}]" "garbage collection"
+		gc)
+			git gc --aggressive --prune > /dev/null 2>&1
+			output keyval-y "[kdm-update][subm][${SUBMODULE}]" "garbage collection"
+			;;
+		esac
 }
 
 # Update all Git submodules for kdm-bash-env (in a parallel-ish fashion)
@@ -162,11 +168,11 @@ _kdm_update() {
 	output keyval-y "[kdm-update][main]" "pull"
 
 
-	output keyval-y "[kdm-update][main]" "Begin submodule update"
+	output keyval-y "[kdm-update][main]" "Begin submodule pull"
 
 	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
 	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
-		_kdm_update_submodule "${SUBMODULE}" &
+		_kdm_update_submodule "${SUBMODULE}" pull &
 	done
 	echo
 
@@ -174,21 +180,20 @@ _kdm_update() {
 	WAIT_COUNT="0"
 	while pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
 		if [[ "${WAIT_COUNT}" -gt "120" ]]; then
-			output error "Waiting for Git processes to complete took too long"
-			return 6
+			output error "Waiting for submodule pull to complete took too long"
+			return 3
 		fi
 
-		[[ "$((WAIT_COUNT%10))" == "0" ]] && output keyval-r "[kdm-update][main]" "Waited on submodule update for ${WAIT_COUNT} seconds"
+		if [[ "$((WAIT_COUNT%15))" == "0" ]]; then
+			output keyval-r "[kdm-update][main]" "Waited on submodule pull for ${WAIT_COUNT} seconds"
+		fi
 
 		sleep 1
 
 		((WAIT_COUNT++))
 	done
 
-	output keyval-g "[kdm-update][main]" "Submodule update complete"
-
-	output keyval-y "[kdm-update][main]" "Garbage collection"
-	git gc --aggressive --prune > /dev/null 2>&1
+	output keyval-g "[kdm-update][main]" "Submodule pull complete"
 
 	output keyval-c "[kdm-update][main]" "Submodule status"
 	git submodule
@@ -198,16 +203,56 @@ _kdm_update() {
 	git status
 	echo
 
+
 	# Run coc extension update/rebuild/reinstall if coc.nvim submodule was updated
 	if git status --no-renames --untracked-files=no --porcelain 2> /dev/null | grep -Eq 'coc\.nvim$'; then
 		COC_UPDATE="${HOME}/.config/coc/extensions/update"
 		[[ -s "${COC_UPDATE}" && -x "${COC_UPDATE}" ]] && "${COC_UPDATE}"
 	fi
 
+	# Push changes if kdm-edit is present
+	if [[ -s "${HOME}/.kdm/extra/kdm-edit" ]]; then
+		# shellcheck disable=SC1091
+		. "${HOME}/.kdm/extra/kdm-edit"
+		_kdm_push
+	fi
+
+
+	output keyval-y "[kdm-update][main]" "Begin submodule garbage collection"
+
+	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
+	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
+		_kdm_update_submodule "${SUBMODULE}" gc &
+	done
+	echo
+
+	# Wait for Git processes to complete
+	WAIT_COUNT="0"
+	while pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
+		if [[ "${WAIT_COUNT}" -gt "120" ]]; then
+			output error "Waiting for submodule garbage collection to complete took too long"
+			return 4
+		fi
+
+		if [[ "$((WAIT_COUNT%15))" == "0" ]]; then
+			output keyval-r "[kdm-update][main]" "Waited on submodule garbage collection for ${WAIT_COUNT} seconds"
+		fi
+
+		sleep 1
+
+		((WAIT_COUNT++))
+	done
+
+	output keyval-g "[kdm-update][main]" "Submodule pull complete"
+
+
+	output keyval-y "[kdm-update][main]" "Garbage collection"
+	git gc --aggressive --prune > /dev/null 2>&1
+
 	# Change back to original pwd
 	if ! cd "${OLD_PWD}"; then
 		output error "Unable to change back to old pwd '${OLD_PWD}'"
-		return 10
+		return 5
 	fi
 
 	output keyval-g "[kdm-update][main]" "Complete"
