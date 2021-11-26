@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+PKG_MANAGER="yarn"
 
 cd "${HOME}/.config/coc/extensions" || exit 1
 
@@ -14,8 +15,8 @@ if ! hash npm > /dev/null 2>&1; then
 	exit 3
 fi
 
-if ! hash yarn > /dev/null 2>&1; then
-	echo "Command unavailable : 'yarn', cannot continue"
+if ! hash "${PKG_MANAGER}" > /dev/null 2>&1; then
+	echo "Command unavailable : '${PKG_MANAGER}', cannot continue"
 	exit 4
 fi
 
@@ -26,7 +27,7 @@ fi
 
 
 echo "Checking for updates"
-if ncu --errorLevel 2 --loglevel silent --packageManager npm --upgrade; then
+if ncu --errorLevel 2 --loglevel silent --packageManager "${PKG_MANAGER}" --upgrade; then
 	echo "No update needed"
 fi
 
@@ -38,8 +39,9 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
-echo "Executing 'npm install' in ~/.config/coc/extensions"
-npm install --quiet --no-audit --no-fund --ignore-engines --legacy-bundling
+echo "Executing '${PKG_MANAGER} install' in ~/.config/coc/extensions"
+# npm install --quiet --no-audit --no-fund --ignore-engines --legacy-bundling
+yarn install --ignore-engines --network-concurrency 8 --non-interactive
 echo; echo
 
 cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 6
