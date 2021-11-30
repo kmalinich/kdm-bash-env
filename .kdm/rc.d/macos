@@ -501,6 +501,9 @@ alias sleep-system="osascript -e 'tell app \"System Events\" to sleep'"
 # 16 : Sierra
 # 17 : High Sierra
 # 18 : Mojave
+# 19 : ?
+# 20 : ?
+# 21 : Monterey
 case "${UNAME_KERNEL_RELEASE%%.*}" in
 	1[4-5])
 		# Fix disk permissions
@@ -516,7 +519,7 @@ case "${UNAME_KERNEL_RELEASE%%.*}" in
 		;;
 
 	1[5-9]) ;&
-	20)
+	2[0-1])
 		# Enable and disable indexing
 		alias indexing-enable=' sudo mdutil -a -i on'
 		alias indexing-disable='sudo mdutil -a -i off'

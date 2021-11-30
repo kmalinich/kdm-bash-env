@@ -84,7 +84,7 @@ augroup ft_crontab_macos
 	au BufEnter /private/tmp/crontab.* setl backupcopy=yes
 augroup END
 
-" Laravel (php) environment config
+" Environment files (dotenv)
 augroup ft_env
 	au BufRead .env* set filetype=cfg
 	au BufRead .env* set noexpandtab
@@ -139,6 +139,12 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 augroup ft_markdown
 	au BufRead *.md set filetype=markdown
 	au BufRead *.md call matchdelete(w:m3)
+augroup END
+
+" OpenVPN
+augroup ft_openvpn
+	au BufRead /usr/local/etc/openvpn/*.conf set filetype=cfg
+	au BufRead *.ovpn set filetype=cfg
 augroup END
 
 " Ruby
