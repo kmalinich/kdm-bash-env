@@ -138,6 +138,7 @@ FILE   38;2;150;150;150
 .fli  38;2;212;108;154
 .gif  38;2;212;108;154
 .gl   38;2;212;108;154
+.heic 38;2;212;108;154
 .ico  38;2;212;108;154
 .jpeg 38;2;212;108;154
 .jpg  38;2;212;108;154
@@ -553,6 +554,7 @@ OTHER_WRITABLE        34;1   # Dir WITHOUT sticky bit set (+t) and IS     other-
 .flv  35
 .gif  35
 .gl   35
+.heic 35
 .ico  35
 .jpeg 35
 .jpg  35
