@@ -127,9 +127,11 @@ FILE   38;2;150;150;150
 
 # Image formats (pink)
 .anx  38;2;212;108;154
+.avif 38;2;212;108;154
 .axv  38;2;212;108;154
 .bmp  38;2;212;108;154
 .cgm  38;2;212;108;154
+.cr2  38;2;212;108;154
 .dl   38;2;212;108;154
 .emf  38;2;212;108;154
 .flc  38;2;212;108;154
@@ -539,9 +541,11 @@ OTHER_WRITABLE        34;1   # Dir WITHOUT sticky bit set (+t) and IS     other-
 .anx  35
 .asf  35
 .avi  35
+.avif 35
 .axv  35
 .bmp  35
 .cgm  35
+.cr2  35
 .dl   35
 .emf  35
 .flc  35
