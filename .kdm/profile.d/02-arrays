@@ -177,13 +177,14 @@ ARRAY_MKDIR=(
 "${BASH_ENV_DIR_SSH_SESSIONS}"
 )
 
+# These are intentionally not ordered alphabetically
 ARRAY_PACKAGE_MANAGERS=(
+brew
+pacman
 apt
 apt-get
-brew
 dnf
 dnf-3
-pacman
 yum
 zypper
 )

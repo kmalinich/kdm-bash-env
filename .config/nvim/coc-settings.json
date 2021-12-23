@@ -40,9 +40,15 @@
 	"yaml.customTags": [
 		"!lambda scalar"
 	],
+	"yaml.completion": true,
+	"yaml.format.bracketSpacing":  true,
 	"yaml.format.enable": true,
+	"yaml.format.printWidth": 160,
+	"yaml.format.proseWrap": "never",
 	"yaml.format.singleQuote": true,
-
+	"yaml.hover": true,
+	"yaml.yamlVersion": 1.1,
+	"yaml.trace.server": "verbose",
 
 	"diagnostic-languageserver.filetypes": {
 		"sh": "shellcheck"
