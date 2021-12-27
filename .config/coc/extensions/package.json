@@ -12,8 +12,8 @@
 		"coc-sql": ">=0.9.0",
 		"coc-stylelintplus": ">=1.5.0",
 		"coc-svg": ">=0.0.13",
-		"coc-tsserver": ">=1.9.1",
+		"coc-tsserver": ">=1.9.4",
 		"coc-xml": ">=1.14.1",
-		"coc-yaml": ">=1.6.0"
+		"coc-yaml": ">=1.6.1"
 	}
 }
