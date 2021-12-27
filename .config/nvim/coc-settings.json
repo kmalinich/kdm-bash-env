@@ -38,7 +38,8 @@
 	"wxss.validate": false,
 
 	"yaml.customTags": [
-		"!lambda scalar"
+		"!lambda Scalar",
+		"!secret Scalar"
 	],
 	"yaml.completion": true,
 	"yaml.format.bracketSpacing":  true,
