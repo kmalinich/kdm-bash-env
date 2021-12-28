@@ -1,9 +1,9 @@
 # If dircolors exists, run it
 if hash dircolors; then
 	if [[ "${COLOR_16M}" == "true" ]]; then
-		# Set ${TERM} to 'xterm-16mcolor' for dircolors to utilize separate true color entries properly
+		# Set ${TERM} to 'xterm-256color+iterm3' for dircolors to utilize separate true color entries properly
 		TERM_OLD="${TERM}"
-		TERM="xterm-16mcolor"
+		TERM="xterm-256color+iterm3"
 	fi
 
 
@@ -31,8 +31,8 @@ case "${COLOR_16M}" in
 	*)      [[ "${UID}" == "0" ]] && C_ENV='\e[31m'   || C_ENV='\e[32m'            ;;
 esac
 
-# Change TERM from xterm-16mcolor to xterm-256color
-[[ "${TERM}" == "xterm-16mcolor" ]] && TERM="xterm-256color"
+# Change TERM from xterm-256color+iterm3 to xterm-256color
+[[ "${TERM}" == "xterm-256color+iterm3" ]] && TERM="xterm-256color"
 
 export C_ENV C_ENV_BOLD TERM
 

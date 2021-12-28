@@ -5,7 +5,7 @@
 # This section is 24bit/16 million colors - depends on a hack specific to this repo, and might not work in your terminal emulator
 # See this for more info: https://gist.github.com/XVilka/8346728
 
-TERM *-16mcolor
+TERM *+iterm3
 
 # Attribute codes:
 # 0 : none
