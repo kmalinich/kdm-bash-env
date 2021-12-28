@@ -48,7 +48,9 @@ export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
 
 
 # Try to load config from facter
-_facter_config() {
+_truecolor_config() {
+	[[ "${TERM}" == "xterm-256color+iterm3" ]] && COLORTERM="truecolor"
+
 	[[ "${COLORTERM}" == "24bit" ]] && COLORTERM="truecolor"
 
 	[[ -e "${BASH_ENV_FILE_DISABLE_TRUECOLOR}" ]] && unset COLORTERM
@@ -68,8 +70,9 @@ _facter_config() {
 	# fi
 
 	export COLOR_16M
+}
 
-
+_facter_config() {
 	if ! hash facter > /dev/null 2>&1; then
 		export PROMPT_HOSTNAME="true"
 		return
@@ -88,6 +91,7 @@ _facter_config() {
 }
 
 
+_truecolor_config
 _facter_config
 
 
