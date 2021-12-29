@@ -5,8 +5,6 @@
 
 # Debug only because of this rediculous stupid thing i've accidentally built here
 _prompt_log() {
-	return
-
 	[[ -z "${PROMPT_LOG_PREFIX}" ]] && PROMPT_LOG_PREFIX="0"
 
 	if [[ "${2}" == *"END"* ]]; then
@@ -25,7 +23,6 @@ _prompt_log() {
 
 # Debug only
 _prompt_tst() {
-	# env | grep -Ei '\/Users\/kdm|code|~' | grep -Ev 'BASH_ENV_|GOPATH|DIR_MS|DIR_ED|DIR_HOME_|HISTFILE|DIR_LGT|DIR_ME|CURL_HOME|LESSOP|MIBDIRS|PATH=|PIP_CONFIG|HTML_TIDY|C_CODE=|PROMPT_COMMAND=|TY_FRMU|XPC_SERVICE' | grep -Ei '\/Users\/kdm|code|~' | sort
 	_prompt_log "${FUNCNAME[0]}" "OLDPWD=${OLDPWD}"
 	_prompt_log "${FUNCNAME[0]}" "PS1=${PS1}"
 	_prompt_log "${FUNCNAME[0]}" "PWD=${PWD}"
@@ -40,13 +37,25 @@ _prompt_prefix() {
 	# Return if prompt prefix has already been generated
 	[[ "${PROMPT_PREFIX}" ]] && return
 
-	PROMPT_PREFIX="\\[\\e[G\\]\\[${C_ENV}\\]"
+	PROMPT_PREFIX="\\[\\e[G\\]"
+
+	# If ${PROMPT_TIMEDATE} is not false, render time portion of prompt prefix
+	# yes, I know it doesn't actually contain the date
+	if [[ "${PROMPT_TIMEDATE}" != "false" ]]; then
+		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_WHT}\\][\\[${C_YLW}\\]\\D{%r}\\[${C_WHT}\\]] "
+	fi
+
+	# If ${PROMPT_USERNAME} is not false, render username portion of prompt prefix
+	if [[ "${PROMPT_USERNAME}" != "false" ]]; then
+		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_ENV}\\]\\u\\[${C_BLU}\\]@"
+	fi
 
 	# If ${PROMPT_HOSTNAME} is not false, render hostname portion of prompt prefix
 	if [[ "${PROMPT_HOSTNAME}" != "false" ]]; then
-		#PROMPT_PREFIX="${PROMPT_PREFIX}\${HOST_SHORT}\\[${C_RST}\\]:"
-		PROMPT_PREFIX="${PROMPT_PREFIX}\\h\\[${C_RST}\\]:"
+		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_ENV}\\]\\h"
 	fi
+
+	PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_RST}\\]:"
 
 	export PROMPT_PREFIX
 }
@@ -178,28 +187,25 @@ _prompt_pwd() {
 		return
 	fi
 
-	export PWD_UPDATED="true"
-	# _prompt_log "${FUNCNAME[0]}" "export PWD_UPDATED=${PWD_UPDATED}"
-
-	export PWD_FMT
-	# _prompt_log "${FUNCNAME[0]}" "export PWD_FMT=${PWD_FMT}"
-
-	export PWD_FMT_LAST="${PWD_FMT}"
-	# _prompt_log "${FUNCNAME[0]}" "export PWD_FMT_LAST=${PWD_FMT_LAST}"
-
+	PWD_UPDATED="true"
+	PWD_FMT_LAST="${PWD_FMT}"
 
 	# Here we modify the pwd string to shorten the display
 	# Find how many folders deep we are
 	PWD_FMT_DEPTH="$(echo "${PWD_FMT}" | awk -F '/' '{print NF-1}')"
-	export PWD_FMT_DEPTH
 
 	# If we're LESS than 3 folders deep, pwd for titlebar and prompt is normal
 	# If we're MORE than 3 folders deep, show .../previous_dir/current_dir
 	PWD_CUSTOM=$(printf "${PWD_FMT}" | rev | awk -F '/' '{printf $1"/"$2"/..."}' | rev)
 
 	[[ "${PWD_FMT_DEPTH}" -lt "3" ]] && PWD_FINAL="${PWD_FMT}" || PWD_FINAL="${PWD_CUSTOM}"
-	export PWD_FINAL
+
+	export PWD_FINAL PWD_FMT PWD_FMT_DEPTH PWD_FMT_LAST PWD_UPDATED
+
 	# _prompt_log "${FUNCNAME[0]}" "export PWD_FINAL=${PWD_FINAL}"
+	# _prompt_log "${FUNCNAME[0]}" "export PWD_FMT=${PWD_FMT}"
+	# _prompt_log "${FUNCNAME[0]}" "export PWD_FMT_LAST=${PWD_FMT_LAST}"
+	# _prompt_log "${FUNCNAME[0]}" "export PWD_UPDATED=${PWD_UPDATED}"
 
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_pwd()

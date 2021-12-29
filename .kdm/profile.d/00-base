@@ -72,27 +72,35 @@ _truecolor_config() {
 	export COLOR_16M
 }
 
-_facter_config() {
+_prompt_config() {
 	if ! hash facter > /dev/null 2>&1; then
-		export PROMPT_HOSTNAME="true"
+		PROMPT_HOSTNAME="true"
+		PROMPT_USERNAME="true"
+		PROMPT_TIMEDATE="true"
+
+		export PROMPT_HOSTNAME PROMPT_USERNAME PROMPT_TIMEDATE
 		return
 	fi
 
 	# PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
+	# PROMPT_USERNAME="$(facter bash-env.prompt.username 2> /dev/null)"
+	# PROMPT_TIMEDATE="$(facter bash-env.prompt.timedate 2> /dev/null)"
 
 	[[ "${PROMPT_HOSTNAME}" != "false" ]] && PROMPT_HOSTNAME="true"
+	[[ "${PROMPT_USERNAME}" != "false" ]] && PROMPT_USERNAME="true"
+	[[ "${PROMPT_TIMEDATE}" != "false" ]] && PROMPT_TIMEDATE="true"
 
 	# Override to always show hostname when connected via SSH
 	[[ -z "${SSH_CLIENT+x}"     ]] || PROMPT_HOSTNAME="true"
 	[[ -z "${SSH_CONNECTION+x}" ]] || PROMPT_HOSTNAME="true"
 	[[ -z "${SSH_TTY+x}"        ]] || PROMPT_HOSTNAME="true"
 
-	export PROMPT_HOSTNAME
+	export PROMPT_HOSTNAME PROMPT_USERNAME PROMPT_TIMEDATE
 }
 
 
 _truecolor_config
-_facter_config
+_prompt_config
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
