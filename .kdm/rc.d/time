@@ -23,14 +23,14 @@ _time_elapsed_chrono() {
 
 	if [[ -z "${1}" || -z "${2}" ]]; then
 		output usage "time-elapsed-chrono <start> <${USAGE_OPTIONS_STRING}>"
-		output usage "If using 'current' as end time, start time must be in sec sinch epoch (date +%s)"
+		output usage "If using 'current' as end time, start time must be in 'seconds since epoch' (date +%s)"
 		return 0
 	fi
 
 	# Case statement to setup current time as end time if specified
 	case "${2}" in
 		current)
-			# Get current time (sec since epoch)
+			# Get current time (seconds since epoch)
 			TIME_END="$(date +%s)"
 			;;
 		*)
@@ -119,7 +119,7 @@ _time_elapsed_text() {
 
 	# Case statement to setup current time as end time if specified
 	case "${2}" in
-		current) TIME_END="$(date +%s)" ;; # Get current time (sec since epoch)
+		current) TIME_END="$(date +%s)" ;; # Get current time (seconds since epoch)
 		*)       TIME_END="${2}"        ;;
 	esac
 
