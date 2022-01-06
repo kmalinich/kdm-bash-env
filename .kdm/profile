@@ -63,7 +63,7 @@ for FILE in $(find "${BASH_ENV_DIR_PROFILE_D}" -maxdepth 1 -name '[0-9][0-9]-*' 
 	# export TIMEFORMAT=$'%3R'
 	# time . "${FILE}"
 	# export TIMEFORMAT=$'%3R'
-done
+done; unset FILE
 
 if [[ "${BASH_INTERACTIVE}" ]]; then
 	# _show_motd
