@@ -5,14 +5,14 @@
 		"coc-eslint": ">=1.5.2",
 		"coc-eslint8": ">=2.0.0",
 		"coc-highlight": ">=1.2.8",
-		"coc-html": ">=1.5.1",
-		"coc-json": ">=1.4.0",
+		"coc-html": ">=1.6.0",
+		"coc-json": ">=1.4.1",
 		"coc-markdownlint": ">=1.12.3",
 		"coc-python": ">=1.2.13",
 		"coc-sql": ">=0.9.0",
 		"coc-stylelintplus": ">=1.5.0",
 		"coc-svg": ">=0.0.13",
-		"coc-tsserver": ">=1.9.4",
+		"coc-tsserver": ">=1.9.5",
 		"coc-xml": ">=1.14.1",
 		"coc-yaml": ">=1.6.1"
 	}
