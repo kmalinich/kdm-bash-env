@@ -47,7 +47,9 @@ _alias_linux_macos_setup() {
 	alias ncgrep='grep -s --color=never'  # Force disable color
 
 	if hash exa; then
-		alias ls="exa --color=auto --color-scale --time-style long-iso --group-directories-first 2> /dev/null"
+		export EXA_COLORS="da=38;5;255:uu=38;5;242:un=38;2;255;255;1"
+		export EXA_ICON_SPACING="2"
+		alias ls="exa --color=auto --color-scale --time-style long-iso --icons --group-directories-first 2> /dev/null"
 	else
 		LS_TIME_STYLE="+%Y-%m-%d %r"
 		alias ls="ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"
