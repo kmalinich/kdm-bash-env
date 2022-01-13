@@ -33,15 +33,24 @@ fi
 alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
 
 # File list aliases
-alias lll='ls --all                          --file-type --human-readable -l'
-alias la=' ls       --almost-all'
-alias l.=' ls                    --directory                                 .*'
-alias ll.='ls                    --directory                              -l .*'
-alias l1=' ls                                --file-type --human-readable -1'
-alias l='  ls                                --file-type                     -C'
-alias ll=' ls                                --file-type --human-readable -l'
-alias lld='ls                    --directory --file-type --human-readable -l'
-
+if hash exa; then
+	alias lll='ls --all                           --classify --long'
+	alias l.=' ls                     --list-dirs                   .*'
+	alias ll.='ls                     --list-dirs            --long .*'
+	alias l1=' ls                                 --classify        --oneline'
+	alias l='  ls                                 --classify                   --grid'
+	alias ll=' ls                                 --classify --long'
+	alias lld='ls                     --list-dirs --classify --long'
+else
+	alias lll='ls --all                          --file-type --human-readable -l'
+	alias la=' ls       --almost-all'
+	alias l.=' ls                    --directory                                 .*'
+	alias ll.='ls                    --directory                              -l .*'
+	alias l1=' ls                                --file-type --human-readable -1'
+	alias l='  ls                                --file-type                     -C'
+	alias ll=' ls                                --file-type --human-readable -l'
+	alias lld='ls                    --directory --file-type --human-readable -l'
+fi
 
 # Quick up-directory-n-list
 alias ..='cd ..; ll'
@@ -65,10 +74,6 @@ alias kk='ll'
 alias namp='nmap'
 alias pign='ping'
 alias tial='tail'
-
-# Application-specific aliases
-# _alias_applications
-# _alias_applications "/usr/local"
 
 # E-Z nmap commands
 _alias_nmap
