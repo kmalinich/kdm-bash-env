@@ -87,56 +87,6 @@ _alias_nmap() {
 }
 
 
-# noping command tweaks
-# shellcheck disable=SC2139
-_alias_noping() {
-	# Declare vars as local
-	local NOPING
-
-	# noping commands, if noping is present
-	hash noping || return;
-
-	# Get full path to binary
-	NOPING=$(command -v noping)
-
-	# noping needs sudo if not root
-	if [[ "${UID}" != "0" ]]; then
-		alias noping="     sudo ${NOPING} -i 0.5"
-		alias noping-fast="sudo ${NOPING} -i 0.1"
-		alias noping-slow="sudo ${NOPING} -i 1.0"
-		return
-	fi
-
-	alias noping="     ${NOPING} -i 0.5"
-	alias noping-fast="${NOPING} -i 0.1"
-	alias noping-slow="${NOPING} -i 1.0"
-}
-
-# noping command tweaks
-# shellcheck disable=SC2139
-_alias_oping() {
-	# Declare vars as local
-	local OPING
-
-	# oping commands, if oping is present
-	hash oping || return;
-
-	# Get full path to binary
-	OPING=$(command -v oping)
-
-	# oping needs sudo if not root
-	if [[ "${UID}" != "0" ]]; then
-		alias oping="     sudo ${OPING} -i 0.5"
-		alias oping-fast="sudo ${OPING} -i 0.1"
-		alias oping-slow="sudo ${OPING} -i 1.0"
-		return
-	fi
-
-	alias oping="     ${OPING} -i 0.5"
-	alias oping-fast="${OPING} -i 0.1"
-	alias oping-slow="${OPING} -i 1.0"
-}
-
 # ping command tweaks
 # shellcheck disable=SC2139
 _alias_ping() {
@@ -155,10 +105,26 @@ _alias_ping() {
 	alias ping="     ${PING} -i 0.5"
 	alias ping-fast="${PING} -i 0.1"
 	alias ping-slow="${PING} -i 1.0"
+}
 
-	# Generate noping and oping aliases, too
-	# _alias_noping
-	# _alias_oping
+# ping6 command tweaks
+# shellcheck disable=SC2139
+_alias_ping6() {
+	# Declare vars as local
+	local ping6
+
+	# ping6 commands, if ping6 is present
+	hash ping6 || return;
+
+	# Get full path to binary
+	ping6=$(command -v ping6)
+
+	# ping6-slow : normal (1.0 second interval)
+	#      ping6 : fast   (0.5 second interval)
+	# ping6-fast : faster (0.1 second interval)
+	alias ping6="     ${ping6} -i 0.5"
+	alias ping6-fast="${ping6} -i 0.1"
+	alias ping6-slow="${ping6} -i 1.0"
 }
 
 

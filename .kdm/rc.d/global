@@ -78,8 +78,9 @@ alias tial='tail'
 # E-Z nmap commands
 _alias_nmap
 
-# ping/noping command tweaks
+# ping/ping6 command tweaks
 _alias_ping
+_alias_ping6
 
 # Prettyprint+colorize various formats, if supporting binaries are installed
 _alias_pygmentize
