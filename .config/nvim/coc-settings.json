@@ -38,6 +38,7 @@
 	"wxss.validate": false,
 
 	"yaml.customTags": [
+		"!include_dir_merge_list Scalar",
 		"!lambda Scalar",
 		"!secret Scalar"
 	],
