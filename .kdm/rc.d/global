@@ -41,6 +41,12 @@ if hash exa; then
 	alias l='  ls                                 --classify                   --grid'
 	alias ll=' ls                                 --classify --long'
 	alias lld='ls                     --list-dirs --classify --long'
+
+	# Because `exa` doesn't support traditional GNU `ls` `ls -tr` syntax, and I use it a lot
+	# Also `exa` 'sort by modified date' is, by default, in reverse order compared to GNU `ls`,
+	# hence the `llt` alias having the `--reverse` option and the `lltr` alias not
+	alias llt=' ll --sort modified --reverse'
+	alias lltr='ll --sort modified'
 else
 	alias lll='ls --all                          --file-type --human-readable -l'
 	alias la=' ls       --almost-all'
