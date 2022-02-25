@@ -123,7 +123,7 @@ _macos_lsusb() {
 	# "smart_status"
 	# "volume_uuid"
 
-	jq '.[0][0].items[0].items' <(
+	jq ".[0][0].items[0].items | ${1-.}" <(
 		plist-to-json <(
 			sudo system_profiler -xml 'SPUSBDataType' 2> /dev/null | sed -E -e 's/\s{1,}<\//<\//g' -e 's/\ \ /\ /g'
 		) | sed \
