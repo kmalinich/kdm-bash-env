@@ -39,23 +39,27 @@ _prompt_prefix() {
 
 	PROMPT_PREFIX="\\[\\e[G\\]"
 
-	# If ${PROMPT_TIMEDATE} is not false, render time portion of prompt prefix
-	# yes, I know it doesn't actually contain the date
-	if [[ "${PROMPT_TIMEDATE}" != "false" ]]; then
+	# If ${PROMPT_TIME} is not false, render time portion of prompt prefix
+	if [[ "${PROMPT_TIME}" != "false" ]]; then
 		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_WHT}\\][\\[${C_YLW}\\]\\D{%r}\\[${C_WHT}\\]] "
 	fi
 
 	# If ${PROMPT_USERNAME} is not false, render username portion of prompt prefix
 	if [[ "${PROMPT_USERNAME}" != "false" ]]; then
-		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_ENV}\\]\\u\\[${C_BLU}\\]@"
+		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_ENV}\\]\\u\\[${C_BLU}\\]"
+
+		if [[ "${PROMPT_HOSTNAME}" != "false" ]]; then
+			PROMPT_PREFIX="${PROMPT_PREFIX}@"
+		else
+			PROMPT_PREFIX="${PROMPT_PREFIX} "
+		fi
 	fi
 
 	# If ${PROMPT_HOSTNAME} is not false, render hostname portion of prompt prefix
 	if [[ "${PROMPT_HOSTNAME}" != "false" ]]; then
-		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_ENV}\\]\\h"
+		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_ENV}\\]\\h\\[${C_RST}\\]:"
 	fi
 
-	PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_RST}\\]:"
 
 	export PROMPT_PREFIX
 }

@@ -76,26 +76,23 @@ _prompt_config() {
 	if ! hash facter > /dev/null 2>&1; then
 		PROMPT_HOSTNAME="true"
 		PROMPT_USERNAME="true"
-		PROMPT_TIMEDATE="true"
-
-		export PROMPT_HOSTNAME PROMPT_USERNAME PROMPT_TIMEDATE
-		return
+		PROMPT_TIME="true"
 	fi
 
 	# PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
 	# PROMPT_USERNAME="$(facter bash-env.prompt.username 2> /dev/null)"
-	# PROMPT_TIMEDATE="$(facter bash-env.prompt.timedate 2> /dev/null)"
+	# PROMPT_TIME="$(facter bash-env.prompt.timedate 2> /dev/null)"
 
 	[[ "${PROMPT_HOSTNAME}" != "false" ]] && PROMPT_HOSTNAME="true"
 	[[ "${PROMPT_USERNAME}" != "false" ]] && PROMPT_USERNAME="true"
-	[[ "${PROMPT_TIMEDATE}" != "false" ]] && PROMPT_TIMEDATE="true"
+	[[ "${PROMPT_TIME}"     != "false" ]] && PROMPT_TIME="true"
 
 	# Override to always show hostname when connected via SSH
 	[[ -z "${SSH_CLIENT+x}"     ]] || PROMPT_HOSTNAME="true"
 	[[ -z "${SSH_CONNECTION+x}" ]] || PROMPT_HOSTNAME="true"
 	[[ -z "${SSH_TTY+x}"        ]] || PROMPT_HOSTNAME="true"
 
-	export PROMPT_HOSTNAME PROMPT_USERNAME PROMPT_TIMEDATE
+	export PROMPT_HOSTNAME PROMPT_USERNAME PROMPT_TIME
 }
 
 
