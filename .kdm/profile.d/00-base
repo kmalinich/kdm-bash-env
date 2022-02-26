@@ -73,15 +73,19 @@ _truecolor_config() {
 }
 
 _prompt_config() {
-	if hash facter > /dev/null 2>&1; then
-		PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
-		PROMPT_USERNAME="$(facter bash-env.prompt.username 2> /dev/null)"
-		PROMPT_TIME="$(    facter bash-env.prompt.time     2> /dev/null)"
-	else
-		PROMPT_HOSTNAME="true"
-		PROMPT_USERNAME="true"
-		PROMPT_TIME="true"
-	fi
+	#if hash facter > /dev/null 2>&1; then
+	#	PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
+	#	PROMPT_USERNAME="$(facter bash-env.prompt.username 2> /dev/null)"
+	#	PROMPT_TIME="$(    facter bash-env.prompt.time     2> /dev/null)"
+	#else
+	#	PROMPT_HOSTNAME="true"
+	#	PROMPT_USERNAME="true"
+	#	PROMPT_TIME="false"
+	#fi
+
+	PROMPT_HOSTNAME="true"
+	PROMPT_USERNAME="true"
+	PROMPT_TIME="false"
 
 	[[ "${PROMPT_HOSTNAME}" != "false" ]] && PROMPT_HOSTNAME="true"
 	[[ "${PROMPT_USERNAME}" != "false" ]] && PROMPT_USERNAME="true"
