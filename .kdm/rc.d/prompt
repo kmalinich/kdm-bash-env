@@ -60,7 +60,6 @@ _prompt_prefix() {
 		PROMPT_PREFIX="${PROMPT_PREFIX}\\[${C_ENV}\\]\\h\\[${C_RST}\\]:"
 	fi
 
-
 	export PROMPT_PREFIX
 }
 

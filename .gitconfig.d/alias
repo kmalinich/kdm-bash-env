@@ -45,7 +45,7 @@
 
 	l = "!_git_l() { git log \"--max-count=${1-25}\" --graph --oneline; }; _git_l"
 
-	ll = "!_git_ll() { git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=tformat:[%C(yellow)%h%C(reset)] [%C(blue)%><(13)%ar%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_ll"
+	ll = "!_git_ll() { git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=tformat:[%C(yellow)%h%C(reset)] [%C(green)%ad%C(reset)] [%C(blue)%><(15)%ar%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_ll"
 
 	# Requires GitHub CLI (https://hub.github.com/)
 	llu = "!_git_llu() { COMMIT_URL=\"$(hub browse --url)/commit\"; git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=tformat:[%C(yellow)${COMMIT_URL}/%h%C(reset)] [%C(blue)%><(13)%ar%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_llu"
