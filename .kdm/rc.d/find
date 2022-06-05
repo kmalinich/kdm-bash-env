@@ -4,7 +4,7 @@
 
 
 # Find dir function
-# Case insensitive, double wildcard search of CURRENT dir
+# Case insensitive, double wildcard search under current directory
 _find_dir() {
 	# Declare vars as local
 	local USAGE_STRING
@@ -12,14 +12,14 @@ _find_dir() {
 	USAGE_STRING="find-dir <dirname>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	output stderr "Finding directory '${1}' under '${PWD}'"
+	output stderr "Finding dir(s) '${1}' under '${PWD}'"
 	output stderr " "
 
-	find -O3 -L ./ -type d -iname "*${1}*"
+	find -L -O3 ./ -type d -iname "*${1}*"
 }
 
 # Find file function
-# Case insensitive, double wildcard search of CURRENT dir
+# Case insensitive, double wildcard search under current directory
 _find_file() {
 	# Declare vars as local
 	local USAGE_STRING
@@ -27,11 +27,27 @@ _find_file() {
 	USAGE_STRING="find-file <filename>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	output stderr "Finding file '${1}' under '${PWD}'"
+	output stderr "Finding file(s) '${1}' under '${PWD}'"
 	output stderr " "
 
-	find -O3 -L ./ -type f -iname "*${1}*"
+	find -L -O3 ./ -type f -iname "*${1}*"
 }
+
+# Find link function
+# Case insensitive, double wildcard search under current directory
+_find_link() {
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="find-link <filename>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	output stderr "Finding link(s) '${1}' under '${PWD}'"
+	output stderr " "
+
+	find -L -O3 ./ -type l -iname "*${1}*"
+}
+
 
 # Find ${COUNT} largest items in current directory
 _find_largest() {
@@ -43,19 +59,20 @@ _find_largest() {
 	output stderr " "
 
 	du \
-		--human-readable   \
-		--summarize        \
-		./* 2> /dev/null | \
-		sort \
+		--human-readable \
+		--summarize      \
+		./* 2> /dev/null \
+		| sort               \
 		--human-numeric-sort \
-		--reverse | head \
-		"--lines=${COUNT}"
+		--reverse            \
+		| head "--lines=${COUNT}"
 }
 
 
 # Function aliases
 alias find-dir='    _find_dir'
 alias find-file='   _find_file'
+alias find-link='   _find_link'
 alias find-largest='_find_largest'
 
 
