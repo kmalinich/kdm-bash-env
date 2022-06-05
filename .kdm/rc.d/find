@@ -15,7 +15,7 @@ _find_dir() {
 	output stderr "Finding directory '${1}' under '${PWD}'"
 	output stderr " "
 
-	find . -type d -iname "*${1}*"
+	find -O3 -L ./ -type d -iname "*${1}*"
 }
 
 # Find file function
@@ -30,7 +30,7 @@ _find_file() {
 	output stderr "Finding file '${1}' under '${PWD}'"
 	output stderr " "
 
-	find . -type f -iname "*${1}*"
+	find -O3 -L ./ -type f -iname "*${1}*"
 }
 
 # Find ${COUNT} largest items in current directory

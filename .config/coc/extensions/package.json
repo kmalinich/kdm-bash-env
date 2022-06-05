@@ -9,7 +9,7 @@
 		"coc-json": ">=1.4.2",
 		"coc-markdownlint": ">=1.12.4",
 		"coc-python": ">=1.2.13",
-		"coc-sql": ">=0.10.3",
+		"coc-sql": ">=0.10.4",
 		"coc-stylelintplus": ">=1.5.0",
 		"coc-svg": ">=0.0.13",
 		"coc-tsserver": ">=1.10.4",
