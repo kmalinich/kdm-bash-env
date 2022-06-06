@@ -10,6 +10,7 @@
 	path = ~/.gitconfig.d/merge
 	path = ~/.gitconfig.d/pull
 	path = ~/.gitconfig.d/push
+	path = ~/.gitconfig.d/safe
 	path = ~/.gitconfig.d/submodule
 	path = ~/.gitconfig.d/url-priv
 	path = ~/.gitconfig.d/url-pub
