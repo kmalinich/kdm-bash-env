@@ -12,7 +12,7 @@
 		"coc-sql": ">=0.10.4",
 		"coc-stylelintplus": ">=1.5.0",
 		"coc-svg": ">=0.0.13",
-		"coc-tsserver": ">=1.10.4",
+		"coc-tsserver": ">=1.10.5",
 		"coc-xml": ">=1.14.1",
 		"coc-yaml": ">=1.7.5"
 	}
