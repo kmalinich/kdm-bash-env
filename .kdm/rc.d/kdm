@@ -142,7 +142,7 @@ _kdm_update_submodule() {
 
 		gc)
 			git gc --aggressive --prune > /dev/null 2>&1
-			output keyval-y "[kdm-update][subm][gc]" "${SUBMODULE}"
+			output keyval-y "[kdm-update][subm][ gc ]" "${SUBMODULE}"
 			;;
 		esac
 }
@@ -167,14 +167,31 @@ _kdm_update() {
 		git pull        --prune
 	} > /dev/null 2>&1
 
-	output keyval-y "[kdm-update][main]" "pull"
+	output keyval-g "[kdm-update][main]" "Pull complete"
 
 
 	output keyval-y "[kdm-update][main]" "Begin submodule pull"
 
+	# Determine half of CPU core count
+	CORE_COUNT="$(nproc)"
+	SUBMODULE_PROC_LIMIT="$((CORE_COUNT/2))"
+
 	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
 	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
+		# Wait to launch another Git process if number running Git processes exceeds half of CPU core count
+		SUBMODULE_PROC_COUNT="$(pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
+
+		while [[ "${SUBMODULE_PROC_COUNT}" -ge "${SUBMODULE_PROC_LIMIT}" ]]; do
+			pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)'
+			echo
+			output keyval-o "[kdm-update][subm][wait]" "${SUBMODULE}"
+			output keyval-o "[kdm-update][subm][wait][SUBMODULE_PROC_COUNT]" "${SUBMODULE_PROC_COUNT}"
+			output keyval-o "[kdm-update][subm][wait][SUBMODULE_PROC_LIMIT]" "${SUBMODULE_PROC_LIMIT}"
+			sleep 1
+		done
+
 		_kdm_update_submodule "${SUBMODULE}" pull &
+		sleep 0.25
 	done
 	echo
 
@@ -245,20 +262,22 @@ _kdm_update() {
 
 	output keyval-y "[kdm-update][main]" "Begin submodule garbage collection"
 
-	# Determine half of CPU core count
-	CORE_COUNT="$(nproc)"
-	SUBMODULE_PROC_LIMIT="$((CORE_COUNT/2))"
-
 	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
 	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
 		# Wait to launch another Git process if number running Git processes exceeds half of CPU core count
 		SUBMODULE_PROC_COUNT="$(pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
+
 		while [[ "${SUBMODULE_PROC_COUNT}" -ge "${SUBMODULE_PROC_LIMIT}" ]]; do
+			pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)'
+			echo
 			output keyval-o "[kdm-update][subm][wait]" "${SUBMODULE}"
+			output keyval-o "[kdm-update][subm][wait][SUBMODULE_PROC_COUNT]" "${SUBMODULE_PROC_COUNT}"
+			output keyval-o "[kdm-update][subm][wait][SUBMODULE_PROC_LIMIT]" "${SUBMODULE_PROC_LIMIT}"
 			sleep 1
 		done
 
 		_kdm_update_submodule "${SUBMODULE}" gc &
+		sleep 0.25
 	done
 	echo
 
