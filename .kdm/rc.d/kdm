@@ -137,12 +137,12 @@ _kdm_update_submodule() {
 				git pull --prune
 			} > /dev/null 2>&1
 
-			output keyval-y "[kdm-update][subm][${SUBMODULE}]" "pull"
+			output keyval-y "[kdm-update][subm][pull]" "${SUBMODULE}"
 			;;
 
 		gc)
 			git gc --aggressive --prune > /dev/null 2>&1
-			output keyval-y "[kdm-update][subm][${SUBMODULE}]" "garbage collection"
+			output keyval-y "[kdm-update][subm][gc]" "${SUBMODULE}"
 			;;
 		esac
 }
@@ -152,6 +152,7 @@ _kdm_update() {
 	# Declare vars as local
 	local ARRAY_SUBMODULES DIR_SUBMODULE SUBMODULE OLD_PWD WAIT_COUNT
 	local PERFORM_COC_UPDATE KDM_PUSH_YN
+	local CORE_COUNT SUBMODULE_PROC_COUNT SUBMODULE_PROC_LIMIT
 
 	OLD_PWD="${PWD}"
 
@@ -180,7 +181,7 @@ _kdm_update() {
 	# Wait for Git processes to complete
 	WAIT_COUNT="0"
 	while pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
-		if [[ "${WAIT_COUNT}" -gt "120" ]]; then
+		if [[ "${WAIT_COUNT}" -gt "180" ]]; then
 			output error "Waiting for submodule pull to complete took too long"
 			return 3
 		fi
@@ -244,8 +245,19 @@ _kdm_update() {
 
 	output keyval-y "[kdm-update][main]" "Begin submodule garbage collection"
 
+	# Determine half of CPU core count
+	CORE_COUNT="$(nproc)"
+	SUBMODULE_PROC_LIMIT="$((CORE_COUNT/2))"
+
 	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
 	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
+		# Wait to launch another Git process if number running Git processes exceeds half of CPU core count
+		SUBMODULE_PROC_COUNT="$(pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
+		while [[ "${SUBMODULE_PROC_COUNT}" -ge "${SUBMODULE_PROC_LIMIT}" ]]; do
+			output keyval-o "[kdm-update][subm][wait]" "${SUBMODULE}"
+			sleep 1
+		done
+
 		_kdm_update_submodule "${SUBMODULE}" gc &
 	done
 	echo
@@ -253,7 +265,7 @@ _kdm_update() {
 	# Wait for Git processes to complete
 	WAIT_COUNT="0"
 	while pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
-		if [[ "${WAIT_COUNT}" -gt "120" ]]; then
+		if [[ "${WAIT_COUNT}" -gt "180" ]]; then
 			output error "Waiting for submodule garbage collection to complete took too long"
 			return 4
 		fi
