@@ -6,14 +6,21 @@ scriptencoding utf-8
 " Better display for messages
 set cmdheight=2
 
-" You will have bad experience for diagnostic messages when it's default 4000
-set updatetime=300
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience
+set updatetime=200
 
-" don't give |ins-completion-menu| messages
+" Don't pass messages to |ins-completion-menu|
 set shortmess+=c
 
-" always show signcolumns
-" set signcolumn=yes
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+	" Recently vim can merge signcolumn and number column into one
+	set signcolumn=number
+else
+	set signcolumn=yes
+endif
 
 
 " Use tab for trigger completion with characters ahead and navigate
@@ -35,8 +42,6 @@ inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<
 
 
 " Ctrl-j/Ctrl-k : Navigate diagnostics
-" nmap <silent> <C-j> <Plug>(coc-diagnostic-prev)
-" nmap <silent> <C-k> <Plug>(coc-diagnostic-next)
 nmap <C-j> <Plug>(coc-diagnostic-prev)
 nmap <C-k> <Plug>(coc-diagnostic-next)
 
@@ -85,14 +90,14 @@ augroup end
 " xmap <leader>a <Plug>(coc-codeaction-selected)
 " nmap <leader>a <Plug>(coc-codeaction-selected)
 
-" Remap for do codeAction of current line
-" nmap <leader>ac <Plug>(coc-codeaction)
+" Remap keys for applying codeAction to the current buffer
+nmap <leader>ac  <Plug>(coc-codeaction)
 
-" Fix autofix problem of current line
-" nmap <leader>qf <Plug>(coc-fix-current)
+" Apply AutoFix to problem on the current line
+nmap <leader>qf <Plug>(coc-fix-current)
 
 
-" Ctrl-f : Run fixer
+" Ctrl-f : Apply AutoFix to all problems
 nmap <C-f> <Plug>(coc-fix)
 
 
