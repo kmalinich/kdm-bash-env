@@ -26,6 +26,10 @@ call LoadFile('lightline')
 
 if has('termguicolors') && g:color_16m ==# 'true'
 	call LoadFile('truecolor')
+
+	if g:term_program ==# 'iterm2'
+		call LoadFile('iterm2')
+	endif
 endif
 
 call LoadFile('search')
@@ -38,7 +42,10 @@ call LoadFile('functions')
 call LoadFile('remap')
 call LoadFile('whitespace') " whitespace must come before filetype
 call LoadFile('filetype')
-call LoadFile('neovim')
+
+if has('nvim')
+	call LoadFile('neovim')
+endif
 
 if g:uname_machine ==# 'x86_64'
 	call LoadFile('python')

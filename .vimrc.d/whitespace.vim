@@ -53,9 +53,5 @@ let w:m3 = matchadd('whitespace_ugly', '^\t*\zs \+')
 " Custom whitespace list characters
 set listchars=tab:\|,trail:,nbsp:+
 
-" Set to two bars instead of UTF-8 arrow,
-" if iTerm2 GPU accelerated Metal renderer on macOS renders it improperly
-" set listchars=tab:\|\|,trail:,nbsp:+
-
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :

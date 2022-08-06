@@ -4,7 +4,7 @@ scriptencoding utf-8
 " Disable all mouse handling, it's annoying
 set mouse=
 
-" Enable mouse handling in all modes (iTerm 3+)
+" Enable mouse handling in all modes (iTerm2 3+)
 " set mouse=a
 
 set mousetime=1

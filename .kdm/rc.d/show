@@ -120,7 +120,11 @@ _show_scp_path() {
 # Show most frequently executed commands
 _show_top_cmds() {
 	# Declare vars as local
-	local COUNT HIST_CMDS HIST_TEMP
+	local COUNT HIST_CMDS HIST_TEMP LC_ALL_OLD
+
+	LC_ALL_OLD="${LC_ALL}"
+
+	LC_ALL='C'
 
 	if [[ ! -s "${HISTFILE}" ]]; then
 		output error "bash history file missing or empty"
@@ -141,6 +145,8 @@ _show_top_cmds() {
 
 	output stderr "-- ${HIST_CMDS} commands total -------------------- Top ${COUNT} --"
 	grep --invert-match --text '#' "${HISTFILE}" | sort | uniq -c | sort -rn | head -n "${COUNT}"
+
+	LC_ALL="${LC_ALL_OLD}"
 
 	if ! rm -f "${HIST_TEMP}" > /dev/null 2>&1; then
 		output error "Failed to remove temporary bash history file '${HIST_TEMP}'"
