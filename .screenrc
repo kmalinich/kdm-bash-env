@@ -7,18 +7,24 @@ startup_message off
 # Change the number of scrollback lines
 defscrollback 100000
 
+# Enable alternate screen mode
+altscreen on
+
 # Ensure the default shell is the same as the $SHELL environment variable
 shell -$SHELL
-
-# Configure status bar at the bottom of the terminal
-hardstatus alwayslastline
-hardstatus string "%{= kb}[ %=%{w}%?%-Lw%?%{C}(%{W}%n*%f %t%?(%u)%?%{C})%{w}%?%+Lw%?%?%= %{b}][%{C} %Y.%m.%d %{W}%0c"
 
 # Set terminal type/TERM variable
 # term screen-256color
 
+# Enable monitoring of background screens
+monitor on
+
 # Enable 24bit color
 truecolor on
 
-# Enable monitoring of background screens
-monitor on
+# Configure colorful informative status bar
+# https://wiki.archlinux.org/title/GNU_Screen#Informative_statusbar
+hardstatus off
+backtick 0 5 5 "/bin/date" '+%Y-%m-%d'
+backtick 1 5 5 "/bin/date" '+%H:%M'
+hardstatus alwayslastline '%{#00ff00}[ %H ][%{#ffffff}%= %{7}%?%-Lw%?%{1;0}%{1}(%{15}%n%f%t%?(%u)%?%{1;0}%{1})%{7}%?%+Lw%?%? %=%{#00ff00}][ %{#00a5ff}%{6}%0` %{#ffffff}%{7}%1`%{#00ff00} ]'
