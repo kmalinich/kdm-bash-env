@@ -152,6 +152,8 @@ ARRAY_PATH=(
 '/opt/puppetlabs/bin'
 "${UL}/sbin"
 "${UL}/bin"
+'/opt/homebrew/sbin'
+'/opt/homebrew/bin'
 '/System/Library/Filesystems/apfs.fs/Contents/Resources'
 '/usr/pgsql-12/bin'
 '/usr/pgsql-11/bin'
