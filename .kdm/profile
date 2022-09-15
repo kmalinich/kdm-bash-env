@@ -15,13 +15,16 @@ export BASH_ENV_FILE_INITIAL_PATH="${BASH_ENV_DIR_KDM}/initial-path"
 
 
 _initialPathGenerate() {
-	PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+	PATH="/usr/local/sbin:/usr/local/bin:/opt/homebrew/sbin:/opt/homebrew/bin:/usr/sbin:/usr/bin:/sbin:/bin"
 
 	# Add GNU coreutils, findutils, and grep to PATH if macOS brew-installed package present
 	ARRAY_DIR_GNU_UTILS=(
 	"/usr/local/opt/coreutils/libexec/gnubin"
 	"/usr/local/opt/findutils/libexec/gnubin"
 	"/usr/local/opt/grep/libexec/gnubin"
+	"/opt/homebrew/opt/coreutils/libexec/gnubin"
+	"/opt/homebrew/opt/findutils/libexec/gnubin"
+	"/opt/homebrew/opt/grep/libexec/gnubin"
 	)
 
 	for DIR_GNU_UTIL in "${ARRAY_DIR_GNU_UTILS[@]}"; do
