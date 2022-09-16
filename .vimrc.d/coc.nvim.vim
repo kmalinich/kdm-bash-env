@@ -1,6 +1,10 @@
 scriptencoding utf-8
 
 
+" Disable startup warning - I know when nvim/vim is outdated anyway, and sometimes I've got places to be
+let g:coc_disable_startup_warning = 1
+
+
 " let g:coc_force_debug = 1
 
 " Better display for messages
