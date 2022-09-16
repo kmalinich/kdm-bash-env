@@ -50,8 +50,5 @@ let w:m2 = matchadd('whitespace_ugly', '\s\+$')
 " Spaces used for indenting
 let w:m3 = matchadd('whitespace_ugly', '^\t*\zs \+')
 
-" Custom whitespace list characters
-set listchars=tab:\|,trail:,nbsp:+
-
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
