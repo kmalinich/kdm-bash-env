@@ -12,11 +12,11 @@
     "coc-sql": ">=0.10.4",
     "coc-stylelintplus": ">=1.5.0",
     "coc-svg": ">=0.0.13",
-    "coc-tsserver": ">=1.11.9",
+    "coc-tsserver": ">=1.11.11",
     "coc-xml": ">=1.14.1",
     "coc-yaml": ">=1.8.0"
   },
   "disabled": [],
-  "locked": [],
-  "lastUpdate": 1663599790693
+  "lastUpdate": 1663783597093,
+  "locked": []
 }
