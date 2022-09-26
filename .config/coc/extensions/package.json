@@ -9,7 +9,7 @@
     "coc-json": ">=1.6.1",
     "coc-markdownlint": ">=1.26.0",
     "coc-python": ">=1.2.13",
-    "coc-sql": ">=0.10.4",
+    "coc-sql": ">=0.10.5",
     "coc-stylelintplus": ">=1.5.0",
     "coc-svg": ">=0.0.13",
     "coc-tsserver": ">=1.11.11",
@@ -17,6 +17,6 @@
     "coc-yaml": ">=1.8.0"
   },
   "disabled": [],
-  "lastUpdate": 1663783597093,
+  "lastUpdate": 1664200692781,
   "locked": []
 }
