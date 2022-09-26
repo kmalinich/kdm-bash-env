@@ -133,6 +133,7 @@ ARRAY_PATH=(
 "${ULO}/gnu-sed/libexec/gnubin"
 "${ULO}/gnu-tar/libexec/gnubin"
 "${ULO}/grep/libexec/gnubin"
+"${ULO}/make/libexec/gnubin"
 "${ULO}/curl-openssl/bin"
 "${ULO}/curl/bin"
 "${ULO}/gnu-getopt/bin"
