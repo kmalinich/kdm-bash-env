@@ -52,6 +52,8 @@ _kdm_pull() {
 	cd "${HOME}" || return 1
 
 	_g_gu
+	~/.config/coc/extensions/install
+
 	CMD_EXIT="${?}"
 
 	cd "${OLD_PWD}" || return 1
