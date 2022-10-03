@@ -12,7 +12,7 @@ function! LoadFile(name)
 endfunction
 
 
-" These are in a specific order
+" All the LoadFile() calls are in a very specific order
 call LoadFile('misc')
 call LoadFile('environment')
 call LoadFile('indent')
@@ -47,7 +47,8 @@ if has('nvim')
 	call LoadFile('neovim')
 endif
 
-if g:uname_machine ==# 'x86_64'
+
+if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:uname_machine ==# 'x86_64')
 	call LoadFile('python')
 	call LoadFile('ruby')
 endif
@@ -57,7 +58,7 @@ call LoadFile('modeline')
 call LoadFile('fileformat')
 call LoadFile('case')
 
-if g:uname_machine ==# 'x86_64'
+if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:uname_machine ==# 'x86_64')
 	call LoadFile('coc.nvim')
 endif
 
