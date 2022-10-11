@@ -75,7 +75,8 @@
 	r  = reset
 	rh = reset --hard HEAD
 
-	s = status --ignored
+	s  = status
+	si = status --ignored
 
 	sm   = submodule
 	smf  = submodule foreach --recursive
