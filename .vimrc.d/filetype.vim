@@ -203,8 +203,12 @@ augroup ft_vmx
 	au BufRead *.vmx set filetype=cfg
 augroup END
 
-" TunerPro xdf
-augroup ft_xdf
+" XML
+augroup ft_xml
+	" macOS property list (plist) files
+	au BufRead *.plist set filetype=xml
+
+	" TunerPro xdf
 	au BufRead *.xdf set filetype=xml
 augroup END
 

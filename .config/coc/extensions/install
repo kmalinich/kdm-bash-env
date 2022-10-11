@@ -36,5 +36,10 @@ rm -f ./package-lock.json > /dev/null 2>&1
 "${PKG_MANAGER}" install --frozen-lockfile --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
+echo "Fixing coc-svg svgo dependency symlink"
+ln -fs "${HOME}/.config/coc/extensions/node_modules/svgo" "${HOME}/.config/coc/extensions/node_modules/coc-svg/node_modules/svgo"
+echo;echo
+
+
 echo "Performing nvim CocUpdateSync"
 nvim -c 'CocUpdateSync|q'

@@ -45,10 +45,12 @@
 
 	l = "!_git_l() { git log \"--max-count=${1-25}\" --graph --oneline; }; _git_l"
 
-	ll = "!_git_ll() { git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=tformat:[%C(yellow)%h%C(reset)] [%C(green)%ad%C(reset)] [%C(blue)%><(15)%ar%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_ll"
+	ll = "!_git_ll() { git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=[%C(yellow)%h%C(reset)] [%C(green)%ad%C(reset)] [%C(cyan)%><(15)%ad%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_ll"
 
 	# Requires GitHub CLI (https://hub.github.com/)
-	llu = "!_git_llu() { COMMIT_URL=\"$(hub browse --url)/commit\"; git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=tformat:[%C(yellow)${COMMIT_URL}/%h%C(reset)] [%C(blue)%><(13)%ar%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_llu"
+	ll-url           = "!_git_ll_url()           { COMMIT_URL=\"$(hub browse --url)/commit\"; git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=[%C(yellow)${COMMIT_URL}/%h%C(reset)] [%C(cyan)%ad%C(reset)] [%C(red)%>(28)%cn %C(blue)/%C(red) %<(28)%an%C(reset)] [%C(green)%>(52)%ce %C(blue)/%C(green) %<(52)%ae%C(reset)] %C(reset)%s\"; }; _git_ll_url"
+	ll-url-author    = "!_git_ll_url_author()    { COMMIT_URL=\"$(hub browse --url)/commit\"; git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=[%C(yellow)${COMMIT_URL}/%h%C(reset)] [%C(cyan)%ad%C(reset)] [%C(red)%<(28)%an%C(reset)] [%C(green)%<(52)%ae%C(reset)] %C(reset)%s\"; }; _git_ll_url_author"
+	ll-url-committer = "!_git_ll_url_committer() { COMMIT_URL=\"$(hub browse --url)/commit\"; git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=[%C(yellow)${COMMIT_URL}/%h%C(reset)] [%C(cyan)%ad%C(reset)] [%C(red)%<(28)%cn%C(reset)] [%C(green)%<(52)%ce%C(reset)] %C(reset)%s\"; }; _git_ll_url_committer"
 
 	m = merge
 
@@ -74,7 +76,8 @@
 	r  = reset
 	rh = reset --hard HEAD
 
-	s = status
+	s  = status
+	si = status --ignored
 
 	sm   = submodule
 	smf  = submodule foreach --recursive
