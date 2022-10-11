@@ -52,8 +52,9 @@
 
 	m = merge
 
-	# Requires GitHub CLI (https://hub.github.com/)
-	o = browse
+	# Requires GitHub CLI (https://github.com/cli/cli)
+	browse = "!_git_browse() { hash gh > /dev/null 2>&1 && gh browse || echo 'Github CLI missing, go to https://github.com/cli/cli'; }; _git_browse;"
+	o      = browse
 
 	p = pull --prune
 
