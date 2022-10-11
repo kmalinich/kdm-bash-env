@@ -1,5 +1,5 @@
 [grep]
-	threads = 16
+	threads = 8
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :

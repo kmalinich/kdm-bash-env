@@ -1,5 +1,6 @@
 [core]
-	pager = cat
+	fsmonitor = true
+	pager     = cat
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :
