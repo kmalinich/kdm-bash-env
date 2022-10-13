@@ -124,6 +124,7 @@ ARRAY_PATH=(
 "${ULR}/bin"
 "${ULO}/perl/bin"
 "${ULO}/net-snmp/bin"
+"${ULO}/bc/bin"
 "${ULO}/go/libexec/bin"
 "${ULO}/coreutils/libexec/gnubin"
 "${ULO}/ed/libexec/gnubin"
