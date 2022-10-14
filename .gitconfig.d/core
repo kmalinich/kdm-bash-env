@@ -1,5 +1,5 @@
 [core]
-	fsmonitor = true
+	#fsmonitor = true
 	pager     = cat
 
 
