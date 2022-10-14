@@ -3,7 +3,7 @@
 # Check if jenv is installed
 if hash jenv; then
 	# Load jenv automatically
-	eval "$(jenv init - --no-rehash | grep -Ev 'export\ PATH')"
+	eval "$(jenv init - --no-rehash | grep -Ev 'export PATH')"
 fi
 
 # Init JAVA_HOME variable
@@ -11,7 +11,7 @@ fi
 # Check if the java_home binary is present
 if [[ -s /usr/libexec/java_home ]]; then
 	# Send all to stdout and grep for filepath
-	JAVA_HOME="$(/usr/libexec/java_home 2>&1 | grep '\/')"
+	JAVA_HOME="$(/usr/libexec/java_home 2>&1 | grep -E '/')"
 
 	# If the return is a path (aka not empty) - export it; otherwise, unset it
 	if [[ "${JAVA_HOME}" ]]; then

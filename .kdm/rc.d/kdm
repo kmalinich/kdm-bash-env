@@ -23,7 +23,7 @@ _kdm_help() {
 	local ENV_CMD ENV_CMDS
 	local ENV_CMD_GROUP_FMT ENV_CMD_GROUP_NEW ENV_CMD_GROUP_OLD
 
-	mapfile -t ENV_CMDS < <(alias | grep -Ev '^alias\ g\-|ccd|cdc|clear|CMD|ehco|grep|grpe|it2|ls\ .*.\-\-|lsusb|markdown|md5sum|namp|pign|ping=|kk|vim|\.\.|showbin|ssh|sudo|tial|\-format=' | awk -F '[ =]' '{print $2}' | sed -r '/^.{,2}$/d')
+	mapfile -t ENV_CMDS < <(alias | grep -Ev '^alias g\-|ccd|cdc|clear|CMD|ehco|grep|grpe|it2|ls .*.\-\-|lsusb|markdown|md5sum|namp|pign|ping=|kk|vim|\.\.|showbin|ssh|sudo|tial|\-format=' | awk -F '[ =]' '{print $2}' | sed -r '/^.{,2}$/d')
 
 	ENV_CMD_GROUP_OLD=""
 	for ENV_CMD in "${ENV_CMDS[@]}"; do

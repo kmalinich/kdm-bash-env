@@ -64,7 +64,7 @@ _truecolor_config() {
 	# if [[ "${COLOR_16M}" == "true" ]]; then
 	# 	# Physical console on Linux:
 	# 	# Disable true color (where as it would be enabled if connecting via SSH or the like)
-	# 	if tty 2> /dev/null | grep -Eq '^\/dev\/tty[0-9]$'; then
+	# 	if tty 2> /dev/null | grep -Eq '^/dev/tty[0-9]$'; then
 	# 		COLOR_16M="false"
 	# 	fi
 	# fi

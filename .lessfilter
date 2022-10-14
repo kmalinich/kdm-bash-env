@@ -68,16 +68,16 @@ fi
 
 
 # grep for node shebang, if it passes, set lexer to javascript
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.node' "${1}" && LEXER_OVERRIDE="javascript"
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.node' "${1}" && LEXER_OVERRIDE="javascript"
 
 # grep for php shebang, if it passes, set lexer to php
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.php.*' "${1}" && LEXER_OVERRIDE="php"
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.php.*' "${1}" && LEXER_OVERRIDE="php"
 
 # grep for python shebang, if it passes, set lexer to python
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.python.*' "${1}" && LEXER_OVERRIDE="python"
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.python.*' "${1}" && LEXER_OVERRIDE="python"
 
 # grep for sh-like shebang, if it passes, set lexer to sh
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*.\/bin.*.sh' "${1}" && LEXER_OVERRIDE="sh"
+[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.sh' "${1}" && LEXER_OVERRIDE="sh"
 
 
 # Shebang grep failed, try detecting based on mime type

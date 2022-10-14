@@ -416,7 +416,7 @@ _macos_system_profiler() {
 _macos_system_profiler_list() {
 	>&2 output blue "Available data types:"
 	>&2 echo
-	sudo system_profiler -listDataTypes | grep -Ev 'Available\ Datatypes:' | sed -e 's/^SP//g' -e 's/DataType$//g' | sort -df
+	sudo system_profiler -listDataTypes | grep -Ev 'Available Datatypes:' | sed -e 's/^SP//g' -e 's/DataType$//g' | sort -df
 }
 
 # E-Z copy file into pasteboard (clipboard)
