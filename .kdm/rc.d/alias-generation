@@ -11,41 +11,41 @@ _alias_linux_macos_setup() {
 	# Declare vars as local
 	local GREP_BASE LS_TIME_STYLE
 
-	# grep/ls config
+	# grep config
 	#     in a terminal : always enable/use color
 	# NOT in a terminal : disable color
-	#
-	# -s : suppress error messages
-	GREP_BASE="grep --color=if-tty -s"
+	GREP_BASE="grep --color=if-tty --no-messages"
 
-	alias grep=" ${GREP_BASE}"
-	alias egrep="${GREP_BASE} -E"
-	alias fgrep="${GREP_BASE} -F"
-	alias igrep="${GREP_BASE} -i"
-	alias rgrep="${GREP_BASE} -r"
-	alias vgrep="${GREP_BASE} -v"
+	alias grep="${GREP_BASE}"
+	alias egrep="${GREP_BASE} --extended-regexp" # -E
+	alias fgrep="${GREP_BASE} --fixed-strings"   # -F
+	alias igrep="${GREP_BASE} --ignore-case"     # -i
+	alias rgrep="${GREP_BASE} --recursive"       # -r
+	alias vgrep="${GREP_BASE} --invert-match"    # -v
 
 	if hash zgrep; then
-		alias zgrep=" z${GREP_BASE}"
-		alias zegrep="z${GREP_BASE} -E"
-		alias zfgrep="z${GREP_BASE} -F"
-		alias zigrep="z${GREP_BASE} -i"
-		alias zrgrep="z${GREP_BASE} -r"
-		alias zvgrep="z${GREP_BASE} -v"
+		alias zgrep="z${GREP_BASE}"
+		alias zegrep="z${GREP_BASE} --extended-regexp" # -E
+		alias zfgrep="z${GREP_BASE} --fixed-strings"   # -F
+		alias zigrep="z${GREP_BASE} --ignore-case"     # -i
+		alias zrgrep="z${GREP_BASE} --recursive"       # -r
+		alias zvgrep="z${GREP_BASE} --invert-match"    # -v
 	fi
 
 	if hash xzgrep; then
-		alias xzgrep=" xz${GREP_BASE}"
-		alias xzegrep="xz${GREP_BASE} -E"
-		alias xzfgrep="xz${GREP_BASE} -F"
-		alias xzigrep="xz${GREP_BASE} -i"
-		alias xzrgrep="xz${GREP_BASE} -r"
-		alias xzvgrep="xz${GREP_BASE} -v"
+		alias xzgrep="xz${GREP_BASE}"
+		alias xzegrep="xz${GREP_BASE} --extended-regexp" # -E
+		alias xzfgrep="xz${GREP_BASE} --fixed-strings"   # -F
+		alias xzigrep="xz${GREP_BASE} --ignore-case"     # -i
+		alias xzrgrep="xz${GREP_BASE} --recursive"       # -r
+		alias xzvgrep="xz${GREP_BASE} --invert-match"    # -v
 	fi
 
-	alias cgrep=' grep -s --color=always' # Force enable color
-	alias ncgrep='grep -s --color=never'  # Force disable color
+	alias cgrep='grep --no-messages --color=always' # Force enable color
+	alias ncgrep='grep --no-messages --color=never'  # Force disable color
 
+
+	# exa/ls config
 	if hash exa; then
 		export EXA_COLORS="da=38;5;255:uu=38;5;242:un=38;2;255;255;1"
 		export EXA_ICON_SPACING="2"
@@ -54,6 +54,7 @@ _alias_linux_macos_setup() {
 		LS_TIME_STYLE="+%Y-%m-%d %r"
 		alias ls="ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"
 	fi
+
 
 	# Sort by IP address octets
 	# .. fought to find this one for a long, long time

@@ -91,7 +91,7 @@ _prompt_exitcode() {
 	# _prompt_log "${FUNCNAME[0]}" "START"
 
 	# Declare vars as local
-	local ARRAY_CMD CMD ENV GRY RED STR WHT YLW
+	local ARRAY_CMD CMD ENV GRY RED STR YLW
 
 	# Return if we're not in a terminal
 	[[ "${BASH_INTERACTIVE}" ]] || return
@@ -105,9 +105,10 @@ _prompt_exitcode() {
 	# 253 : kdm-bash-env command noop
 	# 254 : kdm-bash-env command noop
 	case "${2}" in
-		0)   return ;;
-		127) return ;;
-		253) return ;;
+		0)   ;&
+		127) ;&
+		130) ;& # (128+SIGINT)
+		253) ;&
 		254) return ;;
 	esac
 
@@ -118,31 +119,30 @@ _prompt_exitcode() {
 	# cd, grep, history, or sourcing a file
 	ARRAY_CMD=("${1}")
 	case "${ARRAY_CMD[0]}" in
-		_g_*)         return ;;
-		_prompt_*)    return ;;
-		_show_clock*) return ;;
+		_g_*)         ;&
+		_prompt_*)    ;&
+		_show_clock*) ;&
+		cd)           ;&
+		grep)         ;&
+		history)
+			return
+			;;
 
-		cd)   return ;;
-		grep) return ;;
-
-		history) return ;;
-
-		.)      CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
-		source) CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}" ;;
+		.) ;&
+		source)
+			CMD="${ARRAY_CMD[0]} ${ARRAY_CMD[1]}"
+			;;
 
 		*) CMD="${ARRAY_CMD[0]}" ;;
 	esac
 
 	STR="%s${C_RST}"
 
-	ENV="${C_ENV}${STR}"
-	GRY="${C_GRY}${STR}"
+	GRY="${C_GRY_ITA}${STR}"
 	RED="${C_RED_BRT_BLD}${STR}"
-	WHT="${C_WHT_BRT}${STR}"
 	YLW="${C_YLW}${STR}"
 
-	ARRAY_CMD=("${1}")
-	printf "${GRY} ${RED} ${WHT} ${GRY}\\n" "${CMD}" "failed" ":" "${2}"
+	printf "${GRY} ${RED} ${GRY} ${YLW}\\n" "${CMD}" "FAILED" "- exit code" "${2}"
 
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_exitcode()
