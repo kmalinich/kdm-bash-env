@@ -9,8 +9,8 @@ $include /opt/homebrew/etc/inputrc
 
 # Allow UTF-8 input and output, instead of showing stuff like $'\0123\0456'
 set convert-meta off
-set input-meta   on
-set output-meta  on
+set input-meta   off
+set output-meta  off
 
 
 # Do not bell on tab-completion
@@ -112,6 +112,7 @@ set colored-stats on
 "\e[6~": history-search-forward
 
 
+
 # F5 : Reload ~/.inputrc
 "\e[15~": re-read-init-file
 
@@ -139,6 +140,15 @@ set colored-stats on
 
 # F__ : Single-quote the current or previous word
 # "\e[~": "\eb\'\ef\'"
+
+
+# Shift + left/right arrow : move backward/forward by a word
+"\e[1;2C": forward-word
+"\e[1;2D": backward-word
+
+# Option + left/right arrow : move backward/forward by a word
+"\e[1;9C": forward-word
+"\e[1;9D": backward-word
 
 
 # Option + c : Capitalize current word
