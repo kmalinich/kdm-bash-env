@@ -512,10 +512,10 @@ coc-eslint@>=1.5.8:
   resolved "https://registry.yarnpkg.com/coc-eslint/-/coc-eslint-1.5.8.tgz#2021e9142ff5a9470a53a23a772121f5299bc413"
   integrity sha512-EOdkh804CCouSGvbG9cRZopi+ZX3glAwwfTZPBSMkiM61qbmDtVNNoVO20gj22zUEc/tfu4df7Uh267W2hk1aA==
 
-coc-highlight@>=1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/coc-highlight/-/coc-highlight-1.3.0.tgz#63379d1bdbf9ee2e9db059f9009d8604644a8c0e"
-  integrity sha512-TBBQiFtYPXN7qWBmDi+FEWcLddON8s4rcEmQXUGE7uOfNysNKZ6yVUBCnJbS+n8S+7m5d3yqUyhoG5RUeHJxCg==
+coc-highlight@>=2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/coc-highlight/-/coc-highlight-2.0.3.tgz#9fffe36dbe577ce0c6f33becb6cbd91aa04fe244"
+  integrity sha512-1KbEdEHul9QZCn2uzW2GotzzkywBXpfP7K6ojxBcQBH2qqjvqjOkv1Ox5I+QAQSdF1F6bLI8056Sn7bXQx+8PQ==
 
 coc-html@>=1.7.0:
   version "1.7.0"
@@ -566,10 +566,10 @@ coc-svg@>=0.0.13:
     vscode-languageserver-protocol "^3.15.0-next.1"
     vscode-uri "^1.0.6"
 
-coc-tsserver@>=1.11.11:
-  version "1.11.11"
-  resolved "https://registry.yarnpkg.com/coc-tsserver/-/coc-tsserver-1.11.11.tgz#66e7bca46c0bec63601e10005da92f89c6329d73"
-  integrity sha512-gg8muOoV54D4IawMSGIVgLGevyMD6K0U8TYc4xFMjZt9bvuv5fkeLXxxH+yAfmtFXVmFWSrCAff1gPibnIPOvw==
+coc-tsserver@>=1.11.12:
+  version "1.11.12"
+  resolved "https://registry.yarnpkg.com/coc-tsserver/-/coc-tsserver-1.11.12.tgz#bcda5eed2ad93bf925fcc176d8b58aed04b5a587"
+  integrity sha512-pffJc102a8HRp9H7h4nyLUoQE9ZToWvx+lSTrFTbSgO9EKceGrUCdTBOryonbdhA1C7CPq9dDMJERlqH4XHdfQ==
   dependencies:
     typescript "^4.8.3"
 
