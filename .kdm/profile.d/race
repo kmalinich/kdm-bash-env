@@ -6,14 +6,15 @@ export TIMEFORMAT_RACE="true"
 
 echo "File name,Time elapsed"
 
-mapfile -t ARRAY_FILES < <(find . -maxdepth 1 -type f -executable | sort)
+mapfile -t ARRAY_FILES < <(find "${HOME}/.kdm/profile.d" -maxdepth 1 -type f -executable | sort)
 
 for FILE_NAME in "${ARRAY_FILES[@]}"; do
-	echo -n "${FILE_NAME//\.\//},"
+	echo -n "${FILE_NAME//$HOME\/\.kdm\/profile\.d\//},"
 
-	export TIMEFORMAT='%3R'
-	# shellcheck disable=SC1090
-	time . "${FILE_NAME}"
+	TIME_START="$(date '+%s%N')"
+	. "${FILE_NAME}"
+	TIME_END="$(date '+%s%N')"
+	echo "${TIME_START},${TIME_END},$((TIME_END-TIME_START)) ns"
 done
 
 export TIMEFORMAT="${TIMEFORMAT_OLD}"
