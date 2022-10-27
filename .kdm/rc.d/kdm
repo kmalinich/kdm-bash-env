@@ -223,13 +223,13 @@ _kdm_update() {
 		((WAIT_COUNT++))
 	done
 
-	output keyval-g "[kdm-update][main]" "Submodule pull complete"
+	output keyval-g "[kdm-update][subm][pull]" "Complete"
 
-	output keyval-c "[kdm-update][main]" "Submodule status"
+	output keyval-c "[kdm-update][subm][stat]" "Status"
 	git submodule
 	echo
 
-	output keyval-c "[kdm-update][main]" "Repo status"
+	output keyval-c "[kdm-update][main][stat]" "Status"
 	git status
 	echo
 
@@ -298,7 +298,7 @@ _kdm_update() {
 		fi
 
 		if [[ "$((WAIT_COUNT%15))" == "0" ]]; then
-			output keyval-r "[kdm-update][main]" "Waited on submodule garbage collection for ${WAIT_COUNT} seconds"
+			output keyval-r "[kdm-update][main][wait]" "Waited on submodule garbage collection for ${WAIT_COUNT} seconds"
 		fi
 
 		sleep 1
