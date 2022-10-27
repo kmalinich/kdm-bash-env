@@ -59,7 +59,7 @@ _net_webserver() {
 	USAGE_STRING="net-webserver <${USAGE_OPTIONS_STRING}>"
 	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
 
-	WEBSERVER_PID="$(pgrep -f 'ComplexHTTPServer' 2> /dev/null)"
+	WEBSERVER_PID="$(pgrep -U "${UID}" -f 'ComplexHTTPServer' 2> /dev/null)"
 
 	WEBSERVER_PORT="8192"
 
@@ -79,7 +79,7 @@ _net_webserver() {
 			# Start webserver
 			{ python3 -m ComplexHTTPServer "${WEBSERVER_PORT}" &> /dev/null & disown; }
 
-			WEBSERVER_PID="$(pgrep -f 'ComplexHTTPServer' 2> /dev/null)"
+			WEBSERVER_PID="$(pgrep -U "${UID}" -f 'ComplexHTTPServer' 2> /dev/null)"
 
 			output green "Webserver started (PID ${WEBSERVER_PID}) on port ${WEBSERVER_PORT}, serving directory '${PWD}'"
 			;;

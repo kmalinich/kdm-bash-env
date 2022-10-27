@@ -165,15 +165,17 @@ _kdm_update() {
 		return 1
 	fi
 
+	output keyval-y "[kdm-update][main][pull]" "Begin"
+
 	{
 		git fetch --all --prune
 		git pull        --prune
 	} > /dev/null 2>&1
 
-	output keyval-g "[kdm-update][main]" "Pull complete"
+	output keyval-g "[kdm-update][main][pull]" "Complete"
 
 
-	output keyval-y "[kdm-update][main]" "Begin submodule pull"
+	output keyval-y "[kdm-update][subm][pull]" "Begin"
 
 	# Determine half of CPU core count
 	CORE_COUNT="$(nproc)"
@@ -182,13 +184,13 @@ _kdm_update() {
 	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
 	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
 		# Wait to launch another Git process if number running Git processes exceeds half of CPU core count
-		SUBMODULE_PROC_COUNT="$(pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
+		SUBMODULE_PROC_COUNT="$(pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
 
 		while [[ "${SUBMODULE_PROC_COUNT}" -ge "${SUBMODULE_PROC_LIMIT}" ]]; do
 			output keyval-o "[kdm-update][subm][wait]" "${SUBMODULE}"
 			sleep 1
 
-			SUBMODULE_PROC_COUNT="$(pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
+			SUBMODULE_PROC_COUNT="$(pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
 		done
 
 		_kdm_update_submodule "${SUBMODULE}" pull &
@@ -206,14 +208,14 @@ _kdm_update() {
 		WAIT_LIMIT="600"
 	fi
 
-	while pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
+	while pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
 		if [[ "${WAIT_COUNT}" -gt "${WAIT_LIMIT}" ]]; then
 			output error "Waiting for submodule pull to complete took too long"
 			return 3
 		fi
 
 		if [[ "$((WAIT_COUNT%15))" == "0" ]]; then
-			output keyval-r "[kdm-update][main]" "Waited on submodule pull for ${WAIT_COUNT} seconds"
+			output keyval-r "[kdm-update][main][wait]" "Waited on submodule pull for ${WAIT_COUNT} seconds"
 		fi
 
 		sleep 1
@@ -274,12 +276,12 @@ _kdm_update() {
 	mapfile -t ARRAY_SUBMODULES < <(git submodule | awk '{print $2}')
 	for SUBMODULE in "${ARRAY_SUBMODULES[@]}"; do
 		# Wait to launch another Git process if number running Git processes exceeds half of CPU core count
-		SUBMODULE_PROC_COUNT="$(pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
+		SUBMODULE_PROC_COUNT="$(pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
 
 		while [[ "${SUBMODULE_PROC_COUNT}" -ge "${SUBMODULE_PROC_LIMIT}" ]]; do
 			output keyval-o "[kdm-update][subm][wait]" "${SUBMODULE}"
 			sleep 1
-			SUBMODULE_PROC_COUNT="$(pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
+			SUBMODULE_PROC_COUNT="$(pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' | wc -l)"
 		done
 
 		_kdm_update_submodule "${SUBMODULE}" gc &
@@ -289,7 +291,7 @@ _kdm_update() {
 
 	# Wait for Git processes to complete
 	WAIT_COUNT="0"
-	while pgrep -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
+	while pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)' > /dev/null 2>&1; do
 		if [[ "${WAIT_COUNT}" -gt "${WAIT_LIMIT}" ]]; then
 			output error "Waiting for submodule garbage collection to complete took too long"
 			return 4

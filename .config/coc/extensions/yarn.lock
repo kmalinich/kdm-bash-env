@@ -524,10 +524,10 @@ coc-html@>=1.7.0:
   dependencies:
     typescript "^4.3"
 
-coc-json@>=1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/coc-json/-/coc-json-1.6.1.tgz#0e8c791a068cea6efdbc20404ae356faefe17573"
-  integrity sha512-qRDwaa4PZUb7q0N/oGoUrhKeo+5A9haYggOkUjx3SMPMWh2Pxsck5eftZzyUgLZDh/fabrYP7kBYE9+n7u4gnw==
+coc-json@>=1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/coc-json/-/coc-json-1.7.0.tgz#2d9558098f0a8075be7ef68ccd5e9c397022c8d2"
+  integrity sha512-3JoOzhzNsECYuxLbFnXtpDMEX6FtEEvZCnFowPrE7z3v1dNj6uumwMveqdLvg4qagAPOVVV/gaddDLDQmkwb3w==
 
 coc-markdownlint@>=1.26.0:
   version "1.26.0"

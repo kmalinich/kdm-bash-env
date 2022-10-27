@@ -1,6 +1,16 @@
 # kdm bash-env
 # .inputrc
 
+# Cheatsheet
+#
+# https://man.archlinux.org/man/readline.3
+#
+# `bind -l`  : List names of functions
+# `bind -p`  : List functions      and bindings
+# `bind -v`  : List variable names and values
+# `sed -n l` : See actual character input coming into the terminal
+
+
 # Include global inputrc files
 $include /etc/inputrc
 $include /usr/local/etc/inputrc
@@ -18,10 +28,10 @@ set bell-style none
 
 # Enable tab-completion regardless of filename case
 set completion-ignore-case on
-
+# Treats hyphens (-) and underscores (_) as equivalent when performing case-insensitive filename matching and completion
+set completion-map-case on
 # Common prefixes longer than 5 are replaced with an ellipsis when displaying possible completions
-set completion-prefix-display-length 5
-
+set completion-prefix-display-length 6
 # Enable returning up to 500 tab-completions without having to be asked
 set completion-query-items 500
 
@@ -31,12 +41,14 @@ set expand-tilde off
 # Scroll text horizontally on a single line when longer than the width of the screen, instead of wrapping onto a new line
 # set horizontal-scroll-mode on
 
+# Display the common prefix of the list of possible completions (which may be empty) before cycling through the list
+set menu-complete-display-prefix on
+
 # Attempt to place the cursor position at the same location on each history line retrieved with previous-history or next-history
 set history-preserve-point on
 
 # Tab-completed directory names have a slash appended
 set mark-directories on
-
 # Immediately add a trailing slash when tab-completing symlinks to directories
 set mark-symlinked-directories on
 
@@ -52,7 +64,6 @@ set print-completions-horizontally off
 # Only require single tab key press for tab-completion
 # (Default is double tab key press)
 set show-all-if-ambiguous on
-
 # Words which have more than one possible completion without any possible partial completion (the possible completions don't share a common prefix)
 # cause the matches to be listed immediately instead of ringing the bell
 set show-all-if-unmodified on
@@ -66,11 +77,10 @@ set show-all-if-unmodified on
 # (This is supported by the Readline used by Bash 4)
 set skip-completed-text on
 
-# Suffix each returned file tab-completion with a character denoting its type
-set visible-stats on
-
 # Colored file types
 set colored-stats on
+# Suffix each returned file tab-completion with a character denoting its type
+set visible-stats on
 
 
 # The below keys are configured with this setup in mind:
@@ -102,6 +112,9 @@ set colored-stats on
 #            F18 : \e[32~
 #            F19 : \e[33~
 
+
+"\t": menu-complete
+
 # Delete-forward : Delete following character
 "\e[3~": delete-char
 
@@ -110,7 +123,6 @@ set colored-stats on
 
 # Page down : Move forwards through completion history
 "\e[6~": history-search-forward
-
 
 
 # F5 : Reload ~/.inputrc
@@ -149,6 +161,9 @@ set colored-stats on
 # Option + left/right arrow : move backward/forward by a word
 "\e[1;9C": forward-word
 "\e[1;9D": backward-word
+
+# Space + shift : Just do a space
+"\e[32;2u": " "
 
 
 # Option + c : Capitalize current word
