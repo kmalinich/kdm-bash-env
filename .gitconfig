@@ -1,5 +1,4 @@
 [include]
-	path = ~/.gitconfig.d/safe
 	path = ~/.gitconfig.d/alias
 	path = ~/.gitconfig.d/apply
 	path = ~/.gitconfig.d/color
