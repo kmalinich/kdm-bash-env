@@ -42,7 +42,7 @@ set expand-tilde off
 # set horizontal-scroll-mode on
 
 # Display the common prefix of the list of possible completions (which may be empty) before cycling through the list
-set menu-complete-display-prefix on
+# set menu-complete-display-prefix off
 
 # Attempt to place the cursor position at the same location on each history line retrieved with previous-history or next-history
 set history-preserve-point on
@@ -113,7 +113,7 @@ set visible-stats on
 #            F19 : \e[33~
 
 
-"\t": menu-complete
+#"\t": menu-complete
 
 # Delete-forward : Delete following character
 "\e[3~": delete-char
