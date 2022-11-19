@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+UPDATE_REQUIRED="true"
 PKG_MANAGER="yarn"
 
 
@@ -14,9 +15,11 @@ done
 
 
 cd "${HOME}/.config/coc/extensions" || exit 1
+
 echo "Checking for updates"
 if ncu --errorLevel 2 --loglevel silent --packageManager "${PKG_MANAGER}" --upgrade; then
-	echo "No update needed"
+	echo "No update required"
+	UPDATE_REQUIRED="false"
 fi
 
 echo "Formatting/sorting package.json"
@@ -24,5 +27,6 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force --verbose "${FILE_TEMP}" ./package.json
 
+[[ "${UPDATE_REQUIRED}" == "false" ]] && exit 0
 
 ~/.config/coc/extensions/install

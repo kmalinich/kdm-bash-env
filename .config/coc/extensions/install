@@ -3,7 +3,7 @@
 PKG_MANAGER="yarn"
 
 
-ARRAY_DEPS=(jq ncu "${PKG_MANAGER}")
+ARRAY_DEPS=("${PKG_MANAGER}")
 
 for DEP in "${ARRAY_DEPS[@]}"; do
 	if ! hash "${DEP}" > /dev/null 2>&1; then
