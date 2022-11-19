@@ -312,6 +312,11 @@ ansi-regex@^5.0.1:
   resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-5.0.1.tgz#082cb2c89c9fe8659a311a53bd6a4dc5301db304"
   integrity sha512-quJQXlTSUGL2LH9SUXo8VwsY4soanhgo6LNSm84E1LBcE8s3O0wpdiRzyR9z/ZZJMlMWv37qOOb9pdJlMUEKFQ==
 
+ansi-regex@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/ansi-regex/-/ansi-regex-6.0.1.tgz#3183e38fae9a65d7cb5e53945cd5897d0260a06a"
+  integrity sha512-n5M855fKb2SsfMIiFFoVrABHJC8QtHwVx+mHWP3QcEqBHYienj5dHSgjbxtC0WEZXYt4wcD6zrQElDPhFuZgfA==
+
 ansi-styles@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-3.2.1.tgz#41fbb20243e50b12be0f04b8dedbf07520ce841d"
@@ -492,15 +497,15 @@ coa@^2.0.2:
     chalk "^2.4.1"
     q "^1.1.2"
 
-coc-css@>=1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/coc-css/-/coc-css-1.3.0.tgz#9fb85490b203dd1d3960d4cadc29b8b97178ef3f"
-  integrity sha512-adpUCwj1sFK+6RFXVDUYZe3oC+I1dre4XoWVZY7H05Fn7r7sa5QbpQ/F+kIce2sveQbsVoLTR7mfr18wH7Ru+w==
+coc-css@>=2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/coc-css/-/coc-css-2.0.0.tgz#1c9a842f60c7641c2eb281500cd4c83f2989eced"
+  integrity sha512-KJUI4hDa5dOfWHcWSJnRYs989cVT3B8nIALCtG+gyjNkP0ElhGc2xw38x9FlOOGDRt1+kezBV6c/jE4M+uqt5A==
 
-coc-diagnostic@>=0.23.4:
-  version "0.23.4"
-  resolved "https://registry.yarnpkg.com/coc-diagnostic/-/coc-diagnostic-0.23.4.tgz#9099e65c2077cd801d139f93897be08862796c73"
-  integrity sha512-XaA+RgnSMLmGpJnXLGWZCH5sONP80uYLpzNlwObMvs0AOuN3vXsu7qTE90qc5Jt/S6RIkF+u/XGDVb/z51E12g==
+coc-diagnostic@>=0.23.5:
+  version "0.23.5"
+  resolved "https://registry.yarnpkg.com/coc-diagnostic/-/coc-diagnostic-0.23.5.tgz#a67fde07a2d59138f647c420e61ef93bb36cdb7d"
+  integrity sha512-aomP0EWLWxcVjpDKJrnYXNRhZGiqc4kG3GDGAEeiPSYBUOvRkppNROAj7Tme3hZ7AO4+VMOCemO/d4sgGUZwkA==
 
 coc-eslint8@>=2.0.0:
   version "2.0.0"
@@ -512,15 +517,15 @@ coc-eslint@>=1.5.8:
   resolved "https://registry.yarnpkg.com/coc-eslint/-/coc-eslint-1.5.8.tgz#2021e9142ff5a9470a53a23a772121f5299bc413"
   integrity sha512-EOdkh804CCouSGvbG9cRZopi+ZX3glAwwfTZPBSMkiM61qbmDtVNNoVO20gj22zUEc/tfu4df7Uh267W2hk1aA==
 
-coc-highlight@>=2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/coc-highlight/-/coc-highlight-2.0.3.tgz#9fffe36dbe577ce0c6f33becb6cbd91aa04fe244"
-  integrity sha512-1KbEdEHul9QZCn2uzW2GotzzkywBXpfP7K6ojxBcQBH2qqjvqjOkv1Ox5I+QAQSdF1F6bLI8056Sn7bXQx+8PQ==
+coc-highlight@>=2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/coc-highlight/-/coc-highlight-2.0.4.tgz#cb850b15b8096d20f77818faf5e7373e242cdcdb"
+  integrity sha512-X6VGCqpDML0oRcyH77ANoQ0BAxEsQqVMB9OPbfXB/nSdN3xcO8+M1hNSJm4pBekvywxm6VQUsh/zFD4V55nxLw==
 
-coc-html@>=1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/coc-html/-/coc-html-1.7.0.tgz#de4a312ba8d7f20322a6bfac3ec3352de682e270"
-  integrity sha512-ywRthVmeX9gI1lAORorS8MjNiqfSi9mMNRRwTWe6b+GyzriabMhyCej+RNhHV1gcPNRLqlhy+j3ncHv+m5seKg==
+coc-html@>=1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/coc-html/-/coc-html-1.8.0.tgz#d59063882d65e4b8fb59a8c31869d2032b85590e"
+  integrity sha512-NXmTfHF/TxysUeSstDyLUcfv6LlK08PnltVZCe1J7XpG/QHRRq0sjhkNqkHJVfFT/Vo2NC4lv5Bc9UIWdjGGuw==
   dependencies:
     typescript "^4.3"
 
@@ -566,22 +571,23 @@ coc-svg@>=0.0.13:
     vscode-languageserver-protocol "^3.15.0-next.1"
     vscode-uri "^1.0.6"
 
-coc-tsserver@>=1.11.12:
-  version "1.11.12"
-  resolved "https://registry.yarnpkg.com/coc-tsserver/-/coc-tsserver-1.11.12.tgz#bcda5eed2ad93bf925fcc176d8b58aed04b5a587"
-  integrity sha512-pffJc102a8HRp9H7h4nyLUoQE9ZToWvx+lSTrFTbSgO9EKceGrUCdTBOryonbdhA1C7CPq9dDMJERlqH4XHdfQ==
+coc-tsserver@>=2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/coc-tsserver/-/coc-tsserver-2.0.2.tgz#4dbaf19a2fddeba0df2c8b01d438861641ae8be6"
+  integrity sha512-Dga0vMrawXAWyLOQssoIDJ+4k445HI/asFEOLaCMLczYtNuPuCLllIPOoXQf3QlQolkb/LJVOusrnIn5hqEz8A==
   dependencies:
-    typescript "^4.8.3"
+    strip-ansi "^7.0.1"
+    typescript "^4.8.4"
 
 coc-xml@>=1.14.1:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/coc-xml/-/coc-xml-1.14.1.tgz#ed77673256a6297c6af0c9f0554338da06f42b6d"
   integrity sha512-AW3VpWbRWxHOEVz/uhynp0dmOud51uDhqQQPxTHFqRlIjHoxwnZXC6Cr7ZYrm9A7ybX+C4LWfOKwD+8IH23GkQ==
 
-coc-yaml@>=1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/coc-yaml/-/coc-yaml-1.8.0.tgz#07967894819053738901ddb0f957a9d18dc96459"
-  integrity sha512-ttTi8SSoFPcKOWgY7H7E91zOYcycfsZdvA7jmZJOr+iWYGqR2LdvMvBpWpuV7oWSOF5a88zM/vb8P8aNefE04Q==
+coc-yaml@>=1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/coc-yaml/-/coc-yaml-1.9.0.tgz#7947b2108af0d122bd2814228e77314da38d6bd0"
+  integrity sha512-3O5E/9qSIjxMfilrLTElmRk1drBr1ot2+1KTOKjFIBeQphi4QBvnDbtGtqMCy5odMowe6HbAeo7aIran6e4rGw==
   dependencies:
     prettier "2.0.5"
 
@@ -2102,6 +2108,13 @@ strip-ansi@^6.0.0, strip-ansi@^6.0.1:
   dependencies:
     ansi-regex "^5.0.1"
 
+strip-ansi@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-7.0.1.tgz#61740a08ce36b61e50e65653f07060d000975fb2"
+  integrity sha512-cXNxvT8dFNRVfhVME3JAe98mkXDYN2O1l7jmcwMnOslDeESg1rF/OZMtK0nRAhiari1unG5cD4jG3rapUAkLbw==
+  dependencies:
+    ansi-regex "^6.0.1"
+
 strip-indent@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/strip-indent/-/strip-indent-3.0.0.tgz#c32e1cee940b6b3432c771bc2c54bcce73cd3001"
@@ -2302,10 +2315,15 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^4.3, typescript@^4.8.3:
+typescript@^4.3:
   version "4.8.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.8.4.tgz#c464abca159669597be5f96b8943500b238e60e6"
   integrity sha512-QCh+85mCy+h0IGff8r5XWzOVSbBO+KfeYrMQh7NJ58QujwcE22u+NUSmUxqF+un70P9GXKxa2HCNiTTMJknyjQ==
+
+typescript@^4.8.4:
+  version "4.9.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.3.tgz#3aea307c1746b8c384435d8ac36b8a2e580d85db"
+  integrity sha512-CIfGzTelbKNEnLpLdGFgdyKhG23CKdKgQPOBc+OUNrkJ2vr+KSzsSV5kq5iWhEQbok+quxgGzrAtGWCyU7tHnA==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
