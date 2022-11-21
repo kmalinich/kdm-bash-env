@@ -38,8 +38,8 @@ echo; echo
 
 echo "Fixing coc-svg svgo dependency symlink"
 ln -fs "${HOME}/.config/coc/extensions/node_modules/svgo" "${HOME}/.config/coc/extensions/node_modules/coc-svg/node_modules/svgo"
-echo;echo
+#echo;echo
 
 
-echo "Performing nvim CocUpdateSync"
-nvim -c 'CocUpdateSync|q'
+#echo "Performing nvim CocUpdateSync"
+#nvim -c 'CocUpdateSync|q'
