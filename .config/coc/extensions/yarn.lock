@@ -571,10 +571,10 @@ coc-svg@>=0.0.13:
     vscode-languageserver-protocol "^3.15.0-next.1"
     vscode-uri "^1.0.6"
 
-coc-tsserver@>=2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/coc-tsserver/-/coc-tsserver-2.0.2.tgz#4dbaf19a2fddeba0df2c8b01d438861641ae8be6"
-  integrity sha512-Dga0vMrawXAWyLOQssoIDJ+4k445HI/asFEOLaCMLczYtNuPuCLllIPOoXQf3QlQolkb/LJVOusrnIn5hqEz8A==
+coc-tsserver@>=2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/coc-tsserver/-/coc-tsserver-2.0.3.tgz#e49f66ee554bf72e94d900f9f896448cfdba8b3b"
+  integrity sha512-WWFpe2Nahkh1AZMAM+y4eX6or9rDcubzqh5IIhNddoST795PX9JDxO+PKtzVUp8pz9xW9hUvVot0mQLZhguGjA==
   dependencies:
     strip-ansi "^7.0.1"
     typescript "^4.8.4"
