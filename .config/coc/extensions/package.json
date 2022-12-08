@@ -13,10 +13,9 @@
 		"coc-stylelintplus": ">=1.5.0",
 		"coc-svg": ">=0.0.13",
 		"coc-tsserver": ">=2.0.3",
-		"coc-xml": ">=1.14.1",
 		"coc-yaml": ">=1.9.0"
 	},
 	"disabled": [],
-	"lastUpdate": 1669051394941,
+	"lastUpdate": 1670435914789,
 	"locked": []
 }
