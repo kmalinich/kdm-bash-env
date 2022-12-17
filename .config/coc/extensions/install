@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 
-PKG_MANAGER="yarn"
-
-
-ARRAY_DEPS=("${PKG_MANAGER}")
+ARRAY_DEPS=(jq npm yarn)
 
 for DEP in "${ARRAY_DEPS[@]}"; do
 	if ! hash "${DEP}" > /dev/null 2>&1; then
@@ -14,32 +11,28 @@ done
 
 
 cd "${HOME}/.config/coc/extensions" || exit 2
-echo "Executing '${PKG_MANAGER} install' in ~/.config/coc/extensions"
-"${PKG_MANAGER}" install --ignore-engines --network-concurrency 8 --non-interactive
+echo "Executing 'npm install' in ~/.config/coc/extensions"
+npm install --install-strategy=shallow --ignore-scripts --no-bin-links --no-package-lock --omit=dev
 echo; echo
 
-cd "${HOME}/.config/coc/extensions/node_modules/coc-json" || exit 3
-echo "Executing '${PKG_MANAGER} install' in ~/.config/coc/extensions/node_modules/coc-json"
-rm -f ./package-lock.json > /dev/null 2>&1
-"${PKG_MANAGER}" install --ignore-scripts --ignore-engines --network-concurrency "$(nproc)" --non-interactive
-echo; echo
-
-cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 4
-echo "Executing '${PKG_MANAGER} install' in ~/.config/coc/extensions/node_modules/coc-yaml"
-rm -f ./package-lock.json > /dev/null 2>&1
-"${PKG_MANAGER}" install --ignore-scripts --ignore-engines --network-concurrency "$(nproc)" --non-interactive
-echo; echo
+#cd "${HOME}/.config/coc/extensions/node_modules/coc-json" || exit 3
+#echo "Executing 'yarn install' in ~/.config/coc/extensions/node_modules/coc-json"
+#rm -f ./package-lock.json > /dev/null 2>&1
+#yarn install --ignore-scripts --ignore-engines --network-concurrency "$(nproc)" --non-interactive
+#echo; echo
+#
+#cd "${HOME}/.config/coc/extensions/node_modules/coc-yaml" || exit 4
+#echo "Executing 'yarn install' in ~/.config/coc/extensions/node_modules/coc-yaml"
+#rm -f ./package-lock.json > /dev/null 2>&1
+#yarn install --ignore-scripts --ignore-engines --network-concurrency "$(nproc)" --non-interactive
+#echo; echo
 
 cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 5
-echo "Executing '${PKG_MANAGER} install' in ~/.vim/pack/kdm/coc.nvim"
+echo "Executing 'yarn install' in ~/.vim/pack/kdm/coc.nvim"
 rm -f ./package-lock.json > /dev/null 2>&1
-"${PKG_MANAGER}" install --frozen-lockfile --network-concurrency "$(nproc)" --non-interactive
+yarn install --frozen-lockfile --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
-echo "Fixing coc-svg svgo dependency symlink"
-ln -fs "${HOME}/.config/coc/extensions/node_modules/svgo" "${HOME}/.config/coc/extensions/node_modules/coc-svg/node_modules/svgo"
+#echo "Fixing coc-svg svgo dependency symlink"
+#ln -fs "${HOME}/.config/coc/extensions/node_modules/svgo" "${HOME}/.config/coc/extensions/node_modules/coc-svg/node_modules/svgo"
 #echo;echo
-
-
-#echo "Performing nvim CocUpdateSync"
-#nvim -c 'CocUpdateSync|q'
