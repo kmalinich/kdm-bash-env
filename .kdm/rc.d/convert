@@ -2,18 +2,6 @@
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && o k "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
-
-# Convert squid timestamps to human date and time
-_convert_squid_timestamp() {
-	# Declare vars as local
-	local USAGE_STRING
-
-	USAGE_STRING="convert-squid-timestamp <squid log timestamp>"
-	[[ -z "${1}" ]] && o u "${USAGE_STRING}" && return
-
-	echo "${1}" | perl -p -e 's/^([0-9]*)/"[".localtime($1)."]"/e'
-}
-
 # Convert hexadecimal<->decimal
 dechex() {
 	# Declare vars as local
@@ -90,8 +78,6 @@ dechex() {
 
 
 # Function aliases
-alias convert-squid-timestamp='_convert_squid_timestamp'
-
 alias hexdec='dechex'
 
 

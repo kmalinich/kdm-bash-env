@@ -27,73 +27,6 @@ _macos_hostname() {
 }
 
 
-_itunes_cmd() {
-	osascript -e 'tell application "iTunes"' -e "${1}" -e 'end tell' 2> /dev/null
-}
-
-_itunes_get() {
-	osascript -e 'tell application "iTunes"' -e "get ${1} of current track" -e 'end tell' 2> /dev/null
-}
-
-# iTunes control
-_macos_itunes_control() {
-	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS USAGE_OPTIONS_STRING USAGE_STRING
-
-	# Array of options
-	ARRAY_USAGE_OPTIONS=(
-	next
-	pause
-	play
-	prev
-	)
-
-	# Create variable of pipe-separated options from array
-	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
-
-	USAGE_STRING="itunes <${USAGE_OPTIONS_STRING}>"
-
-	case "${1}" in
-		pause|play) _itunes_cmd "playpause"  && output green "Playback toggled" ;;
-		next)       _itunes_cmd "next track" && output green "Skipped next"     ;;
-		prev)       _itunes_cmd "back track" && output green "Skipped previous" ;;
-
-		*)
-			output usage "${USAGE_STRING}"
-			return
-	esac
-
-	_macos_itunes
-}
-
-# iTunes information
-_macos_itunes() {
-	# Declare vars as local
-	local ITUNES_ALBUM ITUNES_ARTIST ITUNES_KIND ITUNES_NA ITUNES_NAME ITUNES_STATE
-
-	ITUNES_ALBUM="$( _itunes_get 'album')"
-	ITUNES_ARTIST="$(_itunes_get 'artist')"
-	ITUNES_KIND="$(  _itunes_get 'kind')"
-	ITUNES_NAME="$(  _itunes_get 'name')"
-	ITUNES_STATE="$( _itunes_get 'album')"
-
-	ITUNES_NA="Not available"
-
-	[[ -z "${ITUNES_ALBUM}"  ]] && ITUNES_ALBUM="${ITUNES_NA}"
-	[[ -z "${ITUNES_ARTIST}" ]] && ITUNES_ARTIST="${ITUNES_NA}"
-	[[ -z "${ITUNES_KIND}"   ]] && ITUNES_KIND="${ITUNES_NA}"
-	[[ -z "${ITUNES_NAME}"   ]] && ITUNES_NAME="${ITUNES_NA}"
-	[[ -z "${ITUNES_STATE}"  ]] && ITUNES_STATE="${ITUNES_NA}"
-
-	output purple "--------= Currently ${ITUNES_STATE} =--------"
-	echo
-
-	output kv "  Name" "${ITUNES_NAME-Nothing}"
-	output kv "Artist" "${ITUNES_ARTIST-Nothing}"
-	output kv " Album" "${ITUNES_ALBUM-Nothing}"
-	output kv "  Kind" "${ITUNES_KIND-Nothing}"
-}
-
 # Fake lsusb function
 _macos_lsusb() {
 	# Check dependencies
@@ -266,43 +199,6 @@ _macos_volume() {
 	# {
 	# 	afplay "${VOLUME_SOUND_EFFECT}" & disown
 	# } &> /dev/null
-}
-
-# Reset all Office Mac 2011 files
-_macos_fix_office_2011() {
-	# Declare vars as local
-	local ARRAY_RESET_FILES PTH_AS PTH_CHE PTH_LIB PTH_PRF RESET_YN
-
-	# Check if they're sure
-	read -r -p "Are you sure? [Y/n] " RESET_YN
-	echo
-	[[ "${RESET_YN}" == [Nn] ]] && output purple "No changes" && return
-
-	PTH_LIB="${HOME}/Library"
-	PTH_AS="${PTH_LIB}/Application Support"
-	PTH_CHE="${PTH_LIB}/Caches"
-	PTH_PRF="${PTH_LIB}/Preferences"
-
-	ARRAY_RESET_FILES=(
-	"${HOME}/Documents/Microsoft User Data"
-	"${PTH_AS}/CrashReporter/Microsoft"*
-	"${PTH_AS}/Microsoft"
-	"${PTH_AS}/com.apple.sharedfilelist/com.apple.LSSharedFileList.ApplicationRecentDocuments/com.microsoft."*
-	"${PTH_CHE}/Microsoft"
-	"${PTH_CHE}/com.apple.helpd/Generated/com.microsoft."*
-	"${PTH_CHE}/com.apple.helpd/SDMHelpData/Other/English/HelpSDMIndexFile/com.microsoft."*
-	"${PTH_CHE}/com.microsoft."*
-	"${PTH_PRF}/Microsoft"
-	"${PTH_PRF}/com.microsoft."*
-	)
-
-	output red "Resetting all Microsoft Office data"
-	rm -rf "${ARRAY_RESET_FILES[@]}"
-
-	defaults delete com.microsoft.Outlook &> /dev/null
-	killall -9 cfprefsd                   &> /dev/null
-
-	output green "Complete; you should reboot, preferably"
 }
 
 # Show listening ports a bit easier
@@ -504,22 +400,10 @@ alias sleep-system="osascript -e 'tell app \"System Events\" to sleep'"
 # 19 : ?
 # 20 : ?
 # 21 : Monterey
+# 22 : Ventura
 case "${UNAME_KERNEL_RELEASE%%.*}" in
-	1[4-5])
-		# Fix disk permissions
-		alias fix-diskperms="sudo repair_packages --repair --standard-pkgs /; sudo chown -R \${USER} /usr/local"
-		;;
-esac
-
-case "${UNAME_KERNEL_RELEASE%%.*}" in
-	1[1-4])
-		# Flush DNS cache
-		alias fix-dns="sudo killall -HUP mDNSResponder; echo | sudo tee -a /etc/hosts; sudo sed -i '$ d' /etc/hosts"
-		alias fix-diskperms="sudo diskutil repairPermissions /; sudo chown -R \${USER} /usr/local"
-		;;
-
 	1[5-9]) ;&
-	2[0-2])
+	2[0-3])
 		# Enable and disable indexing
 		alias indexing-enable=' sudo mdutil -a -i on'
 		alias indexing-disable='sudo mdutil -a -i off'
@@ -535,16 +419,10 @@ alias copy='_macos_pb_copy'
 
 alias hostname-macos='_macos_hostname'
 
-alias itunes-control='_macos_itunes_control'
-
-alias itunes='_macos_itunes'
-
 alias net-listening='_macos_net_listening'
 
 alias notify='      _macos_notify'
 alias notify-macos='_macos_notify'
-
-alias fix-office-2011='_macos_fix_office_2011'
 
 alias scutil-set='_macos_scutil_set'
 

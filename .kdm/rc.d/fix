@@ -3,72 +3,6 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
-# Fix hung java processes
-_fix_hung_java() {
-	# Declare vars as local
-	local JAVA_PIDS
-
-	mapfile -t JAVA_PIDS < <(ps -ef | awk '/[j]ava/ {print $2}')
-	[[ -z "${JAVA_PIDS[0]}" ]] && output yellow "No Java PIDs detected" && return
-
-	for JAVA_PID in "${JAVA_PIDS[@]}"; do
-		if ! kill -9 "${JAVA_PID}" &> /dev/null; then
-			output red "Failed to kill Java PID '${JAVA_PID}'"
-		else
-			output green "Killed Java PID '${JAVA_PID}'"
-		fi
-	done
-}
-
-# Stale bash threads fix
-# shellcheck disable=SC2009
-_fix_bash_pids() {
-	# Declare vars as local
-	local ARRAY_USAGE_OPTIONS #FIX_BASH_PIDS_PID_LIST[@] FIX_BASH_PIDS_PID_LIST USAGE_OPTIONS_STRING
-
-	# Array of options
-	ARRAY_USAGE_OPTIONS=(show kill)
-
-	# Create variable of pipe-separated options from array
-	USAGE_OPTIONS_STRING="$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")"
-
-	mapfile -t FIX_BASH_PIDS_PID_LIST < <(ps aux | grep -E '[b]ash' | grep -Ev 'root|s00\.' | sort -r | awk '{print $2}')
-
-	if [[ "${#FIX_BASH_PIDS_PID_LIST[@]}" -le "0" ]]; then
-		output green "No stale bash PIDs to kill"
-		return 0
-	fi
-
-	output purple "Number of stale bash PIDs: ${#FIX_BASH_PIDS_PID_LIST[@]}"
-
-	case "${1}" in
-		show)
-			output purple "PID list:"
-			for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
-				output yellow "${PID}"
-			done
-			;;
-		kill)
-			read -r -p "Kill stale bash PIDs? [Y/n] " FIX_BASH_PIDS_YN
-			echo
-			[[ "${FIX_BASH_PIDS_YN}" == [Nn] ]] && output purple "No PIDs killed" && return 1
-
-			for PID in "${FIX_BASH_PIDS_PID_LIST[@]}"; do
-				output yellow "Killing PID '${PID}'"
-				kill -9 "${PID}"
-			done
-
-			output green "Complete"
-
-			# Check the PIDs again
-			fix-bash-pids show
-			;;
-		*)
-			output usage "fix-bash-pids <${USAGE_OPTIONS_STRING}>"
-			;;
-	esac
-}
-
 # Remove / clean macOS .DS_Store / attribute files
 _fix_macos_files() {
 	# Declare vars as local
@@ -111,8 +45,6 @@ _fix_macos_files() {
 
 
 # Function aliases
-alias fix-bash-pids='  _fix_bash_pids'
-alias fix-hung-java='  _fix_hung_java'
 alias fix-macos-files='_fix_macos_files'
 
 

@@ -1,9 +1,0 @@
-# Functions:
-
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
-
-
-# Function aliases
-
-
-# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

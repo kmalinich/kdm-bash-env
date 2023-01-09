@@ -113,7 +113,9 @@ set visible-stats on
 #            F19 : \e[33~
 
 
-#"\t": menu-complete
+"\e[1~": beginning-of-line
+"\e[4~": end-of-line
+
 
 # Delete-forward : Delete following character
 "\e[3~": delete-char
