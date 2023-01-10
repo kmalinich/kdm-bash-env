@@ -3,64 +3,99 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
-# shellcheck disable=SC2139
-_alias_linux_macos_setup() {
-	# Bounce if not on GNU-converted macOS and not on Linux
+_alias_exa() {
+	# Check if exa is installed
+	hash exa || return
+
+	export EXA_COLORS='da=38;5;255:uu=38;5;242:un=38;2;255;255;1'
+	export EXA_ICON_SPACING='2'
+
+	alias ls='exa --color=auto --color-scale --time-style long-iso --icons --group --group-directories-first 2> /dev/null'
+
+	alias lll='ls --all                           --classify --long'
+	alias l.=' ls                     --list-dirs                   .*'
+	alias ll.='ls                     --list-dirs            --long .*'
+	alias l1=' ls                                 --classify        --oneline'
+	alias l='  ls                                 --classify                   --grid'
+	alias ll=' ls                                 --classify --long'
+	alias lld='ls                     --list-dirs --classify --long'
+
+	# Because `exa` doesn't support traditional GNU `ls` `ls -tr` syntax, and I use it a lot
+	# Also `exa` 'sort by modified date' is, by default, in reverse order compared to GNU `ls`,
+	# hence the `llt` alias having the `--reverse` option and the `lltr` alias not
+	alias llt=' ll --sort modified --reverse'
+	alias lltr='ll --sort modified'
+}
+
+_alias_ls() {
+	# Return if GNU grep not installed and not on Linux
 	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
 
+	# Return if exa is installed
+	hash exa && return
+
 	# Declare vars as local
-	local GREP_BASE LS_TIME_STYLE
+	local LS_TIME_STYLE
+
+	LS_TIME_STYLE='+%Y-%m-%d %r'
+
+	# shellcheck disable=SC2139
+	alias ls="ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"
+
+	alias lll='ls --all                          --file-type --human-readable -l'
+	alias la=' ls       --almost-all'
+	alias l.=' ls                    --directory                                 .*'
+	alias ll.='ls                    --directory                              -l .*'
+	alias l1=' ls                                --file-type --human-readable -1'
+	alias l='  ls                                --file-type                     -C'
+	alias ll=' ls                                --file-type --human-readable -l'
+	alias lld='ls                    --directory --file-type --human-readable -l'
+}
+
+# shellcheck disable=SC2139
+_alias_grep() {
+	# Bounce if GNU grep not installed and not on Linux
+	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
 
 	# grep config
 	#     in a terminal : always enable/use color
 	# NOT in a terminal : disable color
-	GREP_BASE="grep --color=if-tty --no-messages"
+	local GREP_BASE="grep --color=if-tty --no-messages"
 
+	declare -A ARRAY_GREP_CMDS=(
+		[e]='extended-regexp'
+		[f]='fixed-strings'
+		[i]='ignore-case'
+		[r]='recursive'
+		[v]='invert-match'
+	)
+
+	# Regular grep
 	alias grep="${GREP_BASE}"
-	alias egrep="${GREP_BASE} --extended-regexp" # -E
-	alias fgrep="${GREP_BASE} --fixed-strings"   # -F
-	alias igrep="${GREP_BASE} --ignore-case"     # -i
-	alias rgrep="${GREP_BASE} --recursive"       # -r
-	alias vgrep="${GREP_BASE} --invert-match"    # -v
+	for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
+		alias "${GREP_CMD}grep"="${GREP_BASE} --${ARRAY_GREP_CMDS[$GREP_CMD]}"
+	done
 
+	# Force enable/disable color
+	alias cgrep=' grep --no-messages --color=always'
+	alias ncgrep='grep --no-messages --color=never'
+
+	# zgrep
 	if hash zgrep; then
 		alias zgrep="z${GREP_BASE}"
-		alias zegrep="z${GREP_BASE} --extended-regexp" # -E
-		alias zfgrep="z${GREP_BASE} --fixed-strings"   # -F
-		alias zigrep="z${GREP_BASE} --ignore-case"     # -i
-		alias zrgrep="z${GREP_BASE} --recursive"       # -r
-		alias zvgrep="z${GREP_BASE} --invert-match"    # -v
+		for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
+			alias "z${GREP_CMD}grep"="z${GREP_BASE} --${ARRAY_GREP_CMDS[$GREP_CMD]}"
+		done
 	fi
 
+	# xzgrep
 	if hash xzgrep; then
 		alias xzgrep="xz${GREP_BASE}"
-		alias xzegrep="xz${GREP_BASE} --extended-regexp" # -E
-		alias xzfgrep="xz${GREP_BASE} --fixed-strings"   # -F
-		alias xzigrep="xz${GREP_BASE} --ignore-case"     # -i
-		alias xzrgrep="xz${GREP_BASE} --recursive"       # -r
-		alias xzvgrep="xz${GREP_BASE} --invert-match"    # -v
+		for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
+			alias "xz${GREP_CMD}grep"="xz${GREP_BASE} --${ARRAY_GREP_CMDS[$GREP_CMD]}"
+		done
 	fi
-
-	alias cgrep='grep --no-messages --color=always' # Force enable color
-	alias ncgrep='grep --no-messages --color=never'  # Force disable color
-
-
-	# exa/ls config
-	if hash exa; then
-		export EXA_COLORS="da=38;5;255:uu=38;5;242:un=38;2;255;255;1"
-		export EXA_ICON_SPACING="2"
-		alias ls="exa --color=auto --color-scale --time-style long-iso --icons --group --group-directories-first 2> /dev/null"
-	else
-		LS_TIME_STYLE="+%Y-%m-%d %r"
-		alias ls="ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"
-	fi
-
-
-	# Sort by IP address octets
-	# .. fought to find this one for a long, long time
-	alias sort-ip='sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"'
 }
-
 
 # E-Z nmap commands
 _alias_nmap() {
@@ -87,45 +122,100 @@ _alias_nmap() {
 	alias nmap-a='nmap -vv -A --open'
 }
 
-
 # ping command tweaks
 # shellcheck disable=SC2139
 _alias_ping() {
 	# Declare vars as local
-	local PING
+	local PING4_BINARY PING6_BINARY
 
 	# ping commands, if ping is present
-	hash ping || return;
+	if hash ping; then
+		# Get full path to binary
+		PING4_BINARY=$(command -v ping)
 
-	# Get full path to binary
-	PING=$(command -v ping)
-
-	# ping-slow : normal (1.0 second interval)
-	#      ping : fast   (0.5 second interval)
-	# ping-fast : faster (0.1 second interval)
-	alias ping="     ${PING} -i 0.5"
-	alias ping-fast="${PING} -i 0.1"
-	alias ping-slow="${PING} -i 1.0"
-}
-
-# ping6 command tweaks
-# shellcheck disable=SC2139
-_alias_ping6() {
-	# Declare vars as local
-	local ping6
+		# ping-slow : normal (1.0 second interval)
+		#      ping : fast   (0.5 second interval)
+		# ping-fast : faster (0.1 second interval)
+		alias ping="     ${PING4_BINARY} -i 0.5"
+		alias ping-fast="${PING4_BINARY} -i 0.1"
+		alias ping-slow="${PING4_BINARY} -i 1.0"
+	fi
 
 	# ping6 commands, if ping6 is present
-	hash ping6 || return;
+	if hash ping6; then
 
-	# Get full path to binary
-	ping6=$(command -v ping6)
+		# Get full path to binary
+		PING6_BINARY=$(command -v ping6)
 
-	# ping6-slow : normal (1.0 second interval)
-	#      ping6 : fast   (0.5 second interval)
-	# ping6-fast : faster (0.1 second interval)
-	alias ping6="     ${ping6} -i 0.5"
-	alias ping6-fast="${ping6} -i 0.1"
-	alias ping6-slow="${ping6} -i 1.0"
+		# ping6-slow : normal (1.0 second interval)
+		#      ping6 : fast   (0.5 second interval)
+		# ping6-fast : faster (0.1 second interval)
+		alias ping6="     ${PING6_BINARY} -i 0.5"
+		alias ping6-fast="${PING6_BINARY} -i 0.1"
+		alias ping6-slow="${PING6_BINARY} -i 1.0"
+	fi
+}
+
+_alias_diff() {
+	# Diff enable auto color
+	DIFF_VERSION="$(diff -v | grep -Eo '[3-9]\.[0-9]$')"
+	if [[ "${DIFF_VERSION/\./}" -ge "34" ]]; then
+		alias diff='diff --color=auto'
+	fi
+
+	# Custom diff:
+	# Tabsize : 2 columns
+	# Ignore tab expansion
+	# Ignore trailing space
+	# Ignore whitespace changes
+	# Ignore blank lines
+	alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
+}
+
+_alias_dirs() {
+	# Downloads and Desktop folder variables
+	DIR_HOME_DC="${HOME}/Documents"
+	DIR_HOME_DL="${HOME}/Downloads"
+	DIR_HOME_DT="${HOME}/Desktop"
+
+	# Downloads and Desktop folder aliases
+	[[ -d "${DIR_HOME_DC}" ]] && export DIR_HOME_DC && alias dc='cd ${DIR_HOME_DC}; ll'
+	[[ -d "${DIR_HOME_DL}" ]] && export DIR_HOME_DL && alias dl='cd ${DIR_HOME_DL}; ll'
+	[[ -d "${DIR_HOME_DT}" ]] && export DIR_HOME_DT && alias dt='cd ${DIR_HOME_DT}; ll'
+}
+
+_alias_misc() {
+	# Newline after screen clear
+	alias c='clear'
+	alias ccd='cd; clear'
+	alias cdc='cd; clear'
+	alias clear='clear; echo'
+
+	# Safety first on file operations
+	alias rm='rm -i'
+	alias cp='cp -iv'
+	alias mv='mv -i'
+	alias mkdir='mkdir -p'
+
+	# Quick up-directory-n-list
+	alias ..='cd ..; ll'
+
+	# Typo aliases
+	alias bim='vim'
+	alias cim='vim'
+	alias ehco='echo'
+	alias grpe='grep'
+	alias kk='ll'
+	alias namp='nmap'
+	alias pign='ping'
+	alias tial='tail'
+
+	# Pre-sorted environment variables
+	alias env-sort='env | sort -h'
+
+	# Sort by IP address octets
+	# .. fought to find this one for a long, long time
+	alias sort-ip='sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"'
 }
 
 
@@ -162,8 +252,15 @@ _alias_pygmentize() {
 }
 
 
-# Execute alias setup
-_alias_linux_macos_setup
+_alias_exa
+_alias_ls
+_alias_grep
+_alias_nmap
+_alias_ping
+_alias_diff
+_alias_dirs
+_alias_misc
+_alias_pygmentize
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

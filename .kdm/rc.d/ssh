@@ -1,4 +1,4 @@
-# Functions: SSH
+# Functions: SSH aliases
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
@@ -6,161 +6,58 @@
 # Generate SSH host aliases
 _sshAliasGenerate() {
 	# Clear SSH alias cache file
-	: > "${BASH_ENV_FILE_SSH_CACHE}"
+	: > "${BASH_ENV_FILE_CACHE_SSH_ALIAS}"
 
 	# Process SSH host alias generation, output to SSH alias cache file
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     2> /dev/null | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf 2> /dev/null | grep -Ev '\*' >> "${BASH_ENV_FILE_SSH_CACHE}" 2> /dev/null
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     2> /dev/null | grep -Ev '\*' >> "${BASH_ENV_FILE_CACHE_SSH_ALIAS}" 2> /dev/null
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf 2> /dev/null | grep -Ev '\*' >> "${BASH_ENV_FILE_CACHE_SSH_ALIAS}" 2> /dev/null
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH bash aliases"
+		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH aliases"
 	fi
 
 	# Source SSH alias cache file
-	# shellcheck source=/dev/null
-	. "${BASH_ENV_FILE_SSH_CACHE}"
+	. "${BASH_ENV_FILE_CACHE_SSH_ALIAS}"
 }
 
 # Configure SSH host aliases
 _sshAliasSetup() {
 	# Generate SSH alias cache file if empty
-	if [[ ! -s "${BASH_ENV_FILE_SSH_CACHE}" ]]; then
+	if [[ ! -s "${BASH_ENV_FILE_CACHE_SSH_ALIAS}" ]]; then
 		_sshAliasGenerate
 		# If generation required, we're done here
 		return 0
 	fi
 
 	# Declare vars as local
-	local SSH_CACHE_AGE SSH_CACHE_TIME
+	local SSH_ALIAS_CACHE_AGE SSH_ALIAS_CACHE_TIME
 
 	# Determine age of SSH alias cache file
 	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		SSH_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_SSH_CACHE}")
+		SSH_ALIAS_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_SSH_ALIAS}")
 	else
-		SSH_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_SSH_CACHE}")
+		SSH_ALIAS_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_SSH_ALIAS}")
 	fi
 
-	SSH_CACHE_AGE=$(($(date +%s)-SSH_CACHE_TIME))
+	SSH_ALIAS_CACHE_AGE=$(($(date +%s)-SSH_ALIAS_CACHE_TIME))
 
 	# Regenerate SSH alias cache file if older than 1 day
-	if [[ "${SSH_CACHE_AGE}" -ge "86400" ]]; then
+	if [[ "${SSH_ALIAS_CACHE_AGE}" -ge "86400" ]]; then
 		_sshAliasGenerate
 		return 0
 	fi
 
 	# Source SSH alias cache file
-	# shellcheck source=/dev/null
-	. "${BASH_ENV_FILE_SSH_CACHE}"
-}
-
-# Ping it, then SSH to it
-# shellcheck disable=SC2029
-_ssh_ping() {
-	# Declare vars as local
-	local USAGE_STRING
-
-	USAGE_STRING="ssh-ping <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ping "${PING_WAIT}" "${1}"
-	ssh                 "${1}" "${2}"
-}
-
-# Show full path for SCPing
-_show_scp_path() {
-	# Declare vars as local
-	local FILE_NAME SCP_CMD SCP_PATH SELECTED
-
-	# If no argument, select current directory
-	SELECTED="${PWD}"
-	[[ "${1}" ]] && SELECTED="${1}"
-
-	# Check if file exists
-	[[ ! -e "${SELECTED}" ]] && output error "'./${1}' is not a valid file" && return
-
-	# Get realpath of argument, and then swap out the home directory with a tilde
-	SELECTED="$(realpath "${SELECTED}")"
-	SCP_PATH="${SELECTED/$HOME/\~}"
-
-	# Check if argument is a file or folder, fill variables accordingly
-	if [[ -d "${SELECTED}" ]]; then
-		FILE_NAME="${SCP_PATH}"
-		SCP_CMD="scp -r"
-	else
-		FILE_NAME="$(basename "${SCP_PATH}")"
-		SCP_CMD="scp"
-	fi
-
-	echo
-	output purple "Download '${FILE_NAME}' from '${HOST_SHORT}':"
-
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\\n"
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\\n"
-	printf "${SCP_CMD} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}${C_RST} .\\n"
-	echo
-
-	# Output upload instructions if file is a directory
-	[[ ! -d "${SELECTED}" ]] && return
-
-	output purple "Upload \${FILE} to ${HOST_SHORT}:${SCP_PATH}/ (fill in the blank variable)"
-
-	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_SHORT}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\\n"
-	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\\n"
-	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\\n"
-	echo
-}
-
-# With compression
-# shellcheck disable=SC2029
-_ssh_c() {
-	# Declare vars as local
-	local USAGE_STRING
-
-	USAGE_STRING="ssh-c <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ssh -o Compression=yes "${1}"
-}
-
-# With X forwarding
-# shellcheck disable=SC2029
-_ssh_x() {
-	# Declare vars as local
-	local USAGE_STRING
-
-	USAGE_STRING="ssh-x <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ssh -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
-}
-
-# With compressed X forwarding
-# shellcheck disable=SC2029
-_ssh_xc() {
-	# Declare vars as local
-	local USAGE_STRING
-
-	USAGE_STRING="ssh-xc <host>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	ssh -o Compression=yes -o ForwardX11=yes -o ForwardX11Trusted=yes "${1}"
+	. "${BASH_ENV_FILE_CACHE_SSH_ALIAS}"
 }
 
 
 # Execute SSH alias setup
 _sshAliasSetup
 
-
 # Function aliases
 alias ssh-alias-generate='_sshAliasGenerate'
-# alias ssh-alias-setup='   _sshAliasSetup'
-
-alias ssh-ping='_ssh_ping'
-
-alias ssh-c=' _ssh_c'
-alias ssh-x=' _ssh_x'
-alias ssh-xc='_ssh_xc'
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

@@ -1,0 +1,75 @@
+# Functions: sudo aliases
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+
+
+# Generate auto-sudo aliases
+_sudoAliasGenerate() {
+	# Clear sudo alias cache file
+	: > "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}"
+
+	# Process auto-sudo-alias generation, output to sudo alias cache file
+	for CMD in "${ARRAY_SUDO[@]}"; do
+		# If it's installed, add sudo
+		hash "${CMD}" && echo "alias ${CMD}='sudo ${CMD}'" >> "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}"
+	done
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "sudo aliases"
+	fi
+
+	# Source sudo alias cache file
+	. "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}"
+}
+
+# Configure auto-sudo aliases
+_sudoAliasSetup() {
+	# First check if we're root; if so, we don't need any of this
+	[[ "${UID}" == "0" ]] && return
+
+	# If we're on macOS, add the macOS commands to the base array
+	# If we're on Linux, add the Linux commands to the base array
+	case "${UNAME_KERNEL_NAME}" in
+		Darwin) ARRAY_SUDO+=("${ARRAY_SUDO_MACOS[@]}") ;;
+		Linux)  ARRAY_SUDO+=("${ARRAY_SUDO_LINUX[@]}") ;;
+	esac
+
+	# Regenerate sudo alias cache file if empty
+	if [[ ! -s "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}" ]]; then
+		_sudoAliasGenerate
+		# If generation required, we're done here
+		return 0
+	fi
+
+	# Declare vars as local
+	local SUDO_ALIAS_CACHE_AGE SUDO_ALIAS_CACHE_TIME
+
+	# Determine age of sudo alias cache file
+	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		SUDO_ALIAS_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}")
+	else
+		SUDO_ALIAS_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}")
+	fi
+
+	SUDO_ALIAS_CACHE_AGE=$(($(date +%s)-SUDO_ALIAS_CACHE_TIME))
+
+	# Regenerate sudo alias cache file if older than 1 day
+	if [[ "${SUDO_ALIAS_CACHE_AGE}" -ge "86400" ]]; then
+		_sudoAliasGenerate
+		return 0
+	fi
+
+	# Source sudo alias cache file
+	. "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}"
+}
+
+
+# Execure sudo alias setup
+_sudoAliasSetup
+
+# Function aliases
+alias sudo-alias-generate='_sudoAliasGenerate'
+
+
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :
