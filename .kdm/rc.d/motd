@@ -92,7 +92,7 @@ _show_motd() {
 	# Get CPU, RAM, uptime, sysload, perhaps do some formatting
 	RAMC="$(echo "${FACTER_JSON}" | jq -Mcr .memory.system.capacity)"
 	RAMB="$(echo "${FACTER_JSON}" | jq -Mcr .memory.system.total_bytes)"
-	RAMG="$( echo "scale=2; ${RAMB}/1073741824" | bc)G"
+	RAMG="$(echo "scale=2; ${RAMB}/1073741824" | bc)G"
 
 	# Handle older versions of facter
 	[[ "${RAM}"  == "null" ]] && RAMG="$( echo "${FACTER_JSON}" | jq -Mcr .memorysize)G"

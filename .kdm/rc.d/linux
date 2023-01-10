@@ -9,39 +9,6 @@
 # PING_WAIT for use in ping functions
 export PING_WAIT="-W 1"
 
-
-# Network config information
-_net_info() {
-	if hash hostname; then
-		output kv "hostname"    "$(hostname)"
-		output kv "hostname -s" "$(hostname -s)"
-		output kv "hostname -d" "$(hostname -d)"
-		output kv "hostname -f" "$(hostname -f)"
-	fi
-
-	if [[ -s /etc/resolv.conf ]]; then
-		output orange "--= resolv.conf =--"
-		echo
-
-		grep -Ev '^#' /etc/resolv.conf
-	fi
-
-	if hash ip; then
-		output orange "--= ip route show =--"
-		echo
-
-		ip route show
-		echo
-
-		output orange "--= ip addr =--"
-		echo
-
-		ip addr show "${DEFROUTE_NIC}"
-		echo
-	fi
-}
-
-
 # systemctl no-pager
 hash systemctl && alias systemctl='systemctl --no-pager'
 

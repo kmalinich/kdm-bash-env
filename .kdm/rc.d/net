@@ -42,6 +42,73 @@ _net_info() {
 	fi
 }
 
+# Formats MAC address for all eventualities
+_net_mac() {
+	# Declare vars as local
+	local CLEAN_MAC COLONS_LOWER COLONS_UPPER DASHES_LOWER DASHES_UPPER NONE_LOWER NONE_UPPER PF_FMT SPACES_LOWER SPACES_UPPER USAGE_STRING
+
+	# Quit if nothing is entered
+	USAGE_STRING="net-mac <MAC address, any format>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	# Strip MAC of anything other than 0-9, a-f, and A-F
+	CLEAN_MAC="${1//[^a-fA-F0-9 ]/}"
+
+	# Check the length of the cleaned MAC address. It should be 12 characters.
+	[[ "${#CLEAN_MAC}" != "12" ]] && output error "'${1}' is invalid ('${CLEAN_MAC}' after sanitizing)" && return
+
+	# If the MAC entered is kosher, build out the variables
+	# Lowercase
+	NONE_LOWER="${CLEAN_MAC,,}"
+	COLONS_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1:/g' -e 's/\(.*\):$/\1/')
+	DASHES_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1-/g' -e 's/\(.*\)-$/\1/')
+	SPACES_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
+
+	# Uppercase
+	NONE_UPPER="${CLEAN_MAC^^}"
+	COLONS_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1:/g' -e 's/\(.*\):$/\1/')
+	DASHES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1-/g' -e 's/\(.*\)-$/\1/')
+	SPACES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
+
+	# Set margin for printf commands
+	PF_FMT="${C_PRP}%-10s${C_RST}%-20s%s\\n"
+
+	# Output MAC address in various formats
+	output purple "------------------------------ Formatted MAC --"
+	printf "${PF_FMT}" "Colons" "${COLONS_LOWER}" "${COLONS_UPPER}"
+	printf "${PF_FMT}" "Dashes" "${DASHES_LOWER}" "${DASHES_UPPER}"
+	printf "${PF_FMT}" "Spaces" "${SPACES_LOWER}" "${SPACES_UPPER}"
+	printf "${PF_FMT}" "None"   "${NONE_LOWER}"   "${NONE_UPPER}"
+
+	# Perform IEEE MAC lookup
+	echo
+	_net_mac_lookup "${COLONS_LOWER}"
+}
+
+# Search a subnet for pinging IPs
+_net_ping_subnet() {
+	# Declare vars as local
+	local USAGE_STRING
+
+	USAGE_STRING="net-ping-subnet <CIDR range>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	# Return if fping is missing
+	! hash fping && output error "fping not available" && return
+
+	output purple "Pinging subnet '${1}'"
+
+	# Sort by IP octets
+	fping \
+		--alive       \
+		--interval=10 \
+		--period=20   \
+		--retry=1     \
+		--timeout=250 \
+		--generate "${1}" 2> /dev/null \
+		| sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"
+}
+
 # Python webserver
 _net_webserver() {
 	# Declare vars as local
@@ -100,264 +167,12 @@ _net_webserver() {
 	esac
 }
 
-# Search a subnet for pinging IPs
-_net_ping_subnet() {
-	# Declare vars as local
-	local USAGE_STRING
-
-	USAGE_STRING="net-ping-subnet <CIDR range>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	# Return if fping is missing
-	! hash fping && output error "fping not available" && return
-
-	output purple "Pinging subnet '${1}'"
-
-	# Sort by IP octets
-	fping \
-		--alive       \
-		--interval=10 \
-		--period=20   \
-		--retry=1     \
-		--timeout=250 \
-		--generate "${1}" 2> /dev/null \
-		| sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"
-}
-
-# Ping something 100 times and show a running average with printf
-_net_ping_average() {
-	# Declare vars as local
-	local PF_FMT PING_AVERAGE PING_COLOR PING_COUNT PING_COUNT_FINAL PING_CURRENT PING_TOTAL USAGE_STRING
-
-	USAGE_STRING="net-ping-average <target> [<optional count, default 100>]"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	# printf format used below
-	PF_FMT="%-7s %s"
-
-	# Print header
-	printf "${C_PRP}${PF_FMT}${C_RST}\\n" "Count" "Average (ms)"
-
-	# Use the 2nd argument (ping total) if present, if not present, default of 100
-	PING_COUNT_FINAL="${2-100}"
-
-	# Init loop variables
-	PING_COUNT="0"
-	PING_TOTAL="0"
-	PING_AVERAGE="0"
-	PING_COLOR="${C_GRN}"
-
-	# Print inital line so you have something to stare at before the first ping returns
-	printf "${PING_COLOR}${PF_FMT}${C_RST}\\r" "${PING_COUNT}" "${PING_AVERAGE}"
-
-	# Loop until PING_COUNT reaches limit (PING_COUNT_FINAL)
-	while [[ "${PING_COUNT}" -lt "${PING_COUNT_FINAL}" ]]; do
-		# Ping host:
-		# 1 ping
-		# OS-specific ping timeout
-		# pipe into awk to get ping time
-		PING_CURRENT=$(ping -c 1 "${PING_WAIT}" "${1}" 2> /dev/null | awk -F '[ =]' '/from/ {printf $10; printf " "}' | sed 's/ //g')
-
-		# If the ping inside of PING_CURRENT variable didn't return,
-		# set PING_CURRENT to be the current average so as to not skew
-		# the results
-		#
-		# Also, set output color to green if PING_CURRENT is populated,
-		# else, set to red
-		PING_COLOR="${C_GRN}"
-		[[ -z "${PING_CURRENT}" ]] && PING_CURRENT="${PING_AVERAGE}" && PING_COLOR="${C_RED}"
-
-		# Increment counter
-		((PING_COUNT++))
-
-		# Calculate total and average
-		PING_TOTAL=$(  echo "scale=5; ${PING_TOTAL}+${PING_CURRENT}" | bc)
-		PING_AVERAGE=$(echo "scale=5; ${PING_TOTAL}/${PING_COUNT}"   | bc)
-
-		# Output string
-		printf "${PING_COLOR}${PF_FMT}${C_RST}\\r" "${PING_COUNT}" "${PING_AVERAGE}"
-	done
-	echo
-}
-
-# Ping something many times and output results in CSV for parsing
-_net_ping_average_csv() {
-	# Declare vars as local
-	local PF_FMT PING_AVERAGE PING_COLOR PING_COUNT PING_COUNT_FINAL PING_CURRENT PING_TOTAL USAGE_STRING
-
-	USAGE_STRING="net-ping-average-csv <target> [<optional count, default 100>]"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	# printf format used below
-	PF_FMT="%-7s %s"
-
-	# Print header
-	printf "${C_PRP}${PF_FMT}${C_RST}\\n" "Count" "Average (ms)" 1>&2
-
-	# Use the 2nd argument (ping total) if present, if not present, default of 100
-	PING_COUNT_FINAL="${2-100}"
-
-	# Init loop variables
-	PING_COUNT="0"
-	PING_TOTAL="0"
-	PING_AVERAGE="0"
-	PING_COLOR="${C_YLW}"
-
-	# Loop until PING_COUNT reaches limit (PING_COUNT_FINAL)
-	while [[ "${PING_COUNT}" -lt "${PING_COUNT_FINAL}" ]]; do
-		# Ping host:
-		# 1 ping
-		# OS-specific ping timeout
-		# pipe into awk to get ping time
-		PING_CURRENT=$(ping -c 1 "${PING_WAIT}" "${1}" 2> /dev/null | awk -F '[ =]' '/from/ {printf $10; printf " "}' | sed 's/ //g')
-
-		# If the ping inside of PING_CURRENT variable didn't return,
-		# set PING_CURRENT to be the current average so as to not skew
-		# the results
-		#
-		# Also, set output color to green if PING_CURRENT is populated
-		[[ -z "${PING_CURRENT}" ]] && PING_CURRENT="${PING_AVERAGE}"
-
-		# Increment counter
-		PING_COUNT=$((PING_COUNT+1))
-
-		# Calculate total and average
-		PING_TOTAL=$(  echo "scale=5; ${PING_TOTAL}+${PING_CURRENT}" | bc)
-		PING_AVERAGE=$(echo "scale=5; ${PING_TOTAL}/${PING_COUNT}"   | bc)
-
-		# Output data string to stderr
-		printf "${PING_COLOR}${PF_FMT}${C_RST}\\r" "${PING_COUNT}" "${PING_AVERAGE}" 1>&2
-	done
-	echo -e "\\n"            1>&2
-	output purple "Results:" 1>&2
-
-	# Output CSV string for passing to log
-	echo "${PING_AVERAGE},${1}"
-}
-
-# Formats MAC address for all eventualities
-_net_mac() {
-	# Declare vars as local
-	local CLEAN_MAC COLONS_LOWER COLONS_UPPER DASHES_LOWER DASHES_UPPER NONE_LOWER NONE_UPPER PF_FMT SPACES_LOWER SPACES_UPPER USAGE_STRING
-
-	# Quit if nothing is entered
-	USAGE_STRING="net-mac <MAC address, any format>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	# Strip MAC of anything other than 0-9, a-f, and A-F
-	CLEAN_MAC="${1//[^a-fA-F0-9 ]/}"
-
-	# Check the length of the cleaned MAC address. It should be 12 characters.
-	[[ "${#CLEAN_MAC}" != "12" ]] && output error "'${1}' is invalid ('${CLEAN_MAC}' after sanitizing)" && return
-
-	# If the MAC entered is kosher, build out the variables
-	# Lowercase
-	NONE_LOWER="${CLEAN_MAC,,}"
-	COLONS_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1:/g' -e 's/\(.*\):$/\1/')
-	DASHES_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1-/g' -e 's/\(.*\)-$/\1/')
-	SPACES_LOWER=$(echo "${NONE_LOWER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
-
-	# Uppercase
-	NONE_UPPER="${CLEAN_MAC^^}"
-	COLONS_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1:/g' -e 's/\(.*\):$/\1/')
-	DASHES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1-/g' -e 's/\(.*\)-$/\1/')
-	SPACES_UPPER=$(echo "${NONE_UPPER}" | sed -e 's/\([0-9A-Fa-f]\{2\}\)/\1 /g' -e 's/\(.*\) $/\1/')
-
-	# Set margin for printf commands
-	PF_FMT="${C_PRP}%-10s${C_RST}%-20s%s\\n"
-
-	# Output MAC address in various formats
-	output purple "------------------------------ Formatted MAC --"
-	printf "${PF_FMT}" "Colons" "${COLONS_LOWER}" "${COLONS_UPPER}"
-	printf "${PF_FMT}" "Dashes" "${DASHES_LOWER}" "${DASHES_UPPER}"
-	printf "${PF_FMT}" "Spaces" "${SPACES_LOWER}" "${SPACES_UPPER}"
-	printf "${PF_FMT}" "None"   "${NONE_LOWER}"   "${NONE_UPPER}"
-
-	# Perform IEEE MAC lookup
-	echo
-	_net_mac_lookup "${COLONS_LOWER}"
-}
-
-# Look up MAC address against IEEE database
-_net_mac_lookup() {
-	# Declare vars as local
-	local IEEE_ADDRESS IEEE_COMPANY IEEE_COUNTRY IEEE_STRING PF_FMT USAGE_STRING
-
-	# Check if oui npm package is installed
-	! hash oui && output error "oui not available" && return
-
-	USAGE_STRING="net-mac-lookup <MAC address with colons [at least first 3 octets]>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	IEEE_STRING="$(oui "${1}" | sed 's/,/ /g' | sed 's/  / /g' | sed ':a;N;$!ba;s/\n/,/g')"
-
-	IEEE_COMPANY="$(echo "${IEEE_STRING}" | awk -F ',' '{print $1}')"
-	IEEE_ADDRESS="$(echo "${IEEE_STRING}" | awk -F ',' '{print $2 ", " $3}')"
-	IEEE_COUNTRY="$(echo "${IEEE_STRING}" | awk -F ',' '{print $4}')"
-
-	PF_FMT="${C_PRP}%-10s${C_RST}%s\\n"
-
-	output purple "-------------------------------- IEEE lookup --"
-	printf "${PF_FMT}" "Company" "${IEEE_COMPANY}"
-	printf "${PF_FMT}" "Address" "${IEEE_ADDRESS}"
-	printf "${PF_FMT}" "Country" "${IEEE_COUNTRY}"
-}
-
-# Lookup DNS information
-_net_dns_lookup() {
-	# Declare vars as local
-	local HOST_CMD_INPUT HOST_CMD_IP LOOKUP_INPUT LOOKUP_IP LOOKUP_REVERSE LOOKUP_SERVER PF_FMT PF_FMT_REV USAGE_STRING
-
-	USAGE_STRING="net-dns-lookup <hostname/IP> <optional DNS server>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-
-	LOOKUP_INPUT="${1}"
-	LOOKUP_SERVER="${2}"
-
-	# Set up command string to include server if passed
-	HOST_CMD_INPUT="host ${LOOKUP_INPUT} ${LOOKUP_SERVER}"
-
-	# If alpha hostname, do lookup of hostname to get
-	LOOKUP_IP="${LOOKUP_INPUT}"
-	[[ "${LOOKUP_INPUT}" == *[aA-zZ]* ]] &&  LOOKUP_IP="$(${HOST_CMD_INPUT} | awk -F 'has address ' '/has address / {print $2}')"
-
-	[[ -z "${LOOKUP_IP}" ]] && output yellow "Lookup of ${LOOKUP_INPUT} failed" && return
-
-	output purple "--------------------------------- DNS lookup --"
-	HOST_CMD_IP="host ${LOOKUP_IP} ${LOOKUP_SERVER}"
-	mapfile -t LOOKUP_REVERSE < <(${HOST_CMD_IP} | awk -F 'domain name pointer ' '/domain name pointer / {print $2}' | sed 's/\.$//g')
-
-	# Set margin for printf commands
-	PF_FMT="${C_PRP}%-10s${C_RST}%s\\n"
-
-	# Set color output to red if failed
-	PF_FMT_REV="${PF_FMT}"
-	[[ -z "${LOOKUP_REVERSE[0]}" ]] && LOOKUP_REVERSE[0]="Failed" && PF_FMT_REV="${C_PRP}%-10s${C_RED}%s${C_RST}\\n"
-
-	# Output returned data
-	printf "${PF_FMT}" "Input" "${LOOKUP_INPUT}"
-	[[ "${LOOKUP_SERVER}"  ]] && printf "${PF_FMT}" "Server" "${LOOKUP_SERVER}"
-
-	if [[ "${LOOKUP_REVERSE[0]}" ]]; then
-		# Loop through array of reverse DNS lookup entries
-		for ENTRY in "${LOOKUP_REVERSE[@]}"; do
-			printf "${PF_FMT_REV}" "Reverse" "${ENTRY}"
-		done
-	fi
-
-	printf "${PF_FMT}" "Forward" "${LOOKUP_IP}"
-}
-
 
 # Function aliases
-alias net-dns-lookup='      _net_dns_lookup'
-alias net-info='            _net_info'
-alias net-mac-lookup='      _net_mac_lookup'
-alias net-mac='             _net_mac'
-alias net-ping-average-csv='_net_ping_average_csv'
-alias net-ping-average='    _net_ping_average'
-alias net-ping-subnet='     _net_ping_subnet'
-alias net-webserver='       _net_webserver'
+alias net-info='       _net_info'
+alias net-mac='        _net_mac'
+alias net-ping-subnet='_net_ping_subnet'
+alias net-webserver='  _net_webserver'
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
