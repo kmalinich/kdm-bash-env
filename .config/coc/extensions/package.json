@@ -1,21 +1,21 @@
 {
-  "dependencies": {
-    "coc-css": ">=2.0.0",
-    "coc-diagnostic": ">=0.23.7",
-    "coc-eslint": ">=1.6.0",
-    "coc-eslint8": ">=2.0.0",
-    "coc-highlight": ">=2.0.4",
-    "coc-html": ">=1.8.0",
-    "coc-json": ">=1.8.0",
-    "coc-markdownlint": ">=1.27.0",
-    "coc-python": ">=1.2.13",
-    "coc-sql": ">=0.11.0",
-    "coc-stylelintplus": ">=1.5.0",
-    "coc-svg": ">=0.0.13",
-    "coc-tsserver": ">=2.1.0",
-    "coc-yaml": ">=1.9.0"
-  },
-  "disabled": [],
-  "lastUpdate": 1673999958878,
-  "locked": []
+	"dependencies": {
+		"coc-css": ">=2.0.0",
+		"coc-diagnostic": ">=0.23.7",
+		"coc-eslint": ">=1.6.0",
+		"coc-eslint8": ">=2.0.0",
+		"coc-highlight": ">=2.0.4",
+		"coc-html": ">=1.8.0",
+		"coc-json": ">=1.8.0",
+		"coc-markdownlint": ">=1.27.0",
+		"coc-python": ">=1.2.13",
+		"coc-sql": ">=0.11.0",
+		"coc-stylelintplus": ">=1.5.0",
+		"coc-svg": ">=0.0.13",
+		"coc-tsserver": ">=2.1.0",
+		"coc-yaml": ">=1.9.0"
+	},
+	"disabled": [],
+	"lastUpdate": 1674242774326,
+	"locked": []
 }
