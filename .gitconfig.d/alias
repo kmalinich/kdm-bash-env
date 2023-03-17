@@ -82,7 +82,7 @@
 	sm   = submodule
 	smf  = submodule foreach --recursive
 	smi  = submodule update  --recursive --init
-	smup = "!_git_smup() { git f; git up; git smf 'BAR=\"=---------------------------------------------=\"; echo \"${BAR}\"; git plu; echo \"${BAR}\\n\\n\"'; }; _git_smup"
+	smup = "!_git_smup() { git f; echo; git up; echo; git smf 'BAR=\"=---------------------------------------------=\"; echo \"${BAR}\"; git plu; echo -e \"${BAR}\\n\\n\"'; }; _git_smup"
 
 	undo = checkout --
 
