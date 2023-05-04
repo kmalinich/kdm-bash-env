@@ -163,7 +163,6 @@ ARRAY_PATH=(
 '/Library/Apple/usr/libexec'
 '/Library/Apple/usr/bin'
 '/usr/libexec'
-'/usr/bin/X11'
 '/usr/bin/site_perl'
 '/usr/bin/vendor_perl'
 '/usr/bin/core_perl'
@@ -178,6 +177,7 @@ ARRAY_PATH=(
 '/sbin'
 '/opt/cuda/bin'
 )
+# '/usr/bin/X11'
 # '/Applications/VMware Fusion.app/Contents/Library'
 # '/Applications/VMware Fusion.app/Contents/Public'
 
