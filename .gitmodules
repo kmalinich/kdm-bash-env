@@ -50,6 +50,10 @@
 	path   = .vim/pack/kdm/logrotate
 	url    = https://github.com/moon-musick/vim-logrotate
 	branch = master
+[submodule ".vim/pack/kdm/nvim-notify"]
+	path   = .vim/pack/kdm/nvim-notify
+	url    = https://github.com/rcarriga/nvim-notify
+	branch = master
 [submodule ".vim/pack/kdm/polyglot"]
 	path   = .vim/pack/kdm/polyglot
 	url    = https://github.com/sheerun/vim-polyglot

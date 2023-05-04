@@ -45,6 +45,7 @@ call LoadFile('filetype')
 
 if has('nvim')
 	call LoadFile('neovim')
+	call LoadFile('notify')
 endif
 
 
@@ -59,7 +60,8 @@ call LoadFile('fileformat')
 call LoadFile('case')
 
 if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:uname_machine ==# 'x86_64')
-	call LoadFile('coc.nvim')
+	call LoadFile('coc')
+	call LoadFile('coc-notify')
 endif
 
 
