@@ -3,17 +3,6 @@ export BASH_ENV_FILE_INITIAL_NETWORK="${BASH_ENV_DIR_KDM}/initial-network"
 
 _initialNetworkGenerate() {
 	# Get IP, TTY, and hostname so the binaries doesn't have to be run again
-	# First try with facter+jq
-	# if hash facter > /dev/null 2>&1 && hash jq > /dev/null 2>&1; then
-	# 	FACTER_NET_JSON="$(facter -j 2> /dev/null)"
-	#
-	# 	DEFROUTE_NIC="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.primary" 2> /dev/null)"
-	# 	[[ "${DEFROUTE_NIC}" ]] && HOST_IP="$(echo "${FACTER_NET_JSON}" | jq -Mcr ".networking.interfaces.${DEFROUTE_NIC}.ip" 2> /dev/null)"
-	#
-	# 	unset FACTER_NET_JSON
-	# fi
-
-	# If facter+jq was a no-go, get it the old fashioned way
 	if [[ -z "${DEFROUTE_NIC}" || -z "${HOST_IP}" ]]; then
 		DEFROUTE_NIC="$(ip route | grep -Po '(?<=dev\ )(e(n|th|ns|np[1-9]s)|br|wlan)[0-9]{1,3}(?=(\s\sproto\ static)?(\s\smetric\ [1-9][0-9]{0,3})?\s$)?' | head -n 1)"
 		[[ "${DEFROUTE_NIC}" ]] && HOST_IP=$(ip addr | grep -Po "(?<=inet\\ )([1-9]([0-9]{1,2})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})(?=.*.[^vir]${DEFROUTE_NIC}$))")
