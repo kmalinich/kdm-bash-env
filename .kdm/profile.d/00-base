@@ -1,8 +1,6 @@
 # bash-env variable set
 export BASH_ENV_DIR_RC_D="${BASH_ENV_DIR_KDM}/rc.d"
-#export BASH_ENV_DIR_CODE="${HOME}/code"
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
-#export BASH_ENV_DIR_NMAP="${HOME}/.nmap"
 export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
 
 export BASH_ENV_DIR_SSH="${HOME}/.ssh"
@@ -15,29 +13,15 @@ export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
 
 export BASH_ENV_FILE_HISTORY="${BASH_ENV_DIR_KDM}/history"
 
-#export BASH_ENV_FILE_PROFILE="${BASH_ENV_DIR_KDM}/profile"
 export BASH_ENV_FILE_RC="${BASH_ENV_DIR_KDM}/rc"
-
-#export BASH_ENV_FILE_LOGOUT="${HOME}/.bash_logout"
 
 export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
 export BASH_ENV_FILE_GEMRC="${HOME}/.gemrc"
 export BASH_ENV_FILE_LESSFILTER="${HOME}/.lessfilter"
-#export BASH_ENV_FILE_GITCONFIG="${HOME}/.gitconfig"
-#export BASH_ENV_FILE_GITIGNORE="${HOME}/.gitignore"
-#export BASH_ENV_FILE_INPUTRC="${HOME}/.inputrc"
-#export BASH_ENV_FILE_NLOAD="${HOME}/.nload"
-#export BASH_ENV_FILE_PIPRC="${HOME}/.piprc"
-#export BASH_ENV_FILE_SCREENRC="${HOME}/.screenrc"
-#export BASH_ENV_FILE_TIDY="${HOME}/.tidyrc"
-#export BASH_ENV_FILE_TOPRC="${HOME}/.toprc"
-#export BASH_ENV_FILE_VIMRC="${HOME}/.vimrc"
 
-#export BASH_ENV_FILE_CONFIG="${BASH_ENV_DIR_KDM}/bash-env.conf"
 export BASH_ENV_FILE_CACHE_SSH_ALIAS="${BASH_ENV_DIR_KDM}/sshcache"
 export BASH_ENV_FILE_CACHE_SUDO_ALIAS="${BASH_ENV_DIR_KDM}/sudocache"
 export BASH_ENV_FILE_COLORS="${BASH_ENV_DIR_PROFILE_D}/03-colors"
-#export BASH_ENV_FILE_DISABLE_TRUECOLOR="${BASH_ENV_DIR_KDM}/disable-truecolor"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
 
@@ -46,10 +30,10 @@ export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
 export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
 
 # Custom tidy-html5 config file path
-export HTML_TIDY="${BASH_ENV_FILE_TIDY}"
+export HTML_TIDY="${HOME}/.tidyrc"
 
 
-# Try to load config from facter
+# Determine if true color should be enabled
 _truecolor_config() {
 	[[ "${TERM}" == "xterm-256color+iterm3" ]] && COLORTERM="truecolor"
 
@@ -75,16 +59,6 @@ _truecolor_config() {
 }
 
 _prompt_config() {
-	#if hash facter > /dev/null 2>&1; then
-	#	PROMPT_HOSTNAME="$(facter bash-env.prompt.hostname 2> /dev/null)"
-	#	PROMPT_USERNAME="$(facter bash-env.prompt.username 2> /dev/null)"
-	#	PROMPT_TIME="$(    facter bash-env.prompt.time     2> /dev/null)"
-	#else
-	#	PROMPT_HOSTNAME="true"
-	#	PROMPT_USERNAME="true"
-	#	PROMPT_TIME="false"
-	#fi
-
 	PROMPT_HOSTNAME="true"
 	PROMPT_USERNAME="true"
 	PROMPT_TIME="false"
