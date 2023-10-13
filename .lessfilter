@@ -12,6 +12,9 @@ hash pygmentize || exit 0
 
 
 _debugLog() {
+	# Comment below line to enable debug output
+	return 0
+
 	echo "1                : '${1}'"
 	echo "FILE_NAME        : '${FILE_NAME}'"
 	echo "FILE_MIME_TYPE   : '${FILE_MIME_TYPE}'"
@@ -44,45 +47,48 @@ case "${FILE_NAME}" in
 	*.[ch]|*.[ch]pp|*.[ch]xx|*.ad[asb]|*.asm|*.awk|*.axp|*.bat|*.c|*.cc|*.cmd|*.cnf|*.conf|*.config|*.cpp|*.css|*.diff|*.ebuild|*.eclass|*.groff|*.h|*.hh|*.htm|*.html|*.inc|*.java|*.l|*.lsp|*.m4|*.md|*.p|*.pas|*.patch|*.pl|*.pm|*.pod|*.pov|*.ppd|*.rb|*.sass|*.scss|*.sh|*.sls|*.sql|*.svg|*.xml|*.xps|*.xsd|*.xsl|*.yaml|*.yml)
 		EXTENSION_DETECT="true"
 	;;
-
-	# .bash_logout, .bash_profile, .bashrc, .profile, etc
-	.bash*|.profile) LEXER_OVERRIDE="sh" ;;
-
-	# systemd files
-	*.mount|*.service|*.socket|*.target|*.timer) LEXER_OVERRIDE="dosini" ;;
-
-	*.ino)   LEXER_OVERRIDE="c"      ;;
-	*.json)  LEXER_OVERRIDE="json"   ;;
-	*.php)   LEXER_OVERRIDE="php"    ;;
-	*.plist) LEXER_OVERRIDE="xml"    ;;
-	*.py)    LEXER_OVERRIDE="python" ;;
-	*.xdf)   LEXER_OVERRIDE="xml"    ;;
 esac
 
-
-# Call pygmentize without lexer set, to attempt auto-detection
+# Call pygmentize without lexer set, to attempt auto-detection based on file extension
 if [[ "${EXTENSION_DETECT}" == "true" ]]; then
+	_debugLog "${1}"
 	pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"
 	exit "${?}"
 fi
 
 
-# grep for node shebang, if it passes, set lexer to javascript
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.node' "${1}" && LEXER_OVERRIDE="javascript"
+# Normal file extension-based detection failed, add some manual effort
+if [[ -z "${LEXER_OVERRIDE}" ]]; then
+	case "${FILE_NAME}" in
+		# .bash_logout, .bash_profile, .bashrc, .profile, etc
+		.bash*|.profile) LEXER_OVERRIDE="sh" ;;
 
-# grep for php shebang, if it passes, set lexer to php
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.php.*' "${1}" && LEXER_OVERRIDE="php"
+		# systemd files
+		*.mount|*.service|*.socket|*.target|*.timer) LEXER_OVERRIDE="dosini" ;;
 
-# grep for python shebang, if it passes, set lexer to python
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.python.*' "${1}" && LEXER_OVERRIDE="python"
+		*.ino)   LEXER_OVERRIDE="c"      ;;
+		*.json)  LEXER_OVERRIDE="json"   ;;
+		*.php)   LEXER_OVERRIDE="php"    ;;
+		*.plist) LEXER_OVERRIDE="xml"    ;;
+		*.py)    LEXER_OVERRIDE="python" ;;
+		*.xdf)   LEXER_OVERRIDE="xml"    ;;
+	esac
+fi
 
-# grep for sh-like shebang, if it passes, set lexer to sh
-[[ -z "${LEXER_OVERRIDE}" ]] && grep -Eq '#!.*./bin.*.sh' "${1}" && LEXER_OVERRIDE="sh"
+
+# grep for specific shebang, if it passes, set lexer value
+if [[ -z "${LEXER_OVERRIDE}" ]]; then
+	SHEBANG_LINE="$(head -n 1 "${1}")"
+	echo "${SHEBANG_LINE}" | grep -Eq '#!.*./bin.*.node'     && LEXER_OVERRIDE="javascript"
+	echo "${SHEBANG_LINE}" | grep -Eq '#!.*./bin.*.php.*'    && LEXER_OVERRIDE="php"
+	echo "${SHEBANG_LINE}" | grep -Eq '#!.*./bin.*.python.*' && LEXER_OVERRIDE="python"
+	echo "${SHEBANG_LINE}" | grep -Eq '#!.*./bin.*.sh'       && LEXER_OVERRIDE="sh"
+fi
 
 
 # Shebang grep failed, try detecting based on mime type
 if [[ -z "${LEXER_OVERRIDE}" ]]; then
-	FILE_MIME_TYPE="$(file --brief --mime-type "${1}")"
+	FILE_MIME_TYPE="$(file --brief --dereference --no-pad --no-buffer --mime-type "${FILE_PATH}" 2> /dev/null | head -n 1)"
 
 	case "${FILE_MIME_TYPE}" in
 		application/javascript) LEXER_OVERRIDE="javascript" ;;
@@ -96,11 +102,13 @@ if [[ -z "${LEXER_OVERRIDE}" ]]; then
 	esac
 fi
 
-# _debugLog "${1}"
+
+_debugLog "${1}"
+
 
 if [[ -n "${LEXER_OVERRIDE}" ]]; then
+	# JSON : Format with jq, sort output, use tab indendation
 	if [[ "${LEXER_OVERRIDE}" == "json" ]] && hash jq; then
-		# Format with jq, sort output, use tab indendation
 		jq -S --tab '.' "${1}" | pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" -l "${LEXER_OVERRIDE}"
 		exit "${?}"
 	fi
@@ -110,5 +118,6 @@ if [[ -n "${LEXER_OVERRIDE}" ]]; then
 fi
 
 
-# Last-ditch effort, I guess
-pygmentize -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"
+# Last-ditch effort
+# -g = Guess the lexer from the file contents, or pass through as plain text if nothing can be guessed
+pygmentize -g -f "${PYG_FMT}" -O "style=${PYG_STYLE}" "${1}"
