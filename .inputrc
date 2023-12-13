@@ -26,6 +26,14 @@ set output-meta  off
 # Do not bell on tab-completion
 set bell-style none
 
+# Attempt to briefly move the cursor to an opening parenthesis when a closing parenthesis is inserted
+set blink-matching-paren on
+
+# When listing completions, readline displays the common prefix of the set of possible completions using a different color
+# The color definitions are taken from the value of the LS_COLORS environment variable
+# If there is a color definition in $LS_COLORS for the custom suffix "readline-colored-completion-prefix", readline uses this color for the common prefix instead of its default
+set colored-completion-prefix on
+
 # Enable tab-completion regardless of filename case
 set completion-ignore-case on
 # Treats hyphens (-) and underscores (_) as equivalent when performing case-insensitive filename matching and completion
@@ -187,3 +195,6 @@ set visible-stats on
 
 # Option + z : Undo a dir change
 "\ez": 'cd -\015'
+
+
+# vim: set filetype=readline ts=2 sw=2 tw=0 noet :

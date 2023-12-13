@@ -20,12 +20,6 @@ TERM *+iterm3
 # Foreground : 38;2;R;G;B;<Attributes>
 # Background : 48;2;R;G;B;<Attributes>
 
-# 256 color text color codes:
-# 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
-
-# 256 color background color codes:
-# 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
-
 
 # Basic file type colors
 DIR    38;2;32;142;229    # Directory (sky blue)
@@ -43,7 +37,8 @@ RESET         0 # Reset to "normal" color
 CAPABILITY 30;41 # File with capability
 DOOR       01;35 # Door
 FIFO       40;33 # Pipe
-SOCK       01;35 # Socket
+
+SOCK 38;2;255;0;224;1;3;7 # Socket (also used by readline colored-completion-prefix)
 
 SETGID 30;43 # File that is setgid (g+s)
 SETUID 37;41 # File that is setuid (u+s)
@@ -54,6 +49,10 @@ OTHER_WRITABLE        38;2;32;142;229;1   # Dir WITHOUT sticky bit set (+t) and 
 
 NORMAL 38;2;210;210;210
 FILE   38;2;150;150;150
+
+
+# readline colored-completion-prefix
+.readline-colored-completion-prefix 38;2;255;0;224;3
 
 
 # Bash profile (dark green, italic)
@@ -426,7 +425,8 @@ FILE   38;2;150;150;150
 
 
 
-# Below is 256color
+
+# This section is normal 256color
 
 TERM *-256color
 TERM linux
@@ -439,7 +439,10 @@ TERM linux
 # 4 : underscore
 # 5 : blink
 # 7 : reverse
-# 8 : concealed (?)
+
+# Foreground : 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
+# Background : 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
+
 
 # Basic file type colors
 DIR    34       # Directory (blue)
@@ -450,17 +453,15 @@ ORPHAN 31;1;5;7 # Bad symlink (red, invert, bold, blink)
 BLK 31;47;1 # Block device (red, bold, grey background)
 CHR 33;47;1 # Character device (yellow, bold, grey background)
 
-FILE          0
 MISSING       0 # Symlink pointing to a nonexistent file
 MULTIHARDLINK 0 # Regular file with more than one link
-NORMAL        0
 RESET         0 # Reset to "normal" color
-
 
 CAPABILITY 30;41 # File with capability
 DOOR       01;35 # Door
 FIFO       40;33 # Pipe
-SOCK       01;35 # Socket
+
+SOCK 01;35;1;3;7 # Socket (also used by readline colored-completion-prefix)
 
 SETGID 30;43 # File that is setgid (g+s)
 SETUID 37;41 # File that is setuid (u+s)
@@ -468,6 +469,13 @@ SETUID 37;41 # File that is setuid (u+s)
 STICKY                34;3   # Dir WITH    sticky bit set (+t) and IS NOT other-writable (o+w)
 STICKY_OTHER_WRITABLE 34;3;1 # Dir WITH    sticky bit set (+t) and IS     other-writable (o+w)
 OTHER_WRITABLE        34;1   # Dir WITHOUT sticky bit set (+t) and IS     other-writable (o+w)
+
+NORMAL 0
+FILE   0
+
+
+# readline colored-completion-prefix
+.readline-colored-completion-prefix 35;1;3;7
 
 
 # Bash profile (green)
