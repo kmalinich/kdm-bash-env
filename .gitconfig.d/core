@@ -1,6 +1,7 @@
 [core]
-	#fsmonitor = true
-	pager     = cat
+	#fsmonitor      = true
+	pager          = cat
+	untrackedCache = true
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :
