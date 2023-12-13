@@ -52,7 +52,7 @@ FILE   38;2;150;150;150
 
 
 # readline colored-completion-prefix
-.readline-colored-completion-prefix 38;2;255;0;224;3
+.readline-colored-completion-prefix 38;2;255;0;224;1;3;7
 
 
 # Bash profile (dark green, italic)
@@ -461,7 +461,7 @@ CAPABILITY 30;41 # File with capability
 DOOR       01;35 # Door
 FIFO       40;33 # Pipe
 
-SOCK 01;35;1;3;7 # Socket (also used by readline colored-completion-prefix)
+SOCK 35;1;3;7 # Socket (also used by readline colored-completion-prefix)
 
 SETGID 30;43 # File that is setgid (g+s)
 SETUID 37;41 # File that is setuid (u+s)
