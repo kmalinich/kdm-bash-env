@@ -1,7 +1,3 @@
-# kdm bash-env
-# .dircolors
-
-
 # This section is 24bit/16 million colors - depends on a hack specific to this repo, and might not work in your terminal emulator
 # See this for more info: https://gist.github.com/XVilka/8346728
 
@@ -123,69 +119,125 @@ FILE   38;2;150;150;150
 .zip  38;2;192;25;108
 .zoo  38;2;192;25;108
 
-
 # Image formats (pink)
+.ANX  38;2;212;108;154
 .anx  38;2;212;108;154
+.AVIF 38;2;212;108;154
 .avif 38;2;212;108;154
+.AXV  38;2;212;108;154
 .axv  38;2;212;108;154
+.BMP  38;2;212;108;154
 .bmp  38;2;212;108;154
+.CGM  38;2;212;108;154
 .cgm  38;2;212;108;154
+.CR2  38;2;212;108;154
 .cr2  38;2;212;108;154
+.DL   38;2;212;108;154
 .dl   38;2;212;108;154
+.EMF  38;2;212;108;154
 .emf  38;2;212;108;154
+.FLC  38;2;212;108;154
 .flc  38;2;212;108;154
+.FLI  38;2;212;108;154
 .fli  38;2;212;108;154
+.GIF  38;2;212;108;154
 .gif  38;2;212;108;154
+.GL   38;2;212;108;154
 .gl   38;2;212;108;154
+.HEIC 38;2;212;108;154
 .heic 38;2;212;108;154
+.ICO  38;2;212;108;154
 .ico  38;2;212;108;154
+.JPEG 38;2;212;108;154
 .jpeg 38;2;212;108;154
+.JPG  38;2;212;108;154
 .jpg  38;2;212;108;154
+.JXR  38;2;212;108;154
 .jxr  38;2;212;108;154
+.MNG  38;2;212;108;154
 .mng  38;2;212;108;154
+.NUV  38;2;212;108;154
 .nuv  38;2;212;108;154
+.OGM  38;2;212;108;154
 .ogm  38;2;212;108;154
+.OGV  38;2;212;108;154
 .ogv  38;2;212;108;154
+.OGX  38;2;212;108;154
 .ogx  38;2;212;108;154
+.PBM  38;2;212;108;154
 .pbm  38;2;212;108;154
+.PCX  38;2;212;108;154
 .pcx  38;2;212;108;154
+.PGM  38;2;212;108;154
 .pgm  38;2;212;108;154
+.PNG  38;2;212;108;154
 .png  38;2;212;108;154
+.PPM  38;2;212;108;154
 .ppm  38;2;212;108;154
+.PSD  38;2;212;108;154
 .psd  38;2;212;108;154
+.QT   38;2;212;108;154
 .qt   38;2;212;108;154
+.RM   38;2;212;108;154
 .rm   38;2;212;108;154
+.RMVB 38;2;212;108;154
 .rmvb 38;2;212;108;154
+.SVG  38;2;212;108;154
 .svg  38;2;212;108;154
+.SVGZ 38;2;212;108;154
 .svgz 38;2;212;108;154
+.SWF  38;2;212;108;154
 .swf  38;2;212;108;154
+.TGA  38;2;212;108;154
 .tga  38;2;212;108;154
+.TIF  38;2;212;108;154
 .tif  38;2;212;108;154
+.TIFF 38;2;212;108;154
 .tiff 38;2;212;108;154
+.WEBP 38;2;212;108;154
 .webp 38;2;212;108;154
+.XBM  38;2;212;108;154
 .xbm  38;2;212;108;154
+.XCF  38;2;212;108;154
 .xcf  38;2;212;108;154
+.XPM  38;2;212;108;154
 .xpm  38;2;212;108;154
+.XWD  38;2;212;108;154
 .xwd  38;2;212;108;154
+.YUV  38;2;212;108;154
 .yuv  38;2;212;108;154
 
 # Video formats (slightly different pink)
+.ASF  38;2;169;49;102
 .asf  38;2;169;49;102
+.AVI  38;2;169;49;102
 .avi  38;2;169;49;102
+.FLV  38;2;169;49;102
 .flv  38;2;169;49;102
+.M2V  38;2;169;49;102
 .m2v  38;2;169;49;102
+.M4V  38;2;169;49;102
 .m4v  38;2;169;49;102
+.MKV  38;2;169;49;102
 .mkv  38;2;169;49;102
+.MOV  38;2;169;49;102
 .mov  38;2;169;49;102
+.MP4  38;2;169;49;102
 .mp4  38;2;169;49;102
+.MP4V 38;2;169;49;102
 .mp4v 38;2;169;49;102
+.MPEG 38;2;169;49;102
 .mpeg 38;2;169;49;102
+.MPG  38;2;169;49;102
 .mpg  38;2;169;49;102
+.TS   38;2;169;49;102
 .ts   38;2;169;49;102
+.VOB  38;2;169;49;102
 .vob  38;2;169;49;102
+.WEBM 38;2;169;49;102
 .webm 38;2;169;49;102
+.WMV  38;2;169;49;102
 .wmv  38;2;169;49;102
-
 
 # Lossless audio formats (dark purple)
 .aif  38;2;108;113;196
@@ -320,7 +372,6 @@ FILE   38;2;150;150;150
 .inf      38;2;255;255;0
 .lo       38;2;255;255;0
 .log      38;2;255;255;0
-.log      38;2;255;255;0
 .m4       38;2;255;255;0
 .map      38;2;255;255;0
 .markdown 38;2;255;255;0
@@ -424,8 +475,6 @@ FILE   38;2;150;150;150
 
 
 
-
-
 # This section is normal 256color
 
 TERM *-256color
@@ -439,6 +488,7 @@ TERM linux
 # 4 : underscore
 # 5 : blink
 # 7 : reverse
+# 8 : concealed (?)
 
 # Foreground : 30=black 31=red 32=green 33=yellow 34=blue 35=magenta 36=cyan 37=white
 # Background : 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
@@ -547,64 +597,124 @@ FILE   0
 .zoo  35
 
 # Image formats (purple)
+.ANX  35
 .anx  35
-.asf  35
-.avi  35
+.AVIF 35
 .avif 35
+.AXV  35
 .axv  35
+.BMP  35
 .bmp  35
+.CGM  35
 .cgm  35
+.CR2  35
 .cr2  35
+.DL   35
 .dl   35
+.EMF  35
 .emf  35
+.FLC  35
 .flc  35
+.FLI  35
 .fli  35
-.flv  35
+.GIF  35
 .gif  35
+.GL   35
 .gl   35
+.HEIC 35
 .heic 35
+.ICO  35
 .ico  35
+.JPEG 35
 .jpeg 35
+.JPG  35
 .jpg  35
+.JXR  35
 .jxr  35
-.m2v  35
-.m4v  35
-.mkv  35
+.MNG  35
 .mng  35
-.mov  35
-.mp4  35
-.mp4v 35
-.mpeg 35
-.mpg  35
+.NUV  35
 .nuv  35
+.OGM  35
 .ogm  35
+.OGV  35
 .ogv  35
+.OGX  35
 .ogx  35
+.PBM  35
 .pbm  35
+.PCX  35
 .pcx  35
+.PGM  35
 .pgm  35
+.PNG  35
 .png  35
+.PPM  35
 .ppm  35
+.PSD  35
 .psd  35
+.QT   35
 .qt   35
+.RM   35
 .rm   35
+.RMVB 35
 .rmvb 35
+.SVG  35
 .svg  35
+.SVGZ 35
 .svgz 35
+.SWF  35
 .swf  35
+.TGA  35
 .tga  35
+.TIF  35
 .tif  35
+.TIFF 35
 .tiff 35
-.ts   35
-.vob  35
-.webm 35
+.WEBP 35
 .webp 35
-.wmv  35
+.XBM  35
 .xbm  35
+.XCF  35
 .xcf  35
+.XPM  35
 .xpm  35
+.XWD  35
 .xwd  35
+.YUV  35
 .yuv  35
+
+# Video formats (purple)
+.asf  35
+.ASF  35
+.avi  35
+.AVI  35
+.flv  35
+.FLV  35
+.m2v  35
+.M2V  35
+.m4v  35
+.M4V  35
+.mkv  35
+.MKV  35
+.mov  35
+.MOV  35
+.mp4  35
+.MP4  35
+.mp4v 35
+.MP4V 35
+.mpeg 35
+.MPEG 35
+.mpg  35
+.MPG  35
+.ts   35
+.TS   35
+.vob  35
+.VOB  35
+.webm 35
+.WEBM 35
+.wmv  35
+.WMV  35
 
 # Lossless audio formats (purple)
 .aif  35
@@ -754,7 +864,7 @@ FILE   0
 .spec     33
 .textile  33
 .txt      33
-# Make sass/scss slightly more orange from vanilla css (except you can't do that with this palette)
+
 .sass     33
 .scss     33
 
