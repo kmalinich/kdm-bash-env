@@ -5,7 +5,7 @@
 #
 # https://man.archlinux.org/man/readline.3
 #
-# `bind -l`  : List names of functions
+# `bind -l`  : List functions
 # `bind -p`  : List functions      and bindings
 # `bind -v`  : List variable names and values
 # `sed -n l` : See actual character input coming into the terminal
@@ -142,27 +142,9 @@ set visible-stats on
 # "\e[17~":
 
 
-# F13 : Insert open and close double-quotes and move to just after the open double-quote
-# "\e[25~": "\"\"\C-b"
 
-
-# F16 : Insert open and close single-quotes and move to just after the open single-quote
-# (Like when you're about to type JSON)
-# "\e[29~": "\'\'\C-b"
-
-# F17 : Insert open and close double-quotes and move to just after the open double-quote
-# "\e[31~": "\"\"\C-b"
-
-# F18 : Double-quote the current or previous word
-# "\e[32~": "\eb\"\ef\""
-
-# F19 : Escaped-double-quote the current or previous word
-# "\e[33~": "\eb\\\"\ef\\\""
-
-
-# F__ : Single-quote the current or previous word
-# "\e[~": "\eb\'\ef\'"
-
+# Shift + space : Just do a space
+"\e[32;2u": " "
 
 # Shift + left/right arrow : move backward/forward by a word
 "\e[1;2C": forward-word
@@ -172,8 +154,12 @@ set visible-stats on
 "\e[1;9C": forward-word
 "\e[1;9D": backward-word
 
-# Space + shift : Just do a space
-"\e[32;2u": " "
+
+# Option + backspace : Delete previous word
+"\e[127;3u": shell-backward-kill-word
+
+# Option + delete-forward : Delete word
+"\e[3;3~": shell-kill-word
 
 
 # Option + c : Capitalize current word
@@ -191,7 +177,7 @@ set visible-stats on
 
 
 # Option + x : Change dir to last word of last command and run 'lll'
-"\ex": 'cd !$ \015lll\015'
+# "\ex": 'cd !$ \015lll\015'
 
 # Option + z : Undo a dir change
 "\ez": 'cd -\015'
