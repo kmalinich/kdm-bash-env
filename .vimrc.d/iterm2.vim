@@ -54,10 +54,12 @@ set guicursor+=sm:blinkoff500-blinkon500-blinkwait10-block-yCursor
 set guicursor+=v:blinkoff500-blinkon500-blinkwait10-block-rCursor
 set guicursor+=ve:blinkoff500-blinkon500-blinkwait10-block-rCursor
 
+
 " Restore normal cursor style when exiting (in this case, underline)
 augroup fix_cursor
 	au VimLeave * set guicursor=a:hor20-yCursor-blinkoff500-blinkon500-blinkwait10
 augroup END
+
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
