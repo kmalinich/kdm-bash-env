@@ -156,10 +156,10 @@ set visible-stats on
 
 
 # Option + backspace : Delete previous word
-"\e[127;3u": shell-backward-kill-word
+# "\e[127;3u": shell-backward-kill-word
 
 # Option + delete-forward : Delete word
-"\e[3;3~": shell-kill-word
+# "\e[3;3~": shell-kill-word
 
 
 # Option + c : Capitalize current word
