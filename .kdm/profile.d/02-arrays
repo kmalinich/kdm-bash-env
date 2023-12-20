@@ -111,6 +111,7 @@ ARRAY_PATH=(
 "${ARRAY_PATH[@]}"
 "${HOME}/bin"
 "${HOME}/.local/bin"
+"${HOME}/.cargo/bin"
 "${HOME}/.go/bin"
 "${HOME}/.composer/vendor/bin"
 "${HOME}/perl5/bin"
