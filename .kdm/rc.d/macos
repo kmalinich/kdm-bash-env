@@ -60,16 +60,14 @@ _macos_lsusb() {
 		plist-to-json <(
 			sudo system_profiler -xml 'SPUSBDataType' 2> /dev/null | sed -E -e 's/\s{1,}<\//<\//g' -e 's/\ \ /\ /g'
 		) | sed \
-			-e 's/"_items"/"items"/g'                        \
-			-e 's/"_name"/"name"/g'                          \
+			-e 's/"_items"/"items"/g' \
+			-e 's/"_name"/"name"/g'   \
+			-e 's/"attrib_Off"/false/g' -e 's/"attrib_No"/false/g' -e 's/"No"/false/g' -e 's/"no"/false/g' \
+			-e 's/"attrib_On"/true/g'   -e 's/"attrib_Yes"/true/g' -e 's/"yes"/true/g' -e 's/"Yes"/true/g' \
 			-e 's/"full_speed"/"full"/g'                     \
 			-e 's/"low_speed"/"low"/g'                       \
 			-e 's/"high_speed"/"high"/g'                     \
 			-e 's/"super_speed"/"super"/g'                   \
-			-e 's/"attrib_No"/false/g'                       \
-			-e 's/"attrib_Off"/false/g'                      \
-			-e 's/"attrib_On"/true/g'                        \
-			-e 's/"attrib_Yes"/true/g'                       \
 			-e 's/"bcd_device"/"bcdDevice"/g'                \
 			-e 's/"Built-in_Device"/"builtIn"/g'             \
 			-e 's/"bus_power"/"busPower"/g'                  \
@@ -83,9 +81,7 @@ _macos_lsusb() {
 			-e 's/"pci_vendor"/"pciVendor"/g'                \
 			-e 's/"product_id"/"productId"/g'                \
 			-e 's/"serial_num"/"serialNumber"/g'             \
-			-e 's/"vendor_id"/"vendorId"/g'                  \
-			-e 's/"No"/false/g' -e 's/"no"/false/g'          \
-			-e 's/"yes"/true/g' -e 's/"Yes"/true/g'
+			-e 's/"vendor_id"/"vendorId"/g'
 	)
 }
 
@@ -303,9 +299,22 @@ _macos_system_profiler() {
 
 	# Check argument
 	USAGE_STRING="system-profiler <data type (name only, no SP prefix or DataType suffix)>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+	if [[ -z "${1}" ]]; then
+		output usage "${USAGE_STRING}"
+		echo
+		_macos_system_profiler_list
+		return
+	fi
 
-	plist-to-json <(sudo system_profiler -xml "SP${1}DataType" 2> /dev/null | sed -E -e 's/\s{1,}<\//<\//g' -e 's/\ \ /\ /g') | sed -e 's/"attrib_Yes"/true/g' -e 's/"attrib_No"/false/g' -e 's/"attrib_On"/true/g' -e 's/"attrib_Off"/false/g' -e 's/"_items"/"items"/g' -e 's/"_name"/"name"/g' | jq -S '.[][].items'
+	jq ".[][].items | ${2-.}" <(
+		plist-to-json <(
+			sudo system_profiler -xml "SP${1}DataType" 2> /dev/null | sed -E -e 's/\s{1,}<\//<\//g' -e 's/\ \ /\ /g'
+		) | sed \
+			-e 's/"_items"/"items"/g'   \
+			-e 's/"_name"/"name"/g'     \
+			-e 's/"attrib_Off"/false/g' -e 's/"attrib_No"/false/g' -e 's/"No"/false/g' -e 's/"no"/false/g' \
+			-e 's/"attrib_On"/true/g'   -e 's/"attrib_Yes"/true/g' -e 's/"yes"/true/g' -e 's/"Yes"/true/g'
+	)
 }
 
 # List formatted system_profiler data types
