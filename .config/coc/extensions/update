@@ -28,6 +28,6 @@ FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
 mv --force "${FILE_TEMP}" ./package.json
 
-[[ "${UPDATE_REQUIRED}" == "false" ]] && exit 0
+[[ "${UPDATE_REQUIRED}" == "false" && "${1}" != "--force" ]] && exit 0
 
 ~/.config/coc/extensions/install
