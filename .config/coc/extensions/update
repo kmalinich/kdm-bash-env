@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 UPDATE_REQUIRED="true"
-PKG_MANAGER="yarn"
+PKG_MANAGER="npm"
 
 
 ARRAY_DEPS=(jq ncu "${PKG_MANAGER}")
@@ -17,7 +17,8 @@ done
 cd "${HOME}/.config/coc/extensions" || exit 1
 
 echo "Checking for updates"
-if ncu --errorLevel 2 --loglevel silent --packageManager "${PKG_MANAGER}" --upgrade; then
+# For some reason, `--upgrade` instead of `-u` makes ncu say "No dependencies" and nothing works
+if ncu --errorLevel 2 --loglevel silent --packageManager "${PKG_MANAGER}" -u; then
 	echo "No update required"
 	UPDATE_REQUIRED="false"
 fi
@@ -25,7 +26,7 @@ fi
 echo "Formatting/sorting package.json"
 FILE_TEMP="$(mktemp)"
 jq -S --tab . ./package.json > "${FILE_TEMP}"
-mv --force --verbose "${FILE_TEMP}" ./package.json
+mv --force "${FILE_TEMP}" ./package.json
 
 [[ "${UPDATE_REQUIRED}" == "false" ]] && exit 0
 

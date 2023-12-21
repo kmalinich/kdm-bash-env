@@ -1,9 +1,8 @@
 {
+	"colors.enable": true,
+
 	"coc.preferences.extensionUpdateCheck": "daily",
 	"coc.preferences.useQuickfixForLocations": true,
-	"coc.preferences.colorSupport": true,
-
-	"css.validate": true,
 
 	"diagnostic.checkCurrentLine": true,
 	"diagnostic.enable": true,
@@ -27,15 +26,21 @@
 
 	"javascript.showUnused": false,
 
+
+	"css.validate": false,
 	"less.validate": false,
 	"scss.validate": false,
 
+	"stylelintplus.autoFixOnSave": true,
+	"stylelintplus.validateOnType": true,
+
+
 	"suggest.autoTrigger": "trigger",
-	"suggest.disableMenu": true,
 	"suggest.noselect": false,
 	"suggest.removeDuplicateItems": true,
 	"suggest.snippetIndicator": "",
 	"suggest.timeout": 500,
+	"suggest.virtualText": true,
 	"suggest.completionItemKindLabels": {
 		"class": "\uf0e8",
 		"color": "\ue22b",
@@ -67,8 +72,6 @@
 
 	"tsserver.enable": false,
 
-	"wxss.validate": false,
-
 	"yaml.completion": true,
 	"yaml.format.bracketSpacing":  true,
 	"yaml.format.enable": true,
@@ -76,7 +79,6 @@
 	"yaml.format.proseWrap": "never",
 	"yaml.format.singleQuote": true,
 	"yaml.hover": true,
-	"yaml.yamlVersion": 1.1,
 	"yaml.trace.server": "verbose",
 	"yaml.customTags": [
 		"!include_dir_merge_list Scalar",
@@ -85,6 +87,7 @@
 		"!lambda Scalar",
 		"!secret Scalar"
 	],
+
 
 	"diagnostic-languageserver.filetypes": {
 		"sh": "shellcheck"

@@ -28,9 +28,10 @@ echo; echo
 #echo; echo
 
 cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 5
-echo "Executing 'yarn install' in ~/.vim/pack/kdm/coc.nvim"
-rm -f ./package-lock.json > /dev/null 2>&1
-yarn install --frozen-lockfile --network-concurrency "$(nproc)" --non-interactive
+echo "Executing 'npm install' in ~/.vim/pack/kdm/coc.nvim"
+#rm -f ./package-lock.json > /dev/null 2>&1
+npm install
+#yarn install --frozen-lockfile --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 
 #echo "Fixing coc-svg svgo dependency symlink"
