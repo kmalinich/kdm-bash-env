@@ -28,9 +28,9 @@ echo; echo
 #echo; echo
 
 cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 5
-echo "Executing 'npm install' in ~/.vim/pack/kdm/coc.nvim"
+echo "Executing 'npm ci' in ~/.vim/pack/kdm/coc.nvim"
 #rm -f ./package-lock.json > /dev/null 2>&1
-npm install
+npm ci
 #yarn install --frozen-lockfile --network-concurrency "$(nproc)" --non-interactive
 echo; echo
 

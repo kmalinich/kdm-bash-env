@@ -42,6 +42,7 @@ _net_info() {
 	fi
 }
 
+
 # Formats MAC address for all eventualities
 _net_mac() {
 	# Declare vars as local
@@ -85,7 +86,33 @@ _net_mac() {
 	_net_mac_lookup "${COLONS_LOWER}"
 }
 
-# Search a subnet for pinging IPs
+# Look up MAC address against IEEE database
+_net_mac_lookup() {
+	# Declare vars as local
+	local IEEE_ADDRESS IEEE_COMPANY IEEE_COUNTRY IEEE_STRING PF_FMT USAGE_STRING
+
+	# Check if oui npm package is installed
+	! hash oui && output error "oui not available" && return
+
+	USAGE_STRING="net-mac-lookup <MAC address with colons [at least first 3 octets]>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+
+	IEEE_STRING="$(oui "${1}" | sed 's/,/ /g' | sed 's/  / /g' | sed ':a;N;$!ba;s/\n/,/g')"
+
+	IEEE_COMPANY="$(echo "${IEEE_STRING}" | awk -F ',' '{print $1}')"
+	IEEE_ADDRESS="$(echo "${IEEE_STRING}" | awk -F ',' '{print $2 ", " $3}')"
+	IEEE_COUNTRY="$(echo "${IEEE_STRING}" | awk -F ',' '{print $4}')"
+
+	PF_FMT="${C_PRP}%-10s${C_RST}%s\\n"
+
+	output purple "-------------------------------- IEEE lookup --"
+	printf "${PF_FMT}" "Company" "${IEEE_COMPANY}"
+	printf "${PF_FMT}" "Address" "${IEEE_ADDRESS}"
+	printf "${PF_FMT}" "Country" "${IEEE_COUNTRY}"
+}
+
+
+# Search a subnet for IPs that respond to ICMP
 _net_ping_subnet() {
 	# Declare vars as local
 	local USAGE_STRING
@@ -108,6 +135,7 @@ _net_ping_subnet() {
 		--generate "${1}" 2> /dev/null \
 		| sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"
 }
+
 
 # Python webserver
 _net_webserver() {
@@ -171,6 +199,7 @@ _net_webserver() {
 # Function aliases
 alias net-info='       _net_info'
 alias net-mac='        _net_mac'
+alias net-mac-lookup=' _net_mac_lookup'
 alias net-ping-subnet='_net_ping_subnet'
 alias net-webserver='  _net_webserver'
 
