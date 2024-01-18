@@ -22,10 +22,7 @@
 	"eslint.format.enable": true,
 	"eslint.onIgnoredFiles": "warn",
 
-	"highlight.colors.enable": true,
-
 	"javascript.showUnused": false,
-
 
 	"css.validate": false,
 	"less.validate": false,
@@ -33,7 +30,6 @@
 
 	"stylelintplus.autoFixOnSave": true,
 	"stylelintplus.validateOnType": true,
-
 
 	"suggest.autoTrigger": "trigger",
 	"suggest.noselect": false,
@@ -104,7 +100,7 @@
 				"-"
 			],
 			"command": "shellcheck",
-			"debounce": 1000,
+			"debounce": 2000,
 			"formatLines": 1,
 			"formatPattern": [
 				"^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",

@@ -171,7 +171,6 @@ augroup end
 let g:coc_global_extensions = [
 	\ 'coc-css',
 	\ 'coc-eslint',
-	\ 'coc-highlight',
 	\ 'coc-html',
 	\ 'coc-json',
 	\ 'coc-markdownlint',
@@ -181,6 +180,7 @@ let g:coc_global_extensions = [
 	\ 'coc-tsserver',
 	\ 'coc-yaml'
 \ ]
+" \ 'coc-highlight',
 " \ 'coc-clangd',
 " \ 'coc-omnisharp',
 " \ 'coc-powershell',
