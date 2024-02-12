@@ -63,9 +63,18 @@ map <C-h> :exec &conceallevel ? "set conceallevel=0" : "set conceallevel=1"<CR>
 
 
 " Tab navigation, normal mode
-nnoremap <C-[> :tabprevious<CR>
-nnoremap <C-]> :tabnext<CR>
-nnoremap <C-t> :tabnew<CR>
+nnoremap <C-S-tab> :tabprevious<CR>
+nnoremap <C-tab>   :tabnext<CR>
+nnoremap <C-t>     :tabnew<CR>
+
+" Tab navigation, insert mode
+inoremap <C-S-tab> <Esc>:tabprevious<CR>i
+inoremap <C-tab>   <Esc>:tabnext<CR>i
+inoremap <C-t>     <Esc>:tabnew<CR>i
+
+" nnoremap <C-[> :tabprevious<CR>
+" nnoremap <C-]> :tabnext<CR>
+" nnoremap <C-t> :tabnew<CR>
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :

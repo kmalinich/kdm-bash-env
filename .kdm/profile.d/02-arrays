@@ -63,6 +63,7 @@ ULR="${UL}/rvm"
 # Entries at the end       of this array will end up at the end       of MANPATH
 ARRAY_MANPATH=(
 "${ULO}/coreutils/libexec/man"
+"${ULO}/mozjpeg/share/man"
 "${ULO}/curl/share/man"
 "${ULO}/diffutils/share/man"
 "${ULO}/findutils/libexec/man"
@@ -128,6 +129,7 @@ ARRAY_PATH=(
 "${ULO}/bc/bin"
 "${ULO}/go/libexec/bin"
 "${ULO}/coreutils/libexec/gnubin"
+"${ULO}/mozjpeg/bin"
 "${ULO}/ed/libexec/gnubin"
 "${ULO}/findutils/libexec/gnubin"
 "${ULO}/gawk/libexec/gnubin"
