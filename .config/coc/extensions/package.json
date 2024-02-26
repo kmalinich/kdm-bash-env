@@ -1,16 +1,16 @@
 {
-  "dependencies": {
-    "coc-css": ">=2.1.0",
-    "coc-diagnostic": ">=0.24.1",
-    "coc-eslint": ">=1.6.0",
-    "coc-html": ">=1.8.0",
-    "coc-json": ">=1.9.2",
-    "coc-markdownlint": ">=1.33.0",
-    "coc-python": ">=1.2.13",
-    "coc-stylelintplus": ">=1.5.0",
-    "coc-svg": ">=0.0.13",
-    "coc-tsserver": ">=2.1.4",
-    "coc-yaml": ">=1.9.0"
-  },
-  "lastUpdate": 1707757318640
+	"dependencies": {
+		"coc-css": ">=2.1.0",
+		"coc-diagnostic": ">=0.24.1",
+		"coc-eslint": ">=1.6.0",
+		"coc-html": ">=1.8.0",
+		"coc-json": ">=1.9.2",
+		"coc-markdownlint": ">=1.33.0",
+		"coc-python": ">=1.2.13",
+		"coc-stylelintplus": ">=1.5.0",
+		"coc-svg": ">=0.0.13",
+		"coc-tsserver": ">=2.1.4",
+		"coc-yaml": ">=1.9.0"
+	},
+	"lastUpdate": 1708926656862
 }
