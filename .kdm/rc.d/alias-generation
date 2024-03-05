@@ -3,14 +3,14 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
-_alias_exa() {
-	# Check if exa is installed
-	hash exa || return
+_alias_eza() {
+	# Check if eza is installed
+	hash eza || return
 
 	export EXA_COLORS='da=38;5;255:uu=38;5;242:un=38;2;255;255;1'
 	export EXA_ICON_SPACING='2'
 
-	alias ls='exa --color=auto --color-scale --time-style long-iso --icons --group --group-directories-first 2> /dev/null'
+	alias ls='eza --color=auto --color-scale --time-style long-iso --icons --group --group-directories-first 2> /dev/null'
 
 	alias lll='ls --all                           --classify --long'
 	alias l.=' ls                     --list-dirs                   .*'
@@ -20,8 +20,8 @@ _alias_exa() {
 	alias ll=' ls                                 --classify --long'
 	alias lld='ls                     --list-dirs --classify --long'
 
-	# Because `exa` doesn't support traditional GNU `ls` `ls -tr` syntax, and I use it a lot
-	# Also `exa` 'sort by modified date' is, by default, in reverse order compared to GNU `ls`,
+	# Because `eza` doesn't support traditional GNU `ls` `ls -tr` syntax, and I use it a lot
+	# Also `eza` 'sort by modified date' is, by default, in reverse order compared to GNU `ls`,
 	# hence the `llt` alias having the `--reverse` option and the `lltr` alias not
 	alias llt=' ll --sort modified --reverse'
 	alias lltr='ll --sort modified'
@@ -31,8 +31,8 @@ _alias_ls() {
 	# Return if GNU grep not installed and not on Linux
 	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
 
-	# Return if exa is installed
-	hash exa && return
+	# Return if eza is installed
+	hash eza && return
 
 	# Declare vars as local
 	local LS_TIME_STYLE
@@ -252,7 +252,7 @@ _alias_pygmentize() {
 }
 
 
-_alias_exa
+_alias_eza
 _alias_ls
 _alias_grep
 _alias_nmap

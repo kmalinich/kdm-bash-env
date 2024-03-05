@@ -87,38 +87,5 @@
 
 	"diagnostic-languageserver.filetypes": {
 		"sh": "shellcheck"
-	},
-
-	"diagnostic-languageserver.linters": {
-		"shellcheck": {
-			"args": [
-				"--shell=bash",
-				"--exclude=SC1090",
-				"--exclude=SC1117",
-				"--exclude=SC2059",
-				"--format=gcc",
-				"-"
-			],
-			"command": "shellcheck",
-			"debounce": 2000,
-			"formatLines": 1,
-			"formatPattern": [
-				"^[^:]+:(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$",
-				{
-					"column": 2,
-					"line": 1,
-					"message": 4,
-					"security": 3
-				}
-			],
-			"offsetColumn": 0,
-			"offsetLine": 0,
-			"securities": {
-				"error": "error",
-				"note": "info",
-				"warning": "warning"
-			},
-			"sourceName": "shellcheck"
-		}
 	}
 }
