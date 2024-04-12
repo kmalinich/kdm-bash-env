@@ -1,7 +1,6 @@
 {
 	"dependencies": {
 		"coc-css": ">=2.1.0",
-		"coc-diagnostic": ">=0.24.1",
 		"coc-eslint": ">=1.7.0",
 		"coc-html": ">=1.8.0",
 		"coc-json": ">=1.9.2",
@@ -12,5 +11,5 @@
 		"coc-tsserver": ">=2.2.0",
 		"coc-yaml": ">=1.9.0"
 	},
-	"lastUpdate": 1712851504081
+	"lastUpdate": 1712934380304
 }

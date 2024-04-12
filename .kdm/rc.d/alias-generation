@@ -10,7 +10,7 @@ _alias_eza() {
 	export EXA_COLORS='da=38;5;255:uu=38;5;242:un=38;2;255;255;1'
 	export EXA_ICON_SPACING='2'
 
-	alias ls='eza --color=auto --color-scale --time-style long-iso --icons --group --group-directories-first 2> /dev/null'
+	alias ls='eza --color=auto --color-scale --time-style long-iso --icons --links --group --group-directories-first 2> /dev/null'
 
 	alias lll='ls --all                           --classify --long'
 	alias l.=' ls                     --list-dirs                   .*'
