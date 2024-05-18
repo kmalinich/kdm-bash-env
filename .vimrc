@@ -45,7 +45,7 @@ call LoadFile('filetype')
 
 if has('nvim')
 	call LoadFile('neovim')
-	call LoadFile('notify')
+	" call LoadFile('notify')
 endif
 
 
