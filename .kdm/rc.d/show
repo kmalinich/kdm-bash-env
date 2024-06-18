@@ -6,38 +6,56 @@
 # Check if an executable exists, if so, show info about it
 _show_bin() {
 	# Declare vars as local
-	local FILE_ALIAS FILE_MIME FILE_PATH FILE_TYPE LS
+	local FILE_ALIAS FILE_MIME FILE_PATH FILE_TYPE EZA LS
 
-	if ! hash "${1}"; then
+	if ! hash "${1}" && ! type "${1}" > /dev/null 2>&1; then
 		output error "Could not find '${1}' in defined PATH"
 		return 1
 	fi
 
 	# Get any potential aliases
-	FILE_ALIAS="$(alias "${1}" 2> /dev/null | awk -F "'" '{printf $2}')"
+	FILE_ALIAS="$(alias "${1}" 2> /dev/null | awk -F "'" '{printf $2}' | sed -e "s/^[ \t]*//" -e 's/  */ /g')"
 
 	# Get full file path, type, and MIME encoding/type
 	! FILE_PATH="$("${WHICHPATH}" --skip-alias --skip-functions "${1}" 2> /dev/null)" && FILE_PATH="$("${WHICHPATH}" "${1}" 2> /dev/null)"
 
-	FILE_TYPE="$(file -bNn                             "${FILE_PATH}" 2> /dev/null | head -n 1)"
-	FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}" 2> /dev/null | head -n 1)"
+	FILE_TYPE="$(type -t "${1}")"
 
-	# Detect GNU ls or stock macOS ls to enable color output properly
-	LS=('ls' '-Fhl')
+	# Only get binary type and mime type of file is of type "file"
+	if [[ "${FILE_TYPE}" == "file" && "${FILE_PATH}" ]]; then
+		FILE_BINT="$(file -bNn                             "${FILE_PATH}" 2> /dev/null | head -n 1)"
+		FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}" 2> /dev/null | head -n 1)"
+	fi
+
+	# Ignore alias if it points to the same binary
+	[[ "${FILE_ALIAS}" == "${FILE_PATH}" ]] && unset FILE_ALIAS
+
+	output keyval-c " Name" "${1}"
+	[[ "${FILE_ALIAS}" ]] && output keyval-r  "Alias" "${FILE_ALIAS}"
+	[[ "${FILE_PATH}"  ]] && output keyval-pn " Path" "${FILE_PATH}"
+	[[ "${FILE_TYPE}"  ]] && output keyval-g  " Type" "${FILE_TYPE}"
+	[[ "${FILE_BINT}"  ]] && output keyval-y  "bType" "${FILE_BINT}"
+	[[ "${FILE_MIME}"  ]] && output keyval-o  " MIME" "${FILE_MIME}"
+
+	[[ -z "${FILE_PATH}" ]] && return 0
+
+	echo
+
+	if [[ "${EZA_AS_LS}" == 'true' ]]; then
+		EZA=('eza' '--color=auto' '--color-scale' '--time-style' 'long-iso' '--icons' '--links' '--group' '--group-directories-first' '--classify' '--long')
+		"${EZA[@]}" "${FILE_PATH}" 2> /dev/null
+		return 0
+	fi
+
+	# Detect GNU/Linux ls or stock macOS ls to nicely format output
+	LS=('ls')
 	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		LS+=('--color=auto')
+		LS+=('--color=if-tty' '--group-directories-first' "--time-style=${LS_TIME_STYLE}" '--file-type' '--human-readable' '-l')
 	else
-		LS+=('-G')
+		LS+=('-FhlG')
 	fi
 
 	"${LS[@]}" "${FILE_PATH}" 2> /dev/null
-	echo
-
-	output kvt " Name" "${1}"
-	[[ "${FILE_ALIAS}" ]] && output kvo "Alias" "${FILE_ALIAS}"
-	[[ "${FILE_PATH}"  ]] && output kv  " Path" "${FILE_PATH}"
-	[[ "${FILE_TYPE}"  ]] && output kvc " Type" "${FILE_TYPE}"
-	[[ "${FILE_MIME}"  ]] && output kvc " MIME" "${FILE_MIME}"
 
 	return 0
 }
