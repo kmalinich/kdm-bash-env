@@ -84,6 +84,7 @@ ARRAY_MANPATH=(
 /usr/share/man/overrides
 /usr/share/man/en
 /usr/share/man
+/opt/local/share/man
 /usr/X11R6/share/man
 /opt/X11/share/man
 )
