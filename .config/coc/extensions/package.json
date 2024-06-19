@@ -9,7 +9,8 @@
     "coc-stylelintplus": ">=1.5.0",
     "coc-svg": ">=0.0.13",
     "coc-tsserver": ">=2.2.0",
-    "coc-yaml": ">=1.9.0"
+    "coc-yaml": ">=1.9.0",
+    "coc-sh": ">=1.2.4"
   },
-  "lastUpdate": 1718735696133
+  "lastUpdate": 1718822141597
 }
