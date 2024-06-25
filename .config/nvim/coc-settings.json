@@ -19,6 +19,7 @@
 
 	"eslint.alwaysShowStatus": true,
 	"eslint.autoFixOnSave": true,
+	"eslint.experimental.useFlatConfig": true,
 	"eslint.format.enable": true,
 	"eslint.onIgnoredFiles": "warn",
 
@@ -83,9 +84,4 @@
 		"!lambda Scalar",
 		"!secret Scalar"
 	],
-
-
-	"diagnostic-languageserver.filetypes": {
-		"sh": "shellcheck"
-	}
 }

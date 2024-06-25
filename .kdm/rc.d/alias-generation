@@ -7,8 +7,16 @@ _alias_eza() {
 	# Check if eza is installed
 	hash eza || return
 
-	export EXA_COLORS='da=38;5;255:uu=38;5;242:un=38;2;255;255;1'
-	export EXA_ICON_SPACING='2'
+	EZA_AS_LS='true'
+
+	EXA_COLORS='da=38;5;255:uu=38;5;242:un=38;2;255;255;1'
+	EZA_COLORS="${EXA_COLORS}"
+
+	EXA_ICON_SPACING='2'
+	EZA_ICON_SPACING="${EZA_ICON_SPACING}"
+
+	export EZA_AS_LS EXA_COLORS EZA_COLORS EXA_ICON_SPACING EZA_ICON_SPACING
+
 
 	alias ls='eza --color=auto --color-scale --time-style long-iso --icons --links --group --group-directories-first 2> /dev/null'
 
@@ -28,16 +36,13 @@ _alias_eza() {
 }
 
 _alias_ls() {
+	export LS_TIME_STYLE='+%Y-%m-%d %r'
+
 	# Return if GNU grep not installed and not on Linux
 	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
 
 	# Return if eza is installed
 	hash eza && return
-
-	# Declare vars as local
-	local LS_TIME_STYLE
-
-	LS_TIME_STYLE='+%Y-%m-%d %r'
 
 	# shellcheck disable=SC2139
 	alias ls="ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"

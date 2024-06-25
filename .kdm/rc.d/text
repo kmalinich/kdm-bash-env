@@ -88,7 +88,7 @@ output() {
 			OUTPUT_STDERR="1>&2"
 			;;
 
-		ef|error_fail)
+		ef|error_fail|error-fail)
 			# Special function to output formatted usage string, with stderr output
 			OUTPUT_FORMAT="${C_RED_BRT_BLD}${C_ITA}Error${C_RST} ${C_WHT_BRT}:${C_RST} ${C_RED}Failed %s, cannot continue${C_RST}\\n"
 			OUTPUT_STDERR="1>&2"
@@ -108,6 +108,20 @@ output() {
 			fi
 
 			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		ka|kva|keyval-a)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_ALT}%s${C_GRY}'${C_RST}\\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
@@ -178,6 +192,20 @@ output() {
 			fi
 
 			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_PRP}%s${C_GRY}'${C_RST}\\n"
+
+			# Output special format and immediately return
+			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
+			return
+			;;
+
+		kpn|kvpn|keyval-pn)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+
+			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_PNK}%s${C_GRY}'${C_RST}\\n"
 
 			# Output special format and immediately return
 			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
@@ -267,11 +295,11 @@ _output_usage() {
 
 	# Array of arrays options
 	declare -A ARRAY_USAGE='(
-	[0]="alert error error_fail usage"
+	[0]="alert error error-fail usage"
 	[1]="black blue orange cyan gray green orange pink purple red white yellow"
 	[2]="leadup leadup-custom"
 	[3]="failure success"
-	[4]="keyval keyval-b keyval-c keyval-f keyval-o keyval-p keyval-r keyval-t"
+	[4]="keyval keyval-a keyval-b keyval-c keyval-f keyval-o keyval-p keyval-pn keyval-r keyval-t"
 	[5]="backtick stderr"
 	)'
 
@@ -292,7 +320,9 @@ _output_completion() {
 
 	# Array of options
 	ARRAY_USAGE_OPTIONS=(
-	alert error error_fail usage
+	alert
+	error error-fail
+	usage
 
 	black blue cyan gray green orange pink purple red white yellow
 
@@ -301,12 +331,14 @@ _output_completion() {
 	failure success
 
 	keyval
+	keyval-a
 	keyval-b
 	keyval-c
 	keyval-f
 	keyval-g
 	keyval-o
 	keyval-p
+	keyval-pn
 	keyval-r
 	keyval-t
 	keyval-y
@@ -333,7 +365,7 @@ _o_completion() {
 
 	f s
 
-	k kb kc kf ko kp kr kt
+	k ka kb kc kf ko kp kpn kr kt
 
 	b 2
 	)
