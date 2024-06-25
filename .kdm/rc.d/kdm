@@ -203,7 +203,7 @@ _kdm_update() {
 	WAIT_LIMIT="180"
 
 	# Wait longer on slower CPUs
-	CPU_MAX_MHZ="$(lscpu --extended=MAXMHZ --json | jq -r '.cpus[0].maxmhz' | awk -F '.' '{print $1}')"
+	CPU_MAX_MHZ="$(lscpu --extended=MAXMHZ | sort -nr | head -n 1 | awk -F '.' '{print $1}')"
 	if [[ "${CPU_MAX_MHZ}" -le "2000" ]]; then
 		WAIT_LIMIT="600"
 	fi
