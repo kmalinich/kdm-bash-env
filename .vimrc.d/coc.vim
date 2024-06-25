@@ -72,9 +72,6 @@ function! ShowDocumentation()
 	endif
 endfunction
 
-" Highlight the symbol and its references when holding the cursor
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
 " Symbol renaming
 nmap <leader>rn <Plug>(coc-rename)
 
@@ -179,9 +176,9 @@ nnoremap <silent> <space>k :<C-u>CocPrev<CR>
 nnoremap <silent> <space>p :<C-u>CocListResume<CR>
 
 
-
-" Highlight symbol under cursor on CursorHold
+" Highlight the symbol and its references when holding the cursor
 " autocmd CursorHold * silent call CocActionAsync('highlight')
+
 
 augroup mygroup
 	autocmd!
