@@ -2,10 +2,10 @@ scriptencoding utf-8
 
 
 " Don't make JSX files require a .jsx extension
-let g:jsx_ext_required = 0
+" let g:jsx_ext_required = 0
 
 " JavaScript plugin config
-" Sisnable syntax highlighting for JSDoc + NGDoc
+" Signable syntax highlighting for JSDoc + NGDoc
 let g:javascript_plugin_jsdoc = 0
 let g:javascript_plugin_ngdoc = 0
 

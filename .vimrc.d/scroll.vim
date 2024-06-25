@@ -2,13 +2,11 @@ scriptencoding utf-8
 
 
 " Make scrolling and highlighters fast
-set lazyredraw
+" set lazyredraw
 
-if !has('nvim')
-	set ttyfast
-endif
+set ttyfast
 
-set ttimeoutlen=40
+" set ttimeoutlen=40
 let g:loaded_matchparen=1
 
 " Keep at least 3 lines above/below

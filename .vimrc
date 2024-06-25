@@ -18,7 +18,7 @@ call LoadFile('environment')
 call LoadFile('indent')
 " call LoadFile('spell')
 call LoadFile('buffers')
-call LoadFile('polyglot')
+"call LoadFile('polyglot')
 call LoadFile('encoding')
 call LoadFile('syntax')
 call LoadFile('backup')
@@ -45,7 +45,7 @@ call LoadFile('filetype')
 
 if has('nvim')
 	call LoadFile('neovim')
-	" call LoadFile('notify')
+	call LoadFile('notify')
 endif
 
 
@@ -61,7 +61,7 @@ call LoadFile('case')
 
 if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:uname_machine ==# 'x86_64')
 	call LoadFile('coc')
-	" call LoadFile('coc-notify')
+	call LoadFile('coc-notify')
 endif
 
 

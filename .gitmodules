@@ -70,7 +70,11 @@
 	path   = .vim/pack/kdm/securemodelines
 	url    = https://github.com/ciaranm/securemodelines
 	branch = master
+[submodule ".vim/pack/kdm/sh"]
+	path   = .vim/pack/kdm/sh
+	url    = https://github.com/arzg/vim-sh
+	branch = master
 [submodule ".vim/pack/kdm/supertab"]
 	path   = .vim/pack/kdm/supertab
 	url    = https://github.com/ervandew/supertab
-	branch = master
+	branch = main
