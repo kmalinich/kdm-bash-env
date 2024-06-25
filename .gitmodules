@@ -54,10 +54,6 @@
 	path   = .vim/pack/kdm/nvim-notify
 	url    = https://github.com/rcarriga/nvim-notify
 	branch = master
-[submodule ".vim/pack/kdm/polyglot"]
-	path   = .vim/pack/kdm/polyglot
-	url    = https://github.com/sheerun/vim-polyglot
-	branch = master
 [submodule ".vim/pack/kdm/salt"]
 	path   = .vim/pack/kdm/salt
 	url    = https://github.com/saltstack/salt-vim
