@@ -18,7 +18,7 @@
 	"diagnostic.warningSign": "⚠",
 
 	"eslint.alwaysShowStatus": true,
-	"eslint.autoFixOnSave": true,
+	"eslint.autoFixOnSave": false,
 	"eslint.experimental.useFlatConfig": true,
 	"eslint.format.enable": true,
 	"eslint.onIgnoredFiles": "warn",
