@@ -70,18 +70,23 @@
 	"tsserver.enable": false,
 
 	"yaml.completion": true,
-	"yaml.format.bracketSpacing":  true,
+	"yaml.format.bracketSpacing": true,
 	"yaml.format.enable": true,
 	"yaml.format.printWidth": 160,
 	"yaml.format.proseWrap": "never",
 	"yaml.format.singleQuote": true,
 	"yaml.hover": true,
 	"yaml.trace.server": "verbose",
+	"yaml.schemaStore.enable": true,
+	"yaml.schemas": {
+		"https://raw.githubusercontent.com/esphome/esphome-vscode/dev/server/src/schema/esphome.json": "*/esphome/config/*"
+	},
 	"yaml.customTags": [
-		"!include_dir_merge_list Scalar",
-		"!include_dir_merge_named Scalar",
+		"!include mapping",
+		"!include_dir_merge_list scalar",
+		"!include_dir_merge_named scalar",
 		"!input",
-		"!lambda Scalar",
-		"!secret Scalar"
+		"!lambda scalar",
+		"!secret scalar"
 	],
 }

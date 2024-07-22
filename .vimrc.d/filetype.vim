@@ -1,29 +1,8 @@
 scriptencoding utf-8
 
+
 " Disable vim-polyglot loading specific types
 let g:polyglot_disabled = ['csv']
-
-
-
-" workaround for whatever weird bug is present in some combination of at least these versions:
-" - neovim v0.5.0-705-g9f704c88a
-" - vim-polyglot 06548fe61765d8a68a289741ce8d30f04a037e60
-"
-" only on Linux x64, oddly
-"
-" it throws some error when opening (at least) yaml files, failing to call matchdelete(w:m3)
-" this workaround calls clearmatches() and then adds back match 0, 1, and 2
-function! DisableSpaceIndentHighlight()
-	call clearmatches()
-
-	" Spaces before a tab
-	let w:m0 = matchadd('whitespace_odd', ' \+\ze\t')
-	" Tabs that are not at the start of a line
-	let w:m1 = matchadd('whitespace_bad', '[^\t][^\/\/ ][^# ]\zs\t\+')
-	" Trailing whitespace
-	let w:m2 = matchadd('whitespace_ugly', '\s\+$')
-endfunction
-
 
 
 " C
@@ -60,11 +39,7 @@ au Filetype python set expandtab
 au Filetype python set shiftwidth=4
 au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
-
-augroup ft_python
-	au BufRead *.py  call matchdelete(w:m3)
-	au BufRead *.pyc call matchdelete(w:m3)
-augroup END
+au Filetype python call DisableSpaceIndentHighlight()
 
 " sh/bash
 au Filetype sh let b:comment_leader = '#'

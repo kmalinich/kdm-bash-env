@@ -37,18 +37,31 @@ map <C-e> :call TrimReindent()<CR>
 
 
 " Whitespace highlighting
-highlight whitespace_bad  guibg=#f1c40f guifg=#2f2f2f
-highlight whitespace_odd  guibg=#3498db guifg=#2f2f2f
-highlight whitespace_ugly guibg=#e74c3c guifg=#2f2f2f
+highlight whitespace_blu guibg=#3498db guifg=#000000
+highlight whitespace_orn guibg=#e67e22 guifg=#ffffff
+highlight whitespace_red guibg=#e74c3c guifg=#000000
+highlight whitespace_ylw guibg=#f1c40f guifg=#000000
 
 " Spaces before a tab
-let w:m0 = matchadd('whitespace_odd', ' \+\ze\t')
-" Tabs that are not at the start of a line
-let w:m1 = matchadd('whitespace_bad', '[^\t][^\/\/ ][^# ]\zs\t\+')
+let w:m0 = matchadd('whitespace_blu', ' \+\ze\t')
+" Tabs that are not at the start of a line or after an existing tab
+let w:m1 = matchadd('whitespace_ylw', '[^\t][^\/\/ ][^# ]\zs\t\+')
 " Trailing whitespace
-let w:m2 = matchadd('whitespace_ugly', '\s\+$')
+let w:m2 = matchadd('whitespace_orn', '\s\+$')
 " Spaces used for indenting
-let w:m3 = matchadd('whitespace_ugly', '^\t*\zs \+')
+let w:m3 = matchadd('whitespace_red', '^\t*\zs \+')
+
+
+function! DisableSpaceIndentHighlight()
+	call clearmatches()
+
+	" Spaces before a tab
+	let w:m0 = matchadd('whitespace_blu', ' \+\ze\t')
+	" Tabs that are not at the start of a line or after an existing tab
+	let w:m1 = matchadd('whitespace_ylw', '[^\t][^\/\/ ][^# ]\zs\t\+')
+	" Trailing whitespace
+	let w:m2 = matchadd('whitespace_orn', '\s\+$')
+endfunction
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
