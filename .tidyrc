@@ -57,7 +57,7 @@ anchor-as-name: yes
 assume-xml-procins: no
 coerce-endtags: yes
 css-prefix: style
-custom-tags: no
+custom-tags: yes
 
 enclose-block-text: yes
 enclose-text: yes
@@ -92,8 +92,7 @@ merge-emphasis: yes
 replace-color: no
 
 // Teaching Tidy options
-// new-blocklevel-tags: article, aside, canvas, command, details, dialog, figcaption, figure, footer, header, hgroup, menu, meter, nav, section, summary
-new-blocklevel-tags: ang-select-usstates, article, aside, canvas, command, details, dialog, figcaption, figure, footer, header, hgroup, menu, meter, nav, rz-slider, rzslider, section, spinner, summary, ui-view, wizard, wz-step, yxt-comma
+new-blocklevel-tags: ag-grid-angular, article, aside, canvas, command, cyb-actions-col, cyb-icons-col, cyb-ordered-icons, cyb-server-data-table, cyb-split-button, cyb-text-col, details, dialog, figcaption, figure, footer, header, hgroup, menu, meter, nav, rng-select-usstates, rz-slider, rzslider, section, spinner, summary, ui-view, wizard, wz-step, yxt-comma
 new-inline-tags: alert, audio, canvas, datalist, keygen, mark, meter, output, progress, rp, rt, ruby, source, time, video, wbr
 // new-pre-tags:
 // new-empty-tags:
