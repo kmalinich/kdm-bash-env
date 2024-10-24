@@ -412,7 +412,7 @@ alias sleep-system="osascript -e 'tell app \"System Events\" to sleep'"
 # 22 : Ventura
 case "${UNAME_KERNEL_RELEASE%%.*}" in
 	1[5-9]) ;&
-	2[0-3])
+	2[0-4])
 		# Enable and disable indexing
 		alias indexing-enable=' sudo mdutil -a -i on'
 		alias indexing-disable='sudo mdutil -a -i off'
