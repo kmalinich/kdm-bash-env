@@ -4,7 +4,7 @@
 		"coc-eslint": ">=1.7.0",
 		"coc-html": ">=1.8.0",
 		"coc-json": ">=1.9.2",
-		"coc-markdownlint": ">=1.35.0",
+		"coc-markdownlint": ">=1.36.0",
 		"coc-python": ">=1.2.13",
 		"coc-sh": ">=1.2.4",
 		"coc-stylelintplus": ">=1.5.0",
@@ -12,5 +12,5 @@
 		"coc-tsserver": ">=2.2.0",
 		"coc-yaml": ">=1.9.0"
 	},
-	"lastUpdate": 1729867576680
+	"lastUpdate": 1731363205850
 }
