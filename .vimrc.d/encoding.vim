@@ -3,11 +3,13 @@ scriptencoding utf-8
 
 " UTF-16 fix
 if has("multi_byte")
-	"if &termencoding == ""
-	"	let &termencoding = &encoding
-	"endif
+	if !has('nvim')
+		if &termencoding == ""
+			let &termencoding = &encoding
+		endif
+	endif
 
-" Use UTF8 encoding
+	" Use UTF8 encoding
 	set       encoding=utf-8
 	setglobal fileencoding=utf-8
 	set       fileencodings=ucs-bom,utf-8,latin1
