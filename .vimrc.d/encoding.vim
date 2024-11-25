@@ -3,9 +3,9 @@ scriptencoding utf-8
 
 " UTF-16 fix
 if has("multi_byte")
-	if &termencoding == ""
-		let &termencoding = &encoding
-	endif
+	"if &termencoding == ""
+	"	let &termencoding = &encoding
+	"endif
 
 " Use UTF8 encoding
 	set       encoding=utf-8
