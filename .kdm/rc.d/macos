@@ -306,7 +306,7 @@ _macos_system_profiler() {
 		return
 	fi
 
-	jq ".[][].items | ${2-.}" <(
+	jq -r ".[][].items | ${2-.}" <(
 		plist-to-json <(
 			sudo system_profiler -xml "SP${1}DataType" 2> /dev/null | sed -E -e 's/\s{1,}<\//<\//g' -e 's/\ \ /\ /g'
 		) | sed \
