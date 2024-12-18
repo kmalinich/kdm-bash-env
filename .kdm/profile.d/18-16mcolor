@@ -37,4 +37,10 @@ esac
 export C_ENV C_ENV_BOLD TERM
 
 
+# Use bat for manpages if present
+if hash bat; then
+	export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+	export MANROFFOPT="-c"
+fi
+
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
