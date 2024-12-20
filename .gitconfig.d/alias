@@ -45,7 +45,7 @@
 
 	l = "!_git_l() { git log \"--max-count=${1-25}\" --graph --oneline; }; _git_l"
 
-	ll = "!_git_ll() { git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=[%C(yellow)%h%C(reset)] [%C(green)%ad%C(reset)] [%C(cyan)%><(15)%ad%C(reset)] [%C(red)%><(28)%an%C(reset)] %C(reset)%s\"; }; _git_ll"
+	ll = "!_git_ll() { git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=[%C(yellow)%h%C(reset)] [%C(green)%ad%C(reset)] [%C(cyan)%><(36)%ae%C(reset)] [%C(red)%><(24)%an%C(reset)] %C(reset)%s\"; }; _git_ll"
 
 	# Requires GitHub CLI (https://hub.github.com/)
 	ll-url           = "!_git_ll_url()           { COMMIT_URL=\"$(hub browse --url)/commit\"; git log \"--max-count=${1-25}\" --date='format:%F %R:%S' \"--pretty=[%C(yellow)${COMMIT_URL}/%h%C(reset)] [%C(cyan)%ad%C(reset)] [%C(red)%>(28)%cn %C(blue)/%C(red) %<(28)%an%C(reset)] [%C(green)%>(52)%ce %C(blue)/%C(green) %<(52)%ae%C(reset)] %C(reset)%s\"; }; _git_ll_url"
