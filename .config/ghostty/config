@@ -1,0 +1,30 @@
+# https://ghostty.org/docs/config/reference
+
+shell-integration = bash
+shell-integration-features = no-cursor
+
+config-file = config.d/font
+config-file = ?config.d/macos
+
+copy-on-select = true
+quit-after-last-window-closed = false
+
+unfocused-split-fill = 2f2f2f
+background = 000000
+foreground = feffff
+theme = kdm
+minimum-contrast = 1.1
+selection-invert-fg-bg = true
+
+window-height = 800
+window-width = 800
+
+cursor-style = underline
+cursor-style-blink = true
+cursor-opacity = 0.9
+cursor-invert-fg-bg = false
+
+mouse-scroll-multiplier = 0.2
+
+
+# vim: set filetype=config ts=2 sw=2 tw=0 noet :

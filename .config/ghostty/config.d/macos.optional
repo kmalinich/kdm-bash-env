@@ -1,0 +1,15 @@
+# https://ghostty.org/docs/config/reference
+
+macos-non-native-fullscreen = false
+macos-titlebar-style = tabs
+
+keybind = global:unconsumed:physical:f20=toggle_visibility
+
+background-opacity = 0.7
+background-blur-radius = 20
+window-vsync = false
+
+macos-titlebar-style = transparent
+
+
+# vim: set filetype=config ts=2 sw=2 tw=0 noet :

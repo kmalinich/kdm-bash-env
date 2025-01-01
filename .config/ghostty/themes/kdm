@@ -1,0 +1,27 @@
+palette = 0=#444444
+palette = 1=#d55745
+palette = 2=#60cf52
+palette = 3=#b59c39
+palette = 4=#3065dd
+palette = 5=#6470be
+palette = 6=#54b8d0
+palette = 7=#e0e0e0
+palette = 8=#515151
+palette = 9=#e74330
+palette = 10=#74fb5c
+palette = 11=#fae24b
+palette = 12=#2152f5
+palette = 13=#6667bf
+palette = 14=#66ddfb
+palette = 15=#e0e0e0
+
+background = 000000
+foreground = feffff
+
+cursor-color = feffff
+cursor-text = 2c2c2c
+
+selection-background = ba8e34
+selection-foreground = 090909
+
+# vim: set filetype=config ts=2 sw=2 tw=0 noet :

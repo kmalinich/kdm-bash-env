@@ -1,0 +1,18 @@
+# https://ghostty.org/docs/config/reference
+
+font-family = ""
+font-family = "InputMonoCompressed Nerd Font"
+
+font-style-bold        = "Bold"
+font-style-italic      = "Italic"
+font-style-bold-italic = "Bold Italic"
+
+font-size = 15
+font-thicken = true
+
+bold-is-bright = true
+
+adjust-cell-width = -15%
+
+
+# vim: set filetype=config ts=2 sw=2 tw=0 noet :
