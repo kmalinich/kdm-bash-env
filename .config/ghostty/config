@@ -26,5 +26,7 @@ cursor-invert-fg-bg = false
 
 mouse-scroll-multiplier = 0.2
 
+auto-update = download
+
 
 # vim: set filetype=config ts=2 sw=2 tw=0 noet :
