@@ -89,4 +89,13 @@
 		"!lambda scalar",
 		"!secret scalar"
 	],
+
+	"languageserver": {
+		"bash": {
+			"command": "bash-language-server",
+			"args": [ "start" ],
+			"filetypes": [ "bash", "sh" ],
+			"ignoredRootPaths": [ "~" ]
+		}
+	}
 }
