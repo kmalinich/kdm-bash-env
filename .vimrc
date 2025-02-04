@@ -64,5 +64,13 @@ if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:una
 	call LoadFile('coc-notify')
 endif
 
+if g:uname_kernel_name ==# 'Darwin'
+	call LoadFile('perl-macos')
+endif
+
+if g:uname_kernel_name ==# 'Linux'
+	call LoadFile('perl-linux')
+endif
+
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
