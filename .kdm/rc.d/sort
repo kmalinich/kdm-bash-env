@@ -5,11 +5,17 @@
 
 # Sort file in-place
 _sort_inplace() {
-	sort -o "${1}" "${1}"
+	sort --output="${1}" "${1}"
+}
+
+# Sort and uniq file in-place
+_uniq_inplace() {
+	sort --unique --output="${1}" "${1}"
 }
 
 
 alias sort-inplace='_sort_inplace'
+alias uniq-inplace='_uniq_inplace'
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
