@@ -65,11 +65,11 @@ if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:una
 endif
 
 if g:uname_kernel_name ==# 'Darwin'
-	call LoadFile('perl-macos')
+	call LoadFile('provider-macos')
 endif
 
 if g:uname_kernel_name ==# 'Linux'
-	call LoadFile('perl-linux')
+	call LoadFile('provider-linux')
 endif
 
 
