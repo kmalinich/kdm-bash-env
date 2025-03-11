@@ -58,6 +58,7 @@ UL="${PREFIX}"
 ULO="${UL}/opt"
 ULR="${UL}/rvm"
 
+unset PREFIX
 
 # Entries at the beginning of this array will end up at the beginning of MANPATH
 # Entries at the end       of this array will end up at the end       of MANPATH
