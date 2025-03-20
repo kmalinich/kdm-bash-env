@@ -202,4 +202,7 @@
 
 --paging=never
 
+--map-syntax "**/.ssh/config.d/*.conf:SSH Config"
+--map-syntax "**/.ssh/config.d/**/*.conf:SSH Config"
+
 --map-syntax "*.ino:C++"
