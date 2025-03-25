@@ -31,7 +31,7 @@
 
 	f = fetch --all --prune
 
-	find = "!_git_find() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; git ls-tree -r --name-only \"${BRANCH}\" | grep -E \"${1}\"; }; _git_find"
+	find = "!_git_find() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; git ls-tree -r --name-only \"${BRANCH}\" | grep -Ei \"${1}\"; }; _git_find"
 
 	# Fix upstream
 	fu = "!_git_fu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git branch \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; _git_fu"
