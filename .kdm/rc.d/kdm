@@ -210,7 +210,7 @@ _kdm_update() {
 		CPU_MAX_MHZ="$(lscpu --extended=MAXMHZ | sort -nr | head -n 1 | awk -F '.' '{print $1}')"
 	fi
 
-	if [[ "${CPU_MAX_MHZ}" -le "2000" ]]; then
+	if [[ "${CPU_MAX_MHZ}" -le "2400" ]]; then
 		WAIT_LIMIT="600"
 	fi
 
