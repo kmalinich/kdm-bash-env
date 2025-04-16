@@ -3,14 +3,14 @@
 		"coc-css": ">=2.1.0",
 		"coc-eslint": ">=3.0.14",
 		"coc-html": ">=1.8.0",
-		"coc-json": ">=1.9.2",
+		"coc-json": ">=1.9.3",
 		"coc-markdownlint": ">=1.36.0",
 		"coc-python": ">=1.2.13",
 		"coc-sh": ">=1.2.4",
 		"coc-stylelintplus": ">=1.5.0",
 		"coc-svg": ">=0.0.13",
-		"coc-tsserver": ">=2.2.4",
+		"coc-tsserver": ">=2.2.5",
 		"coc-yaml": ">=1.9.1"
 	},
-	"lastUpdate": 1743688068294
+	"lastUpdate": 1744740319934
 }
