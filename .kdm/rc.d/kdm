@@ -134,18 +134,21 @@ _kdm_update_submodule() {
 
 	case "${2}" in
 		pull)
+			output keyval-y "[kdm-update][subm][pull][ begin  ]" "${SUBMODULE}"
+
 			{
 				git fetch --all --prune
 				git checkout master
 				git pull --prune
 			} > /dev/null 2>&1
 
-			output keyval-y "[kdm-update][subm][pull]" "${SUBMODULE}"
+			output keyval-g "[kdm-update][subm][pull][complete]" "${SUBMODULE}"
 			;;
 
 		gc)
+			output keyval-y "[kdm-update][subm][ gc ][ begin  ]" "${SUBMODULE}"
 			git gc --aggressive --prune=now > /dev/null 2>&1
-			output keyval-y "[kdm-update][subm][ gc ]" "${SUBMODULE}"
+			output keyval-g "[kdm-update][subm][ gc ][complete]" "${SUBMODULE}"
 			;;
 		esac
 }
@@ -191,7 +194,7 @@ _kdm_update() {
 		while [[ "${SUBMODULE_PROC_COUNT}" -ge "${SUBMODULE_PROC_LIMIT}" ]]; do
 			sleep 1; ((WAIT_COUNT++))
 
-			output keyval-o "[kdm-update][subm][wait]" "Waited to launch git process for '${SUBMODULE}' for ${WAIT_COUNT} seconds"
+			output keyval-r "[kdm-update][subm][wait]" "Waited to launch git process for '${SUBMODULE}' for ${WAIT_COUNT} seconds"
 
 			SUBMODULE_PROC_COUNT="$(_g_pids | wc -l)"
 		done
@@ -290,7 +293,7 @@ _kdm_update() {
 		while [[ "${SUBMODULE_PROC_COUNT}" -ge "${SUBMODULE_PROC_LIMIT}" ]]; do
 			sleep 1; ((WAIT_COUNT++))
 
-			output keyval-o "[kdm-update][subm][wait]" "Waited to launch git process for '${SUBMODULE}' for ${WAIT_COUNT} seconds"
+			output keyval-r "[kdm-update][subm][wait]" "Waited to launch git process for '${SUBMODULE}' for ${WAIT_COUNT} seconds"
 
 			SUBMODULE_PROC_COUNT="$(_g_pids | wc -l)"
 		done
@@ -299,6 +302,7 @@ _kdm_update() {
 		sleep 0.1
 	done
 	echo
+
 
 	# Wait for Git processes to complete
 	WAIT_COUNT="0"
@@ -320,7 +324,7 @@ _kdm_update() {
 
 
 	output keyval-y "[kdm-update][main]" "Garbage collection"
-	git gc --aggressive --prune > /dev/null 2>&1
+	g_kdm_update_submoduleit gc --aggressive --prune > /dev/null 2>&1
 
 	# Change back to original pwd
 	if ! cd "${OLD_PWD}"; then
