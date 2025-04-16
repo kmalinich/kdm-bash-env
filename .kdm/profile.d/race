@@ -20,7 +20,7 @@ for FILE_NAME in "${ARRAY_FILES[@]}"; do
 
 	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
 
-	echo "${MILLISECONDS},${FILE_NAME//$HOME\/\.kdm\/profile\.d\//}" >> "${FILE_TEMP_RAW}"
+	echo "${MILLISECONDS},${FILE_NAME}" >> "${FILE_TEMP_RAW}"
 done
 
 export TIMEFORMAT="${TIMEFORMAT_OLD}"
