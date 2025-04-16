@@ -144,7 +144,7 @@ _kdm_update_submodule() {
 			;;
 
 		gc)
-			git gc --aggressive --prune > /dev/null 2>&1
+			git gc --aggressive --prune=now > /dev/null 2>&1
 			output keyval-y "[kdm-update][subm][ gc ]" "${SUBMODULE}"
 			;;
 		esac
@@ -196,7 +196,7 @@ _kdm_update() {
 			SUBMODULE_PROC_COUNT="$(_g_pids | wc -l)"
 		done
 
-		_kdm_update_submodule "${SUBMODULE}" pull
+		_kdm_update_submodule "${SUBMODULE}" pull &
 		sleep 0.1
 	done
 	echo
@@ -217,7 +217,6 @@ _kdm_update() {
 
 
 	while _g_pids > /dev/null 2>&1; do
-		ps -ef | grep -E 'git (checkout|fetch|gc|prune|pull|status|submodule)'
 		if [[ "${WAIT_COUNT}" -gt "${WAIT_LIMIT}" ]]; then
 			output error "Waiting for submodule pull to complete took too long"
 			return 3
@@ -296,7 +295,7 @@ _kdm_update() {
 			SUBMODULE_PROC_COUNT="$(_g_pids | wc -l)"
 		done
 
-		_kdm_update_submodule "${SUBMODULE}" gc
+		_kdm_update_submodule "${SUBMODULE}" gc &
 		sleep 0.1
 	done
 	echo
@@ -305,7 +304,6 @@ _kdm_update() {
 	WAIT_COUNT="0"
 
 	while _g_pids > /dev/null 2>&1; do
-		ps -ef | grep -E 'git (checkout|fetch|gc|prune|pull|status|submodule)'
 		if [[ "${WAIT_COUNT}" -gt "${WAIT_LIMIT}" ]]; then
 			output error "Waiting for submodule garbage collection to complete took too long"
 			return 4
