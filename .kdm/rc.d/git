@@ -3,6 +3,12 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
 
 
+# Show git process PIDs owned by this user
+_g_pids() {
+	pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)'
+}
+
+
 # Show Git-related info
 _g_gi() {
 	# Declare vars as local
