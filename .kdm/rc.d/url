@@ -1,6 +1,6 @@
 # Functions: URL decode/encode
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 urldecode() {

@@ -26,9 +26,6 @@ export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
 
 
-# Custom pip config file path
-export PIP_CONFIG_FILE="${BASH_ENV_FILE_PIPRC}"
-
 # Custom tidy-html5 config file path
 export HTML_TIDY="${HOME}/.tidyrc"
 

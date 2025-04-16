@@ -1,6 +1,6 @@
 # Functions: Git
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Show git process PIDs owned by this user
@@ -32,23 +32,23 @@ _g_gi() {
 	output orange "---------------------= git info =---------------------"
 	output kv "    URL" "${URL}"
 	output kv " Branch" "${BRANCH}"
-	output kv "Top lvl" "${TOP/$HOME/\~}"
-	output kv " Config" "${CONFIG/$HOME/\~}"
+	output kv "Top lvl" "${TOP/${HOME}/\~}"
+	output kv " Config" "${CONFIG/${HOME}/\~}"
 	output kv " Commit" "${COMMIT}"
 
 	# Git tag-related data
 	TAGS="$(git get-tags 2> /dev/null)"
 
-	if [[ "${TAGS}" ]]; then
+	if [[ -n "${TAGS}" ]]; then
 		HASH=$(    echo "${TAGS##v}" | awk -F '-' '{print $3}')
 		TAG=$(     echo "${TAGS##v}" | awk -F '-' '{print $1}')
 		RELEASE="$(echo "${TAGS##v}" | awk -F '-' '{print $2}').git${HASH##g}"
 
-		[[ "${TAGS}" ]] && output kv "   Tags" "${TAGS}"
-		[[ "${HASH}" ]] && output kv "   Hash" "${HASH}"
-		[[ "${TAG}"  ]] && output kv "Version" "${TAG}"
+		[[ -n "${TAGS}" ]] && output kv "   Tags" "${TAGS}"
+		[[ -n "${HASH}" ]] && output kv "   Hash" "${HASH}"
+		[[ -n "${TAG}"  ]] && output kv "Version" "${TAG}"
 
-		if [[ "${RELEASE}" && "${RELEASE}" != ".git" ]]; then
+		if [[ -n "${RELEASE}" && "${RELEASE}" != ".git" ]]; then
 			output kv "Release" "${RELEASE}"
 		fi
 	fi
@@ -116,7 +116,7 @@ _g_gu() {
 	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
 
 	# Check if there is an update
-	if [[ "$(git log "HEAD..origin/${GIT_BRANCH}" --oneline 2>&1)" ]]; then
+	if [[ -n "$(git log "HEAD..origin/${GIT_BRANCH}" --oneline 2>&1)" ]]; then
 		# Perform git pull
 		_g_wrapper pull
 		CMD_EXIT="${?}"

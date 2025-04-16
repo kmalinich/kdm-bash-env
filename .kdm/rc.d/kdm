@@ -1,6 +1,6 @@
 # Functions: kdm-bash-env
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Get Git hash of bash-env
@@ -58,7 +58,7 @@ _kdm_pull() {
 	CMD_EXIT="${?}"
 
 	cd "${OLD_PWD}" || return 1
-	return ${CMD_EXIT}
+	return "${CMD_EXIT}"
 }
 
 # Re-source ${HOME}/.kdm/rc, then files in the 'source' dir
@@ -113,7 +113,7 @@ _kdm_time() {
 
 	# macOS date command is different when translating from seconds-since-epoch to date if the GNU utils aren't installed
 	DATE_CMD=(date)
-	[[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]] && DATE_CMD+=("--date=@${GIT_SEC}") || DATE_CMD+=(-j -r "${GIT_SEC}")
+	[[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]] && DATE_CMD+=("--date=@${GIT_SEC}") || DATE_CMD+=(-j -r "${GIT_SEC}")
 	DATE_CMD+=('+%a %b %0d %r')
 
 	"${DATE_CMD[@]}"

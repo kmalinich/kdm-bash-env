@@ -1,6 +1,6 @@
 # Functions: Ping
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Custom fping commands
@@ -13,7 +13,7 @@ kping() {
 
 	# Default interval is 500ms unless otherwise specified
 	PING_INTERVAL="500"
-	[[ "${2}" ]] && PING_INTERVAL="${2}"
+	[[ -n "${2}" ]] && PING_INTERVAL="${2}"
 
 	fping -AdDelsu -H 254 -p "${PING_INTERVAL}" -t 1000 "${1}"
 }

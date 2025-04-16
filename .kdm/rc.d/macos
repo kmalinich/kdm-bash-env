@@ -4,7 +4,7 @@
 [[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
 
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # PING_WAIT for use in ping functions
@@ -292,7 +292,7 @@ _macos_notify() {
 	[[ -z "${NOTIFY_TITLE}" || -z "${NOTIFY_MESSAGE}" ]] && output usage "${USAGE_STRING}" && return
 
 	# Add subtitle to osascript string if present
-	[[ "${NOTIFY_SUBTITLE}" ]] && NOTIFY_SUBTITLE="subtitle \"${NOTIFY_SUBTITLE}\""
+	[[ -n "${NOTIFY_SUBTITLE}" ]] && NOTIFY_SUBTITLE="subtitle \"${NOTIFY_SUBTITLE}\""
 
 	osascript -e "display notification \"${NOTIFY_MESSAGE}\" with title \"${NOTIFY_TITLE}\" ${NOTIFY_SUBTITLE}"
 }

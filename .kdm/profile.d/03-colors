@@ -1,6 +1,8 @@
 # kdm bash-env
 # .kdm/bash-env-colors
 
+# shellcheck disable=SC2059
+
 
 #### Color variables ==start ####
 
@@ -380,22 +382,22 @@ _show_colors_256_work() {
 	# Foreground colors
 	for COLORS_FOREGROUND in {30..37}; do
 		# No background
-		local COLOR_VALS="${COLORS_FOREGROUND:+$COLORS_FOREGROUND;}"
+		local COLOR_VALS="${COLORS_FOREGROUND:+${COLORS_FOREGROUND};}"
 		local COLOR_VALS="${COLOR_VALS%%;}"
 		local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
 
 		printf " %-6s" "${SEQUENCE:-(default)}"
 		printf " ${SEQUENCE}text\\e[m"
-		printf " \\e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\\e[m"
+		printf " \\e[${COLOR_VALS:+${COLOR_VALS+${COLOR_VALS};}}1mbold\\e[m"
 
 		# Flashing
-		local COLOR_VALS="${COLORS_FOREGROUND:+$COLORS_FOREGROUND;}5"
+		local COLOR_VALS="${COLORS_FOREGROUND:+${COLORS_FOREGROUND};}5"
 		local COLOR_VALS="${COLOR_VALS%%;}"
 		local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
 
 		printf " %-6s" "${SEQUENCE:-(default)}"
 		printf " ${SEQUENCE}text\\e[m"
-		printf " \\e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\\e[m"
+		printf " \\e[${COLOR_VALS:+${COLOR_VALS+${COLOR_VALS};}}1mbold\\e[m"
 
 		# Background colors
 		for COLORS_BACKGROUND in {40..47}; do
@@ -403,13 +405,13 @@ _show_colors_256_work() {
 			local COLORS_FOREGROUND=${COLORS_FOREGROUND#37}
 
 			# Black
-			local COLOR_VALS="${COLORS_FOREGROUND:+$COLORS_FOREGROUND;}${COLORS_BACKGROUND}"
+			local COLOR_VALS="${COLORS_FOREGROUND:+${COLORS_FOREGROUND};}${COLORS_BACKGROUND}"
 			local COLOR_VALS="${COLOR_VALS%%;}"
 			local SEQUENCE="${COLOR_VALS:+\e[${COLOR_VALS}m}"
 
 			printf " %-9s" "${SEQUENCE:-(default)}"
 			printf " ${SEQUENCE}text\\e[m"
-			printf " \\e[${COLOR_VALS:+${COLOR_VALS+$COLOR_VALS;}}1mbold\\e[m"
+			printf " \\e[${COLOR_VALS:+${COLOR_VALS+${COLOR_VALS};}}1mbold\\e[m"
 		done
 		echo
 	done

@@ -10,20 +10,20 @@ done
 # If entry already present in MANPATH_OLD (at any position), remove entry from MANPATH_OLD
 # This results in MANPATH_OLD containing only entries that are not present in ARRAY_MANPATH_VALID
 for ENTRY in "${ARRAY_MANPATH_VALID[@]}"; do
-	while [[ "${MANPATH_OLD}" =~ ^${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD#"$ENTRY":}";   done
-	while [[ "${MANPATH_OLD}" =~ :${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD//:$ENTRY:/:}"; done
-	while [[ "${MANPATH_OLD}" =~ :${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%:"$ENTRY"}";   done
-	while [[ "${MANPATH_OLD}" =~ ^${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%"$ENTRY"}";    done
+	while [[ "${MANPATH_OLD}" =~ ^${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD#"${ENTRY}":}";   done
+	while [[ "${MANPATH_OLD}" =~ :${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD//:${ENTRY}:/:}"; done
+	while [[ "${MANPATH_OLD}" =~ :${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%:"${ENTRY}"}";   done
+	while [[ "${MANPATH_OLD}" =~ ^${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%"${ENTRY}"}";    done
 done
 
 unset MANPATH_NEW
 
 for ENTRY in "${ARRAY_MANPATH_VALID[@]}"; do
 	# If entry already present in MANPATH_NEW (at any position), remove entry from MANPATH_NEW
-	while [[ "${MANPATH_NEW}" =~ ^${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW#"$ENTRY":}";   done
-	while [[ "${MANPATH_NEW}" =~ :${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW//:$ENTRY:/:}"; done
-	while [[ "${MANPATH_NEW}" =~ :${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%:"$ENTRY"}";   done
-	while [[ "${MANPATH_NEW}" =~ ^${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%"$ENTRY"}";    done
+	while [[ "${MANPATH_NEW}" =~ ^${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW#"${ENTRY}":}";   done
+	while [[ "${MANPATH_NEW}" =~ :${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW//:${ENTRY}:/:}"; done
+	while [[ "${MANPATH_NEW}" =~ :${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%:"${ENTRY}"}";   done
+	while [[ "${MANPATH_NEW}" =~ ^${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%"${ENTRY}"}";    done
 
 	# Add entry to end of MANPATH_NEW
 	MANPATH_NEW="${MANPATH_NEW}${MANPATH_NEW+:}${ENTRY}"
@@ -56,20 +56,20 @@ done
 # If entry already present in MIBDIRS_OLD (at any position), remove entry from MIBDIRS_OLD
 # This results in MIBDIRS_OLD containing only entries that are not present in ARRAY_MIBDIRS_VALID
 for ENTRY in "${ARRAY_MIBDIRS_VALID[@]}"; do
-	while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD#"$ENTRY":}";   done
-	while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD//:$ENTRY:/:}"; done
-	while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%:"$ENTRY"}";   done
-	while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%"$ENTRY"}";    done
+	while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD#"${ENTRY}":}";   done
+	while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD//:${ENTRY}:/:}"; done
+	while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%:"${ENTRY}"}";   done
+	while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%"${ENTRY}"}";    done
 done
 
 unset MIBDIRS_NEW
 
 for ENTRY in "${ARRAY_MIBDIRS_VALID[@]}"; do
 	# If entry already present in MIBDIRS_NEW (at any position), remove entry from MIBDIRS_NEW
-	while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW#"$ENTRY":}";   done
-	while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW//:$ENTRY:/:}"; done
-	while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%:"$ENTRY"}";   done
-	while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%"$ENTRY"}";    done
+	while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW#"${ENTRY}":}";   done
+	while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW//:${ENTRY}:/:}"; done
+	while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%:"${ENTRY}"}";   done
+	while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%"${ENTRY}"}";    done
 
 	# Add entry to end of MIBDIRS_NEW
 	MIBDIRS_NEW="${MIBDIRS_NEW}${MIBDIRS_NEW+:}${ENTRY}"
@@ -102,20 +102,20 @@ done
 # If entry already present in NODE_PATH_OLD (at any position), remove entry from NODE_PATH_OLD
 # This results in NODE_PATH_OLD containing only entries that are not present in ARRAY_NODE_PATH_VALID
 for ENTRY in "${ARRAY_NODE_PATH_VALID[@]}"; do
-	while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD#"$ENTRY":}";   done
-	while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD//:$ENTRY:/:}"; done
-	while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%:"$ENTRY"}";   done
-	while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%"$ENTRY"}";    done
+	while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD#"${ENTRY}":}";   done
+	while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD//:${ENTRY}:/:}"; done
+	while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%:"${ENTRY}"}";   done
+	while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%"${ENTRY}"}";    done
 done
 
 unset NODE_PATH_NEW
 
 for ENTRY in "${ARRAY_NODE_PATH_VALID[@]}"; do
 	# If entry already present in NODE_PATH_NEW (at any position), remove entry from NODE_PATH_NEW
-	while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW#"$ENTRY":}";   done
-	while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW//:$ENTRY:/:}"; done
-	while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%:"$ENTRY"}";   done
-	while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%"$ENTRY"}";    done
+	while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW#"${ENTRY}":}";   done
+	while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW//:${ENTRY}:/:}"; done
+	while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%:"${ENTRY}"}";   done
+	while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%"${ENTRY}"}";    done
 
 	# Add entry to end of NODE_PATH_NEW
 	NODE_PATH_NEW="${NODE_PATH_NEW}${NODE_PATH_NEW+:}${ENTRY}"
@@ -148,20 +148,20 @@ done
 # If entry already present in PATH_OLD (at any position), remove entry from PATH_OLD
 # This results in PATH_OLD containing only entries that are not present in ARRAY_PATH_VALID
 for ENTRY in "${ARRAY_PATH_VALID[@]}"; do
-	while [[ "${PATH_OLD}" =~ ^${ENTRY}: ]]; do PATH_OLD="${PATH_OLD#"$ENTRY":}";   done
-	while [[ "${PATH_OLD}" =~ :${ENTRY}: ]]; do PATH_OLD="${PATH_OLD//:$ENTRY:/:}"; done
-	while [[ "${PATH_OLD}" =~ :${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%:"$ENTRY"}";   done
-	while [[ "${PATH_OLD}" =~ ^${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%"$ENTRY"}";    done
+	while [[ "${PATH_OLD}" =~ ^${ENTRY}: ]]; do PATH_OLD="${PATH_OLD#"${ENTRY}":}";   done
+	while [[ "${PATH_OLD}" =~ :${ENTRY}: ]]; do PATH_OLD="${PATH_OLD//:${ENTRY}:/:}"; done
+	while [[ "${PATH_OLD}" =~ :${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%:"${ENTRY}"}";   done
+	while [[ "${PATH_OLD}" =~ ^${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%"${ENTRY}"}";    done
 done
 
 unset PATH_NEW
 
 for ENTRY in "${ARRAY_PATH_VALID[@]}"; do
 	# If entry already present in PATH_NEW (at any position), remove entry from PATH_NEW
-	while [[ "${PATH_NEW}" =~ ^${ENTRY}: ]]; do PATH_NEW="${PATH_NEW#"$ENTRY":}";   done
-	while [[ "${PATH_NEW}" =~ :${ENTRY}: ]]; do PATH_NEW="${PATH_NEW//:$ENTRY:/:}"; done
-	while [[ "${PATH_NEW}" =~ :${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%:"$ENTRY"}";   done
-	while [[ "${PATH_NEW}" =~ ^${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%"$ENTRY"}";    done
+	while [[ "${PATH_NEW}" =~ ^${ENTRY}: ]]; do PATH_NEW="${PATH_NEW#"${ENTRY}":}"; done
+	while [[ "${PATH_NEW}" =~ :${ENTRY}: ]]; do PATH_NEW="${PATH_NEW//:${ENTRY}:/:}"; done
+	while [[ "${PATH_NEW}" =~ :${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%:"${ENTRY}"}";   done
+	while [[ "${PATH_NEW}" =~ ^${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%"${ENTRY}"}";    done
 
 	# Add entry to end of PATH_NEW
 	PATH_NEW="${PATH_NEW}${PATH_NEW+:}${ENTRY}"

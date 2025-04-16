@@ -4,7 +4,7 @@
 
 # Functions: Text
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output keyval "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Flash full terminal screen (reverse video) until a key is pressed
@@ -280,7 +280,7 @@ output() {
 	OUTPUT_STRING="${OUTPUT_STRING-${2}}"
 
 	# Output to stdout or stderr based on switch
-	[[ "${OUTPUT_STDERR}" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 && return
+	[[ -n "${OUTPUT_STDERR}" ]] && printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}" 1>&2 && return
 	printf "${OUTPUT_FORMAT}" "${OUTPUT_STRING}"
 }
 

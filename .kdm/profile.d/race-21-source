@@ -1,4 +1,18 @@
+#!/usr/bin/env bash
+
 # shellcheck disable=SC1090
+# shellcheck disable=SC1091
+
+. "${HOME}/.kdm/profile.d/02-arrays"
+
+TIMEFORMAT_OLD="${TIMEFORMAT}"
+
+export TIMEFORMAT_RACE="true"
+
+DIR_TEMP="$(mktemp -d)"
+FILE_TEMP_RAW="${DIR_TEMP}/race-times-raw.csv"
+FILE_TEMP_SORTED="${DIR_TEMP}/race-times-sorted.csv"
+
 
 # Source the files in ARRAY_SOURCE if they exist
 for ENTRY in "${ARRAY_SOURCE[@]}"; do
@@ -7,7 +21,14 @@ for ENTRY in "${ARRAY_SOURCE[@]}"; do
 
 	[[ ! -s "${ENTRY}" ]] && continue
 
-	. "${ENTRY}"; SOURCE_EXIT="${?}"
+	TIME_START="$(date '+%s%N')"
+	. "${ENTRY}"
+	SOURCE_EXIT="${?}"
+	TIME_END="$(date '+%s%N')"
+
+	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
+
+	echo "${MILLISECONDS},${ENTRY}" >> "${FILE_TEMP_RAW}"
 
 	[[ "${SOURCE_VERBOSE}" != "true" ]] && continue
 
@@ -20,6 +41,7 @@ for ENTRY in "${ARRAY_SOURCE[@]}"; do
 	output kvf "Failed" "${SOURCE_FILE}"
 done
 
+
 # Source bash libraries from ~/.kdm/extra
 for ENTRY in $(find -L "${BASH_ENV_DIR_EXTRA}" -maxdepth 1 -type f -executable | sort); do
 	# Skip README
@@ -28,7 +50,14 @@ for ENTRY in $(find -L "${BASH_ENV_DIR_EXTRA}" -maxdepth 1 -type f -executable |
 	unset SOURCE_EXIT
 	unset SOURCE_FILE
 
-	. "${ENTRY}"; SOURCE_EXIT="${?}"
+	TIME_START="$(date '+%s%N')"
+	. "${ENTRY}"
+	SOURCE_EXIT="${?}"
+	TIME_END="$(date '+%s%N')"
+
+	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
+
+	echo "${MILLISECONDS},${ENTRY}" >> "${FILE_TEMP_RAW}"
 
 	[[ "${SOURCE_VERBOSE}" != "true" ]] && continue
 
@@ -43,6 +72,19 @@ done
 
 unset SOURCE_EXIT
 unset SOURCE_FILE
+
+
+export TIMEFORMAT="${TIMEFORMAT_OLD}"
+
+unset TIMEFORMAT_RACE
+
+
+echo "Milliseconds elapsed, file name" >> "${FILE_TEMP_SORTED}"
+sort -nr "${FILE_TEMP_RAW}" >> "${FILE_TEMP_SORTED}"
+
+cat "${FILE_TEMP_SORTED}"
+
+rm -rf "${DIR_TEMP}"
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

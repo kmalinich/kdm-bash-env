@@ -1,6 +1,8 @@
 # Functions: MOTD
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+# shellcheck disable=SC2059
+
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Dynamic MOTD with facter (if present)
@@ -17,7 +19,7 @@ _show_motd() {
 	local RAM RAMB RAMC RAMG
 
 	# Return if we're not in a terminal
-	[[ "${BASH_INTERACTIVE}" ]] || return
+	[[ -n "${BASH_INTERACTIVE}" ]] || return
 
 	# Color shortcuts
 	BAR="${C_BLK_BLD}|${C_RST}"

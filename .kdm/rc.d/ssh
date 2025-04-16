@@ -1,6 +1,6 @@
 # Functions: SSH aliases
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Generate SSH host aliases
@@ -14,7 +14,7 @@ _sshAliasGenerate() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH aliases"
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH aliases"
 	fi
 
 	# Source SSH alias cache file
@@ -34,7 +34,7 @@ _sshAliasSetup() {
 	local SSH_ALIAS_CACHE_AGE SSH_ALIAS_CACHE_TIME
 
 	# Determine age of SSH alias cache file
-	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		SSH_ALIAS_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_SSH_ALIAS}")
 	else
 		SSH_ALIAS_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_SSH_ALIAS}")

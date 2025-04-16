@@ -1,6 +1,6 @@
 # Functions: Net
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Network config information
@@ -160,7 +160,7 @@ _net_webserver() {
 
 	case "${1}" in
 		start)
-			if [[ "${WEBSERVER_PID}" ]]; then
+			if [[ -n "${WEBSERVER_PID}" ]]; then
 				output cyan "Webserver already running (PID ${WEBSERVER_PID})"
 				return
 			fi

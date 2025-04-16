@@ -1,6 +1,6 @@
 # Functions: sudo aliases
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Generate auto-sudo aliases
@@ -16,7 +16,7 @@ _sudoAliasGenerate() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "sudo aliases"
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "sudo aliases"
 	fi
 
 	# Source sudo alias cache file
@@ -46,7 +46,7 @@ _sudoAliasSetup() {
 	local SUDO_ALIAS_CACHE_AGE SUDO_ALIAS_CACHE_TIME
 
 	# Determine age of sudo alias cache file
-	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		SUDO_ALIAS_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}")
 	else
 		SUDO_ALIAS_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_SUDO_ALIAS}")

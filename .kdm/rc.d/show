@@ -1,6 +1,6 @@
 # Functions: Show
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Check if an executable exists, if so, show info about it
@@ -22,7 +22,7 @@ _show_bin() {
 	FILE_TYPE="$(type -t "${1}")"
 
 	# Only get binary type and mime type of file is of type "file"
-	if [[ "${FILE_TYPE}" == "file" && "${FILE_PATH}" ]]; then
+	if [[ "${FILE_TYPE}" == "file" && -n "${FILE_PATH}" ]]; then
 		FILE_BINT="$(file -bNn                             "${FILE_PATH}" 2> /dev/null | head -n 1)"
 		FILE_MIME="$(file -bNn --mime-encoding --mime-type "${FILE_PATH}" 2> /dev/null | head -n 1)"
 	fi
@@ -31,11 +31,11 @@ _show_bin() {
 	[[ "${FILE_ALIAS}" == "${FILE_PATH}" ]] && unset FILE_ALIAS
 
 	output keyval-c " Name" "${1}"
-	[[ "${FILE_ALIAS}" ]] && output keyval-r  "Alias" "${FILE_ALIAS}"
-	[[ "${FILE_PATH}"  ]] && output keyval-pn " Path" "${FILE_PATH}"
-	[[ "${FILE_TYPE}"  ]] && output keyval-g  " Type" "${FILE_TYPE}"
-	[[ "${FILE_BINT}"  ]] && output keyval-y  "bType" "${FILE_BINT}"
-	[[ "${FILE_MIME}"  ]] && output keyval-o  " MIME" "${FILE_MIME}"
+	[[ -n "${FILE_ALIAS}" ]] && output keyval-r  "Alias" "${FILE_ALIAS}"
+	[[ -n "${FILE_PATH}"  ]] && output keyval-pn " Path" "${FILE_PATH}"
+	[[ -n "${FILE_TYPE}"  ]] && output keyval-g  " Type" "${FILE_TYPE}"
+	[[ -n "${FILE_BINT}"  ]] && output keyval-y  "bType" "${FILE_BINT}"
+	[[ -n "${FILE_MIME}"  ]] && output keyval-o  " MIME" "${FILE_MIME}"
 
 	[[ -z "${FILE_PATH}" ]] && return 0
 
@@ -49,7 +49,7 @@ _show_bin() {
 
 	# Detect GNU/Linux ls or stock macOS ls to nicely format output
 	LS=('ls')
-	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		LS+=('--color=if-tty' '--group-directories-first' "--time-style=${LS_TIME_STYLE}" '--file-type' '--human-readable' '-l')
 	else
 		LS+=('-FhlG')
@@ -98,14 +98,14 @@ _show_scp_path() {
 
 	# If no argument, select current directory
 	SELECTED="${PWD}"
-	[[ "${1}" ]] && SELECTED="${1}"
+	[[ -n "${1}" ]] && SELECTED="${1}"
 
 	# Check if file exists
 	[[ ! -e "${SELECTED}" ]] && output error "'./${1}' is not a valid file" && return
 
 	# Get realpath of argument, and then swap out the home directory with a tilde
 	SELECTED="$(realpath "${SELECTED}")"
-	SCP_PATH="${SELECTED/$HOME/\~}"
+	SCP_PATH="${SELECTED/${HOME}/\~}"
 
 	# Check if argument is a file or folder, fill variables accordingly
 	if [[ -d "${SELECTED}" ]]; then

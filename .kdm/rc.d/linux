@@ -3,7 +3,7 @@
 # Bounce if we're not on Linux
 [[ "${UNAME_KERNEL_NAME}" != "Linux" ]] && return 0
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # PING_WAIT for use in ping functions

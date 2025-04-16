@@ -1,6 +1,8 @@
 # kdm bash-env
 # .kdm/rc
 
+# shellcheck disable=SC1090
+
 
 # Test for interactivity
 [[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"

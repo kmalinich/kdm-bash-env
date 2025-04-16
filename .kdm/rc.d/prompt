@@ -1,6 +1,6 @@
 # Functions: PS1 prompt
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Debug only because of this rediculous stupid thing i've accidentally built here
@@ -12,7 +12,7 @@ _prompt_log() {
 	fi
 
 	# echo "[$(date '+%r')] [${PROMPT_LOG_PREFIX}/${BASH_SUBSHELL}] $(printf '%*s' ${PROMPT_LOG_PREFIX} '' | sed 's/\ /\t/g') $(printf '%s' "${1}")() :: ${2}" >> ~/kdm-prompt.log
-	echo "[$(date '+%r')] [${PROMPT_LOG_PREFIX}/${BASH_SUBSHELL}] $(printf '%*s' ${BASH_SUBSHELL} '' | sed 's/\ /\t/g') $(printf '%s' "${1}")() :: ${2}" >> ~/kdm-prompt.log
+	echo "[$(date '+%r')] [${PROMPT_LOG_PREFIX}/${BASH_SUBSHELL}] $(printf '%*s' "${BASH_SUBSHELL}" '' | sed 's/\ /\t/g') $(printf '%s' "${1}")() :: ${2}" >> ~/kdm-prompt.log
 
 	if [[ "${2}" == *"START"* ]]; then
 		((PROMPT_LOG_PREFIX++))
@@ -35,7 +35,7 @@ _prompt_tst() {
 # Generate (and don't re-generate) PS1 prompt prefix
 _prompt_prefix() {
 	# Return if prompt prefix has already been generated
-	[[ "${PROMPT_PREFIX}" ]] && return
+	[[ -n "${PROMPT_PREFIX}" ]] && return
 
 	PROMPT_PREFIX="\\[\\e[G\\]"
 
@@ -69,7 +69,7 @@ _prompt_generate() {
 	# _prompt_log "${FUNCNAME[0]}" "START"
 
 	# Return if we're not in a terminal
-	[[ "${BASH_INTERACTIVE}" ]] || return
+	[[ -n "${BASH_INTERACTIVE}" ]] || return
 
 	# Kick _prompt_pwd again with no output to export environment variables
 	_prompt_pwd > /dev/null 2>&1
@@ -94,7 +94,7 @@ _prompt_exitcode() {
 	local ARRAY_CMD CMD ENV GRY RED STR YLW
 
 	# Return if we're not in a terminal
-	[[ "${BASH_INTERACTIVE}" ]] || return
+	[[ -n "${BASH_INTERACTIVE}" ]] || return
 
 	# Bounce if no arguments passed
 	[[ -z "${1}" || -z "${2}" ]] && return
@@ -279,7 +279,7 @@ _prompt_pwd_color_render() {
 
 	# Concatenate color-formatted string
 	while [[ "${COUNT}" != "${DEPTH}" ]]; do
-		STR+="${INPUT[$COUNT]}"
+		STR+="${INPUT[${COUNT}]}"
 		((COUNT++))
 
 		# Append a trailing slash if proper to do so
@@ -304,10 +304,10 @@ _prompt_titlebar() {
 	local TITLEBAR_SSH
 
 	# Return if we're not in a terminal
-	[[ "${BASH_INTERACTIVE}" ]] || return
+	[[ -n "${BASH_INTERACTIVE}" ]] || return
 
 	# Add '[SSH]' to titlebar if in SSH session
-	[[ "${SSH_CONNECTION}" ]] && TITLEBAR_SSH="[SSH] "
+	[[ -n "${SSH_CONNECTION}" ]] && TITLEBAR_SSH="[SSH] "
 
 	# Only apply custom titlebar if we're in xterm and on Bash 3+
 	[[ "${TERM}" == *"xterm"* && "${BASH_VERSINFO[0]}" -ge "3" ]] && printf "\\033]0;%s%s\\007" "${TITLEBAR_SSH}" "${HOST_SUB}:${PWD_FINAL}"

@@ -3,7 +3,7 @@ for PACKAGE_MANAGER in "${ARRAY_PACKAGE_MANAGERS[@]}"; do
 	hash "${PACKAGE_MANAGER}" && break
 	unset PACKAGE_MANAGER
 done
-[[ "${PACKAGE_MANAGER}" ]] && export PACKAGE_MANAGER
+[[ -n "${PACKAGE_MANAGER}" ]] && export PACKAGE_MANAGER
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

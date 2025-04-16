@@ -1,6 +1,6 @@
 # Functions: MD5
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 # Format the output of md5sum command
@@ -12,7 +12,7 @@ _md5_clean() {
 	! hash md5sum && output error "md5sum not available" && return
 
 	USAGE_STRING="md5-clean <filename>, one file only"
-	[[ -z "${1}" || "${2}" ]] && output usage "${USAGE_STRING}" && return
+	[[ -z "${1}" || -n "${2}" ]] && output usage "${USAGE_STRING}" && return
 
 	md5sum "${1}" | awk '{print $1}'
 }

@@ -1,6 +1,6 @@
 # Functions: Alias generation
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
 _alias_eza() {
@@ -78,7 +78,7 @@ _alias_grep() {
 	# Regular grep
 	alias grep="${GREP_BASE}"
 	for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
-		alias "${GREP_CMD}grep"="${GREP_BASE} --${ARRAY_GREP_CMDS[$GREP_CMD]}"
+		alias "${GREP_CMD}grep"="${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
 	done
 
 	# Force enable/disable color
@@ -89,7 +89,7 @@ _alias_grep() {
 	if hash zgrep; then
 		alias zgrep="z${GREP_BASE}"
 		for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
-			alias "z${GREP_CMD}grep"="z${GREP_BASE} --${ARRAY_GREP_CMDS[$GREP_CMD]}"
+			alias "z${GREP_CMD}grep"="z${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
 		done
 	fi
 
@@ -97,7 +97,7 @@ _alias_grep() {
 	if hash xzgrep; then
 		alias xzgrep="xz${GREP_BASE}"
 		for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
-			alias "xz${GREP_CMD}grep"="xz${GREP_BASE} --${ARRAY_GREP_CMDS[$GREP_CMD]}"
+			alias "xz${GREP_CMD}grep"="xz${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
 		done
 	fi
 }

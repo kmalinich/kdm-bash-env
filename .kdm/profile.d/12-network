@@ -6,7 +6,7 @@ _initialNetworkGenerate() {
 	if [[ -z "${DEFROUTE_NIC}" || -z "${HOST_IP}" ]]; then
 		DEFROUTE_NIC="$(ip route | grep -Po '(?<=dev\ )(e(n|th|ns|np[1-9]s)|br|wlan)[0-9]{1,3}(?=(\s\sproto\ static)?(\s\smetric\ [1-9][0-9]{0,3})?\s$)?' | head -n 1)"
 		#[[ "${DEFROUTE_NIC}" ]] && HOST_IP=$(ip addr show "${DEFROUTE_NIC}" | grep -Po "(?<=inet\\ )([1-9]([0-9]{1,2})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})(?=.*.[^vir]${DEFROUTE_NIC}$))")
-		[[ "${DEFROUTE_NIC}" ]] && HOST_IP=$(ip addr show "${DEFROUTE_NIC}" | grep -Po "(?<=inet\\ )([1-9]([0-9]{1,2})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})(?=.*.[^vir]$))")
+		[[ -n "${DEFROUTE_NIC}" ]] && HOST_IP=$(ip addr show "${DEFROUTE_NIC}" | grep -Po "(?<=inet\\ )([1-9]([0-9]{1,2})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})(?=.*.[^vir]$))")
 	fi
 
 	# Export variables
@@ -68,7 +68,7 @@ _initialNetworkSetup() {
 	local INITIAL_NETWORK_AGE INITIAL_NETWORK_TIME
 
 	# Determine age of SSH alias cache file
-	if [[ "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
 		INITIAL_NETWORK_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_INITIAL_NETWORK}")
 	else
 		INITIAL_NETWORK_TIME=$(stat -f '%m' "${BASH_ENV_FILE_INITIAL_NETWORK}")

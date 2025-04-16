@@ -1,6 +1,6 @@
 # Functions: Conversion
 
-[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && o k "Loaded" "${BASH_SOURCE[@]/$HOME\/\.kdm\//}"
+[[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && o k "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 # Convert hexadecimal<->decimal
 dechex() {

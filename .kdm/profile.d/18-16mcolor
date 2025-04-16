@@ -18,7 +18,7 @@ if hash dircolors; then
 	unset DIRCOLOR_DATA
 
 
-	if [[ "${TERM_OLD}" ]]; then
+	if [[ -n "${TERM_OLD}" ]]; then
 		TERM="${TERM_OLD}"
 		unset TERM_OLD
 	fi
