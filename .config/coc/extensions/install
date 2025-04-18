@@ -28,10 +28,15 @@ echo; echo
 #echo; echo
 
 cd "${HOME}/.vim/pack/kdm/coc.nvim" || exit 5
-echo "Executing 'npm ci' in ~/.vim/pack/kdm/coc.nvim"
-#rm -f ./package-lock.json > /dev/null 2>&1
-npm ci
-#yarn install --frozen-lockfile --network-concurrency "$(nproc)" --non-interactive
+rm -rf ./build/ ./node_modules/
+
+export NODE_ENV='production'
+
+echo "Executing 'npm install' in ~/.vim/pack/kdm/coc.nvim"
+npm install --include prod --include dev --include optional --include peer
+
+echo "Executing 'npm run build' in ~/.vim/pack/kdm/coc.nvim"
+npm run build
 echo; echo
 
 #echo "Fixing coc-svg svgo dependency symlink"
