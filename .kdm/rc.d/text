@@ -56,6 +56,44 @@ _flash_term() {
 output() {
 	# Declare vars as local
 	local COLOR_SELECTED OUTPUT_FORMAT OUTPUT_STDERR OUTPUT_STRING
+	local KEYVAL_COLOR
+
+
+	# For options the require arg 2 and 3
+	case "${1,,}" in
+		kv*|keyval*|ka|kb|kc|kf|kr|kg|kt|ko|kpn|kp|kw|ky|k) ;&
+		lc*|luc*|leadup-custom)
+			# Check for 2nd and 3rd args
+			if [[ -z "${2}" || -z "${3}" ]]; then
+				output usage "${USAGE_STRING}"
+				return
+			fi
+			;;
+	esac
+
+
+	KEYVAL_COLOR="null"
+
+	# For keyval options
+	case "${1,,}" in
+		ka|kva|keyval-a)                 KEYVAL_COLOR="${C_ALT}"     ;;
+		kb|kvb|keyval-b)                 KEYVAL_COLOR="${C_BLU}"     ;;
+		kc|kvc|keyval-c)                 KEYVAL_COLOR="${C_CYN}"     ;;
+		kf|kvf|keyval-f|kr|kvr|keyval-r) KEYVAL_COLOR="${C_RED}"     ;;
+		kg|kvg|keyval-g|kt|kvt|keyval-t) KEYVAL_COLOR="${C_GRN}"     ;;
+		ko|kvo|keyval-o)                 KEYVAL_COLOR="${C_ORN}"     ;;
+		kpn|kvpn|keyval-pn)              KEYVAL_COLOR="${C_PNK}"     ;;
+		kp|kvp|keyval-p)                 KEYVAL_COLOR="${C_PRP_BRT}" ;;
+		kw|kvw|keyval-w)                 KEYVAL_COLOR="${C_WHT}"     ;;
+		ky|kvy|keyval-y|k|kv|keyval)     KEYVAL_COLOR="${C_YLW}"     ;;
+	esac
+
+	# For keyval options, output special format and immediately return
+	if [[ "${KEYVAL_COLOR}" != "null" ]]; then
+		printf "${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${KEYVAL_COLOR}%s${C_GRY}'${C_RST}\\n" "${2}" "${3}"
+		return
+	fi
+
 
 	# Case statement for output color/format
 	case "${1,,}" in
@@ -100,131 +138,6 @@ output() {
 			OUTPUT_STRING="failure"
 			;;
 
-		ky|kvy|keyval-y|k|kv|keyval)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_YLW}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		ka|kva|keyval-a)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_ALT}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		kb|kvb|keyval-b)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_BLU}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		kc|kvc|keyval-c)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_CYN}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		kf|kvf|keyval-f|kr|kvr|keyval-r)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_RED}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		ko|kvo|keyval-o)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_ORN}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		kp|kvp|keyval-p)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_PRP}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		kpn|kvpn|keyval-pn)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_PNK}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
-
-		kg|kvg|keyval-g|kt|kvt|keyval-t)
-			# Check for 2nd and 3rd args
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
-			OUTPUT_FORMAT="${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${C_GRN}%s${C_GRY}'${C_RST}\\n"
-
-			# Output special format and immediately return
-			printf "${OUTPUT_FORMAT}" "${2}" "${3}"
-			return
-			;;
 
 		l|lu|leadup) # Special function for leadup to status message, no newline
 			# Create dot string and output format
@@ -233,13 +146,6 @@ output() {
 			;;
 
 		lc|luc|leadup-custom) # Special function for leadup to status message, no newline, with custom command name
-			# Check for 2nd and 3rd args
-			[[ -z "${2}" || -z "${3}" ]] && output usage "${USAGE_STRING}" && return
-			if [[ -z "${2}" || -z "${3}" ]]; then
-				output usage "${USAGE_STRING}"
-				return
-			fi
-
 			# Create dot string and output format
 			printf -v LOADING_DOT_STRING '%*s' $((70-${#2}-${#3})) ''
 			OUTPUT_FORMAT="${C_RST}%s ${C_GRY}'${C_ORN_BRT}%s${C_GRY}'${C_RST} ${C_WHT_BRT}$(printf '%s' "${LOADING_DOT_STRING// /.}") ${C_RST}"
@@ -299,7 +205,7 @@ _output_usage() {
 	[1]="black blue orange cyan gray green orange pink purple red white yellow"
 	[2]="leadup leadup-custom"
 	[3]="failure success"
-	[4]="keyval keyval-a keyval-b keyval-c keyval-f keyval-o keyval-p keyval-pn keyval-r keyval-t"
+	[4]="keyval keyval-a keyval-b keyval-c keyval-f keyval-o keyval-p keyval-pn keyval-r keyval-t keyval-w keyval-y"
 	[5]="backtick stderr"
 	)'
 
@@ -341,6 +247,7 @@ _output_completion() {
 	keyval-pn
 	keyval-r
 	keyval-t
+	keyval-w
 	keyval-y
 
 	backtick stderr
@@ -365,7 +272,7 @@ _o_completion() {
 
 	f s
 
-	k ka kb kc kf ko kp kpn kr kt
+	k ka kb kc kf ko kp kpn kr kt kw ky
 
 	b 2
 	)
