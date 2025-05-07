@@ -9,6 +9,8 @@
 	bm  = branch --merged
 	bnm = branch --no-merged
 
+	branchname = branch --show-current
+
 	cl  = clone --jobs 8 --recursive
 	cls = clone --jobs 8 --recursive --depth 1 --shallow-submodules
 
