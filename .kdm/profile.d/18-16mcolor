@@ -39,8 +39,12 @@ export C_ENV C_ENV_BOLD TERM
 
 # Use bat for manpages if present
 if hash bat; then
-	export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-	export MANROFFOPT="-c"
+	export BAT_THEME_DARK='Monokai Extended Bright'
+	export BAT_THEME='dark'
+
+	# shellcheck disable=SC1111
+	export MANPAGER="col -b -x | sed -e \"s/“/\\\"/g\" -e \"s/”/\\\"/g\" -e \"s/‘/'/g\" -e \"s/’/'/g\" | bat --language man --style plain --paging auto --theme 'Monokai Extended Bright'"
+	export MANROFFOPT='-c'
 fi
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

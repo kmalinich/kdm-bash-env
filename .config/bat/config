@@ -191,7 +191,7 @@
 
 --tabs 2
 
---theme="Monokai Extended Origin"
+--theme="Monokai Extended Bright"
 
 --italic-text=always
 
@@ -200,7 +200,8 @@
 
 --style="changes,grid,snip"
 
---paging=never
+--paging=auto
+--set-terminal-title
 
 --map-syntax "**/.ssh/config.d/*.conf:SSH Config"
 --map-syntax "**/.ssh/config.d/**/*.conf:SSH Config"
