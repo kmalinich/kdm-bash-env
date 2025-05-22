@@ -1,3 +1,5 @@
+# shellcheck disable=SC1090
+
 # Functions: SSH aliases
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"

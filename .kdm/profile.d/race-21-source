@@ -5,101 +5,106 @@
 
 . "${HOME}/.kdm/profile.d/02-arrays"
 
-TIMEFORMAT_OLD="${TIMEFORMAT}"
-
-export TIMEFORMAT_RACE="true"
-
 DIR_TEMP="$(mktemp -d)"
 FILE_TEMP_RAW="${DIR_TEMP}/race-times-raw.csv"
 FILE_TEMP_SORTED="${DIR_TEMP}/race-times-sorted.csv"
 
 
+mapfile -t RACE_ARRAY_SOURCE_PROFILE_D < <(find "${HOME}/.kdm/profile.d" -maxdepth 1 -type f -executable | sort)
 
+#echo "RACE_ARRAY_SOURCE_PROFILE_D: " ${RACE_ARRAY_SOURCE_PROFILE_D[@]}
+
+for RACE_ENTRY in "${RACE_ARRAY_SOURCE_PROFILE_D[@]}"; do
+	[[ ! -s "${RACE_ENTRY}" ]] && continue
+
+	[[ "$(basename "${RACE_ENTRY}")" == "rc" ]] && continue
+	[[ "$(basename "${RACE_ENTRY}")" == "21-source" ]] && continue
+
+	TIME_START="$(date '+%s%N')"
+	. "${RACE_ENTRY}"
+	TIME_END="$(date '+%s%N')"
+
+	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
+
+	echo "${MILLISECONDS},profile.d,${RACE_ENTRY}" >> "${FILE_TEMP_RAW}"
+done
 
 
 # Source the files in ARRAY_SOURCE if they exist
-for ENTRY in "${ARRAY_SOURCE[@]}"; do
-	unset SOURCE_EXIT
-	unset SOURCE_FILE
+RACE_ARRAY_SOURCE=("${ARRAY_SOURCE[@]}")
+# echo "RACE_ARRAY_SOURCE: " ${RACE_ARRAY_SOURCE[@]}
 
-	[[ ! -s "${ENTRY}" ]] && continue
+for RACE_ENTRY in "${RACE_ARRAY_SOURCE[@]}"; do
+	[[ ! -s "${RACE_ENTRY}" ]] && continue
 
-	[[ "$(basename "${ENTRY}")" == "rc" ]] && continue
+	[[ "$(basename "${RACE_ENTRY}")" == "rc" ]] && continue
 
 	TIME_START="$(date '+%s%N')"
-	. "${ENTRY}"
-	SOURCE_EXIT="${?}"
+	. "${RACE_ENTRY}"
 	TIME_END="$(date '+%s%N')"
 
 	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
 
-	echo "${MILLISECONDS},${ENTRY}" >> "${FILE_TEMP_RAW}"
-
-	[[ "${SOURCE_VERBOSE}" != "true" ]] && continue
-
-	SOURCE_FILE="${ENTRY/${HOME}\/\.kdm\//}"
-	if [[ "${SOURCE_EXIT}" == "0" ]]; then
-		output kvt "Loaded" "${SOURCE_FILE}"
-		continue
-	fi
-
-	output kvf "Failed" "${SOURCE_FILE}"
+	echo "${MILLISECONDS},ARRAY_SOURCE,${RACE_ENTRY}" >> "${FILE_TEMP_RAW}"
 done
 
 
-# Source any possible global bashrc(s) under /etc
-# ARRAY_SOURCE_GLOBAL=(bash.bashrc bashrc)
-# for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
-# 	FILE="/etc/${FILE}"
-# 	[[ -f "${FILE}" ]] && . "${FILE}"
-# done; unset FILE
-# 
-# # Build array of files under ~/.kdm/rc.d and source them
-# mapfile -t ARRAY_SOURCE_RC_D < <(find "${BASH_ENV_DIR_RC_D}" -maxdepth 1 -executable -type f 2> /dev/null | sort)
-# for FILE in "${ARRAY_SOURCE_RC_D[@]}"; do
-# 	. "${FILE}"
-# done; unset FILE
+RACE_ARRAY_SOURCE_GLOBAL=(bash.bashrc bashrc)
+for FILE in "${RACE_ARRAY_SOURCE_GLOBAL[@]}"; do
+	RACE_ENTRY="/etc/${FILE}"
 
+	[[ ! -s "${RACE_ENTRY}" ]] && continue
+
+	TIME_START="$(date '+%s%N')"
+	. "${RACE_ENTRY}"
+	TIME_END="$(date '+%s%N')"
+
+	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
+
+	echo "${MILLISECONDS},Global,${RACE_ENTRY}" >> "${FILE_TEMP_RAW}"
+done
+
+
+# Build array of files under ~/.kdm/rc.d and source them
+mapfile -t RACE_ARRAY_SOURCE_RC_D < <(find "${BASH_ENV_DIR_RC_D}" -maxdepth 1 -executable -type f 2> /dev/null | sort)
+# echo "RACE_ARRAY_SOURCE_RC_D: " ${RACE_ARRAY_SOURCE_RC_D[@]}
+
+for RACE_ENTRY in "${RACE_ARRAY_SOURCE_RC_D[@]}"; do
+	[[ ! -s "${RACE_ENTRY}" ]] && continue
+
+	TIME_START="$(date '+%s%N')"
+	. "${RACE_ENTRY}"
+	TIME_END="$(date '+%s%N')"
+
+	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
+
+	echo "${MILLISECONDS},rc.d,${RACE_ENTRY}" >> "${FILE_TEMP_RAW}"
+done
+
+
+mapfile -t RACE_ARRAY_SOURCE_EXTRA < <(find -L "${BASH_ENV_DIR_EXTRA}" -maxdepth 1 -type f -executable 2> /dev/null | sort)
+# echo "RACE_ARRAY_SOURCE_EXTRA: " ${RACE_ARRAY_SOURCE_EXTRA[@]}
 
 # Source bash libraries from ~/.kdm/extra
-for ENTRY in $(find -L "${BASH_ENV_DIR_EXTRA}" -maxdepth 1 -type f -executable | sort); do
+for RACE_ENTRY in "${RACE_ARRAY_SOURCE_EXTRA[@]}"; do
 	# Skip README
-	[[ "${ENTRY}" == "README" ]] && continue
-
-	unset SOURCE_EXIT
-	unset SOURCE_FILE
+	[[ "${RACE_ENTRY}" == "README" ]] && continue
 
 	TIME_START="$(date '+%s%N')"
-	. "${ENTRY}"
-	SOURCE_EXIT="${?}"
+	. "${RACE_ENTRY}"
 	TIME_END="$(date '+%s%N')"
 
 	MILLISECONDS="$(bc -l <<< "scale=3; (${TIME_END}-${TIME_START})/1000000")"
 
-	echo "${MILLISECONDS},${ENTRY}" >> "${FILE_TEMP_RAW}"
-
-	[[ "${SOURCE_VERBOSE}" != "true" ]] && continue
-
-	SOURCE_FILE="${ENTRY/${HOME}\/\.kdm\//}"
-	if [[ "${SOURCE_EXIT}" == "0" ]]; then
-		output kvb "Loaded" "${SOURCE_FILE}"
-		continue
-	fi
-
-	output kvf "Failed" "${SOURCE_FILE}"
+	echo "${MILLISECONDS},Extra,${RACE_ENTRY}" >> "${FILE_TEMP_RAW}"
 done
 
-unset SOURCE_EXIT
-unset SOURCE_FILE
 
-
-export TIMEFORMAT="${TIMEFORMAT_OLD}"
-
-unset TIMEFORMAT_RACE
-
-
-echo "Milliseconds elapsed, file name" >> "${FILE_TEMP_SORTED}"
+echo "Elapsed ms,Category,Filename" >> "${FILE_TEMP_SORTED}"
 sort -nr "${FILE_TEMP_RAW}" >> "${FILE_TEMP_SORTED}"
+# cat "${FILE_TEMP_RAW}" >> "${FILE_TEMP_SORTED}"
+
+sed -i 's/\/Users\/kdm\/\.kdm\///g' "${FILE_TEMP_SORTED}"
 
 cat "${FILE_TEMP_SORTED}"
 
