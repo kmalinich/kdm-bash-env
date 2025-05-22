@@ -137,48 +137,56 @@ unset NODE_PATH_NEW NODE_PATH_OLD
 
 
 # Configure PATH from array ARRAY_PATH
-PATH_OLD="${PATH}"
+if [[ "${BASH_ENV_CACHE_PATH}" != "true" ]]; then
+	PATH_OLD="${PATH}"
 
-# Find entries in ARRAY_PATH that are directories
-ARRAY_PATH_VALID=()
-for ENTRY in "${ARRAY_PATH[@]}"; do
-	[[ -d "${ENTRY}" ]] && ARRAY_PATH_VALID+=("${ENTRY}")
-done
+	# Find entries in ARRAY_PATH that are directories
+	ARRAY_PATH_VALID=()
+	for ENTRY in "${ARRAY_PATH[@]}"; do
+		[[ -d "${ENTRY}" ]] && ARRAY_PATH_VALID+=("${ENTRY}")
+	done
 
-# If entry already present in PATH_OLD (at any position), remove entry from PATH_OLD
-# This results in PATH_OLD containing only entries that are not present in ARRAY_PATH_VALID
-for ENTRY in "${ARRAY_PATH_VALID[@]}"; do
-	while [[ "${PATH_OLD}" =~ ^${ENTRY}: ]]; do PATH_OLD="${PATH_OLD#"${ENTRY}":}";   done
-	while [[ "${PATH_OLD}" =~ :${ENTRY}: ]]; do PATH_OLD="${PATH_OLD//:${ENTRY}:/:}"; done
-	while [[ "${PATH_OLD}" =~ :${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%:"${ENTRY}"}";   done
-	while [[ "${PATH_OLD}" =~ ^${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%"${ENTRY}"}";    done
-done
+	# If entry already present in PATH_OLD (at any position), remove entry from PATH_OLD
+	# This results in PATH_OLD containing only entries that are not present in ARRAY_PATH_VALID
+	for ENTRY in "${ARRAY_PATH_VALID[@]}"; do
+		while [[ "${PATH_OLD}" =~ ^${ENTRY}: ]]; do PATH_OLD="${PATH_OLD#"${ENTRY}":}";   done
+		while [[ "${PATH_OLD}" =~ :${ENTRY}: ]]; do PATH_OLD="${PATH_OLD//:${ENTRY}:/:}"; done
+		while [[ "${PATH_OLD}" =~ :${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%:"${ENTRY}"}";   done
+		while [[ "${PATH_OLD}" =~ ^${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%"${ENTRY}"}";    done
+	done
 
-unset PATH_NEW
+	unset PATH_NEW
 
-for ENTRY in "${ARRAY_PATH_VALID[@]}"; do
 	# If entry already present in PATH_NEW (at any position), remove entry from PATH_NEW
-	while [[ "${PATH_NEW}" =~ ^${ENTRY}: ]]; do PATH_NEW="${PATH_NEW#"${ENTRY}":}"; done
-	while [[ "${PATH_NEW}" =~ :${ENTRY}: ]]; do PATH_NEW="${PATH_NEW//:${ENTRY}:/:}"; done
-	while [[ "${PATH_NEW}" =~ :${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%:"${ENTRY}"}";   done
-	while [[ "${PATH_NEW}" =~ ^${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%"${ENTRY}"}";    done
+	for ENTRY in "${ARRAY_PATH_VALID[@]}"; do
+		while [[ "${PATH_NEW}" =~ ^${ENTRY}: ]]; do PATH_NEW="${PATH_NEW#"${ENTRY}":}";   done
+		while [[ "${PATH_NEW}" =~ :${ENTRY}: ]]; do PATH_NEW="${PATH_NEW//:${ENTRY}:/:}"; done
+		while [[ "${PATH_NEW}" =~ :${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%:"${ENTRY}"}";   done
+		while [[ "${PATH_NEW}" =~ ^${ENTRY}$ ]]; do PATH_NEW="${PATH_NEW%"${ENTRY}"}";    done
 
-	# Add entry to end of PATH_NEW
-	PATH_NEW="${PATH_NEW}${PATH_NEW+:}${ENTRY}"
-done
+		# Add entry to end of PATH_NEW
+		PATH_NEW="${PATH_NEW}${PATH_NEW+:}${ENTRY}"
+	done
 
-# Add what remains of PATH_OLD to end of PATH_NEW
-PATH_NEW="${PATH_NEW}${PATH_NEW+:}${PATH_OLD}"
+	# Add what remains of PATH_OLD to end of PATH_NEW
+	PATH_NEW="${PATH_NEW}${PATH_NEW+:}${PATH_OLD}"
 
-# Remove leading/trailing colons if present
-[[ "${PATH_NEW:0:1}" == ":" ]] && PATH_NEW="${PATH_NEW#:}"
-[[ "${PATH_NEW: -1}" == ":" ]] && PATH_NEW="${PATH_NEW%:}"
+	# Remove leading/trailing colons if present
+	[[ "${PATH_NEW:0:1}" == ":" ]] && PATH_NEW="${PATH_NEW#:}"
+	[[ "${PATH_NEW: -1}" == ":" ]] && PATH_NEW="${PATH_NEW%:}"
 
-unset PATH
-export PATH="${PATH_NEW}"
+	unset PATH
+	export PATH="${PATH_NEW}"
 
-unset ARRAY_PATH_VALID
-unset PATH_NEW PATH_OLD
+	unset ARRAY_PATH_VALID
+	unset PATH_NEW PATH_OLD
+
+	sed -i '/^PATH=/d'                "${BASH_ENV_FILE_CACHE_ENV}"
+	sed -i '/^BASH_ENV_CACHE_PATH=/d' "${BASH_ENV_FILE_CACHE_ENV}"
+
+	echo "PATH=\"${PATH}\""         >> "${BASH_ENV_FILE_CACHE_ENV}"
+	echo "BASH_ENV_CACHE_PATH=true" >> "${BASH_ENV_FILE_CACHE_ENV}"
+fi
 
 
 # Export PATHs

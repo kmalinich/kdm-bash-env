@@ -14,12 +14,17 @@ FILE_TEMP_RAW="${DIR_TEMP}/race-times-raw.csv"
 FILE_TEMP_SORTED="${DIR_TEMP}/race-times-sorted.csv"
 
 
+
+
+
 # Source the files in ARRAY_SOURCE if they exist
 for ENTRY in "${ARRAY_SOURCE[@]}"; do
 	unset SOURCE_EXIT
 	unset SOURCE_FILE
 
 	[[ ! -s "${ENTRY}" ]] && continue
+
+	[[ "$(basename "${ENTRY}")" == "rc" ]] && continue
 
 	TIME_START="$(date '+%s%N')"
 	. "${ENTRY}"
@@ -40,6 +45,20 @@ for ENTRY in "${ARRAY_SOURCE[@]}"; do
 
 	output kvf "Failed" "${SOURCE_FILE}"
 done
+
+
+# Source any possible global bashrc(s) under /etc
+# ARRAY_SOURCE_GLOBAL=(bash.bashrc bashrc)
+# for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
+# 	FILE="/etc/${FILE}"
+# 	[[ -f "${FILE}" ]] && . "${FILE}"
+# done; unset FILE
+# 
+# # Build array of files under ~/.kdm/rc.d and source them
+# mapfile -t ARRAY_SOURCE_RC_D < <(find "${BASH_ENV_DIR_RC_D}" -maxdepth 1 -executable -type f 2> /dev/null | sort)
+# for FILE in "${ARRAY_SOURCE_RC_D[@]}"; do
+# 	. "${FILE}"
+# done; unset FILE
 
 
 # Source bash libraries from ~/.kdm/extra

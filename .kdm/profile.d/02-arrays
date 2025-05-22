@@ -77,6 +77,7 @@ ARRAY_MANPATH=(
 "${ULO}/libtool/libexec/man"
 "${ULO}/make/libexec/man"
 "${ULO}/openssh/share/man"
+"${ULO}/ssh-copy-id/share/man"
 "${ULO}/openssl@3/share/man"
 "${ULO}/openssl@1.1/share/man"
 "${ULO}/openssl/share/man"
@@ -106,26 +107,7 @@ ARRAY_NODE_PATH=(
 /usr/lib/nodejs
 )
 
-# Entries at the beginning of this array will end up at the beginning of PATH
-# Entries at the end       of this array will end up at the end       of PATH
-mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
-
-ARRAY_PATH=(
-"${ARRAY_PATH[@]}"
-"${HOME}/bin"
-"${HOME}/.local/bin"
-"${HOME}/.cargo/bin"
-"${HOME}/.go/bin"
-"${HOME}/.composer/vendor/bin"
-"${HOME}/perl5/bin"
-"${HOME}/Library/Android/sdk/platform-tools"
-"${HOME}/.jenv/shims"
-'/data/data/com.termux/files/usr/bin/applets'
-'/data/data/com.termux/files/usr/bin'
-"${ULR}/gems/ruby-2.4.0/bin"
-"${ULR}/gems/ruby-2.4.0@global/bin"
-"${ULR}/rubies/ruby-2.4.0/bin"
-"${ULR}/bin"
+ARRAY_PATH_MACOS_ULO=(
 "${ULO}/openldap/bin"
 "${ULO}/perl/bin"
 "${ULO}/net-snmp/bin"
@@ -154,10 +136,45 @@ ARRAY_PATH=(
 "${ULO}/python@3.11/libexec/bin"
 "${ULO}/libxml2/bin"
 "${ULO}/libxslt/bin"
+"${ULO}/openssh/bin"
+"${ULO}/ssh-copy-id/bin"
 "${ULO}/openssl@3/bin"
 "${ULO}/openssl@1.1/bin"
 "${ULO}/openssl/bin"
 "${ULO}/ruby/bin"
+)
+
+ARRAY_PATH_MACOS_ULR=(
+"${ULR}/gems/ruby-2.4.0/bin"
+"${ULR}/gems/ruby-2.4.0@global/bin"
+"${ULR}/rubies/ruby-2.4.0/bin"
+"${ULR}/bin"
+)
+
+# Entries at the beginning of this array will end up at the beginning of PATH
+# Entries at the end       of this array will end up at the end       of PATH
+mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
+
+ARRAY_PATH=(
+"${ARRAY_PATH[@]}"
+"${HOME}/bin"
+"${HOME}/.local/bin"
+"${HOME}/.cargo/bin"
+"${HOME}/.go/bin"
+"${HOME}/.composer/vendor/bin"
+"${HOME}/.jenv/shims"
+"${HOME}/perl5/bin"
+"${HOME}/Library/Android/sdk/platform-tools"
+'/data/data/com.termux/files/usr/bin/applets'
+'/data/data/com.termux/files/usr/bin'
+)
+
+if [[ "$(uname)" == "Darwin" ]]; then
+	ARRAY_PATH+=("${ARRAY_PATH_MACOS_ULR[@]}")
+	ARRAY_PATH+=("${ARRAY_PATH_MACOS_ULO[@]}")
+fi
+
+ARRAY_PATH+=(
 '/opt/local/sbin'
 '/opt/local/bin'
 '/opt/puppetlabs/bin'
@@ -185,9 +202,6 @@ ARRAY_PATH=(
 '/sbin'
 '/opt/cuda/bin'
 )
-# '/usr/bin/X11'
-# '/Applications/VMware Fusion.app/Contents/Library'
-# '/Applications/VMware Fusion.app/Contents/Public'
 
 
 ARRAY_MKDIR=(
@@ -351,11 +365,12 @@ xcodebuild
 )
 
 ARRAY_TOUCH=(
+"${BASH_ENV_FILE_CACHE_ENV}"
+"${BASH_ENV_FILE_CACHE_SSH_ALIAS}"
+"${BASH_ENV_FILE_CACHE_SUDO_ALIAS}"
 "${BASH_ENV_FILE_HISTORY}"
 "${BASH_ENV_FILE_SSH_AUTHKEYS}"
-"${BASH_ENV_FILE_CACHE_SSH_ALIAS}"
 "${BASH_ENV_FILE_SSH_CONFIG}"
-"${BASH_ENV_FILE_CACHE_SUDO_ALIAS}"
 "${BASH_ENV_DIR_SSH_CONFIG}/base.conf"
 )
 

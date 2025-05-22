@@ -19,8 +19,10 @@ export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
 export BASH_ENV_FILE_GEMRC="${HOME}/.gemrc"
 export BASH_ENV_FILE_LESSFILTER="${HOME}/.lessfilter"
 
+export BASH_ENV_FILE_CACHE_ENV="${BASH_ENV_DIR_KDM}/envcache"
 export BASH_ENV_FILE_CACHE_SSH_ALIAS="${BASH_ENV_DIR_KDM}/sshcache"
 export BASH_ENV_FILE_CACHE_SUDO_ALIAS="${BASH_ENV_DIR_KDM}/sudocache"
+
 export BASH_ENV_FILE_COLORS="${BASH_ENV_DIR_PROFILE_D}/03-colors"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
 export BASH_ENV_FILE_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config"
@@ -72,6 +74,9 @@ _prompt_config() {
 	export PROMPT_HOSTNAME PROMPT_USERNAME PROMPT_TIME
 }
 
+
+# shellcheck disable=SC1090
+[[ -s "${BASH_ENV_FILE_CACHE_ENV}" ]] && . "${BASH_ENV_FILE_CACHE_ENV}"
 
 _truecolor_config
 _prompt_config
