@@ -1,9 +1,23 @@
+# shellcheck disable=SC1090
+# shellcheck disable=SC2139
+
 # Functions: Alias generation
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
-_alias_eza() {
+_export_dirs() {
+	# Downloads and Desktop folder variables
+	DIR_HOME_DC="${HOME}/Documents"
+	DIR_HOME_DL="${HOME}/Downloads"
+	DIR_HOME_DT="${HOME}/Desktop"
+
+	[[ -d "${DIR_HOME_DC}" ]] && export DIR_HOME_DC
+	[[ -d "${DIR_HOME_DL}" ]] && export DIR_HOME_DL
+	[[ -d "${DIR_HOME_DT}" ]] && export DIR_HOME_DT
+}
+
+_export_eza() {
 	# Check if eza is installed
 	hash eza || return
 
@@ -13,10 +27,24 @@ _alias_eza() {
 	EZA_COLORS="${EXA_COLORS}"
 
 	EXA_ICON_SPACING='2'
-	EZA_ICON_SPACING="${EZA_ICON_SPACING}"
 
 	export EZA_AS_LS EXA_COLORS EZA_COLORS EXA_ICON_SPACING EZA_ICON_SPACING
+}
 
+_export_ls() {
+	export LS_TIME_STYLE='+%Y-%m-%d %r'
+}
+
+_exportSetup() {
+	_export_dirs
+	_export_eza
+	_export_ls
+}
+
+
+_alias_eza() {
+	# Check if eza is installed
+	hash eza || return
 
 	alias ls='eza --color=auto --color-scale --time-style long-iso --icons --links --group --group-directories-first 2> /dev/null'
 
@@ -36,8 +64,6 @@ _alias_eza() {
 }
 
 _alias_ls() {
-	export LS_TIME_STYLE='+%Y-%m-%d %r'
-
 	# Return if GNU grep not installed and not on Linux
 	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
 
@@ -162,8 +188,11 @@ _alias_ping() {
 }
 
 _alias_diff() {
+	local DIFF_VERSION
+
 	# Diff enable auto color
 	DIFF_VERSION="$(diff -v | grep -Eo '[3-9]\.[0-9]{1,2}$')"
+
 	if [[ "${DIFF_VERSION/\./}" -ge "34" ]]; then
 		alias diff='diff --color=auto'
 	fi
@@ -184,9 +213,9 @@ _alias_dirs() {
 	DIR_HOME_DT="${HOME}/Desktop"
 
 	# Downloads and Desktop folder aliases
-	[[ -d "${DIR_HOME_DC}" ]] && export DIR_HOME_DC && alias dc='cd ${DIR_HOME_DC}; ll'
-	[[ -d "${DIR_HOME_DL}" ]] && export DIR_HOME_DL && alias dl='cd ${DIR_HOME_DL}; ll'
-	[[ -d "${DIR_HOME_DT}" ]] && export DIR_HOME_DT && alias dt='cd ${DIR_HOME_DT}; ll'
+	[[ -d "${DIR_HOME_DC}" ]] && alias dc='cd ${DIR_HOME_DC}; ll'
+	[[ -d "${DIR_HOME_DL}" ]] && alias dl='cd ${DIR_HOME_DL}; ll'
+	[[ -d "${DIR_HOME_DT}" ]] && alias dt='cd ${DIR_HOME_DT}; ll'
 }
 
 _alias_misc() {
@@ -256,16 +285,116 @@ _alias_pygmentize() {
 	_alias_pygmentize_xml
 }
 
+# Generate SSH host aliases
+_alias_ssh() {
+	local TEMP_CACHE_SSH_ALIAS
 
-_alias_eza
-_alias_ls
-_alias_grep
-_alias_nmap
-_alias_ping
-_alias_diff
-_alias_dirs
-_alias_misc
-_alias_pygmentize
+	TEMP_CACHE_SSH_ALIAS="$(mktemp -t "kdm-bash-env.alias.ssh.XXXXXXXXXXXXXX")"
 
+	# Process SSH host alias generation, output to SSH alias cache file
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     2> /dev/null | grep -Ev '\*' >> "${TEMP_CACHE_SSH_ALIAS}" 2> /dev/null
+	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf 2> /dev/null | grep -Ev '\*' >> "${TEMP_CACHE_SSH_ALIAS}" 2> /dev/null
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH aliases"
+	fi
+
+	# Source SSH alias cache file
+	. "${TEMP_CACHE_SSH_ALIAS}"
+
+	rm -f "${TEMP_CACHE_SSH_ALIAS}"
+}
+
+_alias_sudo() {
+	# First check if we're root; if so, we don't need sudo aliases
+	[[ "${UID}" == "0" ]] && return
+
+	# If we're on macOS, add the macOS commands to the base array
+	# If we're on Linux, add the Linux commands to the base array
+	case "${UNAME_KERNEL_NAME}" in
+		Darwin) ARRAY_SUDO+=("${ARRAY_SUDO_MACOS[@]}") ;;
+		Linux)  ARRAY_SUDO+=("${ARRAY_SUDO_LINUX[@]}") ;;
+	esac
+
+	# Process auto-sudo-alias generation
+	for CMD in "${ARRAY_SUDO[@]}"; do
+		# If it's installed, add sudo
+		hash "${CMD}" || continue
+		alias "${CMD}"='sudo ${CMD}'
+	done
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "sudo aliases"
+	fi
+}
+
+
+# Process alias generation
+_aliasGenerate() {
+	_alias_eza
+	_alias_ls
+	_alias_grep
+	_alias_nmap
+	_alias_ping
+	_alias_diff
+	_alias_dirs
+	_alias_misc
+	_alias_pygmentize
+	_alias_ssh
+	_alias_sudo
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "aliases"
+	fi
+
+	# Save alias cache file
+	alias > "${BASH_ENV_FILE_CACHE_ALIAS}"
+}
+
+# Configure aliases
+_aliasSetup() {
+	# Regenerate alias cache file if empty
+	if [[ ! -s "${BASH_ENV_FILE_CACHE_ALIAS}" ]]; then
+		_aliasGenerate
+		# If generation required, we're done here
+		return 0
+	fi
+
+	# Declare vars as local
+	local ALIAS_CACHE_AGE ALIAS_CACHE_TIME
+
+	# Determine age of alias cache file
+	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		ALIAS_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_ALIAS}")
+	else
+		ALIAS_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_ALIAS}")
+	fi
+
+	ALIAS_CACHE_AGE=$(($(date +%s)-ALIAS_CACHE_TIME))
+
+	# Regenerate alias cache file if older than 1 day
+	if [[ "${ALIAS_CACHE_AGE}" -ge "86400" ]]; then
+		_aliasGenerate
+		# If generation required, we're done here
+		return 0
+	fi
+
+	# Source alias cache file
+	. "${BASH_ENV_FILE_CACHE_ALIAS}"
+}
+
+
+
+alias > ~/alias-0.sh
+
+_exportSetup
+_aliasSetup
+
+alias alias-generate='_aliasGenerate'
+
+alias > ~/alias-1.sh
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

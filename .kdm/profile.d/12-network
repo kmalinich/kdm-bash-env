@@ -1,6 +1,3 @@
-export BASH_ENV_FILE_INITIAL_NETWORK="${BASH_ENV_DIR_KDM}/initial-network"
-
-
 _initialNetworkGenerate() {
 	# Get IP, TTY, and hostname so the binaries doesn't have to be run again
 	if [[ -z "${DEFROUTE_NIC}" || -z "${HOST_IP}" ]]; then
@@ -45,7 +42,7 @@ _initialNetworkGenerate() {
 	# Populate ${HOSTNAME} environment variable if missing
 	export HOSTNAME="${HOSTNAME-${HOSTNAME_DATA}}"
 
-	cat <<- EOF > "${BASH_ENV_FILE_INITIAL_NETWORK}"
+	cat <<- EOF > "${BASH_ENV_FILE_CACHE_NETWORK}"
 	export DEFROUTE_NIC="${DEFROUTE_NIC}"
 	export DOMAIN="${DOMAIN}"
 	export DOMAIN_FULL="${DOMAIN_FULL}"
@@ -53,12 +50,13 @@ _initialNetworkGenerate() {
 	export HOST_IP="${HOST_IP}"
 	export HOST_SHORT="${HOST_SHORT}"
 	export HOST_SUB="${HOST_SUB}"
+	export BASH_ENV_CACHE_NETWORK=true
 	EOF
 }
 
 _initialNetworkSetup() {
 	# Generate network information file if empty
-	if [[ ! -s "${BASH_ENV_FILE_INITIAL_NETWORK}" ]]; then
+	if [[ ! -s "${BASH_ENV_FILE_CACHE_NETWORK}" ]]; then
 		_initialNetworkGenerate
 		# If generation required, we're done here
 		return 0
@@ -69,9 +67,9 @@ _initialNetworkSetup() {
 
 	# Determine age of SSH alias cache file
 	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
-		INITIAL_NETWORK_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_INITIAL_NETWORK}")
+		INITIAL_NETWORK_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_NETWORK}")
 	else
-		INITIAL_NETWORK_TIME=$(stat -f '%m' "${BASH_ENV_FILE_INITIAL_NETWORK}")
+		INITIAL_NETWORK_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_NETWORK}")
 	fi
 
 	INITIAL_NETWORK_AGE=$(($(date +%s)-INITIAL_NETWORK_TIME))
@@ -84,7 +82,7 @@ _initialNetworkSetup() {
 
 	# Source network information file
 	# shellcheck source=/dev/null
-	. "${BASH_ENV_FILE_INITIAL_NETWORK}"
+	. "${BASH_ENV_FILE_CACHE_NETWORK}"
 }
 
 

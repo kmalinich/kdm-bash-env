@@ -1,143 +1,149 @@
 # Configure MANPATH from array ARRAY_MANPATH
-MANPATH_OLD="${MANPATH}"
+_pathMan() {
+	MANPATH_OLD="${MANPATH}"
 
-# Find entries in ARRAY_MANPATH that are directories
-ARRAY_MANPATH_VALID=()
-for ENTRY in "${ARRAY_MANPATH[@]}"; do
-	[[ -d "${ENTRY}" ]] && ARRAY_MANPATH_VALID+=("${ENTRY}")
-done
+	# Find entries in ARRAY_MANPATH that are directories
+	ARRAY_MANPATH_VALID=()
+	for ENTRY in "${ARRAY_MANPATH[@]}"; do
+		[[ -d "${ENTRY}" ]] && ARRAY_MANPATH_VALID+=("${ENTRY}")
+	done
 
-# If entry already present in MANPATH_OLD (at any position), remove entry from MANPATH_OLD
-# This results in MANPATH_OLD containing only entries that are not present in ARRAY_MANPATH_VALID
-for ENTRY in "${ARRAY_MANPATH_VALID[@]}"; do
-	while [[ "${MANPATH_OLD}" =~ ^${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD#"${ENTRY}":}";   done
-	while [[ "${MANPATH_OLD}" =~ :${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD//:${ENTRY}:/:}"; done
-	while [[ "${MANPATH_OLD}" =~ :${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%:"${ENTRY}"}";   done
-	while [[ "${MANPATH_OLD}" =~ ^${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%"${ENTRY}"}";    done
-done
+	# If entry already present in MANPATH_OLD (at any position), remove entry from MANPATH_OLD
+	# This results in MANPATH_OLD containing only entries that are not present in ARRAY_MANPATH_VALID
+	for ENTRY in "${ARRAY_MANPATH_VALID[@]}"; do
+		while [[ "${MANPATH_OLD}" =~ ^${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD#"${ENTRY}":}";   done
+		while [[ "${MANPATH_OLD}" =~ :${ENTRY}: ]]; do MANPATH_OLD="${MANPATH_OLD//:${ENTRY}:/:}"; done
+		while [[ "${MANPATH_OLD}" =~ :${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%:"${ENTRY}"}";   done
+		while [[ "${MANPATH_OLD}" =~ ^${ENTRY}$ ]]; do MANPATH_OLD="${MANPATH_OLD%"${ENTRY}"}";    done
+	done
 
-unset MANPATH_NEW
+	unset MANPATH_NEW
 
-for ENTRY in "${ARRAY_MANPATH_VALID[@]}"; do
-	# If entry already present in MANPATH_NEW (at any position), remove entry from MANPATH_NEW
-	while [[ "${MANPATH_NEW}" =~ ^${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW#"${ENTRY}":}";   done
-	while [[ "${MANPATH_NEW}" =~ :${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW//:${ENTRY}:/:}"; done
-	while [[ "${MANPATH_NEW}" =~ :${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%:"${ENTRY}"}";   done
-	while [[ "${MANPATH_NEW}" =~ ^${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%"${ENTRY}"}";    done
+	for ENTRY in "${ARRAY_MANPATH_VALID[@]}"; do
+		# If entry already present in MANPATH_NEW (at any position), remove entry from MANPATH_NEW
+		while [[ "${MANPATH_NEW}" =~ ^${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW#"${ENTRY}":}";   done
+		while [[ "${MANPATH_NEW}" =~ :${ENTRY}: ]]; do MANPATH_NEW="${MANPATH_NEW//:${ENTRY}:/:}"; done
+		while [[ "${MANPATH_NEW}" =~ :${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%:"${ENTRY}"}";   done
+		while [[ "${MANPATH_NEW}" =~ ^${ENTRY}$ ]]; do MANPATH_NEW="${MANPATH_NEW%"${ENTRY}"}";    done
 
-	# Add entry to end of MANPATH_NEW
-	MANPATH_NEW="${MANPATH_NEW}${MANPATH_NEW+:}${ENTRY}"
-done
+		# Add entry to end of MANPATH_NEW
+		MANPATH_NEW="${MANPATH_NEW}${MANPATH_NEW+:}${ENTRY}"
+	done
 
-# Add what remains of MANPATH_OLD to end of MANPATH_NEW
-MANPATH_NEW="${MANPATH_NEW}${MANPATH_NEW+:}${MANPATH_OLD}"
+	# Add what remains of MANPATH_OLD to end of MANPATH_NEW
+	MANPATH_NEW="${MANPATH_NEW}${MANPATH_NEW+:}${MANPATH_OLD}"
 
-# Remove leading/trailing colons if present
-[[ "${MANPATH_NEW:0:1}" == ":" ]] && MANPATH_NEW="${MANPATH_NEW#:}"
-[[ "${MANPATH_NEW: -1}" == ":" ]] && MANPATH_NEW="${MANPATH_NEW%:}"
+	# Remove leading/trailing colons if present
+	[[ "${MANPATH_NEW:0:1}" == ":" ]] && MANPATH_NEW="${MANPATH_NEW#:}"
+	[[ "${MANPATH_NEW: -1}" == ":" ]] && MANPATH_NEW="${MANPATH_NEW%:}"
 
-unset MANPATH
-export MANPATH="${MANPATH_NEW}"
+	unset MANPATH
+	export MANPATH="${MANPATH_NEW}"
 
-unset ARRAY_MANPATH_VALID
-unset MANPATH_NEW MANPATH_OLD
+	unset ARRAY_MANPATH_VALID
+	unset MANPATH_NEW MANPATH_OLD
 
-
+	echo "MANPATH=\"${MANPATH}\"" >> "${BASH_ENV_FILE_CACHE_PATHS}"
+}
 
 # Configure MIBDIRS from array ARRAY_MIBDIRS
-MIBDIRS_OLD="${MIBDIRS}"
+_pathMib() {
+	MIBDIRS_OLD="${MIBDIRS}"
 
-# Find entries in ARRAY_MIBDIRS that are directories
-ARRAY_MIBDIRS_VALID=()
-for ENTRY in "${ARRAY_MIBDIRS[@]}"; do
-	[[ -d "${ENTRY}" ]] && ARRAY_MIBDIRS_VALID+=("${ENTRY}")
-done
+	# Find entries in ARRAY_MIBDIRS that are directories
+	ARRAY_MIBDIRS_VALID=()
+	for ENTRY in "${ARRAY_MIBDIRS[@]}"; do
+		[[ -d "${ENTRY}" ]] && ARRAY_MIBDIRS_VALID+=("${ENTRY}")
+	done
 
-# If entry already present in MIBDIRS_OLD (at any position), remove entry from MIBDIRS_OLD
-# This results in MIBDIRS_OLD containing only entries that are not present in ARRAY_MIBDIRS_VALID
-for ENTRY in "${ARRAY_MIBDIRS_VALID[@]}"; do
-	while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD#"${ENTRY}":}";   done
-	while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD//:${ENTRY}:/:}"; done
-	while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%:"${ENTRY}"}";   done
-	while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%"${ENTRY}"}";    done
-done
+	# If entry already present in MIBDIRS_OLD (at any position), remove entry from MIBDIRS_OLD
+	# This results in MIBDIRS_OLD containing only entries that are not present in ARRAY_MIBDIRS_VALID
+	for ENTRY in "${ARRAY_MIBDIRS_VALID[@]}"; do
+		while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD#"${ENTRY}":}";   done
+		while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}: ]]; do MIBDIRS_OLD="${MIBDIRS_OLD//:${ENTRY}:/:}"; done
+		while [[ "${MIBDIRS_OLD}" =~ :${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%:"${ENTRY}"}";   done
+		while [[ "${MIBDIRS_OLD}" =~ ^${ENTRY}$ ]]; do MIBDIRS_OLD="${MIBDIRS_OLD%"${ENTRY}"}";    done
+	done
 
-unset MIBDIRS_NEW
+	unset MIBDIRS_NEW
 
-for ENTRY in "${ARRAY_MIBDIRS_VALID[@]}"; do
-	# If entry already present in MIBDIRS_NEW (at any position), remove entry from MIBDIRS_NEW
-	while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW#"${ENTRY}":}";   done
-	while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW//:${ENTRY}:/:}"; done
-	while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%:"${ENTRY}"}";   done
-	while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%"${ENTRY}"}";    done
+	for ENTRY in "${ARRAY_MIBDIRS_VALID[@]}"; do
+		# If entry already present in MIBDIRS_NEW (at any position), remove entry from MIBDIRS_NEW
+		while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW#"${ENTRY}":}";   done
+		while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}: ]]; do MIBDIRS_NEW="${MIBDIRS_NEW//:${ENTRY}:/:}"; done
+		while [[ "${MIBDIRS_NEW}" =~ :${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%:"${ENTRY}"}";   done
+		while [[ "${MIBDIRS_NEW}" =~ ^${ENTRY}$ ]]; do MIBDIRS_NEW="${MIBDIRS_NEW%"${ENTRY}"}";    done
 
-	# Add entry to end of MIBDIRS_NEW
-	MIBDIRS_NEW="${MIBDIRS_NEW}${MIBDIRS_NEW+:}${ENTRY}"
-done
+		# Add entry to end of MIBDIRS_NEW
+		MIBDIRS_NEW="${MIBDIRS_NEW}${MIBDIRS_NEW+:}${ENTRY}"
+	done
 
-# Add what remains of MIBDIRS_OLD to end of MIBDIRS_NEW
-MIBDIRS_NEW="${MIBDIRS_NEW}${MIBDIRS_NEW+:}${MIBDIRS_OLD}"
+	# Add what remains of MIBDIRS_OLD to end of MIBDIRS_NEW
+	MIBDIRS_NEW="${MIBDIRS_NEW}${MIBDIRS_NEW+:}${MIBDIRS_OLD}"
 
-# Remove leading/trailing colons if present
-[[ "${MIBDIRS_NEW:0:1}" == ":" ]] && MIBDIRS_NEW="${MIBDIRS_NEW#:}"
-[[ "${MIBDIRS_NEW: -1}" == ":" ]] && MIBDIRS_NEW="${MIBDIRS_NEW%:}"
+	# Remove leading/trailing colons if present
+	[[ "${MIBDIRS_NEW:0:1}" == ":" ]] && MIBDIRS_NEW="${MIBDIRS_NEW#:}"
+	[[ "${MIBDIRS_NEW: -1}" == ":" ]] && MIBDIRS_NEW="${MIBDIRS_NEW%:}"
 
-unset MIBDIRS
-export MIBDIRS="${MIBDIRS_NEW}"
+	unset MIBDIRS
+	export MIBDIRS="${MIBDIRS_NEW}"
 
-unset ARRAY_MIBDIRS_VALID
-unset MIBDIRS_NEW MIBDIRS_OLD
+	unset ARRAY_MIBDIRS_VALID
+	unset MIBDIRS_NEW MIBDIRS_OLD
 
-
+	echo "MIBDIRS=\"${MIBDIRS}\"" >> "${BASH_ENV_FILE_CACHE_PATHS}"
+}
 
 # Configure NODE_PATH from array ARRAY_NODE_PATH
-NODE_PATH_OLD="${NODE_PATH}"
+_pathNode() {
+	NODE_PATH_OLD="${NODE_PATH}"
 
-# Find entries in ARRAY_NODE_PATH that are directories
-ARRAY_NODE_PATH_VALID=()
-for ENTRY in "${ARRAY_NODE_PATH[@]}"; do
-	[[ -d "${ENTRY}" ]] && ARRAY_NODE_PATH_VALID+=("${ENTRY}")
-done
+	# Find entries in ARRAY_NODE_PATH that are directories
+	ARRAY_NODE_PATH_VALID=()
+	for ENTRY in "${ARRAY_NODE_PATH[@]}"; do
+		[[ -d "${ENTRY}" ]] && ARRAY_NODE_PATH_VALID+=("${ENTRY}")
+	done
 
-# If entry already present in NODE_PATH_OLD (at any position), remove entry from NODE_PATH_OLD
-# This results in NODE_PATH_OLD containing only entries that are not present in ARRAY_NODE_PATH_VALID
-for ENTRY in "${ARRAY_NODE_PATH_VALID[@]}"; do
-	while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD#"${ENTRY}":}";   done
-	while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD//:${ENTRY}:/:}"; done
-	while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%:"${ENTRY}"}";   done
-	while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%"${ENTRY}"}";    done
-done
+	# If entry already present in NODE_PATH_OLD (at any position), remove entry from NODE_PATH_OLD
+	# This results in NODE_PATH_OLD containing only entries that are not present in ARRAY_NODE_PATH_VALID
+	for ENTRY in "${ARRAY_NODE_PATH_VALID[@]}"; do
+		while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD#"${ENTRY}":}";   done
+		while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}: ]]; do NODE_PATH_OLD="${NODE_PATH_OLD//:${ENTRY}:/:}"; done
+		while [[ "${NODE_PATH_OLD}" =~ :${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%:"${ENTRY}"}";   done
+		while [[ "${NODE_PATH_OLD}" =~ ^${ENTRY}$ ]]; do NODE_PATH_OLD="${NODE_PATH_OLD%"${ENTRY}"}";    done
+	done
 
-unset NODE_PATH_NEW
+	unset NODE_PATH_NEW
 
-for ENTRY in "${ARRAY_NODE_PATH_VALID[@]}"; do
-	# If entry already present in NODE_PATH_NEW (at any position), remove entry from NODE_PATH_NEW
-	while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW#"${ENTRY}":}";   done
-	while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW//:${ENTRY}:/:}"; done
-	while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%:"${ENTRY}"}";   done
-	while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%"${ENTRY}"}";    done
+	for ENTRY in "${ARRAY_NODE_PATH_VALID[@]}"; do
+		# If entry already present in NODE_PATH_NEW (at any position), remove entry from NODE_PATH_NEW
+		while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW#"${ENTRY}":}";   done
+		while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}: ]]; do NODE_PATH_NEW="${NODE_PATH_NEW//:${ENTRY}:/:}"; done
+		while [[ "${NODE_PATH_NEW}" =~ :${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%:"${ENTRY}"}";   done
+		while [[ "${NODE_PATH_NEW}" =~ ^${ENTRY}$ ]]; do NODE_PATH_NEW="${NODE_PATH_NEW%"${ENTRY}"}";    done
 
-	# Add entry to end of NODE_PATH_NEW
-	NODE_PATH_NEW="${NODE_PATH_NEW}${NODE_PATH_NEW+:}${ENTRY}"
-done
+		# Add entry to end of NODE_PATH_NEW
+		NODE_PATH_NEW="${NODE_PATH_NEW}${NODE_PATH_NEW+:}${ENTRY}"
+	done
 
-# Add what remains of NODE_PATH_OLD to end of NODE_PATH_NEW
-NODE_PATH_NEW="${NODE_PATH_NEW}${NODE_PATH_NEW+:}${NODE_PATH_OLD}"
+	# Add what remains of NODE_PATH_OLD to end of NODE_PATH_NEW
+	NODE_PATH_NEW="${NODE_PATH_NEW}${NODE_PATH_NEW+:}${NODE_PATH_OLD}"
 
-# Remove leading/trailing colons if present
-[[ "${NODE_PATH_NEW:0:1}" == ":" ]] && NODE_PATH_NEW="${NODE_PATH_NEW#:}"
-[[ "${NODE_PATH_NEW: -1}" == ":" ]] && NODE_PATH_NEW="${NODE_PATH_NEW%:}"
+	# Remove leading/trailing colons if present
+	[[ "${NODE_PATH_NEW:0:1}" == ":" ]] && NODE_PATH_NEW="${NODE_PATH_NEW#:}"
+	[[ "${NODE_PATH_NEW: -1}" == ":" ]] && NODE_PATH_NEW="${NODE_PATH_NEW%:}"
 
-unset NODE_PATH
-export NODE_PATH="${NODE_PATH_NEW}"
+	unset NODE_PATH
+	export NODE_PATH="${NODE_PATH_NEW}"
 
-unset ARRAY_NODE_PATH_VALID
-unset NODE_PATH_NEW NODE_PATH_OLD
+	unset ARRAY_NODE_PATH_VALID
+	unset NODE_PATH_NEW NODE_PATH_OLD
 
-
+	echo "NODE_PATH=\"${NODE_PATH}\"" >> "${BASH_ENV_FILE_CACHE_PATHS}"
+}
 
 # Configure PATH from array ARRAY_PATH
-if [[ "${BASH_ENV_CACHE_PATH}" != "true" ]]; then
+_pathShell() {
 	PATH_OLD="${PATH}"
 
 	# Find entries in ARRAY_PATH that are directories
@@ -181,22 +187,31 @@ if [[ "${BASH_ENV_CACHE_PATH}" != "true" ]]; then
 	unset ARRAY_PATH_VALID
 	unset PATH_NEW PATH_OLD
 
-	sed -i '/^PATH=/d'                "${BASH_ENV_FILE_CACHE_ENV}"
-	sed -i '/^BASH_ENV_CACHE_PATH=/d' "${BASH_ENV_FILE_CACHE_ENV}"
+	echo "PATH=\"${PATH}\"" >> "${BASH_ENV_FILE_CACHE_PATHS}"
+}
 
-	echo "PATH=\"${PATH}\""         >> "${BASH_ENV_FILE_CACHE_ENV}"
-	echo "BASH_ENV_CACHE_PATH=true" >> "${BASH_ENV_FILE_CACHE_ENV}"
+_pathWhich() {
+	# Get full path to which binary
+	WHICHPATH="$(command -v which)"
+	echo "WHICHPATH=\"${WHICHPATH}\"" >> "${BASH_ENV_FILE_CACHE_PATHS}"
+}
+
+
+if [[ "${BASH_ENV_CACHE_PATHS}" != "true" ]]; then
+	_pathMan
+	_pathMib
+	_pathNode
+	_pathShell
+	_pathWhich
+
+	echo "BASH_ENV_CACHE_PATHS=true" >> "${BASH_ENV_FILE_CACHE_PATHS}"
 fi
 
 
 # Export PATHs
-export MANPATH MIBDIRS NODE_PATH PATH
+export MANPATH MIBDIRS NODE_PATH PATH WHICHPATH
 export MIBS="ALL"
 
-
-# Get full path to which binary
-WHICHPATH="$(command -v which)"
-export WHICHPATH
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

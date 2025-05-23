@@ -205,7 +205,7 @@ ARRAY_PATH+=(
 
 
 ARRAY_MKDIR=(
-"${BASH_ENV_DIR_KDM}"
+"${BASH_ENV_DIR_CACHE}"
 "${BASH_ENV_DIR_SSH_CONFIG}"
 "${BASH_ENV_DIR_SSH_SESSIONS}"
 )
@@ -365,9 +365,6 @@ xcodebuild
 )
 
 ARRAY_TOUCH=(
-"${BASH_ENV_FILE_CACHE_ENV}"
-"${BASH_ENV_FILE_CACHE_SSH_ALIAS}"
-"${BASH_ENV_FILE_CACHE_SUDO_ALIAS}"
 "${BASH_ENV_FILE_HISTORY}"
 "${BASH_ENV_FILE_SSH_AUTHKEYS}"
 "${BASH_ENV_FILE_SSH_CONFIG}"
@@ -380,6 +377,19 @@ export ARRAY_SUDO
 export ARRAY_SUDO_LINUX
 export ARRAY_SUDO_MACOS
 export HISTIGNORE
+
+
+# Create directories if missing
+for ENTRY in "${ARRAY_MKDIR[@]}"; do
+	[[ ! -d "${ENTRY}" ]] && mkdir -p "${ENTRY}"
+done
+
+# Touch files
+for ENTRY in "${ARRAY_TOUCH[@]}"; do
+	[[ ! -e "${ENTRY}" ]] && touch "${ENTRY}"
+done
+
+echo -n
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

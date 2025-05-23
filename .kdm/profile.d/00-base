@@ -1,10 +1,12 @@
+# shellcheck disable=SC1090
+
 # bash-env variable set
 export BASH_ENV_DIR_RC_D="${BASH_ENV_DIR_KDM}/rc.d"
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_SNMP="${HOME}/.snmp"
 
 export BASH_ENV_DIR_SSH="${HOME}/.ssh"
-export BASH_ENV_DIR_SSH_CONFIG="${HOME}/.ssh/config.d"
+export BASH_ENV_DIR_SSH_CONFIG="${BASH_ENV_DIR_SSH}/config.d"
 export BASH_ENV_DIR_SSH_SESSIONS="${HOME}/.ssh-sessions"
 
 export BASH_ENV_DIR_EXTRA="${BASH_ENV_DIR_KDM}/extra"
@@ -19,9 +21,11 @@ export BASH_ENV_FILE_DIRCOLORS="${HOME}/.dircolors"
 export BASH_ENV_FILE_GEMRC="${HOME}/.gemrc"
 export BASH_ENV_FILE_LESSFILTER="${HOME}/.lessfilter"
 
-export BASH_ENV_FILE_CACHE_ENV="${BASH_ENV_DIR_KDM}/envcache"
-export BASH_ENV_FILE_CACHE_SSH_ALIAS="${BASH_ENV_DIR_KDM}/sshcache"
-export BASH_ENV_FILE_CACHE_SUDO_ALIAS="${BASH_ENV_DIR_KDM}/sudocache"
+export BASH_ENV_DIR_CACHE="${BASH_ENV_DIR_KDM}/cache"
+export BASH_ENV_FILE_CACHE_ALIAS="${BASH_ENV_DIR_CACHE}/alias"
+export BASH_ENV_FILE_CACHE_NETWORK="${BASH_ENV_DIR_CACHE}/network"
+export BASH_ENV_FILE_CACHE_PATHS="${BASH_ENV_DIR_CACHE}/paths"
+export BASH_ENV_FILE_CACHE_UNAME="${BASH_ENV_DIR_CACHE}/uname"
 
 export BASH_ENV_FILE_COLORS="${BASH_ENV_DIR_PROFILE_D}/03-colors"
 export BASH_ENV_FILE_SSH_AUTHKEYS="${BASH_ENV_DIR_SSH}/authorized_keys"
@@ -75,8 +79,8 @@ _prompt_config() {
 }
 
 
-# shellcheck disable=SC1090
-[[ -s "${BASH_ENV_FILE_CACHE_ENV}" ]] && . "${BASH_ENV_FILE_CACHE_ENV}"
+[[ -s "${BASH_ENV_FILE_CACHE_PATHS}" ]] && . "${BASH_ENV_FILE_CACHE_PATHS}"
+
 
 _truecolor_config
 _prompt_config

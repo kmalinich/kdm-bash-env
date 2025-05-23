@@ -1,25 +1,16 @@
+# shellcheck disable=SC1090
+
 # Machine uname variables
 if [[ "${BASH_ENV_CACHE_UNAME}" != "true" ]]; then
-	UNAME_KERNEL_NAME="$(   uname -s)"
-	UNAME_KERNEL_RELEASE="$(uname -r)"
-	UNAME_MACHINE="$(       uname -m)"
-
-	sed -i '/^UNAME_KERNEL_NAME=/d'    "${BASH_ENV_FILE_CACHE_ENV}"
-	sed -i '/^UNAME_KERNEL_RELEASE=/d' "${BASH_ENV_FILE_CACHE_ENV}"
-	sed -i '/^UNAME_MACHINE=/d'        "${BASH_ENV_FILE_CACHE_ENV}"
-
-	sed -i '/^BASH_ENV_CACHE_UNAME=/d' "${BASH_ENV_FILE_CACHE_ENV}"
-
-	{
-		echo "UNAME_KERNEL_NAME=\"${UNAME_KERNEL_NAME}\""
-		echo "UNAME_KERNEL_RELEASE=\"${UNAME_KERNEL_RELEASE}\""
-		echo "UNAME_MACHINE=\"${UNAME_MACHINE}\""
-	} >> "${BASH_ENV_FILE_CACHE_ENV}"
-
-echo "BASH_ENV_CACHE_UNAME=true" >> "${BASH_ENV_FILE_CACHE_ENV}"
+	cat <<- EOF > "${BASH_ENV_FILE_CACHE_UNAME}"
+	export UNAME_KERNEL_NAME="$(uname -s)"
+	export UNAME_KERNEL_RELEASE="$(uname -r)"
+	export UNAME_MACHINE="$(uname -m)"
+	export BASH_ENV_CACHE_UNAME=true
+	EOF
 fi
 
-export UNAME_KERNEL_NAME UNAME_KERNEL_RELEASE UNAME_MACHINE
+. "${BASH_ENV_FILE_CACHE_UNAME}"
 
 # Commented these out as they are unused (for now)
 # UNAME="$(               uname)"
