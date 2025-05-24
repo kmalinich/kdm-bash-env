@@ -326,7 +326,7 @@ _alias_sudo() {
 	for CMD in "${ARRAY_SUDO[@]}"; do
 		# If it's installed, add sudo
 		hash "${CMD}" || continue
-		alias "${CMD}"='sudo ${CMD}'
+		alias "${CMD}"="sudo ${CMD}"
 	done
 
 	# Output message if output function available and in a TTY
