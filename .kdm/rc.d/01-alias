@@ -6,6 +6,11 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
+# For newly spawned shells (Linux desktop)
+export BASH_ENV_DIR_CACHE="${BASH_ENV_DIR_KDM}/cache"
+export BASH_ENV_FILE_CACHE_ALIAS="${BASH_ENV_DIR_CACHE}/alias"
+
+
 _export_dirs() {
 	# Downloads and Desktop folder variables
 	DIR_HOME_DC="${HOME}/Documents"
