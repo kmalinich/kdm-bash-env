@@ -24,7 +24,7 @@ cursor-style-blink = true
 cursor-opacity = 0.9
 cursor-invert-fg-bg = false
 
-mouse-scroll-multiplier = 0.2
+mouse-scroll-multiplier = 2.0
 
 auto-update = download
 
