@@ -13,11 +13,30 @@
 # kdm bash-env variables
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
-export BASH_ENV_FILE_INITIAL_PATH="${BASH_ENV_DIR_KDM}/initial-path"
+
+export BASH_ENV_DIR_CACHE="${BASH_ENV_DIR_KDM}/cache"
+export BASH_ENV_FILE_CACHE_PATHS="${BASH_ENV_DIR_CACHE}/paths"
 
 
 _initialPathGenerate() {
-	PATH="/usr/local/sbin:/usr/local/bin:/opt/homebrew/sbin:/opt/homebrew/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+	local UNAME_VAL
+
+	UNAME_VAL="$(uname)"
+
+	PATH="/usr/local/sbin:/usr/local/bin"
+
+	if [[ "${UNAME_VAL}" == "Darwin" ]]; then
+		PATH="${PATH}:/opt/homebrew/sbin:/opt/homebrew/bin"
+	fi
+
+	PATH="${PATH}:/usr/sbin:/usr/bin:/sbin:/bin"
+
+	# Everything after this is macOS-only
+	if [[ "${UNAME_VAL}" != "Darwin" ]]; then
+		export PATH
+		return 0
+	fi
+
 
 	# Add GNU coreutils, findutils, and grep to PATH if macOS brew-installed package present
 	ARRAY_DIR_GNU_UTILS=(
@@ -34,22 +53,20 @@ _initialPathGenerate() {
 		PATH="${DIR_GNU_UTIL}:${PATH}"
 	done
 
-	echo "export PATH=\"${PATH}\"" > "${BASH_ENV_FILE_INITIAL_PATH}"
-
 	export PATH
 }
 
 _initialPathSetup() {
-	# Generate initial path file if empty
-	if [[ ! -s "${BASH_ENV_FILE_INITIAL_PATH}" ]]; then
+	# Generate initial path if paths cache empty
+	if [[ ! -s "${BASH_ENV_FILE_CACHE_PATHS}" ]]; then
 		_initialPathGenerate
 		# If generation required, we're done here
 		return 0
 	fi
 
-	# Source initial path file
+	# Source cached path file
 	# shellcheck source=/dev/null
-	. "${BASH_ENV_FILE_INITIAL_PATH}"
+	. "${BASH_ENV_FILE_CACHE_PATHS}"
 }
 
 
