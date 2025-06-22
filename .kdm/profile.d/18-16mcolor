@@ -43,7 +43,7 @@ if hash bat; then
 	export BAT_THEME="${BAT_THEME_DARK}"
 
 	# shellcheck disable=SC1111
-	export MANPAGER="sh -c 'col -b -x | ${HOME}/.kdm/clean-quotes | bat --language man --style plain --paging auto --theme \'Monokai Extended Bright\''"
+	export MANPAGER="sh -c 'col -b -x | ${HOME}/.kdm/clean-quotes | bat --language man --style plain --paging auto'"
 	export MANROFFOPT='-c'
 fi
 
