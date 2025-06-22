@@ -1,15 +1,6 @@
 # kdm bash-env
 # .inputrc
 
-# Cheatsheet
-#
-# https://man.archlinux.org/man/readline.3
-#
-# `bind -l`  : List functions
-# `bind -p`  : List functions      and bindings
-# `bind -v`  : List variable names and values
-# `sed -n l` : See actual character input coming into the terminal
-
 
 # Include global inputrc files
 $include /etc/inputrc
@@ -119,6 +110,17 @@ set visible-stats on
 #            F17 : \e[31~
 #            F18 : \e[32~
 #            F19 : \e[33~
+
+
+
+# Cheatsheet
+#
+# https://man.archlinux.org/man/readline.3
+#
+# `bind -l`  : List functions
+# `bind -p`  : List functions      and bindings
+# `bind -v`  : List variable names and values
+# `sed -n l` : See actual character input coming into the terminal
 
 
 "\e[1~": beginning-of-line
