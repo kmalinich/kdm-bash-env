@@ -39,10 +39,9 @@ export HTML_TIDY="${HOME}/.tidyrc"
 # Determine if true color should be enabled
 _truecolor_config() {
 	[[ "${TERM}" == "xterm-256color+iterm3" ]] && COLORTERM="truecolor"
+	[[ "${TERM}" == "xterm-ghostty"         ]] && COLORTERM="truecolor"
 
 	[[ "${COLORTERM}" == "24bit" ]] && COLORTERM="truecolor"
-
-	[[ -e "${BASH_ENV_FILE_DISABLE_TRUECOLOR}" ]] && unset COLORTERM
 
 	# Extrapolate ${COLORTERM} into boolean ${COLOR_16M}
 	case "${COLORTERM}" in

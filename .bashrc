@@ -19,12 +19,7 @@ _validate_before_source() {
 	[[ "${BASH_INTERACTIVE}" ]] || return
 
 	# Determine which file to source
-	# if ${BASH_ENV_FILE_RC} is already populated,
-	#   ~/.bash_profile must have been sourced, so source ~/.kdm/rc
-	# else
-	#   ~/.bash_profile must NOT have been sourced, so source ~/.kdm/profile
-	# fi
-	[[ "${BASH_ENV_FILE_RC}" ]] && SOURCE="${FILE_RC}" || SOURCE="${FILE_PF}"
+	[[ "${BASH_INTERACTIVE}" == "true" ]] && SOURCE="${FILE_PF}" || SOURCE="${FILE_RC}"
 
 	# Go!
 	# shellcheck disable=SC1090
