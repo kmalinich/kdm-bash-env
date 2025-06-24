@@ -13,7 +13,9 @@
 	path = ~/.gitconfig.d/submodule
 	path = ~/.gitconfig.d/url-priv
 	path = ~/.gitconfig.d/url-pub
-	path = ~/.gitconfig.d/user
+	path = ~/.gitconfig.d/path
+	path = ~/.gitconfig.d/path-priv
+	path = ~/.gitconfig.d/path-pub
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :
