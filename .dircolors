@@ -1,514 +1,3 @@
-# This section is 24bit/16 million colors - depends on a hack specific to this repo, and might not work in your terminal emulator
-# See this for more info: https://gist.github.com/XVilka/8346728
-
-TERM *+iterm3
-
-# Attribute codes:
-# 0 : none
-# 1 : bold
-# 2 : dim
-# 3 : italic
-# 4 : underscore
-# 5 : blink
-# 7 : reverse
-# 8 : concealed (?)
-
-# Foreground : 38;2;R;G;B;<Attributes>
-# Background : 48;2;R;G;B;<Attributes>
-
-
-# Basic file type colors
-DIR    38;2;32;142;229    # Directory (sky blue)
-EXEC   38;2;0;255;0;1;3   # File with execute permission (bright green, bold, italic)
-LINK   38;2;0;246;248     # Symlink (cyan)
-ORPHAN 38;2;255;0;0;1;5;7 # Bad symlink (red, invert, bold, blink)
-
-BLK 38;2;240;32;32;1;48;2;32;32;32 # Block device (red, bold, grey background)
-CHR 38;2;252;106;8;1;48;2;32;32;32 # Character device (orange, bold, grey background)
-
-MISSING       0 # Symlink pointing to a nonexistent file
-MULTIHARDLINK 0 # Regular file with more than one link
-RESET         0 # Reset to "normal" color
-
-CAPABILITY 30;41 # File with capability
-DOOR       01;35 # Door
-FIFO       40;33 # Pipe
-
-SOCK 38;2;255;0;224;1;3;7 # Socket (also used by readline colored-completion-prefix)
-
-SETGID 30;43 # File that is setgid (g+s)
-SETUID 37;41 # File that is setuid (u+s)
-
-STICKY                38;2;32;142;229;3   # Dir WITH    sticky bit set (+t) and IS NOT other-writable (o+w)
-STICKY_OTHER_WRITABLE 38;2;32;142;229;3;1 # Dir WITH    sticky bit set (+t) and IS     other-writable (o+w)
-OTHER_WRITABLE        38;2;32;142;229;1   # Dir WITHOUT sticky bit set (+t) and IS     other-writable (o+w)
-
-NORMAL 38;2;210;210;210
-FILE   38;2;150;150;150
-
-
-# readline colored-completion-prefix
-.readline-colored-completion-prefix 38;2;255;0;224;1;3;7
-
-
-# Bash profile (dark green, italic)
-.bash_logout  38;2;63;183;58;3
-.bash_profile 38;2;63;183;58;3
-.bashrc       38;2;63;183;58;3
-.lessfilter   38;2;63;183;58;3
-.profile      38;2;63;183;58;3
-
-# Scripts (dark green, italic)
-# These should already have exec permission and be set to brighter green,
-# So this dark green helps weed them out
-.bash 38;2;63;183;58;3
-.bat  38;2;63;183;58;3
-.btm  38;2;63;183;58;3
-.cmd  38;2;63;183;58;3
-.com  38;2;63;183;58;3
-.csh  38;2;63;183;58;3
-.exe  38;2;63;183;58;3
-.ksh  38;2;63;183;58;3
-.ps1  38;2;63;183;58;3
-.sh   38;2;63;183;58;3
-.zsh  38;2;63;183;58;3
-
-# Archives/compressed (magenta)
-.7z   38;2;230;64;63
-.ace  38;2;230;64;63
-.alz  38;2;230;64;63
-.arc  38;2;230;64;63
-.arj  38;2;230;64;63
-.br   38;2;230;64;63
-.bz   38;2;230;64;63
-.bz2  38;2;230;64;63
-.cab  38;2;230;64;63
-.cpio 38;2;230;64;63
-.deb  38;2;230;64;63
-.dmg  38;2;230;64;63
-.dz   38;2;230;64;63
-.ear  38;2;230;64;63
-.gz   38;2;230;64;63
-.jar  38;2;230;64;63
-.lha  38;2;230;64;63
-.lrz  38;2;230;64;63
-.lz   38;2;230;64;63
-.lz4  38;2;230;64;63
-.lzh  38;2;230;64;63
-.lzma 38;2;230;64;63
-.lzo  38;2;230;64;63
-.msi  38;2;230;64;63
-.ova  38;2;230;64;63
-.pkg  38;2;230;64;63
-.rar  38;2;230;64;63
-.rpm  38;2;230;64;63
-.rvz  38;2;230;64;63
-.rz   38;2;230;64;63
-.sar  38;2;230;64;63
-.t7z  38;2;230;64;63
-.tar  38;2;230;64;63
-.taz  38;2;230;64;63
-.tbz  38;2;230;64;63
-.tbz2 38;2;230;64;63
-.tgz  38;2;230;64;63
-.tlz  38;2;230;64;63
-.txz  38;2;230;64;63
-.tz   38;2;230;64;63
-.tzo  38;2;230;64;63
-.war  38;2;230;64;63
-.xar  38;2;230;64;63
-.xci  38;2;230;64;63
-.xz   38;2;230;64;63
-.z    38;2;230;64;63
-.zip  38;2;230;64;63
-.zoo  38;2;230;64;63
-
-# Image formats (pink)
-.ANX  38;2;212;108;154
-.anx  38;2;212;108;154
-.AVIF 38;2;212;108;154
-.avif 38;2;212;108;154
-.AXV  38;2;212;108;154
-.axv  38;2;212;108;154
-.BMP  38;2;212;108;154
-.bmp  38;2;212;108;154
-.CGM  38;2;212;108;154
-.cgm  38;2;212;108;154
-.CR2  38;2;212;108;154
-.cr2  38;2;212;108;154
-.DL   38;2;212;108;154
-.dl   38;2;212;108;154
-.EMF  38;2;212;108;154
-.emf  38;2;212;108;154
-.FLC  38;2;212;108;154
-.flc  38;2;212;108;154
-.FLI  38;2;212;108;154
-.fli  38;2;212;108;154
-.GIF  38;2;212;108;154
-.gif  38;2;212;108;154
-.GL   38;2;212;108;154
-.gl   38;2;212;108;154
-.HEIC 38;2;212;108;154
-.heic 38;2;212;108;154
-.ICO  38;2;212;108;154
-.ico  38;2;212;108;154
-.JPEG 38;2;212;108;154
-.jpeg 38;2;212;108;154
-.JPG  38;2;212;108;154
-.jpg  38;2;212;108;154
-.JXR  38;2;212;108;154
-.jxr  38;2;212;108;154
-.MNG  38;2;212;108;154
-.mng  38;2;212;108;154
-.NUV  38;2;212;108;154
-.nuv  38;2;212;108;154
-.OGM  38;2;212;108;154
-.ogm  38;2;212;108;154
-.OGV  38;2;212;108;154
-.ogv  38;2;212;108;154
-.OGX  38;2;212;108;154
-.ogx  38;2;212;108;154
-.PBM  38;2;212;108;154
-.pbm  38;2;212;108;154
-.PCX  38;2;212;108;154
-.pcx  38;2;212;108;154
-.PGM  38;2;212;108;154
-.pgm  38;2;212;108;154
-.PNG  38;2;212;108;154
-.png  38;2;212;108;154
-.PPM  38;2;212;108;154
-.ppm  38;2;212;108;154
-.PSD  38;2;212;108;154
-.psd  38;2;212;108;154
-.QT   38;2;212;108;154
-.qt   38;2;212;108;154
-.RM   38;2;212;108;154
-.rm   38;2;212;108;154
-.RMVB 38;2;212;108;154
-.rmvb 38;2;212;108;154
-.SVG  38;2;212;108;154
-.svg  38;2;212;108;154
-.SVGZ 38;2;212;108;154
-.svgz 38;2;212;108;154
-.SWF  38;2;212;108;154
-.swf  38;2;212;108;154
-.TGA  38;2;212;108;154
-.tga  38;2;212;108;154
-.TIF  38;2;212;108;154
-.tif  38;2;212;108;154
-.TIFF 38;2;212;108;154
-.tiff 38;2;212;108;154
-.WEBP 38;2;212;108;154
-.webp 38;2;212;108;154
-.XBM  38;2;212;108;154
-.xbm  38;2;212;108;154
-.XCF  38;2;212;108;154
-.xcf  38;2;212;108;154
-.XPM  38;2;212;108;154
-.xpm  38;2;212;108;154
-.XWD  38;2;212;108;154
-.xwd  38;2;212;108;154
-.YUV  38;2;212;108;154
-.yuv  38;2;212;108;154
-
-# Video formats (slightly different pink)
-.ASF  38;2;169;49;102
-.asf  38;2;169;49;102
-.AVI  38;2;169;49;102
-.avi  38;2;169;49;102
-.FLV  38;2;169;49;102
-.flv  38;2;169;49;102
-.M2V  38;2;169;49;102
-.m2v  38;2;169;49;102
-.M4V  38;2;169;49;102
-.m4v  38;2;169;49;102
-.MKV  38;2;169;49;102
-.mkv  38;2;169;49;102
-.MOV  38;2;169;49;102
-.mov  38;2;169;49;102
-.MP4  38;2;169;49;102
-.mp4  38;2;169;49;102
-.MP4V 38;2;169;49;102
-.mp4v 38;2;169;49;102
-.MPEG 38;2;169;49;102
-.mpeg 38;2;169;49;102
-.MPG  38;2;169;49;102
-.mpg  38;2;169;49;102
-.TS   38;2;169;49;102
-.ts   38;2;169;49;102
-.VOB  38;2;169;49;102
-.vob  38;2;169;49;102
-.WEBM 38;2;169;49;102
-.webm 38;2;169;49;102
-.WMV  38;2;169;49;102
-.wmv  38;2;169;49;102
-
-# Lossless audio formats (dark purple)
-.aif  38;2;108;113;196
-.aiff 38;2;108;113;196
-.dff  38;2;108;113;196
-.dsf  38;2;108;113;196
-.mid  38;2;108;113;196
-.midi 38;2;108;113;196
-.flac 38;2;108;113;196
-.wav  38;2;108;113;196
-
-# Lossy audio formats (light purple)
-.aac  38;2;152;155;213
-.amr  38;2;152;155;213
-.au   38;2;152;155;213
-.axa  38;2;152;155;213
-.m4a  38;2;152;155;213
-.mka  38;2;152;155;213
-.mp3  38;2;152;155;213
-.mpc  38;2;152;155;213
-.oga  38;2;152;155;213
-.ogg  38;2;152;155;213
-.ra   38;2;152;155;213
-.spx  38;2;152;155;213
-.xspf 38;2;152;155;213
-
-# Data blobs (orange)
-.a2l            38;2;252;106;8
-.cert           38;2;252;106;8
-.crt            38;2;252;106;8
-.csv            38;2;252;106;8
-.dtd            38;2;252;106;8
-.gemrc          38;2;252;106;8
-.json           38;2;252;106;8
-.key            38;2;252;106;8
-.mxml           38;2;252;106;8
-.ovf            38;2;252;106;8
-.p12            38;2;252;106;8
-.pem            38;2;252;106;8
-.pid            38;2;252;106;8
-.plist          38;2;252;106;8
-.pub            38;2;252;106;8
-.sls            38;2;252;106;8
-.sql            38;2;252;106;8
-.wsdl           38;2;252;106;8
-.xdf            38;2;252;106;8
-.xml            38;2;252;106;8
-.xsd            38;2;252;106;8
-.xsl            38;2;252;106;8
-.xsls           38;2;252;106;8
-.xslt           38;2;252;106;8
-.yaml           38;2;252;106;8
-.yml            38;2;252;106;8
-*ssh_host_*_key 38;2;230;230;0
-
-# Plaintext-ish data blobs
-.pem 38;2;252;106;8;3
-.pub 38;2;252;106;8;3
-
-# .NET application XML (orange)
-.application 38;2;252;106;8
-.config      38;2;252;106;8
-.manifest    38;2;252;106;8
-
-# macOS data blobs (orange)
-.CFUserTextEncoding 38;2;252;106;8
-.DS_Store           38;2;252;106;8
-
-# ViM data blobs (orange)
-.nviminfo           38;2;252;106;8
-.vim_local_rc_cache 38;2;252;106;8
-.viminfo            38;2;252;106;8
-
-# Command data blobs (orange)
-.bash_history      38;2;252;106;8
-.lesshst           38;2;252;106;8
-.node_repl_history 38;2;252;106;8
-.pry_history       38;2;252;106;8
-.wget-hsts         38;2;252;106;8
-
-# JSON config files (orange)
-.eslintrc     38;2;252;106;8
-.csslintrc    38;2;252;106;8
-.htmlhintrc   38;2;252;106;8
-.jsbeautifyrc 38;2;252;106;8
-.prettierrc   38;2;252;106;8
-.proselintrc  38;2;252;106;8
-.stylelintrc  38;2;252;106;8
-
-# Git config files (pink)
-.git           38;2;220;115;218
-.gitconfig     38;2;220;115;218
-.gitignore     38;2;220;115;218
-.gitattributes 38;2;220;115;218
-.gitmodules    38;2;220;115;218
-
-# Bash config files (pink)
-.bash_sessions_disable 38;2;220;115;218
-.hushlogin             38;2;220;115;218
-.inputrc               38;2;220;115;218
-
-# Config files (pink)
-.cfg         38;2;220;115;218
-.cnf         38;2;220;115;218
-.conf        38;2;220;115;218
-.conf.tmpl   38;2;220;115;218
-.dircolors   38;2;220;115;218
-.gdbinit     38;2;220;115;218
-.gtkrc-2.0   38;2;220;115;218
-.gypi        38;2;220;115;218
-.ini         38;2;220;115;218
-.jinja       38;2;220;115;218
-.mount       38;2;220;115;218
-.nload       38;2;220;115;218
-.pa          38;2;220;115;218
-.piprc       38;2;220;115;218
-.rc          38;2;220;115;218
-.repo        38;2;220;115;218
-.repo.tmpl   38;2;220;115;218
-.screenrc    38;2;220;115;218
-.service     38;2;220;115;218
-.tidyrc      38;2;220;115;218
-.timer       38;2;220;115;218
-.vim         38;2;220;115;218
-.vimrc       38;2;220;115;218
-*ssh_config  38;2;220;115;218
-*sshd_config 38;2;220;115;218
-
-# Text documents (yellow)
-.ac       38;2;230;230;0
-.cmake    38;2;230;230;0
-.css      38;2;230;230;0
-.cue      38;2;230;230;0
-.diff     38;2;230;230;0
-.eng      38;2;230;230;0
-.gpg      38;2;230;230;0
-.h        38;2;230;230;0
-.hpp      38;2;230;230;0
-.htm      38;2;230;230;0
-.html     38;2;230;230;0
-.in       38;2;230;230;0
-.inf      38;2;230;230;0
-.lo       38;2;230;230;0
-.log      38;2;230;230;0
-.m4       38;2;230;230;0
-.map      38;2;230;230;0
-.markdown 38;2;230;230;0
-.md       38;2;230;230;0
-.md5      38;2;230;230;0
-.mdown    38;2;230;230;0
-.mf       38;2;230;230;0
-.mib      38;2;230;230;0
-.patch    38;2;230;230;0
-.qml      38;2;230;230;0
-.rst      38;2;230;230;0
-.shtml    38;2;230;230;0
-.spec     38;2;230;230;0
-.textile  38;2;230;230;0
-.txt      38;2;230;230;0
-*LICENSE  38;2;230;230;0
-
-# Make sass/scss slightly more orange from vanilla css
-.sass     38;2;255;172;0
-.scss     38;2;255;172;0
-
-# Non-compiled code-ish (light green)
-.c      38;2;77;190;129
-.cc     38;2;77;190;129
-.cl     38;2;77;190;129
-.coffee 38;2;77;190;129
-.cpp    38;2;77;190;129
-.dsl    38;2;77;190;129
-.erb    38;2;77;190;129
-.erl    38;2;77;190;129
-.go     38;2;77;190;129
-.gyp    38;2;77;190;129
-.hxx    38;2;77;190;129
-.il     38;2;77;190;129
-.ino    38;2;77;190;129
-.ips    38;2;77;190;129
-.java   38;2;77;190;129
-.js     38;2;77;190;129
-.py     38;2;77;190;129
-.lua    38;2;77;190;129
-.man    38;2;77;190;129
-.nse    38;2;77;190;129
-.php    38;2;77;190;129
-.pl     38;2;77;190;129
-.pm     38;2;77;190;129
-.rb     38;2;77;190;129
-.rl     38;2;77;190;129
-.t      38;2;77;190;129
-.ts     38;2;77;190;129
-.xs     38;2;77;190;129
-
-# .NET application deploy (dark yellow/brown)
-.deploy 38;2;209;117;67
-
-# Binary files (dark yellow/brown)
-.3ds      38;2;209;117;67
-.a        38;2;209;117;67
-.abw      38;2;209;117;67
-.aml      38;2;209;117;67
-.bin      38;2;209;117;67
-.dam      38;2;209;117;67
-.dll      38;2;209;117;67
-.doc      38;2;209;117;67
-.docx     38;2;209;117;67
-.dtb      38;2;209;117;67
-.ecu      38;2;209;117;67
-.eot      38;2;209;117;67
-.epub     38;2;209;117;67
-.gb       38;2;209;117;67
-.gba      38;2;209;117;67
-.gbc      38;2;209;117;67
-.ger      38;2;209;117;67 # lol, INPA
-.gg       38;2;209;117;67
-.grp      38;2;209;117;67
-.img      38;2;209;117;67
-.ipo      38;2;209;117;67
-.iso      38;2;209;117;67
-.la       38;2;209;117;67
-.ndd      38;2;209;117;67
-.nds      38;2;209;117;67
-.nes      38;2;209;117;67
-.nsp      38;2;209;117;67
-.o        38;2;209;117;67
-.ocx      38;2;209;117;67
-.odp      38;2;209;117;67
-.ods      38;2;209;117;67
-.odt      38;2;209;117;67
-.one      38;2;209;117;67
-.otf      38;2;209;117;67
-.par2     38;2;209;117;67
-.pdf      38;2;209;117;67
-.ppt      38;2;209;117;67
-.pptx     38;2;209;117;67
-.prg      38;2;209;117;67
-.ps       38;2;209;117;67
-.pyc      38;2;209;117;67
-.pyo      38;2;209;117;67
-.qcow     38;2;209;117;67
-.qcow2    38;2;209;117;67
-.rnd      38;2;209;117;67
-.rtf      38;2;209;117;67
-.sav      38;2;209;117;67
-.sfc      38;2;209;117;67
-.smc      38;2;209;117;67
-.srm      38;2;209;117;67
-.state    38;2;209;117;67
-.state*   38;2;209;117;67
-.terminfo 38;2;209;117;67
-.tex      38;2;209;117;67
-.ttf      38;2;209;117;67
-.wad      38;2;209;117;67
-.woff     38;2;209;117;67
-.woff2    38;2;209;117;67
-.wpd      38;2;209;117;67
-.wua      38;2;209;117;67
-.xls      38;2;209;117;67
-.xlsx     38;2;209;117;67
-.z64      38;2;209;117;67
-
-
-
-
-
 # This section is normal 256color
 
 TERM *-256color
@@ -583,54 +72,60 @@ FILE   0
 .sh   32
 
 # Archives/compressed (purple)
-.7z   35
-.ace  35
-.alz  35
-.arc  35
-.arj  35
-.br   35
-.bz   35
-.bz2  35
-.cab  35
-.cpio 35
-.deb  35
-.dmg  35
-.dz   35
-.ear  35
-.gz   35
-.jar  35
-.lha  35
-.lrz  35
-.lz   35
-.lz4  35
-.lzh  35
-.lzma 35
-.lzo  35
-.msi  35
-.ova  35
-.pkg  35
-.rar  35
-.rpm  35
-.rvz  35
-.rz   35
-.sar  35
-.t7z  35
-.tar  35
-.taz  35
-.tbz  35
-.tbz2 35
-.tgz  35
-.tlz  35
-.txz  35
-.tz   35
-.tzo  35
-.war  35
-.xar  35
-.xci  35
-.xz   35
-.z    35
-.zip  35
-.zoo  35
+.7z         35
+.ace        35
+.alz        35
+.AppxBundle 35
+.ar         35
+.arc        35
+.arj        35
+.br         35
+.bz         35
+.bz2        35
+.cab        35
+.cpio       35
+.deb        35
+.dmg        35
+.dz         35
+.gz         35
+.lha        35
+.lrz        35
+.lz         35
+.lz4        35
+.lzh        35
+.lzma       35
+.lzo        35
+.msi        35
+.obr        35
+.ova        35
+.pkg        35
+.rar        35
+.rpm        35
+.rvz        35
+.rz         35
+.sar        35
+.t7z        35
+.tar        35
+.taz        35
+.tbz        35
+.tbz2       35
+.tgz        35
+.tlz        35
+.txz        35
+.tz         35
+.tzo        35
+.xar        35
+.xci        35
+.xz         35
+.z          35
+.zip        35
+.zoo        35
+
+# Java archives (purple italic)
+.ear 35;3
+.hpi 35;3
+.jar 35;3
+.war 35;3
 
 # Image formats (purple)
 .ANX  35
@@ -721,36 +216,36 @@ FILE   0
 .yuv  35
 
 # Video formats (purple)
-.asf  35
 .ASF  35
-.avi  35
+.asf  35
 .AVI  35
-.flv  35
+.avi  35
 .FLV  35
-.m2v  35
+.flv  35
 .M2V  35
-.m4v  35
+.m2v  35
 .M4V  35
-.mkv  35
+.m4v  35
 .MKV  35
-.mov  35
+.mkv  35
 .MOV  35
-.mp4  35
+.mov  35
 .MP4  35
-.mp4v 35
+.mp4  35
 .MP4V 35
-.mpeg 35
+.mp4v 35
 .MPEG 35
-.mpg  35
+.mpeg 35
 .MPG  35
-.ts   35
+.mpg  35
 .TS   35
-.vob  35
+.ts   35
 .VOB  35
-.webm 35
+.vob  35
 .WEBM 35
-.wmv  35
+.webm 35
 .WMV  35
+.wmv  35
 
 # Lossless audio formats (purple)
 .aif  35
@@ -777,41 +272,62 @@ FILE   0
 .spx  35
 .xspf 35
 
+
+# Plaintext-ish data blobs
+.a2l   33;3
+.gemrc 33;3
+.json  33;3
+.pem   33;3
+.plist 33;3
+.pom   33;3
+.pub   33;3
+.sql   33;3
+.wsdl  33;3
+.xdf   33;3
+.xml   33;3
+.yaml  33;3
+.yml   33;3
+
+# .NET application XML (yellow)
+.application 33;3
+.config      33;3
+
+# Command data blobs (yellow)
+.bash_history      33;3
+.lesshst           33;3
+.node_repl_history 33;3
+.pry_history       33;3
+.wget-hsts         33;3
+
+# JSON config files (yellow)
+.csslintrc    33;3
+.eslintrc     33;3
+.htmlhintrc   33;3
+.jsbeautifyrc 33;3
+.manifest     33;3
+.prettierrc   33;3
+.proselintrc  33;3
+.stylelintrc  33;3
+
+
 # Data blobs (yellow)
-.a2l            33
+.cer            33
 .cert           33
 .crt            33
 .csv            33
 .dtd            33
-.gemrc          33
-.json           33
 .key            33
 .mxml           33
 .ovf            33
+.p7b            33
 .p12            33
 .pid            33
-.plist          33
 .sls            33
-.sql            33
-.wsdl           33
-.xdf            33
-.xml            33
 .xsd            33
 .xsl            33
 .xsls           33
 .xslt           33
-.yaml           33
-.yml            33
 *ssh_host_*_key 33
-
-# Plaintext-ish data blobs
-.pem 33;3
-.pub 33;3
-
-# .NET application XML (yellow)
-.application 33
-.config      33
-.manifest    33
 
 # macOS data blobs (yellow)
 .CFUserTextEncoding 33
@@ -822,21 +338,6 @@ FILE   0
 .vim_local_rc_cache 33
 .viminfo            33
 
-# Command data blobs (yellow)
-.bash_history      33
-.lesshst           33
-.node_repl_history 33
-.pry_history       33
-.wget-hsts         33
-
-# JSON config files (yellow)
-.eslintrc     33
-.csslintrc    33
-.htmlhintrc   33
-.jsbeautifyrc 33
-.prettierrc   33
-.proselintrc  33
-.stylelintrc  33
 
 # Git config files (cyan)
 .git           36
@@ -865,7 +366,9 @@ FILE   0
 .nload       36
 .pa          36
 .piprc       36
+.properties  36
 .rc          36
+.rdp         36
 .repo        36
 .repo.tmpl   36
 .screenrc    36
@@ -878,6 +381,7 @@ FILE   0
 *sshd_config 36
 
 # Text documents (yellow)
+*LICENSE  33
 .ac       33
 .cmake    33
 .css      33
@@ -892,7 +396,6 @@ FILE   0
 .in       33
 .inf      33
 .lo       33
-.log      33
 .m4       33
 .map      33
 .markdown 33
@@ -900,6 +403,8 @@ FILE   0
 .md5      33
 .mdown    33
 .mf       33
+.mf       33
+.MF       33
 .mib      33
 .patch    33
 .qml      33
@@ -908,10 +413,13 @@ FILE   0
 .spec     33
 .textile  33
 .txt      33
-*LICENSE  33
 
-.sass     33
-.scss     33
+
+# Make log/sass/scss slightly different from normal text documents
+.log  33;3
+.sass 33;3
+.scss 33;3
+
 
 # Non-compiled code-ish (green)
 .c      32
@@ -940,7 +448,6 @@ FILE   0
 .rb     32
 .rl     32
 .t      32
-.ts     32
 .xs     32
 
 # .NET application deploy (yellow)
@@ -997,7 +504,6 @@ FILE   0
 .sfc      33
 .smc      33
 .srm      33
-.state    33
 .state*   33
 .terminfo 33
 .tex      33
@@ -1010,6 +516,534 @@ FILE   0
 .xls      33
 .xlsx     33
 .z64      33
+
+
+
+# This section is 24bit/16 million colors - depends on a hack specific to this repo, and might not work in your terminal emulator
+# See this for more info: https://github.com/termstandard/colors
+
+#TERM *+iterm3
+COLORTERM truecolor
+
+# Attribute codes:
+# 0 : none
+# 1 : bold
+# 2 : dim
+# 3 : italic
+# 4 : underscore
+# 5 : blink
+# 7 : reverse
+# 8 : concealed (?)
+
+# Foreground : 38;2;R;G;B;<Attributes>
+# Background : 48;2;R;G;B;<Attributes>
+
+
+# Basic file type colors
+DIR    38;2;32;142;229    # Directory (sky blue)
+EXEC   38;2;0;255;0;1;3   # File with execute permission (bright green, bold, italic)
+LINK   38;2;0;246;248     # Symlink (cyan)
+ORPHAN 38;2;255;0;0;1;5;7 # Bad symlink (red, invert, bold, blink)
+
+BLK 38;2;240;32;32;1;48;2;32;32;32 # Block device (red, bold, grey background)
+CHR 38;2;252;106;8;1;48;2;32;32;32 # Character device (orange, bold, grey background)
+
+MISSING       0 # Symlink pointing to a nonexistent file
+MULTIHARDLINK 0 # Regular file with more than one link
+RESET         0 # Reset to "normal" color
+
+CAPABILITY 30;41 # File with capability
+DOOR       01;35 # Door
+FIFO       40;33 # Pipe
+
+SOCK 38;2;255;0;224;1;3;7 # Socket (also used by readline colored-completion-prefix)
+
+SETGID 30;43 # File that is setgid (g+s)
+SETUID 37;41 # File that is setuid (u+s)
+
+STICKY                38;2;32;142;229;3   # Dir WITH    sticky bit set (+t) and IS NOT other-writable (o+w)
+STICKY_OTHER_WRITABLE 38;2;32;142;229;3;1 # Dir WITH    sticky bit set (+t) and IS     other-writable (o+w)
+OTHER_WRITABLE        38;2;32;142;229;1   # Dir WITHOUT sticky bit set (+t) and IS     other-writable (o+w)
+
+NORMAL 38;2;210;210;210
+FILE   38;2;150;150;150
+
+
+# readline colored-completion-prefix
+.readline-colored-completion-prefix 38;2;255;0;224;1;3;7
+
+
+# Bash profile (dark green, italic)
+.bash_logout  38;2;63;183;58;3
+.bash_profile 38;2;63;183;58;3
+.bashrc       38;2;63;183;58;3
+.lessfilter   38;2;63;183;58;3
+.profile      38;2;63;183;58;3
+
+# Scripts (dark green, italic)
+# These should already have exec permission and be set to brighter green,
+# So this dark green helps weed them out
+.bash 38;2;63;183;58;3
+.bat  38;2;63;183;58;3
+.btm  38;2;63;183;58;3
+.cmd  38;2;63;183;58;3
+.com  38;2;63;183;58;3
+.csh  38;2;63;183;58;3
+.exe  38;2;63;183;58;3
+.ksh  38;2;63;183;58;3
+.ps1  38;2;63;183;58;3
+.sh   38;2;63;183;58;3
+.zsh  38;2;63;183;58;3
+
+# Archives/compressed (red)
+.7z         38;2;255;48;47
+.ace        38;2;255;48;47
+.alz        38;2;255;48;47
+.AppxBundle 38;2;255;48;47
+.ar         38;2;255;48;47
+.arc        38;2;255;48;47
+.arj        38;2;255;48;47
+.br         38;2;255;48;47
+.bz         38;2;255;48;47
+.bz2        38;2;255;48;47
+.cab        38;2;255;48;47
+.cpio       38;2;255;48;47
+.deb        38;2;255;48;47
+.dmg        38;2;255;48;47
+.dz         38;2;255;48;47
+.gz         38;2;255;48;47
+.lha        38;2;255;48;47
+.lrz        38;2;255;48;47
+.lz         38;2;255;48;47
+.lz4        38;2;255;48;47
+.lzh        38;2;255;48;47
+.lzma       38;2;255;48;47
+.lzo        38;2;255;48;47
+.msi        38;2;255;48;47
+.obr        38;2;255;48;47
+.ova        38;2;255;48;47
+.pkg        38;2;255;48;47
+.rar        38;2;255;48;47
+.rpm        38;2;255;48;47
+.rvz        38;2;255;48;47
+.rz         38;2;255;48;47
+.sar        38;2;255;48;47
+.t7z        38;2;255;48;47
+.tar        38;2;255;48;47
+.taz        38;2;255;48;47
+.tbz        38;2;255;48;47
+.tbz2       38;2;255;48;47
+.tgz        38;2;255;48;47
+.tlz        38;2;255;48;47
+.txz        38;2;255;48;47
+.tz         38;2;255;48;47
+.tzo        38;2;255;48;47
+.xar        38;2;255;48;47
+.xci        38;2;255;48;47
+.xz         38;2;255;48;47
+.z          38;2;255;48;47
+.zip        38;2;255;48;47
+.zoo        38;2;255;48;47
+
+# Java archives (slightly more red and italic)
+.ear 38;2;255;24;22;3
+.hpi 38;2;255;24;22;3
+.jar 38;2;255;24;22;3
+.war 38;2;255;24;22;3
+
+# Image formats (pink)
+.ANX  38;2;212;108;154
+.anx  38;2;212;108;154
+.AVIF 38;2;212;108;154
+.avif 38;2;212;108;154
+.AXV  38;2;212;108;154
+.axv  38;2;212;108;154
+.BMP  38;2;212;108;154
+.bmp  38;2;212;108;154
+.CGM  38;2;212;108;154
+.cgm  38;2;212;108;154
+.CR2  38;2;212;108;154
+.cr2  38;2;212;108;154
+.DL   38;2;212;108;154
+.dl   38;2;212;108;154
+.EMF  38;2;212;108;154
+.emf  38;2;212;108;154
+.FLC  38;2;212;108;154
+.flc  38;2;212;108;154
+.FLI  38;2;212;108;154
+.fli  38;2;212;108;154
+.GIF  38;2;212;108;154
+.gif  38;2;212;108;154
+.GL   38;2;212;108;154
+.gl   38;2;212;108;154
+.HEIC 38;2;212;108;154
+.heic 38;2;212;108;154
+.ICO  38;2;212;108;154
+.ico  38;2;212;108;154
+.JPEG 38;2;212;108;154
+.jpeg 38;2;212;108;154
+.JPG  38;2;212;108;154
+.jpg  38;2;212;108;154
+.JXR  38;2;212;108;154
+.jxr  38;2;212;108;154
+.MNG  38;2;212;108;154
+.mng  38;2;212;108;154
+.NUV  38;2;212;108;154
+.nuv  38;2;212;108;154
+.OGM  38;2;212;108;154
+.ogm  38;2;212;108;154
+.OGV  38;2;212;108;154
+.ogv  38;2;212;108;154
+.OGX  38;2;212;108;154
+.ogx  38;2;212;108;154
+.PBM  38;2;212;108;154
+.pbm  38;2;212;108;154
+.PCX  38;2;212;108;154
+.pcx  38;2;212;108;154
+.PGM  38;2;212;108;154
+.pgm  38;2;212;108;154
+.PNG  38;2;212;108;154
+.png  38;2;212;108;154
+.PPM  38;2;212;108;154
+.ppm  38;2;212;108;154
+.PSD  38;2;212;108;154
+.psd  38;2;212;108;154
+.QT   38;2;212;108;154
+.qt   38;2;212;108;154
+.RM   38;2;212;108;154
+.rm   38;2;212;108;154
+.RMVB 38;2;212;108;154
+.rmvb 38;2;212;108;154
+.SVG  38;2;212;108;154
+.svg  38;2;212;108;154
+.SVGZ 38;2;212;108;154
+.svgz 38;2;212;108;154
+.SWF  38;2;212;108;154
+.swf  38;2;212;108;154
+.TGA  38;2;212;108;154
+.tga  38;2;212;108;154
+.TIF  38;2;212;108;154
+.tif  38;2;212;108;154
+.TIFF 38;2;212;108;154
+.tiff 38;2;212;108;154
+.WEBP 38;2;212;108;154
+.webp 38;2;212;108;154
+.XBM  38;2;212;108;154
+.xbm  38;2;212;108;154
+.XCF  38;2;212;108;154
+.xcf  38;2;212;108;154
+.XPM  38;2;212;108;154
+.xpm  38;2;212;108;154
+.XWD  38;2;212;108;154
+.xwd  38;2;212;108;154
+.YUV  38;2;212;108;154
+.yuv  38;2;212;108;154
+
+# Video formats (slightly different pink)
+.ASF  38;2;189;69;122
+.asf  38;2;189;69;122
+.AVI  38;2;189;69;122
+.avi  38;2;189;69;122
+.FLV  38;2;189;69;122
+.flv  38;2;189;69;122
+.M2V  38;2;189;69;122
+.m2v  38;2;189;69;122
+.M4V  38;2;189;69;122
+.m4v  38;2;189;69;122
+.MKV  38;2;189;69;122
+.mkv  38;2;189;69;122
+.MOV  38;2;189;69;122
+.mov  38;2;189;69;122
+.MP4  38;2;189;69;122
+.mp4  38;2;189;69;122
+.MP4V 38;2;189;69;122
+.mp4v 38;2;189;69;122
+.MPEG 38;2;189;69;122
+.mpeg 38;2;189;69;122
+.MPG  38;2;189;69;122
+.mpg  38;2;189;69;122
+.TS   38;2;189;69;122
+.ts   38;2;189;69;122
+.VOB  38;2;189;69;122
+.vob  38;2;189;69;122
+.WEBM 38;2;189;69;122
+.webm 38;2;189;69;122
+.WMV  38;2;189;69;122
+.wmv  38;2;189;69;122
+
+# Lossless audio formats (dark purple)
+.aif  38;2;108;113;196
+.aiff 38;2;108;113;196
+.dff  38;2;108;113;196
+.dsf  38;2;108;113;196
+.mid  38;2;108;113;196
+.midi 38;2;108;113;196
+.flac 38;2;108;113;196
+.wav  38;2;108;113;196
+
+# Lossy audio formats (light purple)
+.aac  38;2;152;155;213
+.amr  38;2;152;155;213
+.au   38;2;152;155;213
+.axa  38;2;152;155;213
+.m4a  38;2;152;155;213
+.mka  38;2;152;155;213
+.mp3  38;2;152;155;213
+.mpc  38;2;152;155;213
+.oga  38;2;152;155;213
+.ogg  38;2;152;155;213
+.ra   38;2;152;155;213
+.spx  38;2;152;155;213
+.xspf 38;2;152;155;213
+
+
+# Plaintext-ish data blobs
+.a2l   38;2;255;136;31
+.gemrc 38;2;255;136;31
+.json  38;2;255;136;31
+.pem   38;2;255;136;31
+.plist 38;2;255;136;31
+.pom   38;2;255;136;31
+.pub   38;2;255;136;31
+.sql   38;2;255;136;31
+.wsdl  38;2;255;136;31
+.xdf   38;2;255;136;31
+.xml   38;2;255;136;31
+.yaml  38;2;255;136;31
+.yml   38;2;255;136;31
+
+# .NET application XML (orange)
+.application 38;2;255;136;31
+.config      38;2;255;136;31
+
+# Command data blobs (orange)
+.bash_history      38;2;255;136;31
+.lesshst           38;2;255;136;31
+.node_repl_history 38;2;255;136;31
+.pry_history       38;2;255;136;31
+.wget-hsts         38;2;255;136;31
+
+# JSON config files (orange)
+.csslintrc    38;2;255;136;31
+.eslintrc     38;2;255;136;31
+.htmlhintrc   38;2;255;136;31
+.jsbeautifyrc 38;2;255;136;31
+.manifest     38;2;255;136;31
+.prettierrc   38;2;255;136;31
+.proselintrc  38;2;255;136;31
+.stylelintrc  38;2;255;136;31
+
+
+# Data blobs (orange)
+.cer            38;2;252;106;8
+.cert           38;2;252;106;8
+.crt            38;2;252;106;8
+.csv            38;2;252;106;8
+.dtd            38;2;252;106;8
+.key            38;2;252;106;8
+.mxml           38;2;252;106;8
+.ovf            38;2;252;106;8
+.p7b            38;2;252;106;8
+.p12            38;2;252;106;8
+.pid            38;2;252;106;8
+.sls            38;2;252;106;8
+.xsd            38;2;252;106;8
+.xsl            38;2;252;106;8
+.xsls           38;2;252;106;8
+.xslt           38;2;252;106;8
+*ssh_host_*_key 38;2;252;106;8
+
+# macOS data blobs (orange)
+.CFUserTextEncoding 38;2;252;106;8
+.DS_Store           38;2;252;106;8
+
+# ViM data blobs (orange)
+.nviminfo           38;2;252;106;8
+.vim_local_rc_cache 38;2;252;106;8
+.viminfo            38;2;252;106;8
+
+
+# Git config files (pink)
+.git           38;2;220;115;218
+.gitconfig     38;2;220;115;218
+.gitignore     38;2;220;115;218
+.gitattributes 38;2;220;115;218
+.gitmodules    38;2;220;115;218
+
+# Bash config files (pink)
+.bash_sessions_disable 38;2;220;115;218
+.hushlogin             38;2;220;115;218
+.inputrc               38;2;220;115;218
+
+# Config files (pink)
+.cfg         38;2;220;115;218
+.cnf         38;2;220;115;218
+.conf        38;2;220;115;218
+.conf.tmpl   38;2;220;115;218
+.dircolors   38;2;220;115;218
+.gdbinit     38;2;220;115;218
+.gtkrc-2.0   38;2;220;115;218
+.gypi        38;2;220;115;218
+.ini         38;2;220;115;218
+.jinja       38;2;220;115;218
+.mount       38;2;220;115;218
+.nload       38;2;220;115;218
+.pa          38;2;220;115;218
+.piprc       38;2;220;115;218
+.properties  38;2;220;115;218
+.rc          38;2;220;115;218
+.rdp         38;2;220;115;218
+.repo        38;2;220;115;218
+.repo.tmpl   38;2;220;115;218
+.screenrc    38;2;220;115;218
+.service     38;2;220;115;218
+.tidyrc      38;2;220;115;218
+.timer       38;2;220;115;218
+.vim         38;2;220;115;218
+.vimrc       38;2;220;115;218
+*ssh_config  38;2;220;115;218
+*sshd_config 38;2;220;115;218
+
+# Text documents (yellow)
+.ac       38;2;230;230;0
+.cmake    38;2;230;230;0
+.css      38;2;230;230;0
+.cue      38;2;230;230;0
+.diff     38;2;230;230;0
+.eng      38;2;230;230;0
+.gpg      38;2;230;230;0
+.h        38;2;230;230;0
+.hpp      38;2;230;230;0
+.htm      38;2;230;230;0
+.html     38;2;230;230;0
+.in       38;2;230;230;0
+.inf      38;2;230;230;0
+.lo       38;2;230;230;0
+.m4       38;2;230;230;0
+.map      38;2;230;230;0
+.markdown 38;2;230;230;0
+.md       38;2;230;230;0
+.md5      38;2;230;230;0
+.mdown    38;2;230;230;0
+.MF       38;2;230;230;0
+.mf       38;2;230;230;0
+.mib      38;2;230;230;0
+.patch    38;2;230;230;0
+.qml      38;2;230;230;0
+.rst      38;2;230;230;0
+.shtml    38;2;230;230;0
+.spec     38;2;230;230;0
+.textile  38;2;230;230;0
+.txt      38;2;230;230;0
+*LICENSE  38;2;230;230;0
+
+
+# Make log/sass/scss slightly different from normal text documents
+.log  38;2;255;162;0
+.sass 38;2;255;162;0
+.scss 38;2;255;162;0
+
+
+# Non-compiled code-ish (light green)
+.c      38;2;77;190;129
+.cc     38;2;77;190;129
+.cl     38;2;77;190;129
+.coffee 38;2;77;190;129
+.cpp    38;2;77;190;129
+.dsl    38;2;77;190;129
+.erb    38;2;77;190;129
+.erl    38;2;77;190;129
+.go     38;2;77;190;129
+.gyp    38;2;77;190;129
+.hxx    38;2;77;190;129
+.il     38;2;77;190;129
+.ino    38;2;77;190;129
+.ips    38;2;77;190;129
+.java   38;2;77;190;129
+.js     38;2;77;190;129
+.py     38;2;77;190;129
+.lua    38;2;77;190;129
+.man    38;2;77;190;129
+.nse    38;2;77;190;129
+.php    38;2;77;190;129
+.pl     38;2;77;190;129
+.pm     38;2;77;190;129
+.rb     38;2;77;190;129
+.rl     38;2;77;190;129
+.t      38;2;77;190;129
+.xs     38;2;77;190;129
+
+# .NET application deploy (dark yellow/brown)
+.deploy 38;2;209;117;67
+
+# Binary files (dark yellow/brown)
+.3ds      38;2;209;117;67
+.a        38;2;209;117;67
+.abw      38;2;209;117;67
+.aml      38;2;209;117;67
+.bin      38;2;209;117;67
+.dam      38;2;209;117;67
+.dll      38;2;209;117;67
+.doc      38;2;209;117;67
+.docx     38;2;209;117;67
+.dtb      38;2;209;117;67
+.ecu      38;2;209;117;67
+.eot      38;2;209;117;67
+.epub     38;2;209;117;67
+.gb       38;2;209;117;67
+.gba      38;2;209;117;67
+.gbc      38;2;209;117;67
+.ger      38;2;209;117;67 # lol, INPA
+.gg       38;2;209;117;67
+.grp      38;2;209;117;67
+.img      38;2;209;117;67
+.ipo      38;2;209;117;67
+.iso      38;2;209;117;67
+.la       38;2;209;117;67
+.ndd      38;2;209;117;67
+.nds      38;2;209;117;67
+.nes      38;2;209;117;67
+.nsp      38;2;209;117;67
+.o        38;2;209;117;67
+.ocx      38;2;209;117;67
+.odp      38;2;209;117;67
+.ods      38;2;209;117;67
+.odt      38;2;209;117;67
+.one      38;2;209;117;67
+.otf      38;2;209;117;67
+.par2     38;2;209;117;67
+.pdf      38;2;209;117;67
+.ppt      38;2;209;117;67
+.pptx     38;2;209;117;67
+.prg      38;2;209;117;67
+.ps       38;2;209;117;67
+.pyc      38;2;209;117;67
+.pyo      38;2;209;117;67
+.qcow     38;2;209;117;67
+.qcow2    38;2;209;117;67
+.rnd      38;2;209;117;67
+.rtf      38;2;209;117;67
+.sav      38;2;209;117;67
+.sfc      38;2;209;117;67
+.smc      38;2;209;117;67
+.srm      38;2;209;117;67
+.state*   38;2;209;117;67
+.terminfo 38;2;209;117;67
+.tex      38;2;209;117;67
+.ttf      38;2;209;117;67
+.wad      38;2;209;117;67
+.woff     38;2;209;117;67
+.woff2    38;2;209;117;67
+.wpd      38;2;209;117;67
+.wua      38;2;209;117;67
+.xls      38;2;209;117;67
+.xlsx     38;2;209;117;67
+.z64      38;2;209;117;67
+
+
+
+
+
 
 
 # vim: set filetype=dircolors ts=2 sw=2 tw=0 noet :
