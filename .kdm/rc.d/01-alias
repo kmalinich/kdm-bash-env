@@ -1,5 +1,4 @@
 # shellcheck disable=SC1090
-# shellcheck disable=SC2139
 
 # Functions: Alias generation
 
@@ -47,25 +46,35 @@ _exportSetup() {
 }
 
 
+_addAliasToFile() {
+	echo "alias ${1}=\"${2}\"" >> "${BASH_ENV_FILE_CACHE_ALIAS}"
+}
+
+
 _alias_eza() {
 	# Check if eza is installed
 	hash eza || return
 
-	alias ls='eza --color=auto --color-scale --time-style long-iso --icons --links --group --group-directories-first 2> /dev/null'
+	_addAliasToFile ls 'eza --color=auto --color-scale --time-style long-iso --icons --links --group --group-directories-first 2> /dev/null'
 
-	alias lll='ls --all                           --classify --long'
-	alias l.=' ls                     --list-dirs                   .*'
-	alias ll.='ls                     --list-dirs            --long .*'
-	alias l1=' ls                                 --classify        --oneline'
-	alias l='  ls                                 --classify                   --grid'
-	alias ll=' ls                                 --classify --long'
-	alias lld='ls                     --list-dirs --classify --long'
+	_addAliasToFile lll 'ls --all                           --classify --long'
+	_addAliasToFile l. ' ls                     --list-dirs                   .*'
+	_addAliasToFile ll. 'ls                     --list-dirs            --long .*'
+	_addAliasToFile l1 ' ls                                 --classify        --oneline'
+	_addAliasToFile l '  ls                                 --classify                   --grid'
+	_addAliasToFile ll ' ls                                 --classify --long'
+	_addAliasToFile lld 'ls                     --list-dirs --classify --long'
 
 	# Because `eza` doesn't support traditional GNU `ls` `ls -tr` syntax, and I use it a lot
 	# Also `eza` 'sort by modified date' is, by default, in reverse order compared to GNU `ls`,
-	# hence the `llt` alias having the `--reverse` option and the `lltr` alias not
-	alias llt=' ll --sort modified --reverse'
-	alias lltr='ll --sort modified'
+	# hence the `llt` _addAliasToFile having the `--reverse` option and the `lltr` _addAliasToFile not
+	_addAliasToFile llt ' ll --sort modified --reverse'
+	_addAliasToFile lltr 'll --sort modified'
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "eza aliases"
+	fi
 }
 
 _alias_ls() {
@@ -76,16 +85,21 @@ _alias_ls() {
 	hash eza && return
 
 	# shellcheck disable=SC2139
-	alias ls="ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"
+	_addAliasToFile ls "ls --color=if-tty --group-directories-first --time-style='${LS_TIME_STYLE}' 2> /dev/null"
 
-	alias lll='ls --all                          --file-type --human-readable -l'
-	alias la=' ls       --almost-all'
-	alias l.=' ls                    --directory                                 .*'
-	alias ll.='ls                    --directory                              -l .*'
-	alias l1=' ls                                --file-type --human-readable -1'
-	alias l='  ls                                --file-type                     -C'
-	alias ll=' ls                                --file-type --human-readable -l'
-	alias lld='ls                    --directory --file-type --human-readable -l'
+	_addAliasToFile lll 'ls --all                          --file-type --human-readable -l'
+	_addAliasToFile la ' ls       --almost-all'
+	_addAliasToFile l. ' ls                    --directory                                 .*'
+	_addAliasToFile ll. 'ls                    --directory                              -l .*'
+	_addAliasToFile l1 ' ls                                --file-type --human-readable -1'
+	_addAliasToFile l '  ls                                --file-type                     -C'
+	_addAliasToFile ll ' ls                                --file-type --human-readable -l'
+	_addAliasToFile lld 'ls                    --directory --file-type --human-readable -l'
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "ls aliases"
+	fi
 }
 
 # shellcheck disable=SC2139
@@ -107,29 +121,34 @@ _alias_grep() {
 	)
 
 	# Regular grep
-	alias grep="${GREP_BASE}"
+	_addAliasToFile grep "${GREP_BASE}"
 	for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
-		alias "${GREP_CMD}grep"="${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
+		_addAliasToFile "${GREP_CMD}grep" "${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
 	done
 
 	# Force enable/disable color
-	alias cgrep=' grep --no-messages --color=always'
-	alias ncgrep='grep --no-messages --color=never'
+	_addAliasToFile cgrep ' grep --no-messages --color=always'
+	_addAliasToFile ncgrep 'grep --no-messages --color=never'
 
 	# zgrep
 	if hash zgrep; then
-		alias zgrep="z${GREP_BASE}"
+		_addAliasToFile zgrep "z${GREP_BASE}"
 		for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
-			alias "z${GREP_CMD}grep"="z${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
+			_addAliasToFile "z${GREP_CMD}grep" "z${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
 		done
 	fi
 
 	# xzgrep
 	if hash xzgrep; then
-		alias xzgrep="xz${GREP_BASE}"
+		_addAliasToFile xzgrep "xz${GREP_BASE}"
 		for GREP_CMD in "${!ARRAY_GREP_CMDS[@]}"; do
-			alias "xz${GREP_CMD}grep"="xz${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
+			_addAliasToFile "xz${GREP_CMD}grep" "xz${GREP_BASE} --${ARRAY_GREP_CMDS[${GREP_CMD}]}"
 		done
+	fi
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "grep aliases"
 	fi
 }
 
@@ -142,20 +161,25 @@ _alias_nmap() {
 	# nmap needs sudo if not root
 	# First, add one for not aggressive one (but still verbose)
 	if [[ "${UID}" != "0" ]]; then
-		alias nmap='sudo nmap --open'
+		_addAliasToFile nmap 'sudo nmap --open'
 		# nmap-v for very verbose scan
-		alias nmap-v='sudo nmap -vv --open'
+		_addAliasToFile nmap-v 'sudo nmap -vv --open'
 		# nmap-a for aggressive scripting scan
-		alias nmap-a='sudo nmap -vv -A --open'
+		_addAliasToFile nmap-a 'sudo nmap -vv -A --open'
 		return
 	fi
 
 	# already root, no need for sudo
-	alias nmap='nmap --open'
+	_addAliasToFile nmap 'nmap --open'
 	# nmap-v for very verbose scan
-	alias nmap-v='nmap -vv --open'
+	_addAliasToFile nmap-v 'nmap -vv --open'
 	# nmap-a for aggressive scripting scan
-	alias nmap-a='nmap -vv -A --open'
+	_addAliasToFile nmap-a 'nmap -vv -A --open'
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "nmap aliases"
+	fi
 }
 
 # ping command tweaks
@@ -167,28 +191,34 @@ _alias_ping() {
 	# ping commands, if ping is present
 	if hash ping; then
 		# Get full path to binary
-		PING4_BINARY=$(command -v ping)
+		unalias ping > /dev/null 2>&1
+		PING4_BINARY="$(command -v ping)"
 
 		# ping-slow : normal (1.0 second interval)
 		#      ping : fast   (0.5 second interval)
 		# ping-fast : faster (0.1 second interval)
-		alias ping="     ${PING4_BINARY} -i 0.5"
-		alias ping-fast="${PING4_BINARY} -i 0.1"
-		alias ping-slow="${PING4_BINARY} -i 1.0"
+		_addAliasToFile ping      "${PING4_BINARY} -i 0.5"
+		_addAliasToFile ping-fast "${PING4_BINARY} -i 0.1"
+		_addAliasToFile ping-slow "${PING4_BINARY} -i 1.0"
 	fi
 
 	# ping6 commands, if ping6 is present
 	if hash ping6; then
-
 		# Get full path to binary
-		PING6_BINARY=$(command -v ping6)
+		unalias ping6 > /dev/null 2>&1
+		PING6_BINARY="$(command -v ping6)"
 
 		# ping6-slow : normal (1.0 second interval)
 		#      ping6 : fast   (0.5 second interval)
 		# ping6-fast : faster (0.1 second interval)
-		alias ping6="     ${PING6_BINARY} -i 0.5"
-		alias ping6-fast="${PING6_BINARY} -i 0.1"
-		alias ping6-slow="${PING6_BINARY} -i 1.0"
+		_addAliasToFile ping6      "${PING6_BINARY} -i 0.5"
+		_addAliasToFile ping6-fast "${PING6_BINARY} -i 0.1"
+		_addAliasToFile ping6-slow "${PING6_BINARY} -i 1.0"
+	fi
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Ping aliases"
 	fi
 }
 
@@ -199,7 +229,7 @@ _alias_diff() {
 	DIFF_VERSION="$(diff -v | grep -Eo '[3-9]\.[0-9]{1,2}$')"
 
 	if [[ "${DIFF_VERSION/\./}" -ge "34" ]]; then
-		alias diff='diff --color=auto'
+		_addAliasToFile diff 'diff --color=auto'
 	fi
 
 	# Custom diff:
@@ -208,9 +238,16 @@ _alias_diff() {
 	# Ignore trailing space
 	# Ignore whitespace changes
 	# Ignore blank lines
-	alias kdiff='diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
+	_addAliasToFile kdiff 'diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "diff aliases"
+	fi
 }
 
+
+# shellcheck disable=SC2016
 _alias_dirs() {
 	# Downloads and Desktop folder variables
 	DIR_HOME_DC="${HOME}/Documents"
@@ -218,65 +255,76 @@ _alias_dirs() {
 	DIR_HOME_DT="${HOME}/Desktop"
 
 	# Downloads and Desktop folder aliases
-	[[ -d "${DIR_HOME_DC}" ]] && alias dc='cd ${DIR_HOME_DC}; ll'
-	[[ -d "${DIR_HOME_DL}" ]] && alias dl='cd ${DIR_HOME_DL}; ll'
-	[[ -d "${DIR_HOME_DT}" ]] && alias dt='cd ${DIR_HOME_DT}; ll'
+	[[ -d "${DIR_HOME_DC}" ]] && _addAliasToFile dc 'cd ${DIR_HOME_DC}; ll'
+	[[ -d "${DIR_HOME_DL}" ]] && _addAliasToFile dl 'cd ${DIR_HOME_DL}; ll'
+	[[ -d "${DIR_HOME_DT}" ]] && _addAliasToFile dt 'cd ${DIR_HOME_DT}; ll'
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Dir aliases"
+	fi
 }
+
 
 _alias_misc() {
 	# Newline after screen clear
-	alias c='clear'
-	alias ccd='cd; clear'
-	alias cdc='cd; clear'
-	alias clear='clear; echo'
+	_addAliasToFile c 'clear'
+	_addAliasToFile ccd 'cd; clear'
+	_addAliasToFile cdc 'cd; clear'
+	_addAliasToFile clear 'clear; echo'
 
 	# Safety first on file operations
-	alias rm='rm -i'
-	alias cp='cp -iv'
-	alias mv='mv -i'
-	alias mkdir='mkdir -p'
+	_addAliasToFile rm 'rm -i'
+	_addAliasToFile cp 'cp -iv'
+	_addAliasToFile mv 'mv -i'
+	_addAliasToFile mkdir 'mkdir -p'
 
 	# Quick up-directory-n-list
-	alias ..='cd ..; ll'
+	_addAliasToFile .. 'cd ..; ll'
 
 	# Typo aliases
-	alias bim='vim'
-	alias cim='vim'
-	alias ehco='echo'
-	alias grpe='grep'
-	alias kk='ll'
-	alias namp='nmap'
-	alias pign='ping'
-	alias tial='tail'
+	_addAliasToFile bim 'vim'
+	_addAliasToFile cim 'vim'
+	_addAliasToFile ehco 'echo'
+	_addAliasToFile grpe 'grep'
+	_addAliasToFile kk 'll'
+	_addAliasToFile namp 'nmap'
+	_addAliasToFile pign 'ping'
+	_addAliasToFile tial 'tail'
 
 	# Pre-sorted environment variables
-	alias env-sort='env | sort -h'
+	_addAliasToFile env-sort 'env | sort -h'
 
 	# Sort by IP address octets
 	# .. fought to find this one for a long, long time
-	alias sort-ip='sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"'
+	_addAliasToFile sort-ip 'sort --field-separator="." --key="1,1g" --key="2,2g" --key="3,3g" --key="4,4g"'
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Misc aliases"
+	fi
 }
 
 
 # Pretty print HTML with tidy, indent: 2 spaces, sorted alphabetically, then colorize with pygmentize
 _alias_pygmentize_html() {
 	hash tidy || return
-	alias html-format="dos2unix | sed -e '/^$/d' -e 's/^[ \\t]*//' -e 's/\\t/\\ /g' | tr '\\n' ' ' | sed -E 's/>(\\ {1,})</></g' | tidy 2> /dev/null | html-beautify -t false -E -T -U | pygmentize -l html -f terminal16m -O style=monokai"
-	alias format-html='html-format'
+	_addAliasToFile html-format "dos2unix | sed -e '/^$/d' -e 's/^[ \\t]*//' -e 's/\\t/\\ /g' | tr '\\n' ' ' | sed -E 's/>(\\ {1,})</></g' | tidy 2> /dev/null | html-beautify -t false -E -T -U | pygmentize -l html -f terminal16m -O style=monokai"
+	_addAliasToFile format-html 'html-format'
 }
 
 # Pretty print JSON with jq, indent: 2 spaces (default), sorted alphabetically, then colorize with pygmentize
 _alias_pygmentize_json() {
 	hash jq || return
-	alias json-format='dos2unix | jq -MS . 2> /dev/null | pygmentize -l json -f terminal16m -O style=monokai'
-	alias format-json='json-format'
+	_addAliasToFile json-format 'dos2unix | jq -MS . 2> /dev/null | pygmentize -l json -f terminal16m -O style=monokai'
+	_addAliasToFile format-json 'json-format'
 }
 
 # Pretty print XML with xmllint, indent: 2 spaces (default), then colorize with pygmentize
 _alias_pygmentize_xml() {
 	hash xmllint || return
-	alias xml-format='dos2unix | xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal16m -O style=monokai'
-	alias format-xml='xml-format'
+	_addAliasToFile xml-format 'dos2unix | xmllint --format - 2> /dev/null | pygmentize -l xml -f terminal16m -O style=monokai'
+	_addAliasToFile format-xml 'xml-format'
 }
 
 # Prettyprint+colorize various formats, if supporting binaries are installed
@@ -288,28 +336,30 @@ _alias_pygmentize() {
 	_alias_pygmentize_html
 	_alias_pygmentize_json
 	_alias_pygmentize_xml
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "pygmentize aliases"
+	fi
 }
+
 
 # Generate SSH host aliases
 _alias_ssh() {
-	local TEMP_CACHE_SSH_ALIAS
+	local ARRAY_SSH_HOSTS SSH_HOST
 
-	TEMP_CACHE_SSH_ALIAS="$(mktemp -t "kdm-bash-env.alias.ssh.XXXXXXXXXXXXXX")"
+	mapfile -t ARRAY_SSH_HOSTS < <(awk -F ' ' '/^Host(\s){1,35}[a-z].*/ {print $2}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf 2> /dev/null | grep -Ev '\*')
 
-	# Process SSH host alias generation, output to SSH alias cache file
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.conf     2> /dev/null | grep -Ev '\*' >> "${TEMP_CACHE_SSH_ALIAS}" 2> /dev/null
-	awk -F ' ' '/^Host(\s){1,29}[a-z].*/ {print "alias " $2 "='"'"'ssh " $2 "'"'"'"}' "${BASH_ENV_DIR_SSH_CONFIG}"/*.d/*.conf 2> /dev/null | grep -Ev '\*' >> "${TEMP_CACHE_SSH_ALIAS}" 2> /dev/null
+	for SSH_HOST in "${ARRAY_SSH_HOSTS[@]}"; do
+		_addAliasToFile "${SSH_HOST}" "ssh ${SSH_HOST}"
+	done
 
 	# Output message if output function available and in a TTY
 	if hash output; then
 		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH aliases"
 	fi
-
-	# Source SSH alias cache file
-	. "${TEMP_CACHE_SSH_ALIAS}"
-
-	rm -f "${TEMP_CACHE_SSH_ALIAS}"
 }
+
 
 _alias_sudo() {
 	# First check if we're root; if so, we don't need sudo aliases
@@ -326,7 +376,7 @@ _alias_sudo() {
 	for CMD in "${ARRAY_SUDO[@]}"; do
 		# If it's installed, add sudo
 		hash "${CMD}" || continue
-		alias "${CMD}"="sudo ${CMD}"
+		_addAliasToFile "${CMD}" "sudo ${CMD}"
 	done
 
 	# Output message if output function available and in a TTY
@@ -352,11 +402,11 @@ _aliasGenerate() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "aliases"
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "All aliases"
 	fi
 
-	# Save alias cache file
-	alias > "${BASH_ENV_FILE_CACHE_ALIAS}"
+	# In-place unique sort
+	sort --unique --output="${BASH_ENV_FILE_CACHE_ALIAS}" "${BASH_ENV_FILE_CACHE_ALIAS}"
 }
 
 # Configure aliases
@@ -364,9 +414,13 @@ _aliasSetup() {
 	# Regenerate alias cache file if empty
 	if [[ ! -s "${BASH_ENV_FILE_CACHE_ALIAS}" ]]; then
 		_aliasGenerate
-		# If generation required, we're done here
+
+		# Source alias cache file
+		. "${BASH_ENV_FILE_CACHE_ALIAS}"
+
 		return 0
 	fi
+
 
 	# Declare vars as local
 	local ALIAS_CACHE_AGE ALIAS_CACHE_TIME
@@ -380,11 +434,14 @@ _aliasSetup() {
 
 	ALIAS_CACHE_AGE=$(($(date +%s)-ALIAS_CACHE_TIME))
 
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Alias cache age" "${ALIAS_CACHE_AGE}"
+	fi
+
 	# Regenerate alias cache file if older than 1 day
 	if [[ "${ALIAS_CACHE_AGE}" -ge "86400" ]]; then
 		_aliasGenerate
-		# If generation required, we're done here
-		return 0
 	fi
 
 	# Source alias cache file
@@ -392,14 +449,11 @@ _aliasSetup() {
 }
 
 
-
-alias > ~/alias-0.sh
-
 _exportSetup
 _aliasSetup
 
+
 alias alias-generate='_aliasGenerate'
 
-alias > ~/alias-1.sh
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :
