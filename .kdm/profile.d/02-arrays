@@ -153,10 +153,15 @@ ARRAY_PATH_MACOS_ULR=(
 
 # Entries at the beginning of this array will end up at the beginning of PATH
 # Entries at the end       of this array will end up at the end       of PATH
-mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
+
+#mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
 
 ARRAY_PATH=(
-"${ARRAY_PATH[@]}"
+'/usr/libexec'
+'/usr/bin'
+'/bin'
+'/usr/sbin'
+'/sbin'
 "${HOME}/bin"
 "${HOME}/.local/bin"
 "${HOME}/.cargo/bin"

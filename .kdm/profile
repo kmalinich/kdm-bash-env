@@ -23,13 +23,15 @@ _initialPathGenerate() {
 
 	UNAME_VAL="$(uname)"
 
-	PATH="/usr/local/sbin:/usr/local/bin"
-
+	# TODO: This feels.... not quite right
+	USR_LOCAL_PATH='/usr/local/sbin:/usr/local/bin'
 	if [[ "${UNAME_VAL}" == "Darwin" ]]; then
-		PATH="${PATH}:/opt/homebrew/sbin:/opt/homebrew/bin"
+		if [[ "$(sysctl -n hw.optional.arm64 2> /dev/null || true)" == "1" ]]; then
+			USR_LOCAL_PATH="/opt/homebrew/sbin:/opt/homebrew/bin:${USR_LOCAL_PATH}"
+		fi
 	fi
 
-	PATH="${PATH}:/usr/sbin:/usr/bin:/sbin:/bin"
+	PATH="${USR_LOCAL_PATH}:/usr/sbin:/usr/bin:/sbin:/bin"
 
 	# Everything after this is macOS-only
 	if [[ "${UNAME_VAL}" != "Darwin" ]]; then
@@ -39,13 +41,14 @@ _initialPathGenerate() {
 
 
 	# Add GNU coreutils, findutils, and grep to PATH if macOS brew-installed package present
+	# /opt/homebrew (arm64 macOS path) has to be on top of /usr/local (x86_64 macOS path)
 	ARRAY_DIR_GNU_UTILS=(
-	"/usr/local/opt/coreutils/libexec/gnubin"
-	"/usr/local/opt/findutils/libexec/gnubin"
-	"/usr/local/opt/grep/libexec/gnubin"
 	"/opt/homebrew/opt/coreutils/libexec/gnubin"
+	"/usr/local/opt/coreutils/libexec/gnubin"
 	"/opt/homebrew/opt/findutils/libexec/gnubin"
+	"/usr/local/opt/findutils/libexec/gnubin"
 	"/opt/homebrew/opt/grep/libexec/gnubin"
+	"/usr/local/opt/grep/libexec/gnubin"
 	)
 
 	for DIR_GNU_UTIL in "${ARRAY_DIR_GNU_UTILS[@]}"; do

@@ -155,6 +155,9 @@ _pathShell() {
 	# If entry already present in PATH_OLD (at any position), remove entry from PATH_OLD
 	# This results in PATH_OLD containing only entries that are not present in ARRAY_PATH_VALID
 	for ENTRY in "${ARRAY_PATH_VALID[@]}"; do
+		# Break if PATH_OLD is already empty
+		[[ "${#PATH_OLD}" == "0" ]] && break
+
 		while [[ "${PATH_OLD}" =~ ^${ENTRY}: ]]; do PATH_OLD="${PATH_OLD#"${ENTRY}":}";   done
 		while [[ "${PATH_OLD}" =~ :${ENTRY}: ]]; do PATH_OLD="${PATH_OLD//:${ENTRY}:/:}"; done
 		while [[ "${PATH_OLD}" =~ :${ENTRY}$ ]]; do PATH_OLD="${PATH_OLD%:"${ENTRY}"}";   done
