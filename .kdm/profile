@@ -39,17 +39,23 @@ _initialPathGenerate() {
 		return 0
 	fi
 
+	# Detect if /usr/local (Intel) or /opt/homebrew (Apple Silicon) should be used as the prefix
+	PREFIX_ARM="/opt/homebrew"
+	PREFIX_X86="/usr/local"
+
+	PREFIX="${PREFIX_X86}"
+	if [[ "$(sysctl -n hw.optional.arm64 2> /dev/null || true)" == "1" ]]; then
+		PREFIX="${PREFIX_ARM}"
+	fi
 
 	# Add GNU coreutils, findutils, and grep to PATH if macOS brew-installed package present
-	# /opt/homebrew (arm64 macOS path) has to be on top of /usr/local (x86_64 macOS path)
 	ARRAY_DIR_GNU_UTILS=(
-	"/opt/homebrew/opt/coreutils/libexec/gnubin"
-	"/usr/local/opt/coreutils/libexec/gnubin"
-	"/opt/homebrew/opt/findutils/libexec/gnubin"
-	"/usr/local/opt/findutils/libexec/gnubin"
-	"/opt/homebrew/opt/grep/libexec/gnubin"
-	"/usr/local/opt/grep/libexec/gnubin"
+	"${PREFIX}/opt/coreutils/libexec/gnubin"
+	"${PREFIX}/opt/findutils/libexec/gnubin"
+	"${PREFIX}/opt/grep/libexec/gnubin"
 	)
+
+	unset PREFIX
 
 	for DIR_GNU_UTIL in "${ARRAY_DIR_GNU_UTILS[@]}"; do
 		[[ ! -d "${DIR_GNU_UTIL}" ]] && continue

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-ARRAY_DEPS=(jq npm yarn)
+ARRAY_DEPS=(jq npm)
 
 for DEP in "${ARRAY_DEPS[@]}"; do
 	if ! hash "${DEP}" > /dev/null 2>&1; then

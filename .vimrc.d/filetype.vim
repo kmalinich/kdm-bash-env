@@ -119,6 +119,8 @@ augroup END
 " OpenVPN
 augroup ft_openvpn
 	au BufRead /usr/local/etc/openvpn/*.conf set filetype=cfg
+	au BufRead /opt/homebrew/etc/openvpn/*.conf set filetype=cfg
+	au BufRead /etc/openvpn/*.conf set filetype=cfg
 	au BufRead *.ovpn set filetype=cfg
 augroup END
 

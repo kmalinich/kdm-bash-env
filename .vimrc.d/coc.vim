@@ -1,9 +1,10 @@
 scriptencoding utf-8
 
+" https://raw.githubusercontent.com/neoclide/coc.nvim/master/doc/coc-example-config.vim
+
 
 " Disable startup warning - I know when nvim/vim is outdated anyway, and sometimes I've got places to be
 let g:coc_disable_startup_warning = 1
-
 
 " let g:coc_force_debug = 1
 
@@ -13,16 +14,11 @@ set cmdheight=2
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable delays and poor user experience
 set updatetime=200
 
+" Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved
+" set signcolumn=yes
+
 " Don't pass messages to |ins-completion-menu|
 set shortmess+=c
-
-" Always show the signcolumn, otherwise it would shift the text each time diagnostics appear/become resolved
-if has("nvim-0.5.0") || has("patch-8.1.1564")
-	" Recently vim can merge signcolumn and number column into one
-	set signcolumn=number
-else
-	set signcolumn=yes
-endif
 
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable no select by `"suggest.noselect": true` in your configuration file
@@ -72,6 +68,9 @@ function! ShowDocumentation()
 	endif
 endfunction
 
+" Highlight the symbol and its references when holding the cursor
+" autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " Symbol renaming
 nmap <leader>rn <Plug>(coc-rename)
 
@@ -83,8 +82,9 @@ augroup mygroup
 	autocmd!
 	" Setup formatexpr specified filetype(s)
 	autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+
 	" Update signature help on jump placeholder
-	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+	" autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
 " Applying code actions to the selected code block
@@ -136,15 +136,14 @@ endif
 " Add `:Format` command to format current buffer
 command! -nargs=0 Format :call CocActionAsync('format')
 " Add `:Fold` command to fold current buffer
-command! -nargs=? Fold   :call CocAction('fold', <f-args>)
+command! -nargs=? Fold :call CocAction('fold', <f-args>)
 " Add `:OR` command for organize imports of the current buffer
-command! -nargs=0 OR     :call CocActionAsync('runCommand', 'editor.action.organizeImport')
+command! -nargs=0 OR :call CocActionAsync('runCommand', 'editor.action.organizeImport')
 
 
 " Add (Neo)Vim's native statusline support
-" NOTE: Please see `:h coc-status` for integrations with external plugins that
-" provide custom statusline: lightline.vim, vim-airline
-" set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+" NOTE: Please see `:h coc-status` for integrations with external plugins that provide custom statusline: lightline.vim, vim-airline
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 
 " Using CocList
@@ -175,40 +174,6 @@ nnoremap <silent> <space>k :<C-u>CocPrev<CR>
 " Spacebar-p : Resume latest coc list
 nnoremap <silent> <space>p :<C-u>CocListResume<CR>
 
-
-" Highlight the symbol and its references when holding the cursor
-" autocmd CursorHold * silent call CocActionAsync('highlight')
-
-
-augroup mygroup
-	autocmd!
-	" Setup formatexpr specified filetype(s)
-	autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-
-	" Update signature help on jump placeholder
-	autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-augroup end
-
-
-" Global extensions (auto-install)
-let g:coc_global_extensions = [
-	\ 'coc-css',
-	\ 'coc-eslint',
-	\ 'coc-html',
-	\ 'coc-json',
-	\ 'coc-markdownlint',
-	\ 'coc-python',
-	\ 'coc-sh',
-	\ 'coc-stylelintplus',
-	\ 'coc-svg',
-	\ 'coc-tsserver',
-	\ 'coc-yaml'
-\ ]
-" \ 'coc-highlight',
-" \ 'coc-clangd',
-" \ 'coc-omnisharp',
-" \ 'coc-powershell',
-" \ 'coc-xml',
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :

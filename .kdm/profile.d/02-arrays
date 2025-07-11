@@ -157,11 +157,6 @@ ARRAY_PATH_MACOS_ULR=(
 #mapfile -t ARRAY_PATH < <(echo -e "${PATH//\:/\\n}")
 
 ARRAY_PATH=(
-'/usr/libexec'
-'/usr/bin'
-'/bin'
-'/usr/sbin'
-'/sbin'
 "${HOME}/bin"
 "${HOME}/.local/bin"
 "${HOME}/.cargo/bin"
@@ -170,6 +165,10 @@ ARRAY_PATH=(
 "${HOME}/.jenv/shims"
 "${HOME}/perl5/bin"
 "${HOME}/Library/Android/sdk/platform-tools"
+'/opt/homebrew/sbin'
+'/opt/homebrew/bin'
+'/usr/local/sbin'
+'/usr/local/bin'
 '/data/data/com.termux/files/usr/bin/applets'
 '/data/data/com.termux/files/usr/bin'
 )
@@ -180,11 +179,7 @@ if [[ "$(uname)" == "Darwin" ]]; then
 fi
 
 ARRAY_PATH+=(
-'/opt/local/sbin'
-'/opt/local/bin'
 '/opt/puppetlabs/bin'
-"${UL}/sbin"
-"${UL}/bin"
 '/System/Library/Filesystems/apfs.fs/Contents/Resources'
 '/usr/pgsql-12/bin'
 '/usr/pgsql-11/bin'

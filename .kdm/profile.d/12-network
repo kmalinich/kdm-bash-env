@@ -1,4 +1,4 @@
-_initialNetworkGenerate() {
+_networkGenerate() {
 	# Get IP, TTY, and hostname so the binaries doesn't have to be run again
 	if [[ -z "${DEFROUTE_NIC}" || -z "${HOST_IP}" ]]; then
 		DEFROUTE_NIC="$(ip route | grep -Po '(?<=dev\ )(e(n|th|ns|np[1-9]s)|br|wlan)[0-9]{1,3}(?=(\s\sproto\ static)?(\s\smetric\ [1-9][0-9]{0,3})?\s$)?' | head -n 1)"
@@ -54,10 +54,10 @@ _initialNetworkGenerate() {
 	EOF
 }
 
-_initialNetworkSetup() {
+_networkSetup() {
 	# Generate network information file if empty
 	if [[ ! -s "${BASH_ENV_FILE_CACHE_NETWORK}" ]]; then
-		_initialNetworkGenerate
+		_networkGenerate
 		# If generation required, we're done here
 		return 0
 	fi
@@ -76,7 +76,7 @@ _initialNetworkSetup() {
 
 	# Regenerate network information file if older than 1 day
 	if [[ "${INITIAL_NETWORK_AGE}" -ge "86400" ]]; then
-		_initialNetworkGenerate
+		_networkGenerate
 		return 0
 	fi
 
@@ -86,7 +86,7 @@ _initialNetworkSetup() {
 }
 
 
-_initialNetworkSetup
+_networkSetup
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

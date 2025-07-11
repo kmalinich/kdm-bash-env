@@ -210,8 +210,11 @@ _kdm_update() {
 	WAIT_LIMIT="180"
 
 	# Wait longer on slower CPUs
-	if [[ "$(uname)" == "Darwin" ]]; then
-		CPU_MAX_MHZ="$(($(sysctl -n hw.cpufrequency)/1000000))"
+	if [[ "${UNAME}" == "Darwin" ]]; then
+		case "${UNAME_MACHINE}" in
+			arm64)  CPU_MAX_MHZ="3600" ;; # Hack: Just fake it, Apple Silicon is hella fast
+			x86_64) CPU_MAX_MHZ="$(($(sysctl -n hw.cpufrequency)/1000000))" ;;
+		esac
 	else
 		CPU_MAX_MHZ="$(lscpu --extended=MAXMHZ | sort -nr | head -n 1 | awk -F '.' '{print $1}')"
 	fi

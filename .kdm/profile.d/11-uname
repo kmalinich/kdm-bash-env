@@ -1,24 +1,64 @@
 # shellcheck disable=SC1090
 
-# Machine uname variables
-if [[ "${BASH_ENV_CACHE_UNAME}" != "true" ]]; then
-	cat <<- EOF > "${BASH_ENV_FILE_CACHE_UNAME}"
-	export UNAME_KERNEL_NAME="$(uname -s)"
-	export UNAME_KERNEL_RELEASE="$(uname -r)"
-	export UNAME_MACHINE="$(uname -m)"
-	export BASH_ENV_CACHE_UNAME=true
-	EOF
-fi
+_unameGenerate() {
+	# Machine uname variables
+	if [[ "${BASH_ENV_CACHE_UNAME}" != "true" ]]; then
+		cat <<- EOF > "${BASH_ENV_FILE_CACHE_UNAME}"
+		BASH_ENV_CACHE_UNAME=true
+		UNAME="$(               uname)"
+		UNAME_ALL="$(           uname -a)"
+		UNAME_KERNEL_NAME="$(   uname -s)"
+		UNAME_KERNEL_RELEASE="$(uname -r)"
+		UNAME_KERNEL_VERSION="$(uname -v)"
+		UNAME_MACHINE="$(       uname -m)"
+		UNAME_NODE="$(          uname -n)"
+		UNAME_PROCESSOR="$(     uname -p)"
+		export BASH_ENV_CACHE_UNAME UNAME UNAME_ALL UNAME_KERNEL_NAME UNAME_KERNEL_RELEASE UNAME_KERNEL_VERSION UNAME_MACHINE UNAME_NODE UNAME_PROCESSOR
+		EOF
+	fi
+}
 
-. "${BASH_ENV_FILE_CACHE_UNAME}"
+# Configure uname variables
+_unameSetup() {
+	# Regenerate uname cache file if empty
+	if [[ ! -s "${BASH_ENV_FILE_CACHE_UNAME}" ]]; then
+		_unameGenerate
 
-# Commented these out as they are unused (for now)
-# UNAME="$(               uname)"
-# UNAME_ALL="$(           uname -a)"
-# UNAME_KERNEL_VERSION="$(uname -v)"
-# UNAME_NODE="$(          uname -n)"
-# UNAME_PROCESSOR="$(     uname -p)"
-# export UNAME UNAME_ALL UNAME_KERNEL_VERSION UNAME_MACHINE UNAME_NODE UNAME_PROCESSOR
+		# Source uname cache file
+		. "${BASH_ENV_FILE_CACHE_UNAME}"
+
+		return 0
+	fi
+
+
+	# Declare vars as local
+	local UNAME_CACHE_AGE UNAME_CACHE_TIME
+
+	# Determine age of uname cache file
+	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+		UNAME_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_UNAME}")
+	else
+		UNAME_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_UNAME}")
+	fi
+
+	UNAME_CACHE_AGE=$(($(date +%s)-UNAME_CACHE_TIME))
+
+	# Output message if output function available and in a TTY
+	if hash output; then
+		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "uname cache age" "${UNAME_CACHE_AGE}"
+	fi
+
+	# Regenerate uname cache file if older than 1 day
+	if [[ "${UNAME_CACHE_AGE}" -ge "86400" ]]; then
+		_unameGenerate
+	fi
+
+	# Source uname cache file
+	. "${BASH_ENV_FILE_CACHE_UNAME}"
+}
+
+
+_unameSetup
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

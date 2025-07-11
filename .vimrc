@@ -61,6 +61,7 @@ call LoadFile('case')
 
 if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:uname_machine ==# 'x86_64')
 	call LoadFile('coc')
+	call LoadFile('coc-extensions')
 	call LoadFile('coc-notify')
 endif
 
