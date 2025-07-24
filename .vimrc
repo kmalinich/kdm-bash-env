@@ -66,7 +66,11 @@ if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:una
 endif
 
 if g:uname_kernel_name ==# 'Darwin'
-	call LoadFile('provider-macos')
+	if g:uname_machine ==# 'arm64'
+		call LoadFile('provider-macos-arm64')
+	else
+		call LoadFile('provider-macos-x86')
+	endif
 endif
 
 if g:uname_kernel_name ==# 'Linux'
