@@ -3,7 +3,7 @@ scriptencoding utf-8
 
 lua << EOF
 function coc_notify(msg, level)
-	local notify_opts = { title = "LSP message", timeout = 400 }
+	local notify_opts = { title = "LSP message" }
 	vim.notify(msg, level, notify_opts)
 end
 
@@ -11,11 +11,13 @@ end
 local coc_status_record = {}
 
 function coc_status_notify(msg, level)
-	local notify_opts = { title = "LSP status", timeout = 400, hide_from_history = true, on_close = reset_coc_status_record }
+	local notify_opts = { title = "LSP status", hide_from_history = true, on_close = reset_coc_status_record }
+
 	-- if coc_status_record is not {} then add it to notify_opts to key called "replace"
 	if coc_status_record ~= {} then
 		notify_opts["replace"] = coc_status_record.id
 	end
+
 	coc_status_record = vim.notify(msg, level, notify_opts)
 end
 
@@ -27,11 +29,13 @@ end
 local coc_diag_record = {}
 
 function coc_diag_notify(msg, level)
-	local notify_opts = { title = "LSP diagnostics", timeout = 400, on_close = reset_coc_diag_record }
+	local notify_opts = { title = "LSP diagnostics", on_close = reset_coc_diag_record }
+
 	-- if coc_diag_record is not {} then add it to notify_opts to key called "replace"
 	if coc_diag_record ~= {} then
 		notify_opts["replace"] = coc_diag_record.id
 	end
+
 	coc_diag_record = vim.notify(msg, level, notify_opts)
 end
 
@@ -40,12 +44,13 @@ function reset_coc_diag_record(window)
 end
 EOF
 
+
 function! s:DiagnosticNotify() abort
 	let l:info = get(b:, 'coc_diagnostic_info', {})
 
 	if empty(l:info) | return '' | endif
 
-	let l:msgs = []
+	let l:msgs  = []
 	let l:level = 'info'
 
 	if get(l:info, 'warning', 0)
@@ -77,6 +82,7 @@ function! s:DiagnosticNotify() abort
 	call v:lua.coc_diag_notify(l:msg, l:level)
 endfunction
 
+
 function! s:StatusNotify() abort
 	let l:status = get(g:, 'coc_status', '')
 	let l:level = 'info'
@@ -84,6 +90,7 @@ function! s:StatusNotify() abort
 	if empty(l:status) | return '' | endif
 	call v:lua.coc_status_notify(l:status, l:level)
 endfunction
+
 
 function! s:InitCoc() abort
 	" load overrides

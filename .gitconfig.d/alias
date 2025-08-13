@@ -11,12 +11,11 @@
 
 	branchname = branch --show-current
 
-	cl  = clone --jobs 8 --recursive
-	cls = clone --jobs 8 --recursive --depth 1 --shallow-submodules
+	cl  = "!_git_cl()  { echo \"[git] Cloning repo '${1}'\"; git clone --jobs \"$(nproc)\" --recursive                                \"${@}\"; }; _git_cl"
+	cls = "!_git_cls() { echo \"[git] Cloning repo '${1}'\"; git clone --jobs \"$(nproc)\" --recursive --depth 1 --shallow-submodules \"${@}\"; }; _git_cls"
 
-	co  = checkout
+	co  = "!_git_co() { echo \"[git] Checking out branch '${1}'\"; git checkout \"${1}\"; }; _git_co"
 	cob = checkout -b
-	com = checkout master
 
 	c   = commit
 	ca  = commit --all
@@ -33,10 +32,10 @@
 
 	f = fetch --all --prune
 
-	find = "!_git_find() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; git ls-tree -r --name-only \"${BRANCH}\" | grep -Ei \"${1}\"; }; _git_find"
+	find = "!_git_find() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git ls-tree -r --name-only \"${BRANCH}\" | grep -Ei \"${1}\"; }; _git_find"
 
 	# Fix upstream
-	fu = "!_git_fu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z "${BRANCH}" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git branch \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; _git_fu"
+	fu = "!_git_fu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git branch \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; _git_fu"
 
 	get-branch  = symbolic-ref --short HEAD
 	get-commit  = rev-parse HEAD
@@ -62,8 +61,7 @@
 
 	p = pull --prune
 
-	plm = "!_git_plm() { git f; git co master; git pp; git s; }; _git_plm"
-	plu = "!_git_plu() { git f; git co master; git up; git s; }; _git_plu"
+	plu = "!_git_plu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git f; git co \"${BRANCH}\"; git up; git s; }; _git_plu"
 
 	ps   = push
 	pso  = push           origin
@@ -71,7 +69,6 @@
 
 	# Requires GitHub CLI (https://hub.github.com/)
 	pr = !bash -c 'hub pull-request $0 $@'
-	# pr = "!_git_pr() { hub pull-request $0 $@; }; _git_pr"
 
 	prune = fetch --all --prune
 

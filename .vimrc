@@ -45,7 +45,9 @@ call LoadFile('filetype')
 
 if has('nvim')
 	call LoadFile('neovim')
-	call LoadFile('notify')
+	if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:uname_machine ==# 'x86_64')
+		call LoadFile('notify')
+	endif
 endif
 
 
@@ -64,6 +66,8 @@ if g:uname_kernel_name ==# 'Darwin' || (g:uname_kernel_name ==# 'Linux' && g:una
 	call LoadFile('coc-extensions')
 	call LoadFile('coc-notify')
 endif
+
+call LoadFile('shada-local')
 
 if g:uname_kernel_name ==# 'Darwin'
 	if g:uname_machine ==# 'arm64'
