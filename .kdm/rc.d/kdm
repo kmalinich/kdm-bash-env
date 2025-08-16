@@ -113,7 +113,7 @@ _kdm_time() {
 
 	# macOS date command is different when translating from seconds-since-epoch to date if the GNU utils aren't installed
 	DATE_CMD=(date)
-	[[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]] && DATE_CMD+=("--date=@${GIT_SEC}") || DATE_CMD+=(-j -r "${GIT_SEC}")
+	[[ -n "${MACOS_GNU}" || "$(uname)" == "Linux" ]] && DATE_CMD+=("--date=@${GIT_SEC}") || DATE_CMD+=(-j -r "${GIT_SEC}")
 	DATE_CMD+=('+%a %b %0d %r')
 
 	"${DATE_CMD[@]}"

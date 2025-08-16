@@ -1,7 +1,7 @@
 # Functions: macOS-only (regardless of GNU conversion)
 
 # Bounce if we're not on Darwin
-[[ "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
+[[ "$(uname)" != "Darwin" ]] && return 0
 
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"

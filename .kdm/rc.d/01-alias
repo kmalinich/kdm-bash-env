@@ -79,7 +79,7 @@ _alias_eza() {
 
 _alias_ls() {
 	# Return if GNU grep not installed and not on Linux
-	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
+	[[ -z "${MACOS_GNU}" && "$(uname)" != "Linux" ]] && return
 
 	# Return if eza is installed
 	hash eza && return
@@ -105,7 +105,7 @@ _alias_ls() {
 # shellcheck disable=SC2139
 _alias_grep() {
 	# Bounce if GNU grep not installed and not on Linux
-	[[ -z "${MACOS_GNU}" && "${UNAME_KERNEL_NAME}" != "Linux" ]] && return
+	[[ -z "${MACOS_GNU}" && "$(uname)" != "Linux" ]] && return
 
 	# grep config
 	#     in a terminal : always enable/use color
@@ -239,11 +239,23 @@ _alias_diff() {
 	# Ignore whitespace changes
 	# Ignore blank lines
 	_addAliasToFile kdiff 'diff --tabsize=2 --ignore-tab-expansion --ignore-trailing-space --ignore-space-change --ignore-blank-lines'
+	_addAliasToFile kdiff-sh '_kdiffShell'
 
 	# Output message if output function available and in a TTY
 	if hash output; then
 		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "diff aliases"
 	fi
+}
+
+_kdiffShell() {
+	diff \
+		--tabsize=2             \
+		--ignore-tab-expansion  \
+		--ignore-trailing-space \
+		--ignore-space-change   \
+		--ignore-blank-lines    \
+		--color=always          \
+		<(grep -vE '^\s*(#|$)' "${1}") <(grep -vE '^\s*(#|$)' "${2}")
 }
 
 
@@ -367,7 +379,7 @@ _alias_sudo() {
 
 	# If we're on macOS, add the macOS commands to the base array
 	# If we're on Linux, add the Linux commands to the base array
-	case "${UNAME_KERNEL_NAME}" in
+	case "$(uname)" in
 		Darwin) ARRAY_SUDO+=("${ARRAY_SUDO_MACOS[@]}") ;;
 		Linux)  ARRAY_SUDO+=("${ARRAY_SUDO_LINUX[@]}") ;;
 	esac
@@ -426,7 +438,7 @@ _aliasSetup() {
 	local ALIAS_CACHE_AGE ALIAS_CACHE_TIME
 
 	# Determine age of alias cache file
-	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "$(uname)" == "Linux" ]]; then
 		ALIAS_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_ALIAS}")
 	else
 		ALIAS_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_ALIAS}")

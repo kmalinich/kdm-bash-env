@@ -66,7 +66,7 @@ _networkSetup() {
 	local INITIAL_NETWORK_AGE INITIAL_NETWORK_TIME
 
 	# Determine age of SSH alias cache file
-	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "$(uname)" == "Linux" ]]; then
 		INITIAL_NETWORK_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_NETWORK}")
 	else
 		INITIAL_NETWORK_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_NETWORK}")

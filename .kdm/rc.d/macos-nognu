@@ -1,7 +1,7 @@
 # Aliases: macOS-only (without GNU conversion)
 
 # Bounce if on GNU-converted macOS or not on Darwin
-[[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" != "Darwin" ]] && return 0
+[[ -n "${MACOS_GNU}" || "$(uname)" != "Darwin" ]] && return 0
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 

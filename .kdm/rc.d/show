@@ -49,7 +49,7 @@ _show_bin() {
 
 	# Detect GNU/Linux ls or stock macOS ls to nicely format output
 	LS=('ls')
-	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "$(uname)" == "Linux" ]]; then
 		LS+=('--color=if-tty' '--group-directories-first' "--time-style=${LS_TIME_STYLE}" '--file-type' '--human-readable' '-l')
 	else
 		LS+=('-FhlG')

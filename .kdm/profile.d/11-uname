@@ -35,7 +35,7 @@ _unameSetup() {
 	local UNAME_CACHE_AGE UNAME_CACHE_TIME
 
 	# Determine age of uname cache file
-	if [[ -n "${MACOS_GNU}" || "${UNAME_KERNEL_NAME}" == "Linux" ]]; then
+	if [[ -n "${MACOS_GNU}" || "$(uname)" == "Linux" ]]; then
 		UNAME_CACHE_TIME=$(stat -c '%Y' "${BASH_ENV_FILE_CACHE_UNAME}")
 	else
 		UNAME_CACHE_TIME=$(stat -f '%m' "${BASH_ENV_FILE_CACHE_UNAME}")

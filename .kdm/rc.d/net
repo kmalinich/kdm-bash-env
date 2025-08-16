@@ -8,7 +8,7 @@ _net_info() {
 	if hash hostname; then
 		output kv "hostname   " "$(hostname)"
 		output kv "hostname -s" "$(hostname -s)"
-		[[ "${UNAME_KERNEL_NAME}" == "Linux" ]] && output kv "hostname -d" "$(hostname -d)"
+		[[ "$(uname)" == "Linux" ]] && output kv "hostname -d" "$(hostname -d)"
 		output kv "hostname -f" "$(hostname -f)"
 		echo
 	fi
