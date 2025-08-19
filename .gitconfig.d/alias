@@ -11,8 +11,8 @@
 
 	branchname = branch --show-current
 
-	cl  = "!_git_cl()  { echo \"[git] Cloning repo '${1}'\"; git clone --jobs \"$(nproc)\" --recursive                                \"${@}\"; }; _git_cl"
-	cls = "!_git_cls() { echo \"[git] Cloning repo '${1}'\"; git clone --jobs \"$(nproc)\" --recursive --depth 1 --shallow-submodules \"${@}\"; }; _git_cls"
+	cl  = clone --jobs 8 --recursive
+	cls = clone --jobs 8 --recursive --depth 1 --shallow-submodules
 
 	co  = "!_git_co() { echo \"[git] Checking out branch '${1}'\"; git checkout \"${1}\"; }; _git_co"
 	cob = checkout -b
