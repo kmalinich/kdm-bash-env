@@ -51,7 +51,6 @@ _kdm_pull() {
 	OLD_PWD="${PWD}"
 	cd "${HOME}" || return 1
 
-	git checkout -- "${HOME}/.config/coc/extensions/package.json"
 	_g_gu
 	~/.config/coc/extensions/install
 
