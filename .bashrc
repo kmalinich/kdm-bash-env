@@ -23,7 +23,7 @@ _validate_before_source() {
 
 	# Go!
 	# shellcheck disable=SC1090
-	[[ -s "${SOURCE}" ]] && . "${SOURCE}" || echo "Error : Failed to source '${SOURCE}'"
+	[[ -s "${SOURCE}" ]] && . "${SOURCE}" || echo "[.bashrc] Error : Failed to source '${SOURCE}'"
 }
 
 
