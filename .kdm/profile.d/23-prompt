@@ -9,24 +9,8 @@ trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
 # Always write lines to history file on each prompt
 # Generate / export PS1 prompt
 # https://unix.stackexchange.com/a/18443
+#
 # export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; history -n; history -w; history -c; history -r; _prompt_generate; _prompt_titlebar;"
-
-# If PROMPT_COMMAND is not an indexed array, declare it to be so
-declare -a PROMPT_COMMAND_ORIG
-
-if [[ "$(declare -p PROMPT_COMMAND)" =~ "declare -- PROMPT_COMMAND" ]]; then
-	# echo "Prompt is not indexed array"
-
-	while read -r PROMPT_COMMAND_LINE; do
-		# echo "PROMPT_COMMAND_LINE : '${PROMPT_COMMAND_LINE}'"
-		PROMPT_COMMAND_ORIG+=("${PROMPT_COMMAND_LINE}")
-	done < <(echo "${PROMPT_COMMAND}")
-
-	unset PROMPT_COMMAND
-	declare -a PROMPT_COMMAND
-fi
-
-PROMPT_COMMAND+=("${PROMPT_COMMAND_ORIG[@]}")
 
 PROMPT_COMMAND+=('_prompt_exitcode "${CMD_PRVS}" "${?}"')
 PROMPT_COMMAND+=('history -a')

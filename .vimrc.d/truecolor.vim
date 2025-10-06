@@ -1,9 +1,6 @@
 scriptencoding utf-8
 
 
-" Color scheme
-colorscheme brogrammer
-
 " True (24-bit) color support (requires supporting terminal emulator)
 let &t_8f = "\e[38;2;%lu;%lu;%lum"
 let &t_8b = "\e[48;2;%lu;%lu;%lum"

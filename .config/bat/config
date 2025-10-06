@@ -191,16 +191,18 @@
 
 --tabs 2
 
---theme="Monokai Extended Bright"
+--paging=auto
 
 --italic-text=always
+
+--theme="Monokai Extended Bright"
 
 --squeeze-blank
 --squeeze-limit 2
 
---style="changes,grid,snip"
+#--style="changes,grid,snip"
+--style="plain"
 
---paging=auto
 --set-terminal-title
 
 --map-syntax "**/.ssh/config.d/*.conf:SSH Config"

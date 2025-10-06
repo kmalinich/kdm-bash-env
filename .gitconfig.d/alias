@@ -14,7 +14,8 @@
 	cl  = clone --jobs 8 --recursive
 	cls = clone --jobs 8 --recursive --depth 1 --shallow-submodules
 
-	co  = "!_git_co() { echo \"[git] Checking out branch '${1}'\"; git checkout \"${1}\"; }; _git_co"
+	#co  = "!_git_co() { echo \"[git] Checking out branch '${1}'\"; git checkout \"${1}\"; }; _git_co"
+	co  = checkout
 	cob = checkout -b
 
 	c   = commit
@@ -59,7 +60,9 @@
 	browse = "!_git_browse() { hash gh > /dev/null 2>&1 && gh browse || echo 'Github CLI missing, go to https://github.com/cli/cli'; }; _git_browse;"
 	o      = browse
 
-	p = pull --prune
+	p   = pull --prune
+	prb = pull --prune --rebase
+
 
 	plu = "!_git_plu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git f; git co \"${BRANCH}\"; git up; git s; }; _git_plu"
 
