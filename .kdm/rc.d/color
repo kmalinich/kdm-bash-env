@@ -57,6 +57,10 @@ rgb2hex() {
 	hex2color "#${HEX_STRING}"
 }
 
+
+alias dec2color='rgb2hex'
+
+
 # Color man pages
 # man() {
 # 	LESS_TERMCAP_mb=$'\e[38;2;255;153;50m'           \

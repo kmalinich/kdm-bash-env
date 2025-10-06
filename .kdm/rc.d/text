@@ -90,7 +90,10 @@ output() {
 
 	# For keyval options, output special format and immediately return
 	if [[ "${KEYVAL_COLOR}" != "null" ]]; then
-		printf "${C_BLU}%s${C_WHT_BRT} : ${C_GRY}'${KEYVAL_COLOR}%s${C_GRY}'${C_RST}\\n" "${2}" "${3}"
+		QUOT="${C_GRY}'"
+		[[ "${OUTPUT_KEYVAL_NO_QUOT}" == "true" ]] && QUOT=""
+
+		printf "${C_BLU}%s${C_WHT_BRT} : ${QUOT}${KEYVAL_COLOR}%s${QUOT}${C_RST}\\n" "${2}" "${3}"
 		return
 	fi
 

@@ -1,6 +1,9 @@
 scriptencoding utf-8
 
 
+" Color scheme
+colorscheme brogrammer
+
 " Automatically change into the directory the current file is in
 " set autochdir
 
