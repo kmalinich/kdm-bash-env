@@ -184,7 +184,6 @@ ARRAY_PATH+=(
 '/System/Library/CoreServices'
 '/Library/Apple/usr/libexec'
 '/Library/Apple/usr/bin'
-'/usr/libexec'
 '/usr/bin/site_perl'
 '/usr/bin/vendor_perl'
 '/usr/bin/core_perl'
@@ -198,6 +197,7 @@ ARRAY_PATH+=(
 '/usr/sbin'
 '/sbin'
 '/opt/cuda/bin'
+'/usr/libexec'
 )
 
 
