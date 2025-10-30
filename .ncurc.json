@@ -4,6 +4,6 @@
 	"upgrade": true,
 
 	"reject": [
-		"sort-json"
+		"chalk"
 	]
 }
