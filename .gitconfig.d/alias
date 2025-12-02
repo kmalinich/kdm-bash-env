@@ -33,10 +33,10 @@
 
 	f = fetch --all --prune
 
-	find = "!_git_find() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git ls-tree -r --name-only \"${BRANCH}\" | grep -Ei \"${1}\"; }; _git_find"
+	find = "!_git_find() { BRANCH=\"$(git branchname)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git ls-tree -r --name-only \"${BRANCH}\" | grep -Ei \"${1}\"; }; _git_find"
 
 	# Fix upstream
-	fu = "!_git_fu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git branch \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; _git_fu"
+	fu = "!_git_fu() { BRANCH=\"$(git branchname)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git branch \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; _git_fu"
 
 	get-branch  = symbolic-ref --short HEAD
 	get-commit  = rev-parse HEAD
@@ -64,7 +64,9 @@
 	prb = pull --prune --rebase
 
 
-	plu = "!_git_plu() { BRANCH=\"$(git get-branch 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git f; git co \"${BRANCH}\"; git up; git s; }; _git_plu"
+	plu = "!_git_plu() { BRANCH=\"$(git branchname)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git f; git co \"${BRANCH}\"; git up; git s; }; _git_plu"
+
+	psf = "!_git_psf() { BRANCH=\"$(git branchname)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git push origin \"${BRANCH}\" --force-with-lease; }; _git_psf"
 
 	ps   = push
 	pso  = push           origin
