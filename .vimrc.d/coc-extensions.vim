@@ -11,7 +11,6 @@ let g:coc_global_extensions = [
 	\ 'coc-eslint',
 	\ 'coc-git',
 	\ 'coc-html',
-	\ 'coc-java',
 	\ 'coc-json',
 	\ 'coc-markdownlint',
 	\ 'coc-omnisharp',
@@ -21,13 +20,14 @@ let g:coc_global_extensions = [
 	\ 'coc-stylelintplus',
 	\ 'coc-svg',
 	\ 'coc-tsserver',
-	\ 'coc-xml',
 	\ 'coc-yaml'
 \ ]
 
-" \ 'coc-highlight',
 " \ 'coc-clangd',
+" \ 'coc-highlight',
+" \ 'coc-java',
 " \ 'coc-powershell',
+" \ 'coc-xml',
 
 
 " vim: set filetype=vim ts=2 sw=2 tw=0 noet :
