@@ -1,3 +1,5 @@
+# shellcheck disable=SC2059
+
 # Functions: PS1 prompt
 
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
@@ -83,6 +85,9 @@ _prompt_generate() {
 	# Render full prompt PS1
 	export PS1="${PROMPT_PREFIX}${PWD_FINAL_COLOR} \\[${C_ENV}\\]\\$\\[${C_RST}\\] "
 
+	# Update title bar
+	_prompt_titlebar
+
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_generate()
 
@@ -96,15 +101,15 @@ _prompt_exitcode() {
 	# Return if we're not in a terminal
 	[[ -n "${BASH_INTERACTIVE}" ]] || return
 
-	# Bounce if no arguments passed
-	[[ -z "${1}" || -z "${2}" ]] && return
+	# Bounce if no argument passed
+	[[ -z "${1}" ]] && return
 
 	# Bounce if exit code is one of:
 	#   0 : command OK
 	# 127 : BASH command not found
 	# 253 : kdm-bash-env command noop
 	# 254 : kdm-bash-env command noop
-	case "${2}" in
+	case "${1}" in
 		0)   ;&
 		127) ;&
 		130) ;& # (128+SIGINT)
@@ -117,7 +122,7 @@ _prompt_exitcode() {
 	# _prompt_* : kdm-bash-env prompt command
 	#
 	# cd, grep, history, or sourcing a file
-	ARRAY_CMD=("${1}")
+	ARRAY_CMD=("${CMD_PRVS}")
 	case "${ARRAY_CMD[0]}" in
 		_g_*)         ;&
 		_prompt_*)    ;&
@@ -142,7 +147,7 @@ _prompt_exitcode() {
 	RED="${C_RED_BRT_BLD}${STR}"
 	YLW="${C_YLW}${STR}"
 
-	printf "${GRY} ${RED} ${GRY} ${YLW}\\n" "${CMD}" "FAILED" "- exit code" "${2}"
+	printf "${GRY} ${RED} ${GRY} ${YLW}\\n" "${CMD}" "FAILED" "- exit code" "${CMD_PRVS}"
 
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_exitcode()

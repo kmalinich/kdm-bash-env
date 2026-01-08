@@ -1,21 +1,23 @@
 # shellcheck disable=SC2016
 
-# Output failed exit codes if cmd exits non-zero
-# Update terminal titlebar
+# _prompt_exitcode() outputs failed exit codes if cmd exits non-zero
 # Trap current and previous commands to access them
-trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
 
 # Check exitcode of previous command
 # Always write lines to history file on each prompt
 # Generate / export PS1 prompt
 # https://unix.stackexchange.com/a/18443
-#
-# export PROMPT_COMMAND="_prompt_exitcode \"\${CMD_PRVS}\" \"\${?}\"; history -n; history -w; history -c; history -r; _prompt_generate; _prompt_titlebar;"
 
-PROMPT_COMMAND+=('_prompt_exitcode "${CMD_PRVS}" "${?}"')
-PROMPT_COMMAND+=('history -a')
-PROMPT_COMMAND+=('_prompt_generate')
-PROMPT_COMMAND+=('_prompt_titlebar')
+if [[ "${TERM_PROGRAM}" == "iterm2" ]]; then
+	precmd_functions+=('history -a')
+	precmd_functions+=('_prompt_generate')
+else
+	trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
+
+	PROMPT_COMMAND+=('_prompt_exitcode "${?}"')
+	PROMPT_COMMAND+=('history -a')
+	PROMPT_COMMAND+=('_prompt_generate')
+fi
 
 
 # Trim \w in PS1 to 2 directories (Bash 4+)
