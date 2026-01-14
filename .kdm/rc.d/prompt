@@ -147,7 +147,7 @@ _prompt_exitcode() {
 	RED="${C_RED_BRT_BLD}${STR}"
 	YLW="${C_YLW}${STR}"
 
-	printf "${GRY} ${RED} ${GRY} ${YLW}\\n" "${CMD}" "FAILED" "- exit code" "${CMD_PRVS}"
+	printf "${GRY} ${RED} ${GRY} ${YLW}\\n" "${CMD}" "FAILED" "- exit code" "${1}"
 
 	# _prompt_log "${FUNCNAME[0]}" "END"
 } # _prompt_exitcode()
