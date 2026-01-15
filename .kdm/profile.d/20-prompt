@@ -8,7 +8,15 @@
 # Generate / export PS1 prompt
 # https://unix.stackexchange.com/a/18443
 
-if [[ "${TERM_PROGRAM}" == "iterm2" ]]; then
+_prompt_command_capture() {
+	export CMD_CRNT="${CMD_PRVS}"
+	export CMD_PRVS="${1}"
+}
+
+if [[ "${TERM_PROGRAM}" == "iTerm.app" ]]; then
+	preexec_functions+=('_prompt_command_capture')
+
+	precmd_functions+=('_prompt_exitcode "${__bp_last_ret_value}"')
 	precmd_functions+=('history -a')
 	precmd_functions+=('_prompt_generate')
 else
