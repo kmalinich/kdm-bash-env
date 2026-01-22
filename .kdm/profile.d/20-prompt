@@ -13,19 +13,18 @@ _prompt_command_capture() {
 	export CMD_PRVS="${1}"
 }
 
-if [[ "${TERM_PROGRAM}" == "iTerm.app" ]]; then
-	preexec_functions+=('_prompt_command_capture')
 
-	precmd_functions+=('_prompt_exitcode "${__bp_last_ret_value}"')
-	precmd_functions+=('history -a')
-	precmd_functions+=('_prompt_generate')
-else
-	trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
+preexec_functions+=('_prompt_command_capture')
 
-	PROMPT_COMMAND+=('_prompt_exitcode "${?}"')
-	PROMPT_COMMAND+=('history -a')
-	PROMPT_COMMAND+=('_prompt_generate')
-fi
+precmd_functions+=('_prompt_exitcode "${__bp_last_ret_value}"')
+precmd_functions+=('history -a')
+precmd_functions+=('_prompt_generate')
+
+trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
+
+PROMPT_COMMAND+=('_prompt_exitcode "${?}"')
+PROMPT_COMMAND+=('history -a')
+PROMPT_COMMAND+=('_prompt_generate')
 
 
 # Trim \w in PS1 to 2 directories (Bash 4+)
