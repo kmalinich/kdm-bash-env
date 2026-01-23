@@ -8,19 +8,8 @@
 # Generate / export PS1 prompt
 # https://unix.stackexchange.com/a/18443
 
-_prompt_command_capture() {
-	export CMD_CRNT="${CMD_PRVS}"
-	export CMD_PRVS="${1}"
-}
 
-
-preexec_functions+=('_prompt_command_capture')
-
-precmd_functions+=('_prompt_exitcode "${__bp_last_ret_value}"')
-precmd_functions+=('history -a')
-precmd_functions+=('_prompt_generate')
-
-trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}"' DEBUG
+trap 'CMD_PRVS="${CMD_CRNT}"; CMD_CRNT="${BASH_COMMAND}";' DEBUG
 
 PROMPT_COMMAND+=('_prompt_exitcode "${?}"')
 PROMPT_COMMAND+=('history -a')
