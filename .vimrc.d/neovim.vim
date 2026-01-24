@@ -15,11 +15,6 @@ set list
 " Ctrl-L to enable/disable whitespace indicators
 map <C-l> :set list!<CR>
 
-
-" Neovim Python config
-let g:python_host_prog  = 'python2'
-let g:python3_host_prog = 'python3'
-
 set pyxversion=3
 
 " Fix for pastetoggle bug

@@ -8,13 +8,19 @@ let g:polyglot_disabled = ['csv']
 " C
 au Filetype c,cpp let b:comment_leader = '/* '
 au Filetype c,cpp set autoindent
-au Filetype c,cpp set expandtab
 au Filetype c,cpp set softtabstop=2
 au Filetype c,cpp set noexpandtab
 
 " CSS
 au Filetype css let b:comment_leader = '/* '
 au Filetype css set noexpandtab
+
+" diff/patch
+augroup ft_crontab
+	au BufRead *.diff    set filetype=diff
+	au BufRead *.mypatch set filetype=diff
+	au BufRead *.patch   set filetype=diff
+augroup END
 
 " HTML
 au Filetype html let b:comment_leader = '<!-- '
@@ -41,9 +47,9 @@ au Filetype python set softtabstop=4
 au Filetype python set tabstop=4
 au Filetype python call DisableSpaceIndentHighlight()
 
-" sh/bash
-au Filetype sh let b:comment_leader = '#'
-au Filetype sh set noexpandtab
+" bash/sh
+au Filetype bash,sh let b:comment_leader = '#'
+au Filetype bash,sh set noexpandtab
 
 
 " Crontab
