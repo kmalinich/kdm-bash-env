@@ -14,7 +14,7 @@ altscreen on
 shell -$SHELL
 
 # Set terminal type/TERM variable
-# term screen-256color
+term screen-256color
 
 # Enable monitoring of background screens
 monitor on
