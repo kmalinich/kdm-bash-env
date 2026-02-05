@@ -51,6 +51,11 @@ au Filetype python call DisableSpaceIndentHighlight()
 au Filetype bash,sh let b:comment_leader = '#'
 au Filetype bash,sh set noexpandtab
 
+" GNU screen rc
+augroup ft_screen
+	au BufRead *.screenrc set filetype=screen
+augroup END
+
 
 " Crontab
 au Filetype crontab let b:comment_leader = '#'
