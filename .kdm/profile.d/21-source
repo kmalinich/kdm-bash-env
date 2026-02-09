@@ -1,16 +1,11 @@
 # shellcheck disable=SC1090
 
-#. ~/.bash-env-lib
-#_bashEnvLog "start :: SJ: '$(_bashEnvSourceJourney)'"
-
 # Source the files in ARRAY_SOURCE if they exist
 for ENTRY in "${ARRAY_SOURCE[@]}"; do
 	unset SOURCE_EXIT
 	unset SOURCE_FILE
 
 	[[ ! -s "${ENTRY}" ]] && continue
-
-	#_bashEnvLog "ENTRY: '${ENTRY/\/home\/kdm\//}'"
 
 	. "${ENTRY}"; SOURCE_EXIT="${?}"
 
@@ -32,8 +27,6 @@ for ENTRY in $(find -L "${BASH_ENV_DIR_EXTRA}" -maxdepth 1 -type f -executable |
 
 	unset SOURCE_EXIT
 	unset SOURCE_FILE
-
-	#_bashEnvLog "ENTRY: '${ENTRY/\/home\/kdm\//}'"
 
 	. "${ENTRY}"; SOURCE_EXIT="${?}"
 
