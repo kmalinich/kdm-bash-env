@@ -10,8 +10,6 @@ DIR_KDM="${HOME}/.kdm"
 FILE_RC="${DIR_KDM}/rc"
 FILE_PF="${DIR_KDM}/profile"
 
-#. ~/.bash-env-lib
-#_bashEnvLog "start :: SJ: '$(_bashEnvSourceJourney)'"
 
 # Test for interactivity
 [[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"
@@ -24,8 +22,6 @@ _validate_before_source() {
 
 	# Determine which file to source
 	[[ "${BASH_INTERACTIVE}" == "true" ]] && SOURCE="${FILE_PF}" || SOURCE="${FILE_RC}"
-
-	#_bashEnvLog "SOURCE: '${SOURCE}'"
 
 	# shellcheck disable=SC1090
 	. "${SOURCE}"

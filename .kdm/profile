@@ -10,8 +10,6 @@
 # Disable echo output
 #[[ "${BASH_INTERACTIVE}" ]] && stty -echo
 
-#. ~/.bash-env-lib
-#_bashEnvLog "start :: SJ: '$(_bashEnvSourceJourney)'"
 
 # kdm bash-env variables
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
@@ -90,7 +88,6 @@ _initialPathSetup
 
 # Source data from ~/.kdm/profile.d
 for ENTRY in $(find "${BASH_ENV_DIR_PROFILE_D}" -maxdepth 1 -name '[0-9][0-9]-*' -type f -executable | sort); do
-	#_bashEnvLog "ENTRY: '${ENTRY/\/home\/kdm\//}'"
 	. "${ENTRY}"
 
 	# For performance debugging
