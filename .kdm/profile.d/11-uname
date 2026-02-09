@@ -45,7 +45,7 @@ _unameSetup() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "uname cache age" "${UNAME_CACHE_AGE}"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "uname cache age" "${UNAME_CACHE_AGE}"
 	fi
 
 	# Regenerate uname cache file if older than 1 day

@@ -73,7 +73,7 @@ _alias_eza() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "eza aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "eza aliases"
 	fi
 }
 
@@ -98,7 +98,7 @@ _alias_ls() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "ls aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "ls aliases"
 	fi
 }
 
@@ -148,7 +148,7 @@ _alias_grep() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "grep aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "grep aliases"
 	fi
 }
 
@@ -178,7 +178,7 @@ _alias_nmap() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "nmap aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "nmap aliases"
 	fi
 }
 
@@ -218,7 +218,7 @@ _alias_ping() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Ping aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Ping aliases"
 	fi
 }
 
@@ -243,7 +243,7 @@ _alias_diff() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "diff aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "diff aliases"
 	fi
 }
 
@@ -273,7 +273,7 @@ _alias_dirs() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Dir aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Dir aliases"
 	fi
 }
 
@@ -313,7 +313,7 @@ _alias_misc() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Misc aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "Misc aliases"
 	fi
 }
 
@@ -351,7 +351,7 @@ _alias_pygmentize() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "pygmentize aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "pygmentize aliases"
 	fi
 }
 
@@ -368,7 +368,7 @@ _alias_ssh() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "SSH aliases"
 	fi
 }
 
@@ -393,7 +393,7 @@ _alias_sudo() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "sudo aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "sudo aliases"
 	fi
 }
 
@@ -414,7 +414,7 @@ _aliasGenerate() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "All aliases"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Generated" "All aliases"
 	fi
 
 	# In-place unique sort
@@ -448,7 +448,7 @@ _aliasSetup() {
 
 	# Output message if output function available and in a TTY
 	if hash output; then
-		[[ -n "${BASH_INTERACTIVE}" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Alias cache age" "${ALIAS_CACHE_AGE}"
+		[[ "${BASH_INTERACTIVE}" == "true" && "${SOURCE_VERBOSE}" != "true" ]] && output kvt "Alias cache age" "${ALIAS_CACHE_AGE}"
 	fi
 
 	# Regenerate alias cache file if older than 1 day

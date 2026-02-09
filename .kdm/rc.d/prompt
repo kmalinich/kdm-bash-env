@@ -71,7 +71,7 @@ _prompt_generate() {
 	# _prompt_log "${FUNCNAME[0]}" "START"
 
 	# Return if we're not in a terminal
-	[[ -n "${BASH_INTERACTIVE}" ]] || return
+	[[ "${BASH_INTERACTIVE}" == "true" ]] || return
 
 	# Kick _prompt_pwd again with no output to export environment variables
 	_prompt_pwd > /dev/null 2>&1
@@ -99,7 +99,7 @@ _prompt_exitcode() {
 	local ARRAY_CMD CMD ENV GRY RED STR YLW
 
 	# Return if we're not in a terminal
-	[[ -n "${BASH_INTERACTIVE}" ]] || return
+	[[ "${BASH_INTERACTIVE}" == "true" ]] || return
 
 	# Bounce if no argument passed
 	[[ -z "${1}" ]] && return
@@ -309,7 +309,7 @@ _prompt_titlebar() {
 	local TITLEBAR_SSH
 
 	# Return if we're not in a terminal
-	[[ -n "${BASH_INTERACTIVE}" ]] || return
+	[[ "${BASH_INTERACTIVE}" == "true" ]] || return
 
 	# Add '[SSH]' to titlebar if in SSH session
 	[[ -n "${SSH_CONNECTION}" ]] && TITLEBAR_SSH="[SSH] "

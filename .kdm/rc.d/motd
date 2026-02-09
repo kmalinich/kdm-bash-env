@@ -19,7 +19,7 @@ _show_motd() {
 	local RAM RAMB RAMC RAMG
 
 	# Return if we're not in a terminal
-	[[ -n "${BASH_INTERACTIVE}" ]] || return
+	[[ "${BASH_INTERACTIVE}" == "true" ]] || return
 
 	# Color shortcuts
 	BAR="${C_BLK_BLD}|${C_RST}"
