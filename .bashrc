@@ -1,6 +1,7 @@
 # kdm bash-env
 # .bashrc (wrapper)
 
+
 # Uncomment for debug mode
 # set -x
 
@@ -9,6 +10,9 @@ DIR_KDM="${HOME}/.kdm"
 FILE_RC="${DIR_KDM}/rc"
 FILE_PF="${DIR_KDM}/profile"
 
+. ~/.bash-env-lib
+_bashEnvLog "start :: SJ: '$(_bashEnvSourceJourney)'"
+
 # Test for interactivity
 [[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"
 
@@ -16,22 +20,19 @@ FILE_PF="${DIR_KDM}/profile"
 # Workaround for non-login shells that do not source .bash_profile
 _validate_before_source() {
 	# Return if we're not in a terminal
-	[[ "${BASH_INTERACTIVE}" ]] || return
+	[[ "${BASH_INTERACTIVE}" == "true" ]] || return
 
 	# Determine which file to source
 	[[ "${BASH_INTERACTIVE}" == "true" ]] && SOURCE="${FILE_PF}" || SOURCE="${FILE_RC}"
 
-	# Go!
+	_bashEnvLog "SOURCE: '${SOURCE}'"
+
 	# shellcheck disable=SC1090
-	[[ -s "${SOURCE}" ]] && . "${SOURCE}" || echo "[.bashrc] Error : Failed to source '${SOURCE}'"
+	. "${SOURCE}"
 }
 
 
 _validate_before_source
 
 
-# vim: set filetype=sh ts=2 sw=2 tw=0 noet :
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# vim: set filetype=bash ts=2 sw=2 tw=0 noet :

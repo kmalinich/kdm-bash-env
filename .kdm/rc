@@ -7,19 +7,24 @@
 # Test for interactivity
 [[ "${-}" == *"i"* ]] && export BASH_INTERACTIVE="true"
 
+. ~/.bash-env-lib
+_bashEnvLog "start :: SJ: '$(_bashEnvSourceJourney)'"
 
 # Source any possible global bashrc(s) under /etc
 ARRAY_SOURCE_GLOBAL=(bash.bashrc bashrc)
-for FILE in "${ARRAY_SOURCE_GLOBAL[@]}"; do
-	FILE="/etc/${FILE}"
-	[[ -f "${FILE}" ]] && . "${FILE}"
-done; unset FILE
+for ENTRY in "${ARRAY_SOURCE_GLOBAL[@]}"; do
+	ENTRY="/etc/${ENTRY}"
+	[[ -f "${ENTRY}" ]] || continue
+	_bashEnvLog "ENTRY: '${ENTRY/\/home\/kdm\//}'"
+	. "${ENTRY}"
+done; unset ENTRY
 
 # Build array of files under ~/.kdm/rc.d and source them
 mapfile -t ARRAY_SOURCE_RC_D < <(find "${BASH_ENV_DIR_RC_D}" -maxdepth 1 -executable -type f 2> /dev/null | sort)
-for FILE in "${ARRAY_SOURCE_RC_D[@]}"; do
-	. "${FILE}"
-done; unset FILE
+for ENTRY in "${ARRAY_SOURCE_RC_D[@]}"; do
+	_bashEnvLog "ENTRY: '${ENTRY/\/home\/kdm\//}'"
+	. "${ENTRY}"
+done; unset ENTRY
 
 
 # vim: set filetype=sh ts=2 sw=2 tw=0 noet :

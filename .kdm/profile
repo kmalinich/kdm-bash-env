@@ -10,6 +10,9 @@
 # Disable echo output
 #[[ "${BASH_INTERACTIVE}" ]] && stty -echo
 
+. ~/.bash-env-lib
+_bashEnvLog "start :: SJ: '$(_bashEnvSourceJourney)'"
+
 # kdm bash-env variables
 export BASH_ENV_DIR_KDM="${HOME}/.kdm"
 export BASH_ENV_DIR_PROFILE_D="${BASH_ENV_DIR_KDM}/profile.d"
@@ -86,15 +89,16 @@ _initialPathSetup
 # [[ "${BASH_INTERACTIVE}" && -t 0 ]] && echo -en "\\nLoading...\\r"
 
 # Source data from ~/.kdm/profile.d
-for FILE in $(find "${BASH_ENV_DIR_PROFILE_D}" -maxdepth 1 -name '[0-9][0-9]-*' -type f -executable | sort); do
-	. "${FILE}"
+for ENTRY in $(find "${BASH_ENV_DIR_PROFILE_D}" -maxdepth 1 -name '[0-9][0-9]-*' -type f -executable | sort); do
+	_bashEnvLog "ENTRY: '${ENTRY/\/home\/kdm\//}'"
+	. "${ENTRY}"
 
 	# For performance debugging
-	# echo -n "${FILE},"
+	# echo -n "${ENTRY},"
 	# export TIMEFORMAT=$'%3R'
-	# time . "${FILE}"
+	# time . "${ENTRY}"
 	# export TIMEFORMAT=$'%3R'
-done; unset FILE
+done; unset ENTRY
 
 #if [[ "${BASH_INTERACTIVE}" ]]; then
 #	# _show_motd
