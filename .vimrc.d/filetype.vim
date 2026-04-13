@@ -149,6 +149,17 @@ augroup ft_sls
 	au BufRead *.sls call matchdelete(w:m3)
 augroup END
 
+" SQL
+augroup ft_sql
+	au BufRead *.sql let b:comment_leader = '--'
+	au BufRead *.sql set filetype=sql
+	au BufRead *.sql call matchdelete(w:m3)
+
+	au BufRead *.sqlplus let b:comment_leader = '--'
+	au BufRead *.sqlplus set filetype=sql
+	au BufRead *.sqlplus call matchdelete(w:m3)
+augroup END
+
 " systemd unit files
 au Filetype systemd let b:comment_leader = '#'
 augroup ft_systemd
