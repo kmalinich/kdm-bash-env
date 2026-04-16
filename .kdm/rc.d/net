@@ -177,6 +177,7 @@ _net_webserver() {
 			WEBSERVER_PID="$(pgrep -U "${UID}" -f 'ComplexHTTPServer' 2> /dev/null)"
 
 			output green "Webserver started (PID ${WEBSERVER_PID}) on port ${WEBSERVER_PORT}, serving directory '${PWD}'"
+			open "http://localhost:${WEBSERVER_PORT}/"
 			;;
 
 		stop)

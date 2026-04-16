@@ -24,8 +24,12 @@
 
 	cp = "!_git_cp() { git commit --all \"--message=${1-Update}\"; }; _git_cp"
 
-	d  = diff --color=auto --color-moved=zebra --color-moved-ws=ignore-all-space --ws-error-highlight=all --ignore-blank-lines --ignore-space-change
-	dw = diff --color=auto --color-moved=zebra --color-moved-ws=ignore-all-space --ws-error-highlight=all --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol --ignore-space-at-eol
+	diff = diff --color=auto --color-moved=zebra --color-moved-ws=ignore-all-space --ws-error-highlight=all --ignore-blank-lines --ignore-space-change
+	d    = diff
+
+	diff-ws = diff --color=auto --color-moved=zebra --color-moved-ws=ignore-all-space --ws-error-highlight=all --ignore-blank-lines --ignore-all-space --ignore-cr-at-eol --ignore-space-at-eol
+	dw      = diff-ws
+
 	ds = describe
 
 	# Delete any branches that have been merged into the current branch
