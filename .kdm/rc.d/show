@@ -3,6 +3,26 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
+# Check if an executable exists, if so, open in $EDITOR
+_edit_bin() {
+	# Declare vars as local
+	local FILE_PATH
+
+	if ! hash "${1}" && ! type "${1}" > /dev/null 2>&1; then
+		output error "Could not find '${1}' in defined PATH"
+		return 1
+	fi
+
+	# Get full file path, type, and MIME encoding/type
+	! FILE_PATH="$("${WHICHPATH}" --skip-alias --skip-functions "${1}" 2> /dev/null)" && FILE_PATH="$("${WHICHPATH}" "${1}" 2> /dev/null)"
+
+	[[ -z "${FILE_PATH}" ]] && return 0
+
+	_show_bin "${1}"
+
+	"${EDITOR}" "${FILE_PATH}"
+} # _edit_bin()
+
 # Check if an executable exists, if so, show info about it
 _show_bin() {
 	# Declare vars as local
@@ -58,7 +78,8 @@ _show_bin() {
 	"${LS[@]}" "${FILE_PATH}" 2> /dev/null
 
 	return 0
-}
+} # _show_bin()
+
 
 # Show a clock
 _show_clock() {
@@ -89,7 +110,7 @@ _show_clock() {
 		printf "${PF_FMT}" "[${SECONDS}] $(date "${DATE_FMT}")"
 		sleep 0.9
 	done
-}
+} # _show_clock()
 
 # Show full path for SCPing
 _show_scp_path() {
@@ -133,7 +154,7 @@ _show_scp_path() {
 	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOSTNAME}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\\n"
 	printf "${C_CYN}FILE${C_RST}=${C_YLW}\"\"; ${C_RST}scp ${C_PRP}-r ${C_YLW}\"${C_PRP}\${FILE}${C_YLW}\"${C_RST} ${C_ENV}${USER}@${HOST_IP}${C_RST}:${C_BLU}${SCP_PATH}/${C_RST}\\n"
 	echo
-}
+} # _show_scp_path()
 
 # Show most frequently executed commands
 _show_top_cmds() {
@@ -172,12 +193,12 @@ _show_top_cmds() {
 	fi
 
 	return 0
-}
+} # _show_top_cmds()
 
 
 # Function aliases
+alias edit-bin='     _edit_bin'
 alias show-bin='     _show_bin'
-alias showbin='      _show_bin'
 alias show-clock='   _show_clock'
 alias show-scp-path='_show_scp_path'
 alias show-top-cmds='_show_top_cmds'
