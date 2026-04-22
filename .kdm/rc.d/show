@@ -18,9 +18,9 @@ _edit_bin() {
 
 	[[ -z "${FILE_PATH}" ]] && return 0
 
-	_show_bin "${1}"
-
 	"${EDITOR}" "${FILE_PATH}"
+
+	_show_bin "${1}"
 } # _edit_bin()
 
 # Check if an executable exists, if so, show info about it

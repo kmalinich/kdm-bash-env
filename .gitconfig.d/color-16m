@@ -20,13 +20,13 @@
 	whitespace = "#f22222"
 
 [color "status"]
-	branch    = "#ffffff italic"
-	changed   = "#e74c3c italic"
-	header    = "#858585"
+	branch    = "#de5abd"
+	changed   = "#ff4c3c"
+	header    = "#707070 italic"
 	nobranch  = "#f22222 #ffffff blink"
 	unmerged  = "#f22222"
-	untracked = "#6c71c4 italic"
-	updated   = "#f1c40f italic"
+	untracked = "#6c71c4"
+	updated   = "#f1c40f"
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :

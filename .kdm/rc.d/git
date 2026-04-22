@@ -1,13 +1,143 @@
 # Functions: Git
 
+# shellcheck disable=SC2120
+
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
+
+
+# Auto-sizing function output header
+_g_header() {
+	local COLUMN_COUNT
+
+	local HEADER_EQ1_LENGTH HEADER_EQ1_STRING
+	local HEADER_EQ2_LENGTH HEADER_EQ2_STRING
+	local HEADER_TXT_LENGTH HEADER_TXT_ODD
+
+	# Init variables
+	HEADER_TXT_ODD="FALSE"
+
+	# Get length of input string
+	HEADER_TXT_LENGTH="${#1}"
+
+	# Subtract the modulo to even it out
+	if [[ "$((HEADER_TXT_LENGTH%2))" != "0" ]]; then
+		HEADER_TXT_ODD="TRUE"
+		((HEADER_TXT_LENGTH--))
+	fi
+
+	# Get 1/2 the number of columns
+	COLUMN_COUNT="$(echo "scale=0; $(tput cols)/2" | bc)"
+
+	# Ceil 1/2 column count value at 80
+	[[ "${COLUMN_COUNT}" -gt "80" ]] && COLUMN_COUNT="80"
+
+	# Floor 1/2 column count value at 57
+	[[ "${COLUMN_COUNT}" -lt "57" ]] && COLUMN_COUNT="57"
+
+	# Number of = characters for smaller portion
+	HEADER_EQ1_LENGTH="5"
+
+	# Calculate number of = characters for main portion
+	HEADER_EQ2_LENGTH="$((COLUMN_COUNT-HEADER_TXT_LENGTH))"
+
+	HEADER_EQ2_LENGTH="$((HEADER_EQ2_LENGTH-9))"
+
+	# Subtract 1 if input text was odd-numbered, to even it out
+	[[ "${HEADER_TXT_ODD}" == "TRUE" ]] && ((HEADER_EQ2_LENGTH--))
+
+	# Create ----- strings
+	HEADER_EQ1_STRING="$(printf '%*s' ${HEADER_EQ1_LENGTH} '' | sed 's/\ /\-/g')"
+	HEADER_EQ2_STRING="$(printf '%*s' ${HEADER_EQ2_LENGTH} '' | sed 's/\ /\-/g')"
+
+	# Add = endstops
+	HEADER_EQ1_STRING="${HEADER_EQ1_STRING}="
+	HEADER_EQ2_STRING="=${HEADER_EQ2_STRING}"
+
+	# shellcheck disable=SC1117
+	printf "${C_ORN}%s${C_RST} ${C_BLU}%s${C_RST} ${C_ORN}%s${C_RST}\n" "${HEADER_EQ1_STRING}" "${1}" "${HEADER_EQ2_STRING}"
+} # _g_header()
 
 
 # Show git process PIDs owned by this user
 _g_pids() {
 	pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)'
-}
+} # _g_pids()
 
+# Git command wrapper for formatted output
+_g_wrapper() {
+	# Declare vars as local
+	local CMD_EXIT
+	local GIT_CMD GIT_CMD_FULL
+	local GIT_CMD_ARGS GIT_CMD_ARGS_COUNT
+
+	[[ -z "${1}" ]] && output error "No command provided to _g_wrapper" && return 254
+	GIT_CMD="${1}"
+
+	GIT_CMD_ARGS_COUNT="${#@}"
+
+	GIT_CMD_ARGS=()
+	for ((i = 2; i <= GIT_CMD_ARGS_COUNT; i++)); do
+		GIT_CMD_ARGS+=("${!i}")
+	done
+
+	GIT_CMD_FULL="${GIT_CMD}"
+	case "${GIT_CMD}" in
+		cam) GIT_CMD_FULL='commit' ;;
+		up)  GIT_CMD_FULL='pull'   ;;
+
+		smup) ;&
+		smi)  GIT_CMD_FULL='submodule' ;;
+	esac
+
+	#d
+	#dw
+	#diff*)
+	#grep
+	#l
+	#ll*
+	#log
+	#show
+
+	# Generate temp file for output (until I learn how to do it without that)
+	FILE_TEMP="$(mktemp -t "kdm-bash-env.${FUNCNAME[0]}.XXXXXXXXXXXXXX")"
+
+	git -c 'color.ui=always' -c "color.${GIT_CMD}=always" -c "color.${GIT_CMD_FULL}=always" "${GIT_CMD}" "${GIT_CMD_ARGS[@]}" > "${FILE_TEMP}" 2>&1
+	CMD_EXIT="${?}"
+
+	if [[ -s "${FILE_TEMP}" ]]; then
+		_g_header "git ${GIT_CMD}${GIT_CMD_ARGS[*]+ }${GIT_CMD_ARGS[*]} [${CMD_EXIT}]"
+		cat "${FILE_TEMP}"
+		echo
+	fi
+
+	rm -f "${FILE_TEMP}" > /dev/null 2>&1
+
+	return "${CMD_EXIT}"
+} # _g_wrapper()
+
+
+# Git commit all w/message
+_g_gca() {
+	# Declare vars as local
+	local COMMIT_MSG CMD_EXIT GIT_BRANCH USAGE_STRING
+
+	USAGE_STRING="g-gca <commit message>"
+	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
+	COMMIT_MSG="${1}"
+
+	if git diff-index --quiet HEAD --; then
+		output blue "No changes to commit"
+		return 1
+	fi
+
+	output kv "Committing changes, with message" "${COMMIT_MSG}"
+	echo
+
+	_g_wrapper cam "${COMMIT_MSG}"
+	CMD_EXIT="${?}"
+	[[ "${CMD_EXIT}" == "0" ]] && _g_gs
+	return "${CMD_EXIT}"
+} # _g_gca()
 
 # Show Git-related info
 _g_gi() {
@@ -26,15 +156,15 @@ _g_gi() {
 	[[ -z "${TOP}"    ]] && output error "No toplvl detected" && return
 	[[ -z "${URL}"    ]] && output error "No URL detected"    && return
 
-	CONFIG="${TOP}/${DIR}/config"
+	CONFIG="${TOP}/.git/config"
 	[[ ! -s "${CONFIG}" ]] && output error "No config data detected" && return
 
-	output orange "---------------------= git info =---------------------"
+	_g_header 'git info'
 	output kv "    URL" "${URL}"
-	output kv " Branch" "${BRANCH}"
-	output kv "Top lvl" "${TOP/${HOME}/\~}"
+	output kv "Top lvl" "${TOP/${HOME}/\~\/}"
 	output kv " Config" "${CONFIG/${HOME}/\~}"
 	output kv " Commit" "${COMMIT}"
+	output kv " Branch" "${BRANCH}"
 
 	# Git tag-related data
 	TAGS="$(git get-tags 2> /dev/null)"
@@ -55,135 +185,7 @@ _g_gi() {
 	echo
 
 	_g_gs
-}
-
-# Git command wrapper for formatted output
-_g_wrapper() {
-	# Declare vars as local
-	local CMD_EXIT GIT_CMD
-
-	[[ -z "${1}" ]] && output error "No command provided to _g_wrapper" && return 254
-	GIT_CMD="${1}"
-
-	output orange "------------------= git ${GIT_CMD} =----------------------"
-	git "${GIT_CMD}"
-	CMD_EXIT="${?}"
-	echo
-
-	return "${CMD_EXIT}"
-}
-
-# Git status
-_g_gs() {
-	_g_wrapper s
-}
-
-# Git fetch, git pull, git update-all-the-submodules-to-latest
-_g_gsu() {
-	# Declare vars as local
-	local CMD_EXIT TEMP_FILE
-
-	# Generate temp file for output (until I learn how to do it without that)
-	TEMP_FILE="$(mktemp)"
-
-	git smup > "${TEMP_FILE}" 2>&1
-	CMD_EXIT="${?}"
-
-	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] --------------------= git smup =-----------------------"
-		cat "${TEMP_FILE}"
-		echo
-	fi
-
-	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
-	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
-
-	_g_gs
-	CMD_EXIT="${?}"
-	return "${CMD_EXIT}"
-}
-
-# Git fetch, git pull
-_g_gu() {
-	# Declare vars as local
-	local CMD_EXIT GIT_BRANCH TEMP_FILE
-
-	GIT_BRANCH="$(git get-branch 2> /dev/null)"
-	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
-
-	_g_wrapper f
-	CMD_EXIT="${?}"
-	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
-
-	# Check if there is an update
-	if [[ -n "$(git log "HEAD..origin/${GIT_BRANCH}" --oneline 2>&1)" ]]; then
-		# Perform git pull
-		_g_wrapper pull
-		CMD_EXIT="${?}"
-		[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
-	else
-		output blue "No git update available"
-		echo
-	fi
-
-	# Generate temp file for output (until I learn how to do it without that)
-	TEMP_FILE="$(mktemp)"
-
-	git smi > "${TEMP_FILE}" 2>&1
-	CMD_EXIT="${?}"
-
-	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] --------------------= git smp =-----------------------"
-		cat "${TEMP_FILE}"
-		echo
-	fi
-
-	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
-	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
-
-	_g_gs
-	CMD_EXIT="${?}"
-	return "${CMD_EXIT}"
-}
-
-# Git commit all w/message
-_g_gca() {
-	# Declare vars as local
-	local COMMIT_MSG CMD_EXIT GIT_BRANCH TEMP_FILE USAGE_STRING
-
-	USAGE_STRING="g-gca <commit message>"
-	[[ -z "${1}" ]] && output usage "${USAGE_STRING}" && return
-	COMMIT_MSG="${1}"
-
-	if git diff-index --quiet HEAD --; then
-		output blue "No changes to commit"
-		return 1
-	fi
-
-	output kv "Committing changes, with message" "${COMMIT_MSG}"
-	echo
-
-	# Generate temp file for output (until I learn how to do it without that)
-	TEMP_FILE="$(mktemp)"
-
-	git cam "${COMMIT_MSG}" > "${TEMP_FILE}" 2>&1
-	CMD_EXIT="${?}"
-
-	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] ------------= git cam '${COMMIT_MSG}' =----------------"
-		cat "${TEMP_FILE}"
-		echo
-	fi
-
-	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
-
-	if [[ "${CMD_EXIT}" == "0" ]]; then
-		_g_gs
-		CMD_EXIT="${?}"
-	fi
-
-	return "${CMD_EXIT}"
-}
+} # _g_gi()
 
 # Git push origin
 _g_gpo() {
@@ -192,12 +194,12 @@ _g_gpo() {
 
 	# Array of branches
 	ARRAY_BRANCHES=(
-	current
-	develop
-	testing
-	master
-	production
-	postprod
+		current
+		develop
+		testing
+		master
+		production
+		postprod
 	)
 
 	# Array of branch acronyms
@@ -249,27 +251,58 @@ _g_gpo() {
 		fi
 	fi
 
-	# Generate temp file for output (until I learn how to do it without that)
-	TEMP_FILE="$(mktemp)"
-
-	git psvo "${SELECTED_BRANCH}" > "${TEMP_FILE}" 2>&1
+	_g_wrapper pso "${SELECTED_BRANCH}"
 	CMD_EXIT="${?}"
-
-	if [[ -s "${TEMP_FILE}" ]]; then
-		output orange "[${CMD_EXIT}] ------= git psvo ${SELECTED_BRANCH} =----------"
-		cat "${TEMP_FILE}"
-		echo
-	fi
-
-	rm -rf "${TEMP_FILE}" > /dev/null 2>&1
-
-	if [[ "${CMD_EXIT}" == "0" ]]; then
-		_g_gs
-		CMD_EXIT="${?}"
-	fi
-
+	[[ "${CMD_EXIT}" == "0" ]] && _g_gs
 	return "${CMD_EXIT}"
-}
+} # _g_gpo()
+
+# Git status
+_g_gs() {
+	_g_wrapper status "${@}"
+} # _g_gs()
+
+# Git fetch, git pull, git update-all-the-submodules-to-latest
+_g_gsu() {
+	# Declare vars as local
+	local CMD_EXIT
+
+	_g_wrapper smup
+	CMD_EXIT="${?}"
+	[[ "${CMD_EXIT}" == "0" ]] && _g_gs
+	return "${CMD_EXIT}"
+} # _g_gsu()
+
+# Git fetch, git pull
+_g_gu() {
+	# Declare vars as local
+	local CMD_EXIT GIT_BRANCH
+
+	GIT_BRANCH="$(git get-branch 2> /dev/null)"
+	[[ -z "${GIT_BRANCH}" ]] && output error "No branch detected" && return
+
+	_g_wrapper fetch
+	CMD_EXIT="${?}"
+	[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
+
+	# Check if there is an update
+	if [[ -n "$(git log "HEAD..origin/${GIT_BRANCH}" --oneline 2>&1)" ]]; then
+		# Perform git pull
+		_g_wrapper up
+		CMD_EXIT="${?}"
+		[[ "${CMD_EXIT}" != "0" ]] && return "${CMD_EXIT}"
+	else
+		output green "Up-to-date"
+	fi
+
+	[[ ! -d "$(git get-gitdir)/modules" ]] && return "${CMD_EXIT}"
+
+	echo
+	_g_wrapper smi
+	CMD_EXIT="${?}"
+	[[ "${CMD_EXIT}" == "0" ]] && _g_gs
+	return "${CMD_EXIT}"
+} # _g_gu()
 
 
 # Function aliases

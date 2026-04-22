@@ -1,3 +1,7 @@
+[core]
+	excludesFile = ~/.config/git/ignore
+
+
 [include]
 	path = ~/.gitconfig.d/alias
 	path = ~/.gitconfig.d/apply
@@ -8,16 +12,15 @@
 	path = ~/.gitconfig.d/grep
 	path = ~/.gitconfig.d/init
 	path = ~/.gitconfig.d/merge
-	path = ~/.gitconfig.d/pull
-	path = ~/.gitconfig.d/push
-	path = ~/.gitconfig.d/submodule
-	path = ~/.gitconfig.d/url-priv
-	path = ~/.gitconfig.d/url-pub
 	path = ~/.gitconfig.d/path
 	path = ~/.gitconfig.d/path-priv
 	path = ~/.gitconfig.d/path-pub
+	path = ~/.gitconfig.d/pull
+	path = ~/.gitconfig.d/push
+	path = ~/.gitconfig.d/status
+	path = ~/.gitconfig.d/submodule
+	path = ~/.gitconfig.d/url-priv
+	path = ~/.gitconfig.d/url-pub
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :
-[core]
-	excludesFile = ~/.config/git/ignore
