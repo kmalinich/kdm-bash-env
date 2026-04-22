@@ -9,7 +9,6 @@
 	bm  = branch --merged
 	bnm = branch --no-merged
 
-	#branchname = branch --show-current
 	branchname = get-branch
 
 	#cl = clone --jobs 8 --recursive
@@ -53,7 +52,7 @@
 	# Fix upstream
 	fu = "!_git_fu() { BRANCH=\"$(git get-branch)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; BRANCH_UPSTREAM=\"origin/${BRANCH}\"; git branch \"--set-upstream-to=${BRANCH_UPSTREAM}\" \"${BRANCH}\"; echo \"Set upstream to\" \"${BRANCH_UPSTREAM}\"; }; _git_fu"
 
-	get-branch  = symbolic-ref --short HEAD
+	get-branch  = "!_git_gb() { BRANCH=\"$(git symbolic-ref --short HEAD 2> /dev/null)\"; [[ -z \"${BRANCH}\" ]] && BRANCH=\"$(git branch --show-current)\"; echo \"${BRANCH}\"; }; _git_gb"
 	get-commit  = rev-parse HEAD
 	get-gitdir  = rev-parse --git-dir
 	get-repodir = rev-parse --show-toplevel
