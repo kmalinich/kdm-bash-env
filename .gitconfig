@@ -19,6 +19,7 @@
 	path = ~/.gitconfig.d/push
 	path = ~/.gitconfig.d/status
 	path = ~/.gitconfig.d/submodule
+	path = ~/.gitconfig.d/submodule-parallel
 	path = ~/.gitconfig.d/url-priv
 	path = ~/.gitconfig.d/url-pub
 
