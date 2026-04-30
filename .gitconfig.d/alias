@@ -26,7 +26,7 @@
 	cp = "!_git_cp() { git commit --all \"--message=${1-Update}\"; }; _git_cp"
 
 
-	d  = "!_git_d() { git diff --color=auto --color-moved=zebra --color-moved-ws=ignore-all-space --ws-error-highlight=all --ignore-blank-lines --ignore-space-change \"${@}\"; }; _git_d"
+	d  = diff --color=auto --color-moved=zebra --color-moved-ws=ignore-all-space --ws-error-highlight=all --ignore-blank-lines --ignore-space-change
 	dw = d --ignore-all-space --ignore-cr-at-eol --ignore-space-at-eol
 
 	diff-ws = dw
