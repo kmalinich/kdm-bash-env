@@ -1,0 +1,31 @@
+-t 18
+#--exclude-kernfs
+
+
+# Always enable extended mode
+--extended
+
+# Disable file deletion
+#--disable-delete
+
+# Exclude .git directories
+--exclude .git
+
+# Read excludes from ~/.ncduexcludes, ignore error if the file does not exist
+@--exclude-from ~/.ncduexcludes
+
+
+-2
+
+--color dark
+--enable-natsort
+--exclude-caches
+--one-file-system
+--si
+
+--show-itemcount
+--show-percent
+--show-graph
+--show-mtime
+
+--graph-style hash
