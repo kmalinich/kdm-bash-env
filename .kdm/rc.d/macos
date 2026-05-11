@@ -426,18 +426,21 @@ alias screen-saver='open -a ScreenSaverEngine'
 alias sleep-system="osascript -e 'tell app \"System Events\" to sleep'"
 
 
-# 14 : Yosemite
-# 15 : El Capitan
-# 16 : Sierra
-# 17 : High Sierra
-# 18 : Mojave
-# 19 : ?
-# 20 : ?
-# 21 : Monterey
-# 22 : Ventura
+# 14.x.x : macOS 10.10 : Yosemite
+# 15.x.x : macOS 10.11 : El Capitan
+# 16.x.x : macOS 10.12 : Sierra
+# 17.x.x : macOS 10.13 : High Sierra
+# 18.x.x : macOS 10.14 : Mojave
+# 19.x.x : macOS 10.15 : Catalina
+# 20.x.x : macOS 11    : Big Sur
+# 21.x.x : macOS 12    : Monterey
+# 22.x.x : macOS 13    : Ventura
+# 23.x.x : macOS 14    : Sonoma
+# 24.x.x : macOS 15    : Sequoia
+# 25.x.x : macOS 26    : Tahoe
 case "${UNAME_KERNEL_RELEASE%%.*}" in
 	1[5-9]) ;&
-	2[0-4])
+	2[0-6])
 		# Enable and disable indexing
 		alias indexing-enable=' sudo mdutil -a -i on'
 		alias indexing-disable='sudo mdutil -a -i off'
