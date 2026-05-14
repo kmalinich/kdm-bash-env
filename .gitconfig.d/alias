@@ -11,11 +11,10 @@
 
 	branchname = get-branch
 
-	#cl = clone --jobs 8 --recursive
-	cl = "!_git_cl() { git clone --jobs \"$(nproc)\" --recursive \"${@}\"; }; _git_cl"
+	cl = clone --recursive
+
 	cls = cl --shallow-submodules
 
-	#co  = "!_git_co() { echo \"[git] Checking out branch '${1}'\"; git checkout \"${1}\"; }; _git_co"
 	co  = checkout
 	cob = checkout -b
 
