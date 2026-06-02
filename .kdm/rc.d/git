@@ -144,24 +144,22 @@ _g_gi() {
 	# Declare vars as local
 	local BRANCH COMMIT CONFIG DIR HASH RELEASE TAG TAGS TOP URL
 
-	BRANCH="$(git get-branch  2> /dev/null)"
-	COMMIT="$(git get-commit  2> /dev/null)"
-	DIR="$(   git get-gitdir  2> /dev/null)"
-	TOP="$(   git get-repodir 2> /dev/null)"
-	URL="$(   git get-url     2> /dev/null)"
-
-	[[ -z "${BRANCH}" ]] && output error "No branch detected" && return
-	[[ -z "${COMMIT}" ]] && output error "No commit detected" && return
-	[[ -z "${DIR}"    ]] && output error "No repo detected"   && return
-	[[ -z "${TOP}"    ]] && output error "No toplvl detected" && return
-	[[ -z "${URL}"    ]] && output error "No URL detected"    && return
+	TOP="$(git get-repodir 2> /dev/null)"; [[ -z "${TOP}" ]] && output error "No toplvl detected" && return
 
 	CONFIG="${TOP}/.git/config"
 	[[ ! -s "${CONFIG}" ]] && output error "No config data detected" && return
 
+	BRANCH="$(git get-branch  2> /dev/null)"; [[ -z "${BRANCH}" ]] && output error "No branch detected" && return
+	COMMIT="$(git get-commit  2> /dev/null)"; [[ -z "${COMMIT}" ]] && output error "No commit detected" && return
+	DIR="$(   git get-gitdir  2> /dev/null)"; [[ -z "${DIR}"    ]] && output error "No repo detected"   && return
+	URL="$(   git get-url     2> /dev/null)"; [[ -z "${URL}"    ]] && output error "No URL detected"    && return
+
+	TOP="${TOP/${HOME}/\~}"
+	[[ "${TOP}" == '~' ]] && TOP='~/'
+
 	_g_header 'git info'
 	output kv "    URL" "${URL}"
-	output kv "Top lvl" "${TOP/${HOME}/\~\/}"
+	output kv "Top lvl" "${TOP}"
 	output kv " Config" "${CONFIG/${HOME}/\~}"
 	output kv " Commit" "${COMMIT}"
 	output kv " Branch" "${BRANCH}"
