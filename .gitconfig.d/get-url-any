@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+ARRAY_SED_ARGS=()
+
+while read GITCONFIG_URL; do
+	GITCONFIG_URL_VALUE="$(git config get "url.${GITCONFIG_URL}.insteadof")"
+
+	GITCONFIG_URL="${GITCONFIG_URL#git@}"
+	GITCONFIG_URL="${GITCONFIG_URL#htt*:\/\/}"
+	GITCONFIG_URL="${GITCONFIG_URL//:/\/}"
+	GITCONFIG_URL="${GITCONFIG_URL%\/}/"
+
+	ARRAY_SED_ARGS+=('-e' "s,${GITCONFIG_URL_VALUE},${GITCONFIG_URL},g")
+done < <(git config list --name-only | grep -E '^url' | sed -e 's/^url\.//g' -e 's/\.insteadof$//g')
+
+URL="https://$(git get-url-config | sed "${ARRAY_SED_ARGS[@]}" -e 's/git@//g' -e 's/:/\//g' -e 's/\.git//g')"
+
+echo "${URL}"
+
+[[ "${1}" != 'open' ]] && exit 0
+
+open "${URL}"
+
+
+# vim: set filetype=bash ts=2 sw=2 tw=0 noet :
