@@ -8,6 +8,7 @@
 	path = ~/.gitconfig.d/color
 	path = ~/.gitconfig.d/commit
 	path = ~/.gitconfig.d/core
+	path = ~/.gitconfig.d/diff
 	path = ~/.gitconfig.d/filter
 	path = ~/.gitconfig.d/grep
 	path = ~/.gitconfig.d/init
