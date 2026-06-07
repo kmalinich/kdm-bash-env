@@ -326,7 +326,7 @@ _kdm_update() {
 
 
 	output keyval-y "[kdm-update][main]" "Garbage collection"
-	g_kdm_update_submoduleit gc --aggressive --prune > /dev/null 2>&1
+	git gc --aggressive --prune > /dev/null 2>&1
 
 	# Change back to original pwd
 	if ! cd "${OLD_PWD}"; then

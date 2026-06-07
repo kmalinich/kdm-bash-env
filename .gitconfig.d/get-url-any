@@ -13,13 +13,16 @@ while read GITCONFIG_URL; do
 	ARRAY_SED_ARGS+=('-e' "s,${GITCONFIG_URL_VALUE},${GITCONFIG_URL},g")
 done < <(git config list --name-only | grep -E '^url' | sed -e 's/^url\.//g' -e 's/\.insteadof$//g')
 
-URL="https://$(git get-url-config | sed "${ARRAY_SED_ARGS[@]}" -e 's/git@//g' -e 's/:/\//g' -e 's/\.git//g')"
+URL="https://$(git get-url-config | sed -E "${ARRAY_SED_ARGS[@]}" -e 's/^git@//g' -e 's/^https?:\/\///g' -e 's/:/\//g' -e 's/\.git//g')"
 
 echo "${URL}"
 
 [[ "${1}" != 'open' ]] && exit 0
 
-open "${URL}"
+case "$(uname)" in
+	Darwin)     open "${URL}" ;;
+	Linux)  xdg-open "${URL}" ;;
+esac
 
 
 # vim: set filetype=bash ts=2 sw=2 tw=0 noet :
