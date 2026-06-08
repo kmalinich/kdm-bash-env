@@ -31,7 +31,7 @@ hex2color() {
 	COLOR_HEX="${COLOR_HEX,,}"
 
 	# Output info and sample
-	echo -e "#${COLOR_HEX} | ${DEC_VAL_1} ${DEC_VAL_2} ${DEC_VAL_3} | \\\\e${ANSI_COLOR} | http://www.color-hex.com/color/${COLOR_HEX} | \\e${ANSI_COLOR}TESTING color${C_RST}"
+	echo -e "#${COLOR_HEX} | ${DEC_VAL_1} ${DEC_VAL_2} ${DEC_VAL_3} | \\\\e${ANSI_COLOR} | https://www.color-hex.com/color/${COLOR_HEX} | \\e${ANSI_COLOR}TESTING color${C_RST}"
 }
 
 # Render RGB values into hex string, then feed to hex2color function

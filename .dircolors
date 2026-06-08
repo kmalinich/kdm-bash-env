@@ -274,19 +274,23 @@ FILE   0
 
 
 # Plaintext-ish data blobs
-.a2l   33;3
-.gemrc 33;3
-.json  33;3
-.pem   33;3
-.plist 33;3
-.pom   33;3
-.pub   33;3
-.sql   33;3
-.wsdl  33;3
-.xdf   33;3
-.xml   33;3
-.yaml  33;3
-.yml   33;3
+.a2l     33;3
+.gemrc   33;3
+.htm     33;3
+.html    33;3
+.json    33;3
+.pem     33;3
+.plist   33;3
+.pom     33;3
+.pub     33;3
+.shtml   33;3
+.sql     33;3
+.sqlplus 33;3
+.wsdl    33;3
+.xdf     33;3
+.xml     33;3
+.yaml    33;3
+.yml     33;3
 
 # .NET application XML (yellow)
 .application 33;3
@@ -362,6 +366,8 @@ FILE   0
 .gypi        36
 .INI         36
 .ini         36
+.INF         36
+.inf         36
 .jinja       36
 .mount       36
 .nload       36
@@ -393,7 +399,6 @@ FILE   0
 .h        33
 .hpp      33
 .htm      33
-.html     33
 .in       33
 .INF      33
 .MF       33
@@ -412,7 +417,6 @@ FILE   0
 .patch    33
 .qml      33
 .rst      33
-.shtml    33
 .spec     33
 .textile  33
 .txt      33
@@ -533,7 +537,6 @@ FILE   0
 # This section is 24bit/16 million colors - depends on a hack specific to this repo, and might not work in your terminal emulator
 # See this for more info: https://github.com/termstandard/colors
 
-#TERM *+iterm3
 COLORTERM truecolor
 
 # Attribute codes:
@@ -808,20 +811,25 @@ FILE   38;2;150;150;150
 .xspf 38;2;152;155;213
 
 
-# Plaintext-ish data blobs
+# Plaintext-ish data blobs (orange)
 .a2l   38;2;255;136;31
 .gemrc 38;2;255;136;31
+.html  38;2;255;136;31
 .json  38;2;255;136;31
 .pem   38;2;255;136;31
 .plist 38;2;255;136;31
 .pom   38;2;255;136;31
 .pub   38;2;255;136;31
+.shtml 38;2;255;136;31
 .sql   38;2;255;136;31
 .wsdl  38;2;255;136;31
 .xdf   38;2;255;136;31
 .xml   38;2;255;136;31
 .yaml  38;2;255;136;31
 .yml   38;2;255;136;31
+
+# Oracle SQL*Plus (slightly lighter orange)
+.sqlplus 38;2;255;159;75
 
 # .NET application XML (orange)
 .application 38;2;255;136;31
@@ -897,6 +905,8 @@ FILE   38;2;150;150;150
 .gypi        38;2;220;115;218
 .INI         38;2;220;115;218
 .ini         38;2;220;115;218
+.INF         38;2;220;115;218
+.inf         38;2;220;115;218
 .jinja       38;2;220;115;218
 .mount       38;2;220;115;218
 .nload       38;2;220;115;218
@@ -916,46 +926,48 @@ FILE   38;2;150;150;150
 *ssh_config  38;2;220;115;218
 *sshd_config 38;2;220;115;218
 
-# Text documents (yellow)
-.ac       38;2;230;230;0
-.cmake    38;2;230;230;0
-.css      38;2;230;230;0
-.cue      38;2;230;230;0
-.diff     38;2;230;230;0
-.eng      38;2;230;230;0
-.gpg      38;2;230;230;0
-.h        38;2;230;230;0
-.hpp      38;2;230;230;0
-.htm      38;2;230;230;0
-.html     38;2;230;230;0
-.in       38;2;230;230;0
-.INF      38;2;230;230;0
-.inf      38;2;230;230;0
-.lo       38;2;230;230;0
-.m4       38;2;230;230;0
-.map      38;2;230;230;0
-.markdown 38;2;230;230;0
-.MF       38;2;230;230;0
-.md       38;2;230;230;0
-.md5      38;2;230;230;0
-.mdown    38;2;230;230;0
-.mf       38;2;230;230;0
-.mib      38;2;230;230;0
-.mypatch  38;2;230;230;0
-.patch    38;2;230;230;0
-.qml      38;2;230;230;0
-.rst      38;2;230;230;0
-.shtml    38;2;230;230;0
-.spec     38;2;230;230;0
-.textile  38;2;230;230;0
-.txt      38;2;230;230;0
-*LICENSE  38;2;230;230;0
-
-
+# Code-ish text documents (yellow)
+.ac      38;2;230;230;0
+.cmake   38;2;230;230;0
+.css     38;2;230;230;0
+.diff    38;2;230;230;0
+.eng     38;2;230;230;0
+.gpg     38;2;230;230;0
+.h       38;2;230;230;0
+.hpp     38;2;230;230;0
+.htm     38;2;230;230;0
+.in      38;2;230;230;0
+.lo      38;2;230;230;0
+.m4      38;2;230;230;0
+.map     38;2;230;230;0
+.MF      38;2;230;230;0
+.mf      38;2;230;230;0
+.mib     38;2;230;230;0
+.mypatch 38;2;230;230;0
+.patch   38;2;230;230;0
+.qml     38;2;230;230;0
+.spec    38;2;230;230;0
 # Make log/sass/scss slightly different from normal text documents
 .log  38;2;255;162;0
 .sass 38;2;255;162;0
 .scss 38;2;255;162;0
+
+
+# Text documents (cyan)
+.cue      38;2;0;230;230
+.diff     38;2;0;230;230
+.in       38;2;0;230;230
+.markdown 38;2;0;230;230
+.md       38;2;0;230;230
+.md5      38;2;0;230;230
+.mdown    38;2;0;230;230
+.rst      38;2;0;230;230
+.textile  38;2;0;230;230
+
+# Plainest of texts (very light gray)
+.txt      38;2;220;220;220
+*LICENSE  38;2;220;220;220
+
 
 
 # Non-compiled code-ish (light green)
