@@ -35,10 +35,10 @@
 
 	# Delete any branches that have been merged into the current branch
 	# See also: https://gist.github.com/robmiller/5133264
-	dm = "!_git_dm() { git up && git branch --color=never --format '%(refname:lstrip=2)' --merged | grep -v \"^$(git symbolic-ref --short HEAD)$\" | xargs -n 1 git branch --delete 2> /dev/null; }; _git_dm"
+	dm = "!_git_dm() { git up && git branch --color=never --format '%(refname:lstrip=2)' --merged | grep -Ev \"^(origin/)?$(git get-branch)$\" | xargs --max-args=1 git bd 2> /dev/null; }; _git_dm"
 
 
-	fetch = fetch --prune
+	fetch = fetch --prune --prune-tags --no-tags
 
 	f  = fetch
 	fa = fetch --all
@@ -71,7 +71,7 @@
 
 	o = !bash "${HOME}/.gitconfig.d/get-url-any open"
 
-	pull = pull --prune
+	pull = pull --prune --prune-tags --no-tags
 	prb  = pull --rebase
 
 	plu = "!_git_plu() { BRANCH=\"$(git get-branch)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git f; git co \"${BRANCH}\"; git up; git s; }; _git_plu"
