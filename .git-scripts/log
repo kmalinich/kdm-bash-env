@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+
+
+CMD="${1-ll}"
+MAX_COUNT="${2-25}"
+
+
+DATE_FMT='format:%F %R:%S'
+
+COMMIT_URL="$(git get-url)/commit"
+
+PAD_NAME='28'
+PAD_EMAIL='52'
+
+
+# %C  color
+# %h  abbreviated commit hash
+# %an author name
+# %ae author email
+# %ad author date (format respects --date= option)
+# %cn committer name
+# %ce committer email
+# %s  subject
+
+PAD_AE="$(git log --max-count="${MAX_COUNT}" --pretty='%ae' | sort -u | wc -L)"
+PAD_AN="$(git log --max-count="${MAX_COUNT}" --pretty='%an' | sort -u | wc -L)"
+PAD_CE="$(git log --max-count="${MAX_COUNT}" --pretty='%ce' | sort -u | wc -L)"
+PAD_CN="$(git log --max-count="${MAX_COUNT}" --pretty='%cn' | sort -u | wc -L)"
+
+
+SEP='%C(#ffffff)/%C(reset)'
+
+B_L='%C(#808080)[%C(reset)'
+B_R='%C(#808080)]%C(reset)'
+
+AD="%C(#2fdf64)%ad%C(reset)"
+AE="%C(#3398db)%>(${PAD_AE})%ae%C(reset)"
+AN="%C(#ffcc32)%>(${PAD_AN})%an%C(reset)"
+CE="%C(#00c8c8)%<(${PAD_CE})%ce%C(reset)"
+CN="%C(#ff9932)%<(${PAD_CN})%cn%C(reset)"
+
+H='%C(#de5abd)%h%C(reset)'
+
+URL="%C(#8064b9)${COMMIT_URL}${SEP}%C(#de5abd)%h%C(reset)"
+
+F_AD="${B_L}${AD}${B_R}"
+F_AE="${B_L}${AE}${B_R}"
+F_AN="${B_L}${AN}${B_R}"
+F_CE="${B_L}${CE}${B_R}"
+F_CN="${B_L}${CN}${B_R}"
+
+F_H="${B_L}${H}${B_R}"
+
+F_URL="${B_L}${URL}${B_R}"
+
+F_S='%C(reset)%s'
+
+case "${CMD}" in
+	l) git log --max-count="${MAX_COUNT}" --graph --oneline ;;
+
+	ll) ;&
+	ll-author)    PRETTY="${F_AD} ${F_H} ${F_AN} ${F_AE} ${F_S}" ;;
+	ll-committer) PRETTY="${F_AD} ${F_H} ${F_CN} ${F_CE} ${F_S}" ;;
+	ll-all)       PRETTY="${F_AD} ${F_H} ${B_L}${AN}${SEP}${CN}${B_R} ${B_L}${AE}${SEP}${CE}${B_R} ${F_S}" ;;
+
+	ll-url) ;&
+	ll-url-author)    PRETTY="${F_AD} ${F_URL} ${F_AN} ${F_AE} ${F_S}" ;;
+	ll-url-committer) PRETTY="${F_AD} ${F_URL} ${F_CN} ${F_CE} ${F_S}" ;;
+	ll-url-all)       PRETTY="${F_AD} ${F_URL} ${B_L}${AN}${SEP}${CN}${B_R} ${B_L}${AE}${SEP}${CE}${B_R} ${F_S}" ;;
+
+	*) exit 1 ;;
+esac
+
+[[ -z "${PRETTY}" ]] && exit 2
+
+
+
+
+git log --date="${DATE_FMT}" --max-count="${MAX_COUNT}" --pretty="${PRETTY}"
+
+
+# vim: set filetype=sh ts=2 sw=2 tw=0 noet :

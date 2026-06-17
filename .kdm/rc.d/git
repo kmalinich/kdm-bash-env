@@ -249,7 +249,7 @@ _g_gpo() {
 		fi
 	fi
 
-	_g_wrapper pso "${SELECTED_BRANCH}"
+	_g_wrapper ps origin "${SELECTED_BRANCH}"
 	CMD_EXIT="${?}"
 	[[ "${CMD_EXIT}" == "0" ]] && _g_gs
 	return "${CMD_EXIT}"
