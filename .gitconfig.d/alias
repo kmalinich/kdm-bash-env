@@ -82,7 +82,7 @@
 
 
 	pull = pl
-	pl   = pull --prune --prune-tags --no-tags
+	pl   = pull --prune --no-tags
 	prb  = pl --rebase
 	up   = pl --no-rebase
 	plu  = "!_git_plu() { BRANCH=\"$(git get-branch)\"; [[ -z \"${BRANCH}\" ]] && echo \"Error : No branch detected\" && return; git f; git co \"${BRANCH}\"; git pl; git s; }; _git_plu"
