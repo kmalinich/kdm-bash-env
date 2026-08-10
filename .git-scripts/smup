@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC2016
+
+git f
+echo
+
+git pl
+echo
+
+git smf 'BAR="=---------------------------------------------="; echo "${BAR}"; git plu; echo -e "${BAR}\n\n"'

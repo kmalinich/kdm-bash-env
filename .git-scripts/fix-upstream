@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC1091
+
+. "${HOME}/.git-scripts/include/branch"
+
+BRANCH_UPSTREAM="origin/${BRANCH}"
+
+git branch --set-upstream-to="${BRANCH_UPSTREAM}" "${BRANCH}"
+
+echo "Set upstream to '${BRANCH_UPSTREAM}'"

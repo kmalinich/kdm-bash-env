@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# shellcheck disable=SC1091
+
+. "${HOME}/.git-scripts/include/branch"
+
+git ls-tree -r --name-only "${BRANCH}" | grep -Ei "${1}"

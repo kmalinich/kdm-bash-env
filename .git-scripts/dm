@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+if ! git pl; then
+	echo 'Error: git pull failed, cannot continue' 1>&2
+	exit 1
+fi
+
+git branch --color=never --format '%(refname:lstrip=2)' --merged | grep -Ev "^(origin/)?$(git get-branch)$" | xargs --max-args=1 git bd 2> /dev/null
