@@ -208,5 +208,7 @@
 --map-syntax "**/.ssh/config.d/*.conf:SSH Config"
 --map-syntax "**/.ssh/config.d/**/*.conf:SSH Config"
 
+--map-syntax "**/.gitconfig.d/*:Git Config"
+
 --map-syntax "*.ino:C++"
 --map-syntax "*.sqlplus:SQL"
