@@ -4,4 +4,18 @@
 
 . "${HOME}/.git-scripts/include/branch"
 
+#echo "\$@ : '${@}'"
+#echo "\$0 : '${0}'"
+#echo "\$1 : '${1}'"
+#echo "\$2 : '${2}'"
+#echo "\$3 : '${3}'"
+#echo "\$4 : '${4}'"
+#echo "\$5 : '${5}'"
+#echo "GP : '${GIT_PREFIX}'"
+#echo "BR : '${BRANCH}'"
+
+if [[ -d "./${GIT_PREFIX}" ]]; then
+	cd "./${GIT_PREFIX}"
+fi
+
 git ls-tree -r --name-only "${BRANCH}" | grep -Ei "${1}"
