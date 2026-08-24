@@ -5,6 +5,12 @@
 [[ "${_}" != "${0}" && "${SOURCE_VERBOSE}" == "true" ]] && output kv "Loaded" "${BASH_SOURCE[@]/${HOME}\/\.kdm\//}"
 
 
+# Show git process PIDs owned by this user
+_g_pids() {
+	pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)'
+} # _g_pids()
+
+
 # Auto-sizing function output header
 _g_header() {
 	local COLUMN_COUNT
@@ -57,18 +63,11 @@ _g_header() {
 	printf "${C_ORN}%s${C_RST} ${C_BLU}%s${C_RST} ${C_ORN}%s${C_RST}\n" "${HEADER_EQ1_STRING}" "${1}" "${HEADER_EQ2_STRING}"
 } # _g_header()
 
-
-# Show git process PIDs owned by this user
-_g_pids() {
-	pgrep -U "${UID}" -f 'git\ (checkout|fetch|gc|prune|pull|status|submodule)'
-} # _g_pids()
-
 # Git command wrapper for formatted output
 _g_wrapper() {
 	# Declare vars as local
 	local CMD_EXIT
-	local GIT_CMD GIT_CMD_FULL
-	local GIT_CMD_ARGS GIT_CMD_ARGS_COUNT
+	local GIT_CMD GIT_CMD_ARGS GIT_CMD_ARGS_COUNT
 
 	[[ -z "${1}" ]] && output error "No command provided to _g_wrapper" && return 254
 	GIT_CMD="${1}"
@@ -80,28 +79,10 @@ _g_wrapper() {
 		GIT_CMD_ARGS+=("${!i}")
 	done
 
-	GIT_CMD_FULL="${GIT_CMD}"
-	case "${GIT_CMD}" in
-		cam) GIT_CMD_FULL='commit' ;;
-		up)  GIT_CMD_FULL='pull'   ;;
-
-		smup) ;&
-		smi)  GIT_CMD_FULL='submodule' ;;
-	esac
-
-	#d
-	#dw
-	#diff*)
-	#grep
-	#l
-	#ll*
-	#log
-	#show
-
 	# Generate temp file for output (until I learn how to do it without that)
 	FILE_TEMP="$(mktemp -t "kdm-bash-env.${FUNCNAME[0]}.XXXXXXXXXXXXXX")"
 
-	git -c 'color.ui=always' -c "color.${GIT_CMD}=always" -c "color.${GIT_CMD_FULL}=always" "${GIT_CMD}" "${GIT_CMD_ARGS[@]}" > "${FILE_TEMP}" 2>&1
+	git "${GIT_CMD}" "${GIT_CMD_ARGS[@]}" > "${FILE_TEMP}" 2>&1
 	CMD_EXIT="${?}"
 
 	if [[ -s "${FILE_TEMP}" ]]; then
@@ -155,6 +136,8 @@ _g_gi() {
 	URL="$(   git get-url     2> /dev/null)"; [[ -z "${URL}"    ]] && output error "No URL detected"    && return
 
 	TOP="${TOP/${HOME}/\~}"
+
+	# shellcheck disable=SC2088
 	[[ "${TOP}" == '~' ]] && TOP='~/'
 
 	_g_header 'git info'
@@ -185,75 +168,6 @@ _g_gi() {
 	_g_gs
 } # _g_gi()
 
-# Git push origin
-_g_gpo() {
-	# Declare vars as local
-	local ARRAY_BRANCHES ARRAY_USAGE_OPTIONS CMD_EXIT LOG SELECTED_BRANCH TEMP_FILE USAGE_STRING
-
-	# Array of branches
-	ARRAY_BRANCHES=(
-		current
-		develop
-		testing
-		master
-		production
-		postprod
-	)
-
-	# Array of branch acronyms
-	ARRAY_USAGE_OPTIONS=(c d t m p pp)
-
-	case "${1}" in
-		c)
-			SELECTED_BRANCH="$(git get-branch 2> /dev/null)"
-			if [[ -z "${SELECTED_BRANCH}" ]]; then
-				output error "No current branch detected"
-				return 1
-			fi
-			;;
-
-		d)  SELECTED_BRANCH="develop"    ;;
-		t)  SELECTED_BRANCH="testing"    ;;
-		m)  SELECTED_BRANCH="master"     ;;
-		p)  SELECTED_BRANCH="production" ;;
-		pp) SELECTED_BRANCH="postprod"   ;;
-
-		*)
-			USAGE_STRING="g-gpo <$(IFS=$'|'; echo "${ARRAY_USAGE_OPTIONS[*]}")> <$(IFS=$'|'; echo "${ARRAY_BRANCHES[*]}")> <y>"
-			output usage "${USAGE_STRING}"
-			return 254
-			;;
-	esac
-
-	# Bounce if:
-	# git log exit code is 0
-	# AND
-	# There are no apparant pushable changes
-	LOG="$(git log "origin/${SELECTED_BRANCH}.." --oneline 2> /dev/null)"
-	# shellcheck disable=SC2181
-	if [[ "${?}" == "0" && "$(echo "${LOG}" | wc -l)" == "0" ]]; then
-		output blue "No changes to push"
-		return 2
-	fi
-
-	output kv "Pushing to branch" "${SELECTED_BRANCH}"
-	echo
-
-	if [[ "${2##\-}" != [Yy] ]]; then
-		read -r -p "Continue? [Y/n] " GIT_PUSH_YN
-		echo
-
-		if [[ "${GIT_PUSH_YN}" == [Nn] ]]; then
-			output red "Push cancelled"
-			return 253
-		fi
-	fi
-
-	_g_wrapper ps origin "${SELECTED_BRANCH}"
-	CMD_EXIT="${?}"
-	[[ "${CMD_EXIT}" == "0" ]] && _g_gs
-	return "${CMD_EXIT}"
-} # _g_gpo()
 
 # Git status
 _g_gs() {
@@ -306,7 +220,6 @@ _g_gu() {
 # Function aliases
 alias g-gca='_g_gca'
 alias g-gi=' _g_gi'
-alias g-gpo='_g_gpo'
 alias g-gs=' _g_gs'
 alias g-gsu='_g_gsu'
 alias g-gu=' _g_gu'

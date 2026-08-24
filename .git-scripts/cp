@@ -1,3 +1,22 @@
 #!/usr/bin/env bash
 
-git commit --all --message="${1-Update}"
+. "${HOME}/.kdm/rc.d/text"
+
+
+if git diff-index --quiet HEAD --; then
+	output blue "No changes to commit"
+	exit 1
+fi
+
+
+COMMIT_MSG="${1}"
+
+[[ -z "${COMMIT_MSG}" ]] && output usage 'git cp <commit message>' && return
+
+
+
+output kv "Committing changes, with message" "${COMMIT_MSG}"
+
+git cam "${COMMIT_MSG}"
+
+git ps

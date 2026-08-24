@@ -1,10 +1,11 @@
 [color]
-	branch      = on
-	diff        = on
-	interactive = on
-	status      = on
+	branch      = always
+	commit      = always
+	diff        = always
+	interactive = always
+	status      = always
 	submodule   = always
-	ui          = true
+	ui          = always
 
 [color "branch"]
 	current = "#f1c40f reverse"
