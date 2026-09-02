@@ -1,5 +1,5 @@
 [color]
-	branch      = always
+	branch      = on
 	commit      = always
 	diff        = on
 	interactive = always
