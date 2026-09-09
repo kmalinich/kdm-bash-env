@@ -359,36 +359,43 @@ FILE   0
 .inputrc               36
 
 # Config files (cyan)
+*ssh_config  36
+*sshd_config 36
+.automount   36
 .cfg         36
 .cnf         36
 .conf        36
 .conf.tmpl   36
+.device      36
 .dircolors   36
 .gdbinit     36
 .gtkrc-2.0   36
 .gypi        36
-.INI         36
-.ini         36
 .INF         36
 .inf         36
+.INI         36
+.ini         36
 .jinja       36
 .mount       36
 .nload       36
 .pa          36
+.path        36
 .piprc       36
 .properties  36
 .rc          36
 .rdp         36
 .repo        36
 .repo.tmpl   36
+.scope       36
 .screenrc    36
 .service     36
+.slice       36
+.socket      36
+.target      36
 .tidyrc      36
 .timer       36
 .vim         36
 .vimrc       36
-*ssh_config  36
-*sshd_config 36
 
 # Text documents (yellow)
 *LICENSE  33
@@ -403,9 +410,7 @@ FILE   0
 .hpp      33
 .htm      33
 .in       33
-.INF      33
 .MF       33
-.inf      33
 .lo       33
 .m4       33
 .map      33
@@ -903,36 +908,43 @@ FILE   38;2;150;150;150
 .inputrc               38;2;220;115;218
 
 # Config files (pink)
+*ssh_config  38;2;220;115;218
+*sshd_config 38;2;220;115;218
+.automount   38;2;220;115;218
 .cfg         38;2;220;115;218
 .cnf         38;2;220;115;218
 .conf        38;2;220;115;218
 .conf.tmpl   38;2;220;115;218
+.device      38;2;220;115;218
 .dircolors   38;2;220;115;218
 .gdbinit     38;2;220;115;218
 .gtkrc-2.0   38;2;220;115;218
 .gypi        38;2;220;115;218
-.INI         38;2;220;115;218
-.ini         38;2;220;115;218
 .INF         38;2;220;115;218
 .inf         38;2;220;115;218
+.INI         38;2;220;115;218
+.ini         38;2;220;115;218
 .jinja       38;2;220;115;218
 .mount       38;2;220;115;218
 .nload       38;2;220;115;218
 .pa          38;2;220;115;218
+.path        38;2;220;115;218
 .piprc       38;2;220;115;218
 .properties  38;2;220;115;218
 .rc          38;2;220;115;218
 .rdp         38;2;220;115;218
 .repo        38;2;220;115;218
 .repo.tmpl   38;2;220;115;218
+.scope       38;2;220;115;218
 .screenrc    38;2;220;115;218
 .service     38;2;220;115;218
+.slice       38;2;220;115;218
+.socket      38;2;220;115;218
+.target      38;2;220;115;218
 .tidyrc      38;2;220;115;218
 .timer       38;2;220;115;218
 .vim         38;2;220;115;218
 .vimrc       38;2;220;115;218
-*ssh_config  38;2;220;115;218
-*sshd_config 38;2;220;115;218
 
 # Code-ish text documents (yellow)
 .ac      38;2;230;230;0
