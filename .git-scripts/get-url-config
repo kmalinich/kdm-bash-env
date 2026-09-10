@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+
+while read -r REMOTE; do
+	git config "remote.${REMOTE}.url"
+done < <(git remote) | sort -u | head -n 1
+
+
+# vim: set filetype=bash ts=2 sw=2 tw=0 noet :

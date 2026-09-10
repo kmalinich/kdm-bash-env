@@ -64,7 +64,7 @@
 	get-repodir = rev-parse --show-toplevel
 	get-tags    = describe --tags
 
-	get-url-config = config remote.origin.url
+	get-url-config = !bash "${HOME}/.git-scripts/get-url-config"
 
 
 	l                = !bash "${HOME}/.git-scripts/log l"

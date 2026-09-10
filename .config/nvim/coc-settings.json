@@ -97,6 +97,7 @@
 	},
 
 	"json.schemaDownload.trustedDomains": {
+		"https://raw.githubusercontent.com": true,
 		"https://www.schemastore.org": true,
 		"https://json.schemastore.org": true
 	}
