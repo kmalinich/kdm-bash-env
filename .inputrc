@@ -85,32 +85,37 @@ set visible-stats on
 # The below keys are configured with this setup in mind:
 # - macOS
 # - iTerm2 with Option key(s) set to 'Esc+'
-# - Aluminum USB Apple Keyboard with keypad (model A1243)
 
-# Aluminum USB Apple Keyboard key codes:
-# Delete forward : \e[3~
+# Key codes:
+# Forward delete : \e[3~
 #        Page up : \e[5~
 #      Page down : \e[6~
-#             F1 : \e[11~
-#             F2 : \e[12~
-#             F3 : \e[13~
-#             F4 : \e[14~
-#             F5 : \e[15~
-#             F6 : \e[17~
-#             F7 : \e[18~
-#             F8 : \e[19~
-#             F9 : \e[20~
-#            F10 : \e[21~
-#            F11 : \e[23~
-#            F12 : \e[24~
-#            F13 : \e[25~
-#            F14 : ??
-#            F15 : ??
-#            F16 : \e[29~
-#            F17 : \e[31~
-#            F18 : \e[32~
-#            F19 : \e[33~
+#
 
+#  F1 : \e[11~
+#  F2 : \e[12~
+#  F3 : \e[13~
+#  F4 : \e[14~
+#  F5 : \e[15~
+#  F6 : \e[17~
+#  F7 : \e[18~
+#  F8 : \e[19~
+#  F9 : \e[20~
+# F10 : \e[21~
+# F11 : \e[23~
+# F12 : \e[24~
+# F13 : \e[1;2P~
+# F14 : \e[1;2Q~
+# F15 : \e[1;2R~
+# F16 : \e[1;2S~
+# F17 : \e[15;2~
+# F18 : \e[17;2~
+# F19 : \e[18;2~
+# F20 : \e[19;2~
+# F21 : \e[20;2~
+# F22 : \e[21;2~
+# F23 : \e[23;2~
+# F24 : \e[24;2~
 
 
 # Cheatsheet
@@ -135,14 +140,31 @@ set visible-stats on
 
 # Page down : Move forwards through completion history
 "\e[6~": history-search-forward
+"\e[1;2R": history-search-forward
 
 
 # F5 : Reload ~/.inputrc
 "\e[15~": re-read-init-file
 
-# F6 :
-# "\e[17~":
+# F13 : Insert open and close double-quotes and move to just after the open double-quote
+# "\e[25~": "\"\"\C-b"
 
+
+# F16 : Insert open and close single-quotes and move to just after the open single-quote
+# (Like when you're about to type JSON)
+# "\e[29~": "\'\'\C-b"
+
+# F17 : Insert open and close double-quotes and move to just after the open double-quote
+# "\e[31~": "\"\"\C-b"
+
+# F18 : Double-quote the current or previous word
+# "\e[32~": "\eb\"\ef\""
+
+# F19 : Escaped-double-quote the current or previous word
+# "\e[33~": "\eb\\\"\ef\\\""
+
+# F__ : Single-quote the current or previous word
+# "\e[~": "\eb\'\ef\'"
 
 
 # Shift + space : Just do a space
