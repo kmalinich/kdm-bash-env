@@ -13,7 +13,7 @@
 [submodule ".vim/pack/kdm/coc.nvim"]
 	path   = .vim/pack/kdm/coc.nvim
 	url    = https://github.com/neoclide/coc.nvim
-	branch = master
+	branch = release
 [submodule ".vim/pack/kdm/css-color"]
 	path   = .vim/pack/kdm/css-color
 	url    = https://github.com/ap/vim-css-color
