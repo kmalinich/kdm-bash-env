@@ -1,29 +1,44 @@
 [color]
-	branch      = on
+	branch      = auto
 	commit      = always
-	diff        = on
+	diff        = auto
 	interactive = always
-	status      = always
+	status      = auto
 	submodule   = always
-	ui          = on
+	ui          = auto
+
 
 [color "branch"]
 	current = "#f1c40f reverse"
 	local   = "#f1c40f"
 	remote  = "#2ecc71"
+	plain   = "#ffffff dim italic"
 
 [color "diff"]
-	context    = "#ffffff dim italic"
+	commit     = cyan bold
+	func       = normal
+	plain      = normal
+	context    = "#ffffff dim"
 	frag       = "#6c71c4"
 	meta       = "#f1c40f"
 	new        = "#2ecc71 bold"
 	old        = "#e74c3c bold"
 	whitespace = "#f22222"
 
+[color "grep"]
+	context    = "#6c71c4"
+	filename   = "#fe5abd"
+	function   = "#f1c40f"
+	linenumber = normal
+	match      = "#f22222 bold"
+	selected   = "#ffffff dim"
+	separator  = "#6c71c4"
+
 [color "status"]
-	branch    = "#de5abd"
+	added     = "#f22222 bold"
+	branch    = "#fe5abd italic"
 	changed   = "#ff4c3c"
-	header    = "#707070 italic"
+	header    = "#808080"
 	nobranch  = "#f22222 #ffffff blink"
 	unmerged  = "#f22222"
 	untracked = "#6c71c4"
