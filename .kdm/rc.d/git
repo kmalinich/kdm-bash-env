@@ -82,7 +82,7 @@ _g_wrapper() {
 	# Generate temp file for output (until I learn how to do it without that)
 	FILE_TEMP="$(mktemp -t "kdm-bash-env.${FUNCNAME[0]}.XXXXXXXXXXXXXX")"
 
-	git "${GIT_CMD}" "${GIT_CMD_ARGS[@]}" > "${FILE_TEMP}" 2>&1
+	git -c 'color.status=always' -c 'color.ui=always' "${GIT_CMD}" "${GIT_CMD_ARGS[@]}" > "${FILE_TEMP}" 2>&1
 	CMD_EXIT="${?}"
 
 	if [[ -s "${FILE_TEMP}" ]]; then
