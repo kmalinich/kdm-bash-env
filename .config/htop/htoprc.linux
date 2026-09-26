@@ -1,8 +1,8 @@
 # Beware! This file is rewritten by htop when settings are changed in the interface.
 # The parser is also very primitive, and not human-friendly.
-htop_version=3.5.3-1-arch
+htop_version=3.5.3-1.1-arch
 config_reader_min_version=3
-fields=3 0 48 17 18 2 130 47 132 111 46 50 37 49 1
+fields=3 0 48 17 18 2 111 130 47 132 46 50 37 49 1
 hide_kernel_threads=1
 hide_userland_threads=1
 hide_running_in_container=0
@@ -52,7 +52,7 @@ sort_direction=-1
 tree_sort_direction=-1
 tree_view_always_by_pid=0
 all_branches_collapsed=0
-screen:Main=PPID PID USER PRIORITY NICE STATE M_PRIV PERCENT_MEM GPU_PERCENT IO_RATE PERCENT_CPU NLWP PROCESSOR TIME Command
+screen:Main=PPID PID USER PRIORITY NICE STATE IO_RATE M_PRIV PERCENT_MEM GPU_PERCENT PERCENT_CPU NLWP PROCESSOR TIME Command
 .sort_key=PERCENT_CPU
 .tree_sort_key=PERCENT_CPU
 .tree_view_always_by_pid=0
