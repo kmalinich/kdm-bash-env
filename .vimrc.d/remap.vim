@@ -17,6 +17,20 @@ cnoreabbrev wQ wq
 " Disable replace mode, which turns on in bad terminals for some reason
 nnoremap R <Nop>
 
+" Automatically force Replace and Virtual Replace modes back to Insert mode
+function! s:ForbidReplace()
+	if v:insertmode isnot# 'i'
+			call feedkeys("\<Insert>", "n")
+	endif
+endfunction
+
+augroup ForbidReplaceMode
+	autocmd!
+	autocmd InsertEnter * call s:ForbidReplace()
+	autocmd InsertChange * call s:ForbidReplace()
+augroup END
+
+
 " Disable Ex mode
 noremap Q <Nop>
 
