@@ -1,0 +1,2 @@
+[checkout]
+	workers = -1
