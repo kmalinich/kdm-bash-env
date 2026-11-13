@@ -1,2 +1,7 @@
 [pack]
 	threads = 24
+	writeBitmaps = true
+	writeBitmapLookupTable = true
+
+[repack]
+	writeBitmaps = true
