@@ -5,6 +5,7 @@
 [include]
 	path = ~/.gitconfig.d/alias
 	path = ~/.gitconfig.d/apply
+	path = ~/.gitconfig.d/checkout
 	path = ~/.gitconfig.d/color
 	path = ~/.gitconfig.d/commit
 	path = ~/.gitconfig.d/core
@@ -13,6 +14,7 @@
 	path = ~/.gitconfig.d/grep
 	path = ~/.gitconfig.d/init
 	path = ~/.gitconfig.d/merge
+	path = ~/.gitconfig.d/pack
 	path = ~/.gitconfig.d/path
 	path = ~/.gitconfig.d/path-priv
 	path = ~/.gitconfig.d/path-pub
