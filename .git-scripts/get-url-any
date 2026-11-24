@@ -2,7 +2,7 @@
 
 ARRAY_SED_ARGS=()
 
-while read GITCONFIG_URL; do
+while read -r GITCONFIG_URL; do
 	GITCONFIG_URL_VALUE="$(git config get "url.${GITCONFIG_URL}.insteadof")"
 
 	GITCONFIG_URL="${GITCONFIG_URL#git@}"
