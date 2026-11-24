@@ -11,6 +11,7 @@
 	path = ~/.gitconfig.d/init
 	path = ~/.gitconfig.d/merge
 	path = ~/.gitconfig.d/pack
+	path = ~/.gitconfig.d/pack-threads
 	path = ~/.gitconfig.d/path
 	path = ~/.gitconfig.d/path-priv
 	path = ~/.gitconfig.d/path-pub
