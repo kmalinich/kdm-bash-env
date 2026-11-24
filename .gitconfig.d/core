@@ -1,8 +1,10 @@
 [core]
-	#fsmonitor      = true
-	pager          = cat
-	untrackedCache = true
 	excludesFile = ~/.config/git/ignore
+
+	#fsmonitor      = true
+	untrackedCache = true
+
+	pager = bat
 
 
 # vim: set filetype=gitconfig ts=2 sw=2 tw=0 noet :

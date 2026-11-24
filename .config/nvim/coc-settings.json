@@ -1,8 +1,17 @@
 {
 	"colors.enable": true,
+	"extensions.updateCheck": "daily",
 
-	"coc.preferences.extensionUpdateCheck": "daily",
 	"coc.preferences.useQuickfixForLocations": true,
+
+	"languageserver": {
+		"bash": {
+			"command": "bash-language-server",
+			"args": [ "start" ],
+			"filetypes": [ "bash", "sh" ],
+			"ignoredRootPaths": [ "~" ]
+		}
+	},
 
 	"diagnostic.checkCurrentLine": true,
 	"diagnostic.enable": true,
@@ -17,10 +26,23 @@
 	"diagnostic.virtualTextCurrentLineOnly": true,
 	"diagnostic.warningSign": "⚠",
 
+	"editor.codeActionsOnSave": {
+		"source.fixAll": "always",
+		"source.organizeImports": "always",
+		"source.removeUnused": "always"
+	},
+
 	"eslint.alwaysShowStatus": true,
-	"eslint.autoFixOnSave": false,
 	"eslint.format.enable": true,
 	"eslint.onIgnoredFiles": "warn",
+
+	"json.schemaDownload.trustedDomains": {
+		"https://json.schemastore.org": true,
+		"https://models.dev": true,
+		"https://opencode.ai": true,
+		"https://raw.githubusercontent.com": true,
+		"https://www.schemastore.org": true
+	},
 
 	"javascript.showUnused": false,
 
@@ -85,20 +107,5 @@
 		"!input",
 		"!lambda scalar",
 		"!secret scalar"
-	],
-
-	"languageserver": {
-		"bash": {
-			"command": "bash-language-server",
-			"args": [ "start" ],
-			"filetypes": [ "bash", "sh" ],
-			"ignoredRootPaths": [ "~" ]
-		}
-	},
-
-	"json.schemaDownload.trustedDomains": {
-		"https://raw.githubusercontent.com": true,
-		"https://www.schemastore.org": true,
-		"https://json.schemastore.org": true
-	}
+	]
 }

@@ -1,7 +1,3 @@
-[core]
-	excludesFile = ~/.config/git/ignore
-
-
 [include]
 	path = ~/.gitconfig.d/alias
 	path = ~/.gitconfig.d/apply
